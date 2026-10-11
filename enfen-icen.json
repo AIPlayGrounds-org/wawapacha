@@ -10,8 +10,8 @@
   "data_type": "observed",
   "spatial_resolution": "Región Niño 1+2",
   "temporal_resolution": "Mensual, media móvil de tres meses",
-  "reference_period": "1991–2020 según ENFEN (2024)",
-  "ingestion_time": "2026-10-10T18:33:35+00:00",
+  "reference_period": "Climatología móvil de 30 años; 1991–2020 desde 2006 (ENFEN, 2024)",
+  "ingestion_time": "2026-10-11T18:52:59+00:00",
   "processing_version": "0.1.0",
   "records": [
     {
