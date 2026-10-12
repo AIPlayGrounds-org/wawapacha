@@ -139,27 +139,6 @@ locator = "Nota Técnica ENFEN 02-2026, PDF p. 2, \"Consideraciones\", fourth pa
 quote = "En los CO se explicará claramente que estos estados de alerta se sustentan en pronósticos de naturaleza probabilística, con niveles de incertidumbre. Por lo tanto, dichos estados serán actualizados de acuerdo al análisis de las observaciones oceánicas y atmosféricas, así como de las predicciones de los modelos climáticos."
 
 [[claim]]
-id = "enfen-magnitude-wording"
-claim_es = "El Comunicado Oficial ENFEN N° 17-2026 expresa la magnitud esperada con palabras y en condicional, y muestra las probabilidades mensuales de condiciones cálidas, frías y neutra en una figura."
-status = "verified"
-date_checked = "2026-10-10"
-
-[[claim.source]]
-ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-17-2026/"
-locator = "Comunicado Oficial ENFEN N° 17-2026, PDF p. 1, first paragraph under the headline"
-quote = "El Niño Costero (región Niño 1+2 - Figura 1) se mantendría con una magnitud extraordinaria,"
-
-[[claim.source]]
-ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-17-2026/"
-locator = "Comunicado Oficial ENFEN N° 17-2026, PDF p. 1, first paragraph under the headline, sentence 2"
-quote = "El Niño (región Niño 3.4 - Figura 1) se mantendría con una magnitud muy fuerte"
-
-[[claim.source]]
-ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-17-2026/"
-locator = "Comunicado Oficial ENFEN N° 17-2026, PDF p. 1, Figura 2 caption"
-quote = "Probabilidades mensuales estimadas por el ENFEN de las condiciones cálidas, frías y neutra"
-
-[[claim]]
 id = "historical-coastal-chronology"
 claim_es = "La cronología operativa de ENFEN clasifica 1982–1983 y 1997–1998 como El Niño Costero extraordinario, y 2017 como moderado, con periodos distintos."
 status = "verified"

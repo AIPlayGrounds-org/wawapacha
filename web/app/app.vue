@@ -65,6 +65,12 @@ import '@fontsource/patrick-hand/latin-ext.css'
   /* Usados por los gráficos, que leen estas variables. */
   --bg: var(--paper);
   --surface: var(--paper);
+  --surface-raised: #ffffff;
+  --shadow-card: 0 10px 26px rgb(15 61 70 / 8%);
+  --content-width: 78rem;
+  --reading-width: 42rem;
+  --radius-card: 12px;
+  --space-card: 1.25rem;
   --fs-small: 0.875rem;
   --font: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
   --hand: 'Patrick Hand', 'Comic Sans MS', cursive;
@@ -73,6 +79,8 @@ import '@fontsource/patrick-hand/latin-ext.css'
 @media (prefers-color-scheme: dark) {
   :root {
     --paper: #131313;
+    --surface-raised: #1d1d1d;
+    --shadow-card: 0 10px 26px rgb(0 0 0 / 24%);
     --text: #ececec;
     --muted: #ababab;
     --faint: #7c7c7c;

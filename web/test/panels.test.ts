@@ -1,16 +1,20 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { mount } from '@vue/test-utils'
 import type { Component } from 'vue'
-import { describe, expect, it } from 'vitest'
+import { flushPromises, mount } from '@vue/test-utils'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ChartShell from '~/components/ChartShell.vue'
-import EnfenPanel from '~/components/EnfenPanel.vue'
 import NinoWeeklyPanel from '~/components/NinoWeeklyPanel.vue'
 import OutlookPanel from '~/components/OutlookPanel.vue'
+import HomePage from '~/pages/index.vue'
+import { useDataset } from '~/composables/useDataset'
 import { messages, outlookCategoryLabel } from '~/messages'
 import { formatDay, formatMonth, formatValue } from '~/utils/format'
 import { loadDataset } from '../server/utils/loadDataset'
 import { enfenFixture, outlookFixture } from './fixtures/panels'
+
+vi.mock('~/composables/useDataset', () => ({ useDataset: vi.fn() }))
+vi.mock('~/composables/useSiteSeo', () => ({ useSiteSeo: vi.fn() }))
 
 const passthrough = { template: '<div><slot /></div>' }
 
@@ -42,6 +46,49 @@ const emptyRecords = <T extends { records: unknown[] }>(dataset: T) =>
     ...dataset,
     records: [],
   }) as unknown as T
+
+const mountHome = async (enfen = enfenFixture) => {
+  const ids = [
+    'noaa-oisst',
+    'noaa-cpc-nino-weekly',
+    'enfen-icen',
+    'noaa-cpc-outlook',
+    'senamhi-estaciones',
+  ] as const
+  const datasets = new Map(
+    await Promise.all(ids.map(async (id) => [id, await loadDataset(id)] as const)),
+  )
+  vi.mocked(useDataset).mockImplementation(async (id, shape) => {
+    const dataset = id === 'enfen-communique' ? enfen : datasets.get(id)
+    if (!dataset) throw new Error(`Missing test dataset: ${id}`)
+    return shape ? shape(dataset) : dataset
+  })
+  const wrapper = mount(
+    {
+      components: { HomePage },
+      template: '<Suspense><HomePage /></Suspense>',
+    },
+    {
+      global: {
+        stubs: {
+          NuxtLink: { props: ['to'], template: '<a :href="to"><slot /></a>' },
+          IcenChart: passthrough,
+          NinoWeeklyPanel: passthrough,
+          OisstMap: passthrough,
+          OutlookPanel: passthrough,
+          SenamhiRainChart: passthrough,
+        },
+      },
+    },
+  )
+  await flushPromises()
+  await flushPromises()
+  return wrapper
+}
+
+beforeEach(() => {
+  vi.mocked(useDataset).mockReset()
+})
 
 const rampOf = (css: string) => [...css.matchAll(/--ramp-\d: (#[0-9a-f]{6});/g)].map((m) => m[1]!)
 const luminance = (hex: string) => {
@@ -175,45 +222,49 @@ describe('outlookCategoryLabel', () => {
   })
 })
 
-describe('EnfenPanel', () => {
-  const mountEnfen = (stale: boolean, dataset = enfenFixture) =>
-    mount(EnfenPanel, {
-      props: {
-        dataset: {
-          ...dataset,
-          records: dataset.records.length ? [{ ...dataset.records[0]!, stale }] : dataset.records,
-        },
-      },
-      global: { components: { ChartShell } },
-    })
+describe('home ENFEN status card', () => {
+  it('uses the verified lead only for its matching communiqué', () => {
+    expect(messages.page.homeLead(17, 2026)).toContain('magnitud extraordinaria')
+    expect(messages.page.homeLead(17, 2027)).toBe('Una lectura breve de la señal.')
+    expect(messages.page.homeLead(17, 2027)).not.toBe(messages.page.coastLead)
+  })
 
-  it('shows the official status, dates and detail link of a current communique', () => {
-    const wrapper = mountEnfen(false)
+  it('shows the official status, dates and detail link of a current communique', async () => {
+    const wrapper = await mountHome()
 
-    expect(wrapper.get('.number').text()).toBe('Comunicado 17 · 2026')
-    expect(wrapper.get('.status').text()).toBe('Alerta de El Niño Costero')
-    expect(wrapper.text()).toContain('Estado oficial')
+    expect(wrapper.get('.status-kicker').text()).toBe('Estado oficial')
+    expect(wrapper.get('.status-card strong').text()).toBe('Alerta de El Niño Costero')
     expect(wrapper.text()).toContain('28 de septiembre de 2026')
-    expect(wrapper.get("dd time[datetime='2026-10-15']").text()).toBe('15 de octubre de 2026')
+    expect(wrapper.text()).toContain('Próximo comunicado previsto · 15 de octubre de 2026')
     expect(wrapper.find('.stale-status').exists()).toBe(false)
-    expect(wrapper.get('.detail-link').attributes('href')).toBe(
+    expect(wrapper.get('.status-card a').attributes('href')).toBe(
       'https://example.com/comunicado-17-2026',
     )
+    const comparison = wrapper.findAll('.comparison-card').map((card) => card.text())
+    expect(comparison[0]).toContain('Pico ICEN · junio de 1983')
+    expect(comparison[1]).toContain('Pico ICEN · noviembre de 1997')
+    expect(comparison[2]).toContain('Pico ICEN · marzo de 2017')
   })
 
-  it('says the next communique is not yet published when the record is stale', () => {
-    const wrapper = mountEnfen(true)
+  it('shows the last official status and next communiqué when the record is stale', async () => {
+    const wrapper = await mountHome({
+      ...enfenFixture,
+      records: [{ ...enfenFixture.records[0]!, stale: true }],
+    })
 
+    expect(wrapper.get('.eyebrow').text()).toBe('Último estado oficial')
+    expect(wrapper.get('.status-kicker').text()).toBe('Último estado oficial')
     expect(wrapper.get('.stale-status').text()).toBe('Próximo comunicado · 15 de octubre de 2026')
-    expect(wrapper.text()).toContain('Último estado oficial')
-    expect(wrapper.get('.status').text()).toBe('Alerta de El Niño Costero')
+    expect(wrapper.get('.status-card strong').text()).toBe('Alerta de El Niño Costero')
   })
 
-  it('shows a Spanish empty state without dereferencing a missing communique', () => {
-    const wrapper = mountEnfen(false, emptyRecords(enfenFixture))
+  it('uses an ENFEN empty state without dereferencing a missing communique', async () => {
+    const wrapper = await mountHome(emptyRecords(enfenFixture))
 
-    expect(wrapper.text()).toContain(messages.panels.enfen.empty)
+    expect(wrapper.get('.eyebrow').text()).toBe(messages.page.emptyEnfenTitle)
+    expect(wrapper.get('#home-title').text()).toBe(messages.page.emptyEnfenTitle)
     expect(wrapper.find('.status-card').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('Sin datos del ONI')
     expect(wrapper.text()).not.toMatch(/NaN|undefined/)
   })
 })
