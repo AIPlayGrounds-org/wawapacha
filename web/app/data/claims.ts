@@ -21,8 +21,6 @@ const verifiedClaims = {
     'El sistema de alerta de ENFEN tiene cinco estados y se anuncia en cada comunicado; Vigilancia se activa cuando el pronóstico indica una probabilidad superior al 50 % de condiciones cálidas.',
   'alerts-are-probabilistic-and-updated':
     'Los estados de alerta de ENFEN tienen incertidumbre y se actualizan con observaciones y predicciones.',
-  'enfen-magnitude-wording':
-    'El Comunicado Oficial ENFEN N° 17-2026 expresa la magnitud esperada con palabras y en condicional, y muestra las probabilidades mensuales de condiciones cálidas, frías y neutra en una figura.',
   'historical-coastal-chronology':
     'La cronología operativa de ENFEN clasifica 1982–1983 y 1997–1998 como El Niño Costero extraordinario, y 2017 como moderado, con periodos distintos.',
   'nino-region-definitions':

@@ -2,9 +2,9 @@
   "margin": 0.15,
   "routes": {
     "/": {
-      "payloadBytes": 585921,
-      "entryJsBytes": 928684,
-      "cssBytes": 1555
+      "payloadBytes": 577624,
+      "entryJsBytes": 911022,
+      "cssBytes": 2947
     },
     "/territorio": {
       "payloadBytes": 140503,
@@ -12,9 +12,9 @@
       "cssBytes": 1037
     },
     "/historico": {
-      "payloadBytes": 146593,
-      "entryJsBytes": 782908,
-      "cssBytes": 1555
+      "payloadBytes": 147398,
+      "entryJsBytes": 800484,
+      "cssBytes": 2947
     },
     "/rios": {
       "payloadBytes": 383072,
@@ -22,9 +22,9 @@
       "cssBytes": 1645
     },
     "/aprende": {
-      "payloadBytes": 69,
-      "entryJsBytes": 234387,
-      "cssBytes": 0
+      "payloadBytes": 74671,
+      "entryJsBytes": 886875,
+      "cssBytes": 947
     },
     "/metodologia": {
       "payloadBytes": 9225,

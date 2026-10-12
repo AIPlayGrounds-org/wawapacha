@@ -2,627 +2,608 @@
 import { messages } from '~/messages'
 import { useDataset } from '~/composables/useDataset'
 import { cropOisst } from '~/utils/oisstMap'
+import { shapeSenamhiDataset } from '~/utils/senamhi'
+import { formatDay, formatMonth, formatValue } from '~/utils/format'
 import { ENFEN_COMUNICADOS, SENAMHI_AVISOS } from '~/links'
 import { useSiteSeo } from '~/composables/useSiteSeo'
+import IcenChart from '~/components/IcenChart.vue'
+import NinoWeeklyPanel from '~/components/NinoWeeklyPanel.vue'
+import OutlookPanel from '~/components/OutlookPanel.vue'
+import OisstMap from '~/components/OisstMap.vue'
+import SenamhiRainChart from '~/components/SenamhiRainChart.vue'
 
-const oni = await useDataset('noaa-cpc-oni')
 const oisst = await useDataset('noaa-oisst', cropOisst)
 const weekly = await useDataset('noaa-cpc-nino-weekly')
+const icen = await useDataset('enfen-icen')
 const enfen = await useDataset('enfen-communique')
 const outlook = await useDataset('noaa-cpc-outlook')
-const records = oni.records
-const last = records.at(-1)
+const senamhi = await useDataset('senamhi-estaciones', shapeSenamhiDataset)
 
-const CPC_ONI_PAGE = 'https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso/oni/v6/'
-const phase = last ? ensoPhase(last.anomaly) : 'neutral'
-const streak = phaseStreak(records)
-
-/** Responde en llano a «¿hay El Niño (o La Niña)?» con la definición de episodio de NOAA. */
-const status = computed(() => {
-  if (!last || phase === 'neutral') {
-    return {
-      title: messages.oni.neutralTitle,
-      detail: messages.oni.neutralDetail,
-    }
-  }
-  const name = phase === 'warm' ? messages.oni.warmName : messages.oni.coldName
-  const side = phase === 'warm' ? messages.oni.warmSide : messages.oni.coldSide
-  if (streak >= NOAA_EPISODE_SEASONS) {
-    return {
-      title: messages.oni.episodeTitle(name),
-      detail: messages.oni.episodeDetail(streak, side),
-    }
-  }
-  const umbral =
-    phase === 'warm'
-      ? messages.oni.aboveTitle(messages.oni.warmName)
-      : messages.oni.belowTitle(messages.oni.coldName)
-  return {
-    title: umbral,
-    detail: messages.oni.belowDetail(streak, side, name),
-  }
-})
-
-/**
- * La respuesta corta a la pregunta del titular. Habla de la regla de episodio de NOAA (5 trimestres seguidos
- * sobre el umbral), no de un estado oficial: NOAA monitorea hoy con el RONI. Pendiente de revisión de Contenido.
- */
-const answer = computed(() => {
-  if (!last) return null
-  const value = messages.page.degreeValue(formatAnomaly(last.anomaly), messages.page.degreeC)
-  const rule = messages.oni.episodeRule(streak)
-  if (phase === 'warm') {
-    return streak >= NOAA_EPISODE_SEASONS
-      ? {
-          short: messages.oni.yes,
-          lead: messages.oni.centralWarm,
-          value,
-          tail: messages.oni.warmTail(streak),
-        }
-      : {
-          short: messages.oni.notYet,
-          lead: messages.oni.centralAbove,
-          value,
-          tail: messages.oni.warmNotYetTail(rule),
-        }
-  }
-  if (phase === 'cold')
-    return {
-      short: messages.oni.no,
-      lead: messages.oni.centralWarm,
-      value,
-      tail: messages.oni.coldTail,
-    }
-  return {
-    short: messages.oni.no,
-    lead: messages.oni.centralNear,
-    value,
-    tail: messages.oni.neutralTail,
-  }
-})
-
-const description = computed(() =>
-  last
-    ? messages.oni.summary(
-        monthName(records[0]!.start),
-        monthName(last.end),
-        `${seasonLabel(last)}, ${messages.page.degreeValue(formatAnomaly(last.anomaly), messages.page.degreeC)}`,
-        status.value.title,
-      )
-    : '',
-)
-
-const recent = records.slice(-12).reverse()
-const phaseLabel = {
-  warm: messages.oni.rangeLabel('warm'),
-  neutral: messages.oni.rangeLabel('neutral'),
-  cold: messages.oni.rangeLabel('cold'),
-} as const
+const enfenRecord = enfen.records[0]
+const latestIcen = icen.records.at(-1)
+const peakIcen = (start: string, end: string) =>
+  icen.records
+    .filter((record) => record.start >= start && record.start <= end)
+    .reduce<(typeof icen.records)[number] | null>(
+      (peak, record) => (peak === null || record.icen > peak.icen ? record : peak),
+      null,
+    )
+const comparison = [
+  {
+    id: '1982-83',
+    label: messages.historico.events['1982-83'],
+    peak: peakIcen('1982-07', '1983-11'),
+  },
+  {
+    id: '1997-98',
+    label: messages.historico.events['1997-98'],
+    peak: peakIcen('1997-04', '1998-08'),
+  },
+  {
+    id: '2017',
+    label: messages.historico.events['2017'],
+    peak: peakIcen('2017-01', '2017-04'),
+  },
+  {
+    id: 'current',
+    label: messages.page.currentLabel(latestIcen?.start.slice(0, 4) ?? '—'),
+    peak: latestIcen ?? null,
+  },
+].map((event) => ({
+  ...event,
+  value: event.peak?.icen ?? null,
+  metricLabel:
+    event.id === 'current'
+      ? messages.page.latestLabel
+      : event.peak
+        ? messages.page.peakLabel(formatMonth(event.peak.start))
+        : messages.historico.noPeak,
+}))
+const maxComparison = Math.max(...comparison.map((event) => event.value ?? 0), 1)
+const comparisonWidth = (value: number | null) =>
+  `${Math.max(4, ((value ?? 0) / maxComparison) * 100)}%`
 
 useSiteSeo({
   title: messages.page.seoTitle,
   description: messages.page.seoDescription,
-  ogDescription: last
-    ? `${seasonLabel(last)}: ${formatAnomaly(last.anomaly)} °C. ${status.value.title}.`
-    : messages.page.seoDescription,
+  ogDescription: enfenRecord
+    ? messages.page.homeLead(enfenRecord.number, enfenRecord.year)
+    : messages.page.emptyEnfenTitle,
 })
 </script>
 
 <template>
-  <div class="site">
+  <div class="home">
+    <header class="site-header">
+      <NuxtLink class="brand" to="/">{{ messages.page.brand }}</NuxtLink>
+      <nav :aria-label="messages.page.mainNav">
+        <NuxtLink to="/historico">{{ messages.historico.historyNav }}</NuxtLink>
+        <NuxtLink to="/territorio">{{ messages.page.territoryLink }}</NuxtLink>
+        <NuxtLink to="/rios">{{ messages.rios.sectionLabel }}</NuxtLink>
+        <NuxtLink to="/aprende">{{ messages.page.learnLink }}</NuxtLink>
+        <NuxtLink to="/metodologia">{{ messages.page.methodologyLink }}</NuxtLink>
+      </nav>
+    </header>
+
     <main id="main-content">
-      <template v-if="last && answer">
-        <div class="cover">
-          <header class="topbar">
-            <span class="brand">{{ messages.page.brand }}</span>
-            <NuxtLink to="/territorio">{{ messages.page.territoryLink }}</NuxtLink>
-            <NuxtLink to="/historico">{{ messages.historico.historyNav }}</NuxtLink>
-            <NuxtLink to="/rios">{{ messages.rios.sectionLabel }}</NuxtLink>
-            <NuxtLink to="/aprende">{{ messages.page.learnLink }}</NuxtLink>
-            <NuxtLink to="/metodologia">{{ messages.page.methodologyLink }}</NuxtLink>
-          </header>
-          <section class="hero" aria-labelledby="oni-title">
-            <h1 id="oni-title">{{ messages.page.title }}</h1>
-            <p class="answer">
-              <strong>{{ answer.short }}</strong>
-              {{ answer.lead }}
-              <span class="value" :class="phase">{{ answer.value }}</span>
-              {{ answer.tail }}
-            </p>
-            <p class="byline">
-              {{ messages.page.dataBy }}
-              <a :href="CPC_ONI_PAGE" target="_blank" rel="noopener"
-                >{{ messages.page.noaaLink
-                }}<span class="sr-only">{{ messages.page.newTab }}</span></a
-              >,
-              {{ messages.page.observedUntil(monthName(last.end)) }}
-            </p>
-            <p class="cue" aria-hidden="true">
-              {{ messages.page.scrollCue }}
-              <svg width="18" height="28" viewBox="0 0 18 28">
-                <path d="M9 2 V24 M2 17 L9 24 L16 17" />
-              </svg>
-            </p>
-          </section>
-          <OniStripes class="cover-stripes" :dataset="oni" />
+      <section class="hero" aria-labelledby="home-title">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            {{
+              enfenRecord
+                ? enfenRecord.stale
+                  ? messages.panels.enfen.latestStatus
+                  : messages.page.homeEyebrow(enfenRecord.number, enfenRecord.year)
+                : messages.page.emptyEnfenTitle
+            }}
+          </p>
+          <h1 id="home-title">{{ enfenRecord?.status ?? messages.page.emptyEnfenTitle }}</h1>
+          <p v-if="enfenRecord" class="hero-lead">
+            {{ messages.page.homeLead(enfenRecord.number, enfenRecord.year) }}
+          </p>
+          <p v-if="enfenRecord" class="hero-meta">
+            {{ messages.page.communiqueMeta(enfenRecord.number, enfenRecord.year) }}
+            <time :datetime="enfenRecord.start">{{ formatDay(enfenRecord.start) }}</time>
+          </p>
         </div>
+        <aside
+          v-if="enfenRecord"
+          class="status-card"
+          :class="{ 'status-card--alert': enfenRecord.status.startsWith('Alerta') }"
+          :aria-label="messages.page.officialStatus"
+        >
+          <span class="status-kicker">{{
+            enfenRecord.stale ? messages.panels.enfen.latestStatus : messages.panels.enfen.status
+          }}</span>
+          <strong>{{ enfenRecord.status }}</strong>
+          <span v-if="enfenRecord.stale" class="stale-status" role="status">
+            {{ messages.panels.enfen.nextDueStale(formatDay(enfenRecord.end)) }}
+          </span>
+          <span v-else>{{ messages.page.homeNext(formatDay(enfenRecord.end)) }}</span>
+          <a :href="enfenRecord.url" target="_blank" rel="noopener">
+            {{ messages.panels.enfen.detail }}
+            <span class="sr-only">{{ messages.page.newTab }}</span>
+          </a>
+        </aside>
+      </section>
 
-        <OniStory :dataset="oni" />
-
-        <section class="oisst-panel" aria-labelledby="oisst-title">
-          <div class="prose">
-            <h2 id="oisst-title">{{ messages.oisst.title }}</h2>
-            <p>{{ messages.oisst.lead }}</p>
-          </div>
-          <div class="figure">
-            <OisstMap :dataset="oisst" />
-          </div>
-        </section>
-
-        <div class="sand">
-          <article class="prose">
-            <h2 id="oni-peru">{{ messages.page.peruTitle }}</h2>
-            <p>{{ messages.page.peruBody }}</p>
-            <p class="key-point">
-              <strong>{{ messages.page.peruWarning }}</strong>
-            </p>
-            <ul class="links">
-              <li>
-                <a :href="ENFEN_COMUNICADOS" target="_blank" rel="noopener"
-                  >{{ messages.page.enfenLink
-                  }}<span class="sr-only">{{ messages.page.newTab }}</span></a
-                >
-              </li>
-              <li>
-                <a :href="SENAMHI_AVISOS" target="_blank" rel="noopener"
-                  >{{ messages.page.senamhiLink
-                  }}<span class="sr-only">{{ messages.page.newTab }}</span></a
-                >
-              </li>
-            </ul>
-          </article>
+      <section class="section coast" aria-labelledby="coast-title">
+        <div class="section-heading">
+          <p class="eyebrow">{{ messages.page.sectionSignal }}</p>
+          <h2 id="coast-title">{{ messages.page.coastTitle }}</h2>
+          <p>{{ messages.page.coastLead }}</p>
         </div>
-
-        <NinoWeeklyPanel :dataset="weekly" />
-        <EnfenPanel :dataset="enfen" />
-
-        <section class="local-path prose" aria-labelledby="local-title">
-          <h2 id="local-title">{{ messages.page.localTitle }}</h2>
-          <p>{{ messages.page.localLead }}</p>
-          <nav class="links" :aria-label="messages.page.localTitle">
-            <NuxtLink to="/territorio">{{ messages.page.localTerritoryLink }}</NuxtLink>
-            <NuxtLink to="/historico">{{ messages.page.localHistoryLink }}</NuxtLink>
-          </nav>
-        </section>
-
-        <OutlookPanel :dataset="outlook" />
-
-        <section class="explore" aria-labelledby="oni-history">
-          <div class="prose">
-            <h2 id="oni-history">{{ messages.page.historyTitle }}</h2>
-            <p>{{ messages.page.historyLead }}</p>
+        <div class="map-layout">
+          <div class="map-note">
+            <h3>{{ messages.page.mapTitle }}</h3>
+            <p>{{ oisst.variable }}</p>
+            <a :href="oisst.source.url" target="_blank" rel="noopener">
+              {{ messages.page.reviewSource }} · {{ oisst.source.institution }}
+              <span class="sr-only">{{ messages.page.newTab }}</span>
+            </a>
           </div>
           <figure class="figure">
-            <ChartShell :dataset="oni" :summary="description">
-              <NuxtErrorBoundary>
-                <ClientOnly>
-                  <OniChart :dataset="oni" :description="description" />
-                  <template #fallback>
-                    <div class="chart-placeholder">{{ messages.page.chartLoading }}</div>
-                  </template>
-                </ClientOnly>
-                <template #error>
-                  <div class="chart-placeholder">
-                    {{ messages.page.chartError }}
-                  </div>
-                </template>
-              </NuxtErrorBoundary>
-            </ChartShell>
-            <figcaption>
-              <ul class="key" :aria-label="messages.chart.colors">
-                <li>
-                  <span class="swatch warm" aria-hidden="true" />{{ messages.chart.warmThreshold }}
-                </li>
-                <li>
-                  <span class="swatch neutral" aria-hidden="true" />{{
-                    messages.chart.neutralRange
-                  }}
-                </li>
-                <li>
-                  <span class="swatch cold" aria-hidden="true" />{{ messages.chart.coldThreshold }}
-                </li>
-              </ul>
-              {{ messages.chart.thresholdNote }}
-            </figcaption>
+            <OisstMap :dataset="oisst" />
           </figure>
-
-          <details class="prose">
-            <summary>{{ messages.page.tableSummary }}</summary>
-            <div
-              class="table-wrap"
-              role="region"
-              :aria-label="messages.page.tableSummary"
-              tabindex="0"
-            >
-              <table>
-                <thead>
-                  <tr>
-                    <th scope="col">{{ messages.page.tableMonths }}</th>
-                    <th scope="col">{{ messages.page.tableCode }}</th>
-                    <th scope="col" class="num">{{ messages.page.tableSeaTemperature }}</th>
-                    <th scope="col" class="num">{{ messages.page.tableAnomaly }}</th>
-                    <th scope="col">{{ messages.page.tableThreshold }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="r in recent" :key="r.start">
-                    <th scope="row">{{ seasonMonths(r) }}</th>
-                    <td>{{ seasonLabel(r) }}</td>
-                    <td class="num">{{ formatTemperature(r.sst) }} {{ messages.page.degreeC }}</td>
-                    <td class="num">{{ formatAnomaly(r.anomaly) }} {{ messages.page.degreeC }}</td>
-                    <td>{{ phaseLabel[ensoPhase(r.anomaly)] }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </details>
-        </section>
-
-        <div class="deep-end">
-          <OniStripes class="end-stripes" :dataset="oni" />
-          <footer class="prose methods">
-            <h2>{{ messages.page.methodsTitle }}</h2>
-            <p>{{ messages.page.methodsBody }}</p>
-            <p>{{ messages.page.methodsBodyTwo }}</p>
-            <p class="sign">{{ messages.page.signoff }}</p>
-          </footer>
         </div>
-      </template>
+      </section>
 
-      <section v-else class="hero" aria-labelledby="oni-empty">
-        <h1 id="oni-empty">{{ messages.page.emptyTitle }}</h1>
-        <p class="answer">
-          {{ messages.page.emptyLead }}
-          <a :href="CPC_ONI_PAGE" target="_blank" rel="noopener"
-            >{{ messages.page.oniSource }}<span class="sr-only">{{ messages.page.newTab }}</span></a
-          >.
-        </p>
+      <section class="section evidence" aria-labelledby="evidence-title">
+        <div class="section-heading">
+          <p class="eyebrow">{{ messages.page.sectionMeasure }}</p>
+          <h2 id="evidence-title">{{ messages.page.evidenceTitle }}</h2>
+          <p>{{ messages.page.weeklyLead }}</p>
+        </div>
+        <NinoWeeklyPanel :dataset="weekly" />
+        <div class="subsection" aria-labelledby="icen-title">
+          <div class="subsection-heading">
+            <h3 id="icen-title">{{ messages.page.icenTitle }}</h3>
+            <p>{{ messages.historico.icenSummary }}</p>
+          </div>
+          <IcenChart :dataset="icen" />
+        </div>
+      </section>
+
+      <section class="section comparison-section" aria-labelledby="comparison-title">
+        <div class="section-heading">
+          <p class="eyebrow">{{ messages.page.sectionScale }}</p>
+          <h2 id="comparison-title">{{ messages.page.comparisonTitle }}</h2>
+          <p>{{ messages.page.comparisonLead }}</p>
+        </div>
+        <div class="comparison-grid">
+          <article v-for="event in comparison" :key="event.id" class="comparison-card">
+            <div class="comparison-topline">
+              <h3>{{ event.label }}</h3>
+              <strong v-if="event.value !== null"
+                >{{ formatValue(event.value) }} {{ messages.page.degreeC }}</strong
+              >
+              <span v-else>—</span>
+            </div>
+            <div class="comparison-bar" aria-hidden="true">
+              <span :style="{ width: comparisonWidth(event.value) }" />
+            </div>
+            <p>{{ event.metricLabel }}</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section impact" aria-labelledby="impact-title">
+        <div class="section-heading">
+          <p class="eyebrow">{{ messages.page.sectionPrecedent }}</p>
+          <h2 id="impact-title">{{ messages.page.impactTitle }}</h2>
+          <p>{{ messages.page.impactLead }}</p>
+          <p class="coverage-note">{{ messages.page.impactCoverage }}</p>
+        </div>
+        <SenamhiRainChart :dataset="senamhi" />
+      </section>
+
+      <section class="section forecast" aria-labelledby="forecast-title">
+        <div class="section-heading">
+          <p class="eyebrow">{{ messages.page.sectionNext }}</p>
+          <h2 id="forecast-title">{{ messages.page.forecastTitle }}</h2>
+        </div>
+        <div class="forecast-grid">
+          <article class="forecast-copy">
+            <p>{{ messages.page.forecastLead }}</p>
+            <p>{{ messages.page.summerLead }}</p>
+            <p>{{ messages.page.temperatureLead }}</p>
+            <div class="source-links">
+              <a :href="ENFEN_COMUNICADOS" target="_blank" rel="noopener">
+                {{ messages.page.enfenLink }}<span class="sr-only">{{ messages.page.newTab }}</span>
+              </a>
+              <a :href="SENAMHI_AVISOS" target="_blank" rel="noopener">
+                {{ messages.page.senamhiLink
+                }}<span class="sr-only">{{ messages.page.newTab }}</span>
+              </a>
+            </div>
+          </article>
+          <OutlookPanel :dataset="outlook" />
+        </div>
+      </section>
+
+      <section class="section local" aria-labelledby="local-title">
+        <div class="section-heading">
+          <p class="eyebrow">{{ messages.page.sectionDecision }}</p>
+          <h2 id="local-title">{{ messages.page.localTitle }}</h2>
+          <p>{{ messages.page.localLead }}</p>
+        </div>
+        <div class="local-grid">
+          <NuxtLink class="local-card" to="/territorio">
+            <span class="local-label">{{ messages.page.localTerritoryLabel }}</span>
+            <strong>{{ messages.page.localTerritoryLink }}</strong>
+            <span>{{ messages.page.localTerritoryDescription }}</span>
+          </NuxtLink>
+          <NuxtLink class="local-card" to="/rios">
+            <span class="local-label">{{ messages.page.localRiversLabel }}</span>
+            <strong>{{ messages.page.localRiversLink }}</strong>
+            <span>{{ messages.page.localRiversDescription }}</span>
+          </NuxtLink>
+          <NuxtLink class="local-card" to="/historico">
+            <span class="local-label">{{ messages.page.localArchiveLabel }}</span>
+            <strong>{{ messages.page.localHistoryLink }}</strong>
+            <span>{{ messages.page.localArchiveDescription }}</span>
+          </NuxtLink>
+        </div>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <NuxtLink class="brand" to="/">{{ messages.page.brand }}</NuxtLink>
+      <span>{{ messages.page.officialSources }}</span>
+      <NuxtLink to="/metodologia">{{ messages.page.methodologyLink }}</NuxtLink>
+    </footer>
   </div>
 </template>
 
 <style scoped>
-/* Portada sobre el mar profundo. */
-.cover {
-  background: var(--deep);
-  color: var(--on-deep);
-  --link: var(--on-deep);
-  --focus: var(--on-deep);
-  --muted: var(--on-deep-muted);
+.home {
+  min-height: 100svh;
+  background: var(--paper);
 }
-.cover-stripes {
-  --stripes-height: 40px;
-  --stripes-label: var(--on-deep-muted);
-}
-.topbar {
+.site-header,
+.site-footer {
   display: flex;
   align-items: center;
   gap: 24px;
-  justify-content: center;
-  padding: 18px 16px 0;
-  background: var(--deep);
-  color: var(--on-deep);
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 18px 24px;
 }
-.topbar a {
-  color: var(--on-deep);
+.site-header {
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.site-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 20px;
 }
 .brand {
+  flex: none;
+  color: var(--text);
   font-family: var(--hand);
   font-size: 1.5rem;
   line-height: 1;
-  letter-spacing: 0.02em;
+  text-decoration: none;
 }
-
-/* Primer viewport: la pregunta, enorme; la respuesta corta debajo. */
+main {
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
 .hero {
-  min-height: calc(100svh - 150px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 16px 40px;
-  text-align: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.6fr);
+  align-items: end;
+  gap: clamp(32px, 7vw, 96px);
+  min-height: min(680px, calc(100svh - 80px));
+  padding: clamp(72px, 12vw, 152px) 24px clamp(72px, 10vw, 128px);
+  border-bottom: 1px solid var(--border);
 }
-h1 {
-  margin: 0;
-  max-width: 11ch;
-  font-size: clamp(3.25rem, 13vw, 6rem);
-  font-weight: 900;
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  text-transform: uppercase;
 }
-.answer {
-  margin: 28px 0 0;
-  max-width: 30rem;
-  font-size: clamp(1.2rem, 2.6vw, 1.4rem);
-  line-height: 1.45;
+h1,
+h2,
+h3,
+p {
   text-wrap: pretty;
 }
-.answer strong {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 700;
+h1 {
+  max-width: 10ch;
+  margin: 0;
+  font-size: clamp(3.7rem, 10vw, 8.5rem);
+  font-weight: 850;
+  letter-spacing: -0.065em;
+  line-height: 0.88;
 }
-.value {
-  font-weight: 800;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
-.value.warm {
-  color: var(--warm-on-deep);
-}
-.value.cold {
-  color: var(--on-deep);
-  text-decoration: underline 3px var(--cold);
-  text-underline-offset: 0.18em;
-}
-.byline {
-  margin: 22px 0 0;
-  font-size: 0.9375rem;
-  font-style: italic;
-  color: var(--muted);
-}
-.notice {
-  --link: var(--notice-text);
-  margin: 20px 0 0;
-  max-width: 32rem;
-  padding: 12px 16px;
-  background: var(--notice-bg);
-  color: var(--notice-text);
-  font-size: 1rem;
-  text-align: left;
-}
-.cue {
-  margin: 48px 0 0;
-  display: grid;
-  justify-items: center;
-  gap: 6px;
-  font-family: var(--hand);
-  font-size: 1.25rem;
-  color: var(--muted);
-}
-.cue svg {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .cue svg {
-    animation: baja 2.4s ease-in-out 3;
-  }
-}
-@keyframes baja {
-  0%,
-  60%,
-  100% {
-    transform: translateY(0);
-  }
-  30% {
-    transform: translateY(5px);
-  }
-}
-
-/* El Perú, sobre arena: el desierto de la costa. */
-.sand {
-  margin-top: 48px;
-  padding: clamp(48px, 8vw, 88px) 0 clamp(40px, 7vw, 72px);
-  background: var(--sand);
-}
-
-/* Después de la historia: una columna de lectura, como un ensayo. */
-.prose {
+.hero-lead {
   max-width: 38rem;
-  margin: 0 auto;
-  padding: 0 16px;
+  margin: 34px 0 0;
+  font-size: clamp(1.25rem, 2.7vw, 1.7rem);
+  line-height: 1.35;
 }
-h2 {
-  margin: 0 0 16px;
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  font-weight: 800;
+.hero-meta {
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+.status-card {
+  display: grid;
+  gap: 12px;
+  padding: var(--space-card);
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-card);
+}
+.status-card--alert {
+  border-top-color: var(--warm);
+}
+.status-kicker,
+.local-label {
+  color: var(--muted);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.status-card strong {
+  font-size: clamp(1.45rem, 3vw, 2rem);
   line-height: 1.1;
-  letter-spacing: -0.02em;
 }
-.prose p {
-  margin: 0 0 18px;
-}
-.key-point {
-  font-size: 1.25rem;
+.status-card span:not(.status-kicker) {
+  color: var(--muted);
+  font-size: 0.96rem;
   line-height: 1.45;
 }
-.links {
+.section {
+  padding: clamp(80px, 11vw, 144px) 24px 0;
+}
+.section-heading {
+  max-width: var(--reading-width);
+  margin-bottom: 32px;
+}
+h2 {
+  margin: 0 0 14px;
+  font-size: clamp(2rem, 4.7vw, 3.5rem);
+  font-weight: 820;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+h3 {
   margin: 0;
-  padding: 0;
-  list-style: none;
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  line-height: 1.1;
+}
+.section-heading > p:last-child,
+.subsection-heading p,
+.coverage-note {
+  margin: 0;
+  color: var(--muted);
+}
+.map-layout {
   display: grid;
-  gap: 6px;
-  font-weight: 600;
+  grid-template-columns: minmax(12rem, 0.5fr) minmax(0, 1.5fr);
+  align-items: start;
+  gap: clamp(24px, 6vw, 88px);
 }
-
-.explore {
-  padding: clamp(64px, 10vw, 112px) 0 0;
+.map-note {
+  padding-top: 22px;
+  border-top: 2px solid var(--accent);
 }
-.local-path {
-  max-width: 38rem;
-  margin: clamp(64px, 10vw, 112px) auto 0;
-  padding: 28px 16px 0;
-  border-top: 1px solid var(--border);
-}
-.local-path .links {
-  margin-top: 18px;
-}
-.oisst-panel {
-  padding: clamp(64px, 10vw, 112px) 0 0;
+.map-note p {
+  margin: 14px 0 20px;
+  color: var(--muted);
 }
 .figure {
-  max-width: 960px;
-  margin: 8px auto 0;
-  padding: 0 16px;
+  min-width: 0;
+  margin: 0;
 }
-/* Misma altura que botones + gráfico, para que la página no salte al cargarlo. */
-.chart-placeholder {
-  height: 410px;
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  text-align: center;
-  color: var(--muted);
+.evidence {
+  background: var(--sea);
 }
-@media (max-width: 599px) {
-  .topbar {
-    flex-wrap: wrap;
-    gap: 12px 16px;
-  }
-  .topbar .brand {
-    flex-basis: 100%;
-    text-align: center;
-  }
-  .chart-placeholder {
-    height: 360px;
-  }
+.evidence :deep(.panel) {
+  padding-top: 0;
 }
-figcaption {
-  font-size: var(--fs-small);
-  color: var(--muted);
+.subsection {
+  margin-top: clamp(56px, 8vw, 96px);
 }
-.key {
+.subsection-heading {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 20px;
-  margin: 8px 0;
-  padding: 0;
-  list-style: none;
-  color: var(--text);
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
 }
-.swatch {
-  display: inline-block;
-  width: 16px;
-  height: 3px;
-  margin-right: 8px;
-  vertical-align: middle;
+.subsection-heading p {
+  max-width: 30rem;
 }
-.swatch.warm {
-  background: var(--warm);
+.comparison-section {
+  padding-bottom: 0;
 }
-.swatch.neutral {
-  background: var(--neutral-data);
-  box-shadow: 0 0 0 4px var(--band);
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--border);
+  background: var(--border);
 }
-.swatch.cold {
-  background: var(--cold);
+.comparison-card {
+  display: grid;
+  gap: 24px;
+  min-height: 150px;
+  padding: 20px;
+  background: var(--paper);
 }
-
-details {
-  margin-top: 24px;
+.comparison-topline {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
 }
-summary {
-  cursor: pointer;
-  font-weight: 650;
-  width: fit-content;
-}
-summary::marker {
-  color: var(--text);
-}
-.table-wrap {
-  max-width: 100%;
-  overflow-x: auto;
-  margin-top: 12px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-}
-table {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 0.95rem;
-}
-th,
-td {
-  text-align: left;
-  padding: 8px 14px 8px 0;
-  border-bottom: 1px solid var(--border);
+.comparison-topline strong {
   white-space: nowrap;
-}
-thead th {
-  color: var(--muted);
-  font-weight: 600;
-  font-size: var(--fs-small);
-}
-.num {
-  text-align: right;
+  font-size: 1.15rem;
   font-variant-numeric: tabular-nums;
 }
-
-/* Pie sobre el mar profundo, abierto por las franjas: cierra lo que abrió la portada. */
-.deep-end {
-  margin-top: clamp(72px, 10vw, 120px);
-  background: var(--deep);
-  color: var(--on-deep);
-  --link: var(--on-deep);
-  --focus: var(--on-deep);
-  --muted: var(--on-deep-muted);
-  --text: var(--on-deep);
-  --border: color-mix(in srgb, var(--on-deep) 22%, transparent);
+.comparison-bar {
+  align-self: end;
+  height: 8px;
+  background: var(--band);
 }
-.end-stripes {
-  --stripes-height: 14px;
+.comparison-bar span {
+  display: block;
+  height: 100%;
+  background: var(--warm);
 }
-.end-stripes :deep(.year) {
-  display: none;
-}
-.methods {
-  padding-top: 48px;
-  padding-bottom: 64px;
-  font-size: 1rem;
+.comparison-card p {
+  margin: 0;
   color: var(--muted);
-}
-.methods h2 {
-  color: var(--text);
-  font-size: 1.4rem;
-}
-.meta {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px 24px;
-  margin: 24px 0 0;
-}
-.meta dt,
-.tech dt {
   font-size: var(--fs-small);
 }
-.meta dd,
-.tech dd {
-  margin: 0;
-  color: var(--text);
+.impact {
+  background: var(--sand);
 }
-.tech {
+.impact :deep(.chart-shell) {
+  background: var(--paper);
+}
+.coverage-note {
+  margin-top: 14px;
+  font-size: var(--fs-small);
+}
+.forecast {
+  padding-bottom: 0;
+}
+.forecast-grid {
   display: grid;
-  gap: 10px;
-  margin: 12px 0 0;
+  grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
+  align-items: start;
+  gap: clamp(32px, 6vw, 88px);
 }
-@media (min-width: 560px) {
-  .tech div {
-    display: grid;
-    grid-template-columns: 12rem 1fr;
-    gap: 16px;
+.forecast-copy {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  border-left: 4px solid var(--accent);
+  background: var(--band);
+}
+.forecast-copy p {
+  margin: 0;
+}
+.source-links {
+  display: grid;
+  gap: 2px;
+  margin-top: 6px;
+  font-weight: 650;
+}
+.forecast-grid :deep(.outlook-panel) {
+  padding-top: 0;
+}
+.forecast-grid :deep(.outlook-panel .prose) {
+  padding-inline: 0;
+}
+.forecast-grid :deep(.outlook-panel .figure) {
+  padding-inline: 0;
+}
+.local {
+  padding-bottom: clamp(80px, 11vw, 144px);
+}
+.local-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.local-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 150px;
+  padding: var(--space-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+.local-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.local-card strong {
+  font-size: 1.35rem;
+}
+.local-card span:last-child {
+  color: var(--muted);
+  font-size: var(--fs-small);
+  line-height: 1.4;
+}
+.site-footer {
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+@media (prefers-reduced-motion: reduce) {
+  .local-card {
+    transition: none;
   }
 }
-.sign {
-  margin-top: 48px !important;
-  font-family: var(--hand);
-  font-size: 1.25rem;
-  text-align: center;
+@media (max-width: 900px) {
+  .hero,
+  .forecast-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero {
+    min-height: auto;
+  }
+  .status-card {
+    max-width: 30rem;
+  }
+  .comparison-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 599px) {
+  .site-header,
+  .site-footer {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding-inline: 16px;
+  }
+  .site-header nav {
+    justify-content: flex-start;
+    gap: 4px 14px;
+  }
+  .hero,
+  .section {
+    padding-inline: 16px;
+  }
+  h1 {
+    font-size: clamp(3.5rem, 18vw, 5.5rem);
+  }
+  .map-layout,
+  .local-grid {
+    grid-template-columns: 1fr;
+  }
+  .subsection-heading {
+    display: grid;
+    gap: 10px;
+  }
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+  .site-footer {
+    gap: 10px 18px;
+  }
 }
 </style>
