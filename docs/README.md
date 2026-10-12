@@ -21,7 +21,9 @@ instead of repeating them.
 11. [`concepts.md`](concepts.md): the climate terms the data uses.
 12. [`claims.md`](claims.md): the claim registry, its fields, quote rules and
     checks.
-13. [`story.md`](story.md): the reading path from the central-Pacific signal to
+13. [`design.md`](design.md): the visual tokens and layout rules shared by the
+    site and its charts.
+14. [`story.md`](story.md): the reading path from the central-Pacific signal to
     the coast, state, observations, expectations and past events.
 
 To change code, start with [`CONTRIBUTING.md`](../.github/CONTRIBUTING.md).
