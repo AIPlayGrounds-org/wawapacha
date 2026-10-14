@@ -13,7 +13,8 @@ The central-signal views use
 [weekly-nino-anomalies](../evidence/claims.toml) and
 [roni-is-current-official-index](../evidence/claims.toml). The ONI explorer
 lives on `/aprende`. The homepage starts with the ENFEN hero, then shows the
-sea-temperature map and evidence panels.
+sea-temperature map, evidence panels, the 2017 comparison, the 2017 rain
+record, the outlook and links to the local views.
 
 ## The Peruvian coast and official state
 
