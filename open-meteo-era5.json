@@ -10,16 +10,9 @@
   "data_type": "estimated",
   "spatial_resolution": "0,25° (unos 28 km)",
   "temporal_resolution": "Diaria; también horaria",
-  "ingestion_time": "2026-10-19T19:54:33+00:00",
+  "ingestion_time": "2026-10-20T18:27:39+00:00",
   "processing_version": "0.2.0",
   "records": [
-    {
-      "region": "Amazonas",
-      "code": "PE01",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 12.2
-    },
     {
       "region": "Amazonas",
       "code": "PE01",
@@ -595,11 +588,11 @@
       "precipitation_mm": 1.4
     },
     {
-      "region": "Ancash",
-      "code": "PE02",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 6.2
+      "region": "Amazonas",
+      "code": "PE01",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.8
     },
     {
       "region": "Ancash",
@@ -1176,11 +1169,11 @@
       "precipitation_mm": 1.8
     },
     {
-      "region": "Apurimac",
-      "code": "PE03",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.1
+      "region": "Ancash",
+      "code": "PE02",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 1.5
     },
     {
       "region": "Apurimac",
@@ -1757,10 +1750,10 @@
       "precipitation_mm": 0.0
     },
     {
-      "region": "Arequipa",
-      "code": "PE04",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
+      "region": "Apurimac",
+      "code": "PE03",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
       "precipitation_mm": 0.0
     },
     {
@@ -2338,10 +2331,10 @@
       "precipitation_mm": 0.0
     },
     {
-      "region": "Ayacucho",
-      "code": "PE05",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
+      "region": "Arequipa",
+      "code": "PE04",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
       "precipitation_mm": 0.0
     },
     {
@@ -2919,11 +2912,11 @@
       "precipitation_mm": 0.0
     },
     {
-      "region": "Cajamarca",
-      "code": "PE06",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 4.7
+      "region": "Ayacucho",
+      "code": "PE05",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.0
     },
     {
       "region": "Cajamarca",
@@ -3500,11 +3493,11 @@
       "precipitation_mm": 10.1
     },
     {
-      "region": "Callao",
-      "code": "PE07",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.1
+      "region": "Cajamarca",
+      "code": "PE06",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 3.8
     },
     {
       "region": "Callao",
@@ -4081,11 +4074,11 @@
       "precipitation_mm": 0.4
     },
     {
-      "region": "Cusco",
-      "code": "PE08",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 1.9
+      "region": "Callao",
+      "code": "PE07",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.9
     },
     {
       "region": "Cusco",
@@ -4662,11 +4655,11 @@
       "precipitation_mm": 1.9
     },
     {
-      "region": "Huancavelica",
-      "code": "PE09",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.3
+      "region": "Cusco",
+      "code": "PE08",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 3.0
     },
     {
       "region": "Huancavelica",
@@ -5243,11 +5236,11 @@
       "precipitation_mm": 0.0
     },
     {
-      "region": "Huanuco",
-      "code": "PE10",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.7
+      "region": "Huancavelica",
+      "code": "PE09",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.0
     },
     {
       "region": "Huanuco",
@@ -5824,11 +5817,11 @@
       "precipitation_mm": 9.7
     },
     {
-      "region": "Ica",
-      "code": "PE11",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.0
+      "region": "Huanuco",
+      "code": "PE10",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 5.4
     },
     {
       "region": "Ica",
@@ -6405,11 +6398,11 @@
       "precipitation_mm": 0.0
     },
     {
-      "region": "Junin",
-      "code": "PE12",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 2.6
+      "region": "Ica",
+      "code": "PE11",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.0
     },
     {
       "region": "Junin",
@@ -6986,11 +6979,11 @@
       "precipitation_mm": 1.4
     },
     {
-      "region": "La Libertad",
-      "code": "PE13",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 5.0
+      "region": "Junin",
+      "code": "PE12",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 2.0
     },
     {
       "region": "La Libertad",
@@ -7567,11 +7560,11 @@
       "precipitation_mm": 1.1
     },
     {
-      "region": "Lambayeque",
-      "code": "PE14",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.0
+      "region": "La Libertad",
+      "code": "PE13",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 3.3
     },
     {
       "region": "Lambayeque",
@@ -8148,10 +8141,10 @@
       "precipitation_mm": 0.1
     },
     {
-      "region": "Lima",
-      "code": "PE15",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
+      "region": "Lambayeque",
+      "code": "PE14",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
       "precipitation_mm": 0.0
     },
     {
@@ -8729,11 +8722,11 @@
       "precipitation_mm": 0.0
     },
     {
-      "region": "Loreto",
-      "code": "PE16",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 2.2
+      "region": "Lima",
+      "code": "PE15",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.0
     },
     {
       "region": "Loreto",
@@ -9310,11 +9303,11 @@
       "precipitation_mm": 1.5
     },
     {
-      "region": "Madre de Dios",
-      "code": "PE17",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 2.2
+      "region": "Loreto",
+      "code": "PE16",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.2
     },
     {
       "region": "Madre de Dios",
@@ -9891,11 +9884,11 @@
       "precipitation_mm": 7.9
     },
     {
-      "region": "Moquegua",
-      "code": "PE18",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.0
+      "region": "Madre de Dios",
+      "code": "PE17",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 4.2
     },
     {
       "region": "Moquegua",
@@ -10472,11 +10465,11 @@
       "precipitation_mm": 0.0
     },
     {
-      "region": "Pasco",
-      "code": "PE19",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.2
+      "region": "Moquegua",
+      "code": "PE18",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.0
     },
     {
       "region": "Pasco",
@@ -11053,11 +11046,11 @@
       "precipitation_mm": 0.7
     },
     {
-      "region": "Piura",
-      "code": "PE20",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.0
+      "region": "Pasco",
+      "code": "PE19",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 3.9
     },
     {
       "region": "Piura",
@@ -11634,11 +11627,11 @@
       "precipitation_mm": 0.8
     },
     {
-      "region": "Puno",
-      "code": "PE21",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.0
+      "region": "Piura",
+      "code": "PE20",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.1
     },
     {
       "region": "Puno",
@@ -12215,11 +12208,11 @@
       "precipitation_mm": 0.0
     },
     {
-      "region": "San Martin",
-      "code": "PE22",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 10.5
+      "region": "Puno",
+      "code": "PE21",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.0
     },
     {
       "region": "San Martin",
@@ -12796,11 +12789,11 @@
       "precipitation_mm": 0.9
     },
     {
-      "region": "Tacna",
-      "code": "PE23",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.0
+      "region": "San Martin",
+      "code": "PE22",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.5
     },
     {
       "region": "Tacna",
@@ -13377,11 +13370,11 @@
       "precipitation_mm": 0.0
     },
     {
-      "region": "Tumbes",
-      "code": "PE24",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 0.4
+      "region": "Tacna",
+      "code": "PE23",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.0
     },
     {
       "region": "Tumbes",
@@ -13958,11 +13951,11 @@
       "precipitation_mm": 3.4
     },
     {
-      "region": "Ucayali",
-      "code": "PE25",
-      "start": "2026-07-22",
-      "end": "2026-07-22",
-      "precipitation_mm": 9.9
+      "region": "Tumbes",
+      "code": "PE24",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 0.6
     },
     {
       "region": "Ucayali",
@@ -14537,6 +14530,13 @@
       "start": "2026-10-12",
       "end": "2026-10-12",
       "precipitation_mm": 0.0
+    },
+    {
+      "region": "Ucayali",
+      "code": "PE25",
+      "start": "2026-10-13",
+      "end": "2026-10-13",
+      "precipitation_mm": 1.7
     }
   ]
 }
