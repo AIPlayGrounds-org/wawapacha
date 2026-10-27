@@ -7,7 +7,7 @@
     "check:budget": "bun scripts/check-budget.ts",
     "check:claims": "bun scripts/check-claims.ts",
     "check:seo": "bun scripts/check-seo.ts",
-    "claims": "bun scripts/generate-claims.ts && oxfmt --write app/data/claims.ts",
+    "claims": "bun scripts/generate-claims.ts",
     "dev": "nuxt dev",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
