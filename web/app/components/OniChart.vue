@@ -221,7 +221,7 @@ const option = computed(() => {
 }
 .ranges button {
   font: inherit;
-  font-size: 0.9375rem;
+  font-size: var(--text-meta);
   min-height: 44px;
   padding: 0 16px;
   border: 1px solid var(--border);
@@ -240,7 +240,7 @@ const option = computed(() => {
   background: var(--text);
   border-color: var(--text);
   color: var(--paper);
-  font-weight: 650;
+  font-weight: 600;
 }
 @media (pointer: coarse) {
   .ranges button {

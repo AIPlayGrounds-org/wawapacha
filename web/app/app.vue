@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { messages } from '~/messages'
-// Serif de lectura con eje de tamaño óptico: fina para leer, pesada y apretada para el titular.
-// Letra manuscrita solo para anotar los gráficos, como una nota al margen.
 import '@fontsource-variable/source-serif-4/opsz.css'
 import '@fontsource-variable/source-serif-4/opsz-italic.css'
-import '@fontsource/patrick-hand/latin.css'
-import '@fontsource/patrick-hand/latin-ext.css'
 </script>
 
 <template>
@@ -17,91 +13,99 @@ import '@fontsource/patrick-hand/latin-ext.css'
 </template>
 
 <style>
-/*
-  Mundo visual: un ensayo visual con scroll.
-  Papel blanco y tinta casi negra para leer. El mar tiene su color: petróleo profundo en la portada
-  y el pie, verde agua claro en el mapa y en el rango normal; la costa, en arena.
-  Un único realce cálido para El Niño y uno frío para La Niña, solo en datos.
-  No hay rojo de alarma: una anomalía no es un peligro.
-*/
 :root {
-  --paper: #ffffff;
-  --text: #262626;
-  --muted: #5e5e5e;
-  --faint: #8c8c8c;
-  --border: #e2e2e2;
-  --land: #e6d8bb;
-  --band: #e3f0ee;
-  /* El mar: verde agua claro (mapa, rango normal) y petróleo profundo (portada y pie). */
-  --sea: #e3f0ee;
-  --sea-edge: #a9cdc8;
-  --sand: #f5eddd;
-  --deep: #0f3d46;
-  --on-deep: #eef6f5;
-  --on-deep-muted: #b2cfcc;
-  --warm-on-deep: #ffa46d;
-  --neutral-data: #a6a6a6;
-  --warm: #d4581b;
-  --warm-text: #ae4613;
-  --warm-tint: #fbe9df;
-  --cold: #2f6db3;
-  --cold-text: #2a62a2;
-  --accent: #17676b;
+  --paper: #f3f9f8;
+  --surface: #e8f2f0;
+  --surface-raised: #fbfaf4;
+  --text: #20353a;
+  --muted: #49636a;
+  --faint: #71838a;
+  --border: #c9dcda;
+  --land: #e2d1ad;
+  --band: #e0efec;
+  --sea: #e0efec;
+  --sea-edge: #93bdb8;
+  --sand: #f5ecda;
+  --deep: #113f47;
+  --on-deep: #edf7f5;
+  --on-deep-muted: #aacac5;
+  --warm-on-deep: #ffad78;
+  --neutral-data: #9aa9aa;
+  --warm: #bc551d;
+  --warm-text: #8f3d13;
+  --warm-tint: #fae7db;
+  --cold: #356ba6;
+  --cold-text: #2f5e92;
+  --accent: #13676b;
   --link: var(--accent);
   --focus: var(--accent);
-  --chart-grid: #ececec;
-  /* Rampa divergente del pronóstico: frío fuerte (1) a cálido fuerte (9), neutral en el centro (5). Cada paso tiene al menos 3:1 sobre el fondo. */
-  --ramp-1: #0a3a78;
-  --ramp-2: #1d5ba5;
-  --ramp-3: #3a7dbf;
-  --ramp-4: #5c92c8;
-  --ramp-5: #8a8a8a;
-  --ramp-6: #c9783c;
-  --ramp-7: #b9622a;
-  --ramp-8: #9c4818;
-  --ramp-9: #6e300b;
-  --notice-bg: #fff3d6;
-  --notice-text: #5a3d07;
-  /* Usados por los gráficos, que leen estas variables. */
+  --chart-grid: #dce8e6;
+  --ramp-1: #24528e;
+  --ramp-2: #326eae;
+  --ramp-3: #4b8ac2;
+  --ramp-4: #4f83b5;
+  --ramp-5: #687777;
+  --ramp-6: #c9793d;
+  --ramp-7: #b75f29;
+  --ramp-8: #984418;
+  --ramp-9: #6c2e0b;
+  --notice-bg: #f8edc8;
+  --notice-text: #5a430d;
   --bg: var(--paper);
-  --surface: var(--paper);
-  --surface-raised: #ffffff;
-  --shadow-card: 0 10px 26px rgb(15 61 70 / 8%);
-  --content-width: 78rem;
+  --content-width: 80rem;
   --reading-width: 42rem;
-  --radius-card: 12px;
-  --space-card: 1.25rem;
-  --fs-small: 0.875rem;
-  --font: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
-  --hand: 'Patrick Hand', 'Comic Sans MS', cursive;
+  --gutter: clamp(1rem, 3vw, 2.5rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --shadow-card:
+    0 0 0 1px color-mix(in oklch, var(--text) 5%, transparent),
+    0 0.375rem 0.75rem color-mix(in oklch, var(--deep) 12%, transparent);
+  --text-label: 0.75rem;
+  --text-meta: 0.875rem;
+  --text-body: 1rem;
+  --text-lead: 1.25rem;
+  --text-title-sm: 1.5rem;
+  --text-title: 2rem;
+  --text-display: 3rem;
+  --font: 'Source Serif 4 Variable', Georgia, serif;
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #131313;
-    --surface-raised: #1d1d1d;
-    --shadow-card: 0 10px 26px rgb(0 0 0 / 24%);
-    --text: #ececec;
-    --muted: #ababab;
-    --faint: #7c7c7c;
-    --border: #2d2d2d;
-    --land: #3a3324;
-    --band: #142a2d;
-    --sea: #112629;
-    --sea-edge: #2b555a;
-    --sand: #1e1a13;
-    --deep: #0a2a31;
-    --on-deep: #e6f0ef;
+    --paper: #13272b;
+    --surface: #1b3438;
+    --surface-raised: #244047;
+    --text: #e7f1ef;
+    --muted: #b1c7c5;
+    --faint: #8ca5a2;
+    --border: #3d5a5d;
+    --land: #4b402c;
+    --band: #1a3739;
+    --sea: #153236;
+    --sea-edge: #397075;
+    --sand: #312a1c;
+    --deep: #09272f;
+    --on-deep: #e3f0ee;
     --on-deep-muted: #9fbfbc;
-    --warm-on-deep: #f7a06a;
-    --accent: #7cc9c7;
-    --neutral-data: #707070;
-    --warm: #f08a4b;
-    --warm-text: #f59a62;
-    --warm-tint: #3a2215;
-    --cold: #74aaeb;
-    --cold-text: #8ab8ee;
-    --chart-grid: #232323;
+    --warm-on-deep: #ffab75;
+    --accent: #8bd4d0;
+    --neutral-data: #809796;
+    --warm: #f09555;
+    --warm-text: #f8a46c;
+    --warm-tint: #4a2a1b;
+    --cold: #83b8f0;
+    --cold-text: #95c7fa;
+    --chart-grid: #294348;
     --ramp-1: #7db8ff;
     --ramp-2: #6ea3ea;
     --ramp-3: #6190d0;
@@ -111,7 +115,7 @@ import '@fontsource/patrick-hand/latin-ext.css'
     --ramp-7: #d9894f;
     --ramp-8: #f09050;
     --ramp-9: #ffa468;
-    --notice-bg: #33280f;
+    --notice-bg: #3d3217;
     --notice-text: #f4dca5;
   }
 }
@@ -123,9 +127,9 @@ body {
   background: var(--paper);
   color: var(--text);
   font-family: var(--font);
-  font-size: 1.125rem;
+  font-size: var(--text-body);
   font-optical-sizing: auto;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 a {
   color: var(--link);
@@ -136,6 +140,41 @@ a {
 a:hover {
   text-decoration-color: currentColor;
   text-decoration-thickness: 2px;
+}
+strong,
+th,
+dt {
+  font-weight: 600;
+}
+button,
+select,
+summary {
+  font: inherit;
+}
+button {
+  color: inherit;
+}
+button:active {
+  transform: translateY(1px);
+}
+main p,
+main li,
+main dd {
+  text-wrap: pretty;
+}
+main h1,
+main h2,
+main h3 {
+  text-wrap: balance;
+  font-weight: 600;
+}
+:where(.chart, .map, .chart-region) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+canvas {
+  max-width: 100%;
 }
 ::selection {
   background: color-mix(in srgb, var(--text) 16%, transparent);
@@ -154,16 +193,7 @@ a:hover {
 :where(button, select, summary) {
   min-height: 44px;
 }
-:where(
-  .topbar a,
-  .header a,
-  .links a,
-  .alerts a,
-  .source-links a,
-  .detail-link,
-  .skip-link,
-  li > a
-) {
+:where(.links a, .alerts a, .source-links a, .site-footer a, .detail-link, .skip-link, li > a) {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
@@ -191,14 +221,14 @@ summary {
   outline: 2px solid var(--focus);
   outline-offset: 3px;
 }
-@media (max-width: 599px) {
-  .header {
-    flex-wrap: wrap;
-    gap: 12px 20px;
-  }
-  .header .brand {
-    flex-basis: 100%;
-    text-align: center;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 </style>

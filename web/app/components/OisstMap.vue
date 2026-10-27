@@ -157,8 +157,11 @@ const option = computed(() => {
   aspect-ratio: 640 / 740;
 }
 table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
-  font-size: 0.8rem;
+  font-size: var(--text-label);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -171,9 +174,10 @@ td {
   padding: 4px 6px;
   border: 1px solid var(--border);
   text-align: right;
+  overflow-wrap: anywhere;
 }
 th {
   background: var(--band);
-  font-weight: 650;
+  font-weight: 600;
 }
 </style>

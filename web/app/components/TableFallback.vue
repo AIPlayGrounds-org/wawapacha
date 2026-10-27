@@ -23,7 +23,7 @@ defineProps<{ label: string }>()
   min-height: 44px;
   color: var(--text);
   cursor: pointer;
-  font-weight: 650;
+  font-weight: 600;
 }
 .table-wrap {
   max-width: 100%;
@@ -31,8 +31,10 @@ defineProps<{ label: string }>()
   overflow-x: auto;
 }
 :deep(table) {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
-  white-space: nowrap;
 }
 :deep(caption) {
   margin-bottom: 8px;
@@ -44,8 +46,9 @@ defineProps<{ label: string }>()
   border-bottom: 1px solid var(--border);
   padding: 8px 10px;
   text-align: left;
+  overflow-wrap: anywhere;
 }
 :deep(th) {
-  font-weight: 650;
+  font-weight: 600;
 }
 </style>

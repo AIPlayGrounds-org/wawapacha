@@ -1,53 +1,69 @@
 # Design
 
-The site uses an editorial data-dashboard system. The home page answers the
-official question first, then moves from map to measurements, comparison,
-forecast and local tools. The shared chart frame remains the source for data
-provenance.
+WawaPacha is a field brief for the Peruvian coast. The home page answers the
+official state first, then gives the evidence, historical scale, outlook and
+local routes needed to interpret it. Secondary routes use the same header,
+reading rail and data frame.
 
-## Tokens
+## Screen goal
 
-| Token               | Light                         | Dark                    | Use                                           |
-| ------------------- | ----------------------------- | ----------------------- | --------------------------------------------- |
-| Typeface            | Source Serif 4 Variable       | Source Serif 4 Variable | Reading text and headings                     |
-| Annotation typeface | Patrick Hand                  | Patrick Hand            | Short chart annotations only                  |
-| Body size           | `1.125rem`                    | `1.125rem`              | Long-form reading                             |
-| Small size          | `0.875rem`                    | `0.875rem`              | Metadata and labels                           |
-| Heading scale       | `clamp(2rem, 4.7vw, 3.5rem)`  | same                    | Section headings                              |
-| Hero scale          | `clamp(3.7rem, 10vw, 8.5rem)` | same                    | Home answer                                   |
-| Text                | `#262626`                     | `#ececec`               | Primary text                                  |
-| Muted text          | `#5e5e5e`                     | `#ababab`               | Secondary text                                |
-| Paper               | `#ffffff`                     | `#131313`               | Page background                               |
-| Raised surface      | `#ffffff`                     | `#1d1d1d`               | Status cards                                  |
-| Border              | `#e2e2e2`                     | `#2d2d2d`               | Rules and card edges                          |
-| Accent              | `#17676b`                     | `#7cc9c7`               | Links, focus and section markers              |
-| Warm data           | `#d4581b`                     | `#f08a4b`               | Warm anomalies only                           |
-| Cold data           | `#2f6db3`                     | `#74aaeb`               | Cold anomalies only                           |
-| Sea surface         | `#e3f0ee`                     | `#112629`               | Evidence section and neutral chart range      |
-| Sand surface        | `#f5eddd`                     | `#1e1a13`               | Historical context section                    |
-| Content width       | `78rem`                       | `78rem`                 | Shared page rail                              |
-| Reading width       | `42rem`                       | `42rem`                 | Prose measure                                 |
-| Card radius         | `12px`                        | `12px`                  | Status and local link cards                   |
-| Card spacing        | `1.25rem`                     | `1.25rem`               | Status and local link card padding            |
-| Motion              | `160ms ease`                  | `160ms ease`            | Local link hover; disabled for reduced motion |
+The user's goal is to understand the current coastal state and what evidence
+supports it. The next action is to inspect the signal, forecast or local view
+that answers their question.
 
-The tokens live in [`web/app/app.vue`](../web/app/app.vue). Components use the
-same variables for charts and page surfaces. Warm and cold colours identify data
-direction; they do not signal danger. The alert state uses a warm rule with the
-official wording, not a red warning palette.
+The home page has one primary message: the current ENFEN status. The map,
+charts and local links support that message. Historical context, methodology
+and education remain available through navigation and are not presented as
+competing calls to action.
 
-Light and dark primary text, muted text, accent, warm data and cold data use the
-values above. The dark values are selected for readable contrast against
-`#131313`; focus uses the accent with a visible outline.
+## System
 
-## Layout rules
+The shared tokens live in [`web/app/app.vue`](../web/app/app.vue). Components
+read those tokens; page styles do not add local colour or type scales.
 
-- The home page keeps one reading rail and uses a two-column split only when a
-  chart or status card benefits from it.
-- The first viewport contains the ENFEN state, its date and the next official
-  action.
-- Charted evidence blocks carry dataset provenance through `ChartShell`;
-  comparison cards present derived values directly.
-- Tables remain available through the existing accessible fallbacks.
-- The home page uses no auto-playing motion. Hover motion is removed when the
-  user requests reduced motion.
+| Rule              | Token or behavior                                                                                                                          |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Type scale        | 12, 14, 16, 20, 24, 32, 48px; each screen uses at most five sizes.                                                                         |
+| Families          | Source Serif 4 is the only product family. It serves reading copy, headings and metadata.                                                  |
+| Weights           | 400 for body text and 600 for emphasis.                                                                                                    |
+| Body and metadata | 16px body; 14px metadata; 12px labels.                                                                                                     |
+| Headings          | 24px section titles; 32px page titles on narrow screens; 48px page titles on wide screens.                                                 |
+| Colour            | One ocean-blue accent. Tinted neutral roles and data ramps use the shared palette. Warm and cold hues describe data direction, not danger. |
+| Surfaces          | The paper, sea, sand and raised-surface roles separate evidence groups. Borders carry structure; shadows mark raised status only.          |
+| Spacing           | The 4px steps from `--space-1` through `--space-24` group content before surface treatment.                                                |
+| Targets and focus | Interactive targets are at least 44px high. `:focus-visible` uses the accent outline.                                                      |
+| Motion            | Only local-link hover uses transform. It is gated for fine pointers and removed for reduced motion. No content enters from scale zero.     |
+| Data chrome       | `ChartShell` owns variable, unit, period, type, source and update age for every chart.                                                     |
+
+## Layout
+
+The site uses one content rail. The home page uses paired columns only where a
+map, status or forecast benefits from a side note. At 900px and below, those
+columns become one column. Tables keep their accessible fallback and scroll
+inside their own region when a long value needs more width.
+
+The shared header marks the current route with `aria-current="page"`. Every
+page keeps the skip link, one `main` landmark and one page heading.
+
+## States
+
+Charts show their loading and error placeholders where the chart will land.
+Empty data uses a status message with the relevant next source or route. A
+stale source keeps its provenance and adds a status notice linking to the
+source. Table fallbacks remain available below the chart.
+
+## Review answers
+
+1. The home goal is the current ENFEN state.
+2. The next decision needs status, date, evidence and an onward route.
+3. The system carries source dates, units and update age into each chart.
+4. Loading, stale and empty states are visible beside their content.
+5. Signal, measure, scale, precedent, outlook and local routes are grouped.
+6. Navigation, charts, tables and disclosure follow familiar patterns.
+7. Dataset shaping and chart provenance absorb data complexity.
+8. The first viewport gives the state before supporting evidence.
+9. The status is the only large filled emphasis on the home page.
+10. The common path is status to evidence to local view.
+11. Static payloads show loading and error positions without a blank chart.
+12. The first read and stale-source states are explicit.
+13. Unrelated sections are not promoted to the home page's first decision.

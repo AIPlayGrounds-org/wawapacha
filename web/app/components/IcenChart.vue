@@ -108,6 +108,15 @@ const chartOption = computed(() => {
 .icen-note {
   margin: 0 0 16px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
+}
+.chart {
+  width: 100%;
+  height: 380px;
+}
+@media (max-width: 599px) {
+  .chart {
+    height: 320px;
+  }
 }
 </style>

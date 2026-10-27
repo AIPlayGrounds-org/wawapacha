@@ -170,170 +170,148 @@ useSiteSeo({ title: territory.seoTitle, description: territory.seoDescription })
 </script>
 
 <template>
-  <main id="main-content" class="territory-page">
-    <header class="topbar">
-      <NuxtLink class="brand" to="/">{{ messages.page.brand }}</NuxtLink>
-      <span class="section-label">{{ territory.sectionLabel }}</span>
-      <NuxtLink to="/rios">{{ messages.rios.sectionLabel }}</NuxtLink>
-      <NuxtLink to="/aprende">{{ messages.page.learnLink }}</NuxtLink>
-      <NuxtLink to="/metodologia">{{ messages.page.methodologyLink }}</NuxtLink>
-    </header>
-
-    <section class="intro" aria-labelledby="territory-title">
-      <h1 id="territory-title">{{ territory.title }}</h1>
-      <p>{{ territory.lead }}</p>
-      <p>{{ territory.leadDetails }}</p>
-      <div class="metric-toggle" role="group" :aria-label="territory.metricGroup">
-        <button
-          type="button"
-          :aria-pressed="metric === 'precipitation'"
-          @click="metric = 'precipitation'"
-        >
-          {{ territory.precipitation }}
-        </button>
-        <button type="button" :aria-pressed="metric === 'anomaly'" @click="metric = 'anomaly'">
-          {{ territory.anomaly }}
-        </button>
-      </div>
-    </section>
-
-    <section class="map-section" aria-labelledby="map-title">
-      <h2 id="map-title" class="sr-only">{{ territory.mapHeading }}</h2>
-      <ChartShell :dataset="chirps" :summary="mapSummary">
-        <template v-if="geometryRecord && latestChirps.length">
-          <NuxtErrorBoundary>
-            <ClientOnly>
-              <VChart class="map" :option="option" autoresize />
-              <template #fallback>
-                <div class="chart-placeholder">{{ territory.loading }}</div>
-              </template>
-            </ClientOnly>
-            <template #error>
-              <div class="chart-placeholder">{{ territory.chartError }}</div>
-            </template>
-          </NuxtErrorBoundary>
-        </template>
-        <p v-else class="empty-state" role="status">{{ territory.mapEmpty }}</p>
-        <p class="secondary-provenance">
-          {{ territory.boundaryProvenance }}
-          <a v-if="geometryRecord" :href="geometry.source.url" target="_blank" rel="noopener">
-            {{ geometry.source.institution }}<span class="sr-only">{{ messages.page.newTab }}</span>
-          </a>
-          <template v-if="geometryRecord">
-            · {{ geometryRecord.attribution }}
-            <a :href="geometryRecord.license_url" target="_blank" rel="noopener">
-              {{ territory.boundaryLicense }}<span class="sr-only">{{ messages.page.newTab }}</span>
-            </a>
-          </template>
-        </p>
-      </ChartShell>
-    </section>
-
-    <section class="tables" :aria-label="territory.tableSection">
-      <ChartShell :dataset="chirps" :summary="chirpsSummary">
-        <details v-if="latestChirps.length" open>
-          <summary>{{ territory.tableSummary }}</summary>
-          <div class="table-wrap" role="region" :aria-label="territory.tableSummary" tabindex="0">
-            <table>
-              <caption>
-                {{
-                  territory.chirpsCaption(latestChirpsDate)
-                }}
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col">{{ territory.department }}</th>
-                  <th scope="col">{{ territory.code }}</th>
-                  <th scope="col" class="num">{{ territory.precipitation }}</th>
-                  <th scope="col" class="num">{{ territory.anomaly }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="record in latestChirps" :key="record.code">
-                  <th scope="row">{{ record.region }}</th>
-                  <td>{{ record.code }}</td>
-                  <td class="num">{{ displayPrecipitation(record.precipitation_mm) }}</td>
-                  <td class="num">{{ displayAnomaly(record.anomaly_mm) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </details>
-        <p v-else class="empty-state" role="status">{{ territory.tableEmpty }}</p>
-      </ChartShell>
-
-      <ChartShell :dataset="era5" :summary="era5Summary">
-        <div v-if="era5Records.length" class="cross-check">
-          <h2>{{ territory.crossCheckTitle }}</h2>
-          <p>{{ territory.crossCheckClaim }}</p>
-          <p>{{ territory.crossCheckLimits }}</p>
-          <p>
-            {{ territory.crossCheckLead(era5.window.days, era5.window.start, era5.window.end) }}
-          </p>
-          <div
-            class="table-wrap"
-            role="region"
-            :aria-label="territory.crossCheckCaption"
-            tabindex="0"
+  <div class="territory-page">
+    <SiteHeader />
+    <main id="main-content">
+      <section class="intro" aria-labelledby="territory-title">
+        <p class="eyebrow">{{ territory.sectionLabel }}</p>
+        <h1 id="territory-title">{{ territory.title }}</h1>
+        <p>{{ territory.lead }}</p>
+        <p>{{ territory.leadDetails }}</p>
+        <div class="metric-toggle" role="group" :aria-label="territory.metricGroup">
+          <button
+            type="button"
+            :aria-pressed="metric === 'precipitation'"
+            @click="metric = 'precipitation'"
           >
-            <table>
-              <caption>
-                {{
-                  territory.crossCheckCaption
-                }}
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col">{{ territory.department }}</th>
-                  <th scope="col">{{ territory.code }}</th>
-                  <th scope="col" class="num">{{ territory.chirpsValue }}</th>
-                  <th scope="col" class="num">{{ territory.era5Sum }}</th>
-                  <th scope="col">{{ territory.sampleType }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="record in era5Records" :key="record.code">
-                  <th scope="row">{{ record.region }}</th>
-                  <td>{{ record.code }}</td>
-                  <td class="num">{{ displayPrecipitation(record.chirps?.precipitation_mm) }}</td>
-                  <td class="num">{{ displayEra5(record) }}</td>
-                  <td>{{ territory.pointSample }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <DatasetAttribution :dataset="era5" />
+            {{ territory.precipitation }}
+          </button>
+          <button type="button" :aria-pressed="metric === 'anomaly'" @click="metric = 'anomaly'">
+            {{ territory.anomaly }}
+          </button>
         </div>
-        <p v-else class="empty-state" role="status">{{ territory.era5Empty }}</p>
-      </ChartShell>
-    </section>
-  </main>
+      </section>
+
+      <section class="map-section" aria-labelledby="map-title">
+        <h2 id="map-title" class="sr-only">{{ territory.mapHeading }}</h2>
+        <ChartShell :dataset="chirps" :summary="mapSummary">
+          <template v-if="geometryRecord && latestChirps.length">
+            <NuxtErrorBoundary>
+              <ClientOnly>
+                <VChart class="map" :option="option" autoresize />
+                <template #fallback>
+                  <div class="chart-placeholder">{{ territory.loading }}</div>
+                </template>
+              </ClientOnly>
+              <template #error>
+                <div class="chart-placeholder">{{ territory.chartError }}</div>
+              </template>
+            </NuxtErrorBoundary>
+          </template>
+          <p v-else class="empty-state" role="status">{{ territory.mapEmpty }}</p>
+          <p class="secondary-provenance">
+            {{ territory.boundaryProvenance }}
+            <a v-if="geometryRecord" :href="geometry.source.url" target="_blank" rel="noopener">
+              {{ geometry.source.institution
+              }}<span class="sr-only">{{ messages.page.newTab }}</span>
+            </a>
+            <template v-if="geometryRecord">
+              · {{ geometryRecord.attribution }}
+              <a :href="geometryRecord.license_url" target="_blank" rel="noopener">
+                {{ territory.boundaryLicense
+                }}<span class="sr-only">{{ messages.page.newTab }}</span>
+              </a>
+            </template>
+          </p>
+        </ChartShell>
+      </section>
+
+      <section class="tables" :aria-label="territory.tableSection">
+        <ChartShell :dataset="chirps" :summary="chirpsSummary">
+          <details v-if="latestChirps.length" open>
+            <summary>{{ territory.tableSummary }}</summary>
+            <div class="table-wrap" role="region" :aria-label="territory.tableSummary" tabindex="0">
+              <table>
+                <caption>
+                  {{
+                    territory.chirpsCaption(latestChirpsDate)
+                  }}
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">{{ territory.department }}</th>
+                    <th scope="col">{{ territory.code }}</th>
+                    <th scope="col" class="num">{{ territory.precipitation }}</th>
+                    <th scope="col" class="num">{{ territory.anomaly }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="record in latestChirps" :key="record.code">
+                    <th scope="row">{{ record.region }}</th>
+                    <td>{{ record.code }}</td>
+                    <td class="num">{{ displayPrecipitation(record.precipitation_mm) }}</td>
+                    <td class="num">{{ displayAnomaly(record.anomaly_mm) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+          <p v-else class="empty-state" role="status">{{ territory.tableEmpty }}</p>
+        </ChartShell>
+
+        <ChartShell :dataset="era5" :summary="era5Summary">
+          <div v-if="era5Records.length" class="cross-check">
+            <h2>{{ territory.crossCheckTitle }}</h2>
+            <p>{{ territory.crossCheckClaim }}</p>
+            <p>{{ territory.crossCheckLimits }}</p>
+            <p>
+              {{ territory.crossCheckLead(era5.window.days, era5.window.start, era5.window.end) }}
+            </p>
+            <div
+              class="table-wrap"
+              role="region"
+              :aria-label="territory.crossCheckCaption"
+              tabindex="0"
+            >
+              <table>
+                <caption>
+                  {{
+                    territory.crossCheckCaption
+                  }}
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">{{ territory.department }}</th>
+                    <th scope="col">{{ territory.code }}</th>
+                    <th scope="col" class="num">{{ territory.chirpsValue }}</th>
+                    <th scope="col" class="num">{{ territory.era5Sum }}</th>
+                    <th scope="col">{{ territory.sampleType }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="record in era5Records" :key="record.code">
+                    <th scope="row">{{ record.region }}</th>
+                    <td>{{ record.code }}</td>
+                    <td class="num">{{ displayPrecipitation(record.chirps?.precipitation_mm) }}</td>
+                    <td class="num">{{ displayEra5(record) }}</td>
+                    <td>{{ territory.pointSample }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <DatasetAttribution :dataset="era5" />
+          </div>
+          <p v-else class="empty-state" role="status">{{ territory.era5Empty }}</p>
+        </ChartShell>
+      </section>
+    </main>
+  </div>
 </template>
 
 <style scoped>
 .territory-page {
   min-height: 100svh;
   padding-bottom: 64px;
-}
-.topbar {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 18px 16px;
-}
-.brand {
-  color: var(--text);
-  font-family: var(--hand);
-  font-size: 1.5rem;
-  line-height: 1;
-  text-decoration: none;
-}
-.section-label {
-  color: var(--muted);
-  font-size: 0.95rem;
 }
 .intro,
 .map-section,
@@ -348,12 +326,20 @@ useSiteSeo({ title: territory.seoTitle, description: territory.seoDescription })
   padding-top: clamp(40px, 8vw, 88px);
   padding-bottom: 32px;
 }
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 h1 {
   max-width: 18ch;
   margin: 0;
-  font-size: clamp(2.75rem, 8vw, 5.25rem);
-  font-weight: 900;
-  line-height: 0.96;
+  font-size: var(--text-display);
+  font-weight: 600;
+  line-height: 1.05;
   letter-spacing: -0.035em;
   text-wrap: balance;
 }
@@ -361,7 +347,7 @@ h1 {
   max-width: 44rem;
   margin: 24px 0 0;
   color: var(--muted);
-  font-size: 1.15rem;
+  font-size: var(--text-body);
 }
 .metric-toggle {
   display: inline-flex;
@@ -377,13 +363,13 @@ h1 {
   color: var(--text);
   cursor: pointer;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 .metric-toggle button[aria-pressed='true'] {
   border-color: var(--text);
   background: var(--text);
   color: var(--paper);
-  font-weight: 650;
+  font-weight: 600;
 }
 .map-section {
   padding-bottom: 32px;
@@ -403,7 +389,7 @@ h1 {
 .secondary-provenance {
   margin: 16px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 .tables {
   display: grid;
@@ -418,7 +404,7 @@ details {
 summary {
   color: var(--text);
   cursor: pointer;
-  font-weight: 650;
+  font-weight: 600;
 }
 .table-wrap {
   overflow-x: auto;
@@ -426,8 +412,10 @@ summary {
 }
 table {
   width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 caption {
   margin-bottom: 12px;
@@ -439,11 +427,11 @@ td {
   padding: 8px 10px;
   border-bottom: 1px solid var(--border);
   text-align: left;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 thead th {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: var(--text-label);
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
@@ -456,7 +444,7 @@ thead th {
 }
 h2 {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: var(--text-title-sm);
   line-height: 1.15;
 }
 .cross-check p {
@@ -472,9 +460,8 @@ h2 {
   .map {
     min-height: 320px;
   }
-  .topbar {
-    align-items: flex-start;
-    flex-direction: column;
+  h1 {
+    font-size: var(--text-title);
   }
 }
 </style>

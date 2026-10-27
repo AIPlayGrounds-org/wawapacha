@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
+import { format } from 'oxfmt'
 import { parseClaims } from './claim-registry'
 
 export const renderClaims = (registry: string): string => {
@@ -27,10 +28,21 @@ if (import.meta.main) {
   const registryPath = resolve(import.meta.dir, '../../evidence/claims.toml')
   const outputPath = resolve(import.meta.dir, '../app/data/claims.ts')
   const registry = await readFile(registryPath, 'utf8')
-  const output = renderClaims(registry)
+  const config = JSON.parse(await readFile(resolve(import.meta.dir, '../.oxfmtrc.json'), 'utf8'))
+  const formatted = await format(outputPath, renderClaims(registry), config)
+  if (formatted.errors.length > 0) {
+    throw new Error(`could not format generated claims: ${formatted.errors[0]?.message}`)
+  }
+  const output = formatted.code
 
   await mkdir(dirname(outputPath), { recursive: true })
-  await writeFile(outputPath, output)
+  let existing: string | undefined
+  try {
+    existing = await readFile(outputPath, 'utf8')
+  } catch (error) {
+    if (!(error instanceof Error && 'code' in error && error.code === 'ENOENT')) throw error
+  }
+  if (existing !== output) await writeFile(outputPath, output)
   console.log(
     `generated ${outputPath} with ${parseClaims(registry).filter((claim) => claim.status === 'verified').length} verified claims`,
   )

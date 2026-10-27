@@ -186,8 +186,8 @@ const option = computed(() => {
 }
 h2 {
   margin: 0 0 16px;
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  font-weight: 800;
+  font-size: var(--text-title-sm);
+  font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
@@ -208,16 +208,16 @@ h2 {
 }
 .latest-label {
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
 }
 .latest-grid strong {
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: var(--text-title-sm);
   font-variant-numeric: tabular-nums;
 }
 .latest-grid time {
   grid-column: 1 / -1;
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
 }
 .chart {
   width: 100%;
@@ -235,7 +235,7 @@ h2 {
   color: var(--muted);
 }
 figcaption {
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
   color: var(--muted);
 }
 .key {

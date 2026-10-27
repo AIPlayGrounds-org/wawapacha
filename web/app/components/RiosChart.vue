@@ -231,8 +231,8 @@ const option = computed(() => {
 }
 .controls label {
   color: var(--muted);
-  font-size: 0.95rem;
-  font-weight: 650;
+  font-size: var(--text-meta);
+  font-weight: 600;
 }
 select {
   min-height: 44px;
@@ -246,7 +246,7 @@ select {
 .model-note {
   margin: 0 0 12px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 .chart,
 .chart-placeholder {
@@ -266,8 +266,10 @@ select {
 }
 table {
   width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 caption {
   margin-bottom: 8px;
@@ -279,11 +281,11 @@ td {
   padding: 8px 10px;
   border-bottom: 1px solid var(--border);
   text-align: left;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 thead th {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: var(--text-label);
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
