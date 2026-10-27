@@ -74,16 +74,7 @@ useSiteSeo({
 
 <template>
   <div class="home">
-    <header class="site-header">
-      <NuxtLink class="brand" to="/">{{ messages.page.brand }}</NuxtLink>
-      <nav :aria-label="messages.page.mainNav">
-        <NuxtLink to="/historico">{{ messages.historico.historyNav }}</NuxtLink>
-        <NuxtLink to="/territorio">{{ messages.page.territoryLink }}</NuxtLink>
-        <NuxtLink to="/rios">{{ messages.rios.sectionLabel }}</NuxtLink>
-        <NuxtLink to="/aprende">{{ messages.page.learnLink }}</NuxtLink>
-        <NuxtLink to="/metodologia">{{ messages.page.methodologyLink }}</NuxtLink>
-      </nav>
-    </header>
+    <SiteHeader />
 
     <main id="main-content">
       <section class="hero" aria-labelledby="home-title">
@@ -260,7 +251,6 @@ useSiteSeo({
   min-height: 100svh;
   background: var(--paper);
 }
-.site-header,
 .site-footer {
   display: flex;
   align-items: center;
@@ -268,24 +258,6 @@ useSiteSeo({
   max-width: var(--content-width);
   margin: 0 auto;
   padding: 18px 24px;
-}
-.site-header {
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-.site-header nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 4px 20px;
-}
-.brand {
-  flex: none;
-  color: var(--text);
-  font-family: var(--hand);
-  font-size: 1.5rem;
-  line-height: 1;
-  text-decoration: none;
 }
 main {
   max-width: var(--content-width);
@@ -295,16 +267,16 @@ main {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 0.6fr);
   align-items: end;
-  gap: clamp(32px, 7vw, 96px);
-  min-height: min(680px, calc(100svh - 80px));
-  padding: clamp(72px, 12vw, 152px) 24px clamp(72px, 10vw, 128px);
+  gap: var(--space-12);
+  min-height: 34rem;
+  padding: var(--space-16) var(--gutter) var(--space-16);
   border-bottom: 1px solid var(--border);
 }
 .eyebrow {
   margin: 0 0 12px;
   color: var(--accent);
-  font-size: 0.78rem;
-  font-weight: 750;
+  font-size: var(--text-label);
+  font-weight: 600;
   letter-spacing: 0.1em;
   line-height: 1.3;
   text-transform: uppercase;
@@ -318,29 +290,29 @@ p {
 h1 {
   max-width: 10ch;
   margin: 0;
-  font-size: clamp(3.7rem, 10vw, 8.5rem);
-  font-weight: 850;
-  letter-spacing: -0.065em;
-  line-height: 0.88;
+  font-size: var(--text-display);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 .hero-lead {
   max-width: 38rem;
-  margin: 34px 0 0;
-  font-size: clamp(1.25rem, 2.7vw, 1.7rem);
-  line-height: 1.35;
+  margin: var(--space-6) 0 0;
+  font-size: var(--text-body);
+  line-height: 1.5;
 }
 .hero-meta {
-  margin: 22px 0 0;
+  margin: var(--space-4) 0 0;
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
 }
 .status-card {
   display: grid;
   gap: 12px;
-  padding: var(--space-card);
+  padding: var(--space-6);
   border: 1px solid var(--border);
   border-top: 4px solid var(--border);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-md);
   background: var(--surface-raised);
   box-shadow: var(--shadow-card);
 }
@@ -350,37 +322,37 @@ h1 {
 .status-kicker,
 .local-label {
   color: var(--muted);
-  font-size: var(--fs-small);
-  font-weight: 700;
+  font-size: var(--text-meta);
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 .status-card strong {
-  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-size: var(--text-title-sm);
   line-height: 1.1;
 }
 .status-card span:not(.status-kicker) {
   color: var(--muted);
-  font-size: 0.96rem;
+  font-size: var(--text-body);
   line-height: 1.45;
 }
 .section {
-  padding: clamp(80px, 11vw, 144px) 24px 0;
+  padding: var(--space-16) var(--gutter) 0;
 }
 .section-heading {
   max-width: var(--reading-width);
-  margin-bottom: 32px;
+  margin-bottom: var(--space-8);
 }
 h2 {
-  margin: 0 0 14px;
-  font-size: clamp(2rem, 4.7vw, 3.5rem);
-  font-weight: 820;
-  letter-spacing: -0.045em;
-  line-height: 0.98;
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-title-sm);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 h3 {
   margin: 0;
-  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  font-size: var(--text-title-sm);
   line-height: 1.1;
 }
 .section-heading > p:last-child,
@@ -393,14 +365,14 @@ h3 {
   display: grid;
   grid-template-columns: minmax(12rem, 0.5fr) minmax(0, 1.5fr);
   align-items: start;
-  gap: clamp(24px, 6vw, 88px);
+  gap: var(--space-12);
 }
 .map-note {
   padding-top: 22px;
   border-top: 2px solid var(--accent);
 }
 .map-note p {
-  margin: 14px 0 20px;
+  margin: var(--space-3) 0 var(--space-5);
   color: var(--muted);
 }
 .figure {
@@ -414,7 +386,7 @@ h3 {
   padding-top: 0;
 }
 .subsection {
-  margin-top: clamp(56px, 8vw, 96px);
+  margin-top: var(--space-12);
 }
 .subsection-heading {
   display: flex;
@@ -451,7 +423,7 @@ h3 {
 }
 .comparison-topline strong {
   white-space: nowrap;
-  font-size: 1.15rem;
+  font-size: var(--text-body);
   font-variant-numeric: tabular-nums;
 }
 .comparison-bar {
@@ -467,7 +439,7 @@ h3 {
 .comparison-card p {
   margin: 0;
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
 }
 .impact {
   background: var(--sand);
@@ -477,7 +449,7 @@ h3 {
 }
 .coverage-note {
   margin-top: 14px;
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
 }
 .forecast {
   padding-bottom: 0;
@@ -486,12 +458,12 @@ h3 {
   display: grid;
   grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
   align-items: start;
-  gap: clamp(32px, 6vw, 88px);
+  gap: var(--space-12);
 }
 .forecast-copy {
   display: grid;
   gap: 18px;
-  padding: 24px;
+  padding: var(--space-6);
   border-left: 4px solid var(--accent);
   background: var(--band);
 }
@@ -502,7 +474,7 @@ h3 {
   display: grid;
   gap: 2px;
   margin-top: 6px;
-  font-weight: 650;
+  font-weight: 600;
 }
 .forecast-grid :deep(.outlook-panel) {
   padding-top: 0;
@@ -514,21 +486,21 @@ h3 {
   padding-inline: 0;
 }
 .local {
-  padding-bottom: clamp(80px, 11vw, 144px);
+  padding-bottom: var(--space-16);
 }
 .local-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--space-3);
 }
 .local-card {
   display: grid;
   align-content: start;
   gap: 10px;
   min-height: 150px;
-  padding: var(--space-card);
+  padding: var(--space-6);
   border: 1px solid var(--border);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-md);
   color: var(--text);
   text-decoration: none;
   transition:
@@ -540,18 +512,18 @@ h3 {
   transform: translateY(-2px);
 }
 .local-card strong {
-  font-size: 1.35rem;
+  font-size: var(--text-title-sm);
 }
 .local-card span:last-child {
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
   line-height: 1.4;
 }
 .site-footer {
   justify-content: space-between;
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
 }
 @media (prefers-reduced-motion: reduce) {
   .local-card {
@@ -574,22 +546,17 @@ h3 {
   }
 }
 @media (max-width: 599px) {
-  .site-header,
   .site-footer {
     align-items: flex-start;
     flex-wrap: wrap;
-    padding-inline: 16px;
-  }
-  .site-header nav {
-    justify-content: flex-start;
-    gap: 4px 14px;
+    padding-inline: var(--gutter);
   }
   .hero,
   .section {
-    padding-inline: 16px;
+    padding-inline: var(--gutter);
   }
   h1 {
-    font-size: clamp(3.5rem, 18vw, 5.5rem);
+    font-size: var(--text-title);
   }
   .map-layout,
   .local-grid {

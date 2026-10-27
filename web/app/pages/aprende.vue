@@ -38,14 +38,7 @@ useSiteSeo({ title: learn.seoTitle, description: learn.seoDescription })
 
 <template>
   <div class="page">
-    <header class="header">
-      <NuxtLink class="brand" to="/">{{ messages.page.brand }}</NuxtLink>
-      <NuxtLink to="/territorio">{{ messages.page.territoryLink }}</NuxtLink>
-      <NuxtLink to="/historico">{{ messages.historico.historyNav }}</NuxtLink>
-      <NuxtLink to="/rios">{{ messages.rios.sectionLabel }}</NuxtLink>
-      <NuxtLink to="/aprende">{{ messages.page.learnLink }}</NuxtLink>
-      <NuxtLink to="/metodologia">{{ messages.page.methodologyLink }}</NuxtLink>
-    </header>
+    <SiteHeader />
 
     <main id="main-content">
       <section class="intro" aria-labelledby="learn-title">
@@ -155,23 +148,6 @@ useSiteSeo({ title: learn.seoTitle, description: learn.seoDescription })
 .page {
   min-height: 100svh;
 }
-.header {
-  display: flex;
-  align-items: baseline;
-  gap: 24px;
-  max-width: 68rem;
-  margin: 0 auto;
-  padding: 18px 20px;
-  border-bottom: 1px solid var(--border);
-}
-.brand {
-  margin-right: auto;
-  color: var(--text);
-  font-family: var(--hand);
-  font-size: 1.5rem;
-  line-height: 1;
-  text-decoration: none;
-}
 main {
   max-width: 68rem;
   margin: 0 auto;
@@ -184,16 +160,17 @@ main {
 .eyebrow {
   margin: 0 0 8px;
   color: var(--accent);
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: var(--text-label);
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 h1 {
   max-width: 15ch;
   margin: 0;
-  font-size: clamp(2.7rem, 8vw, 5.3rem);
-  line-height: 0.98;
+  font-size: var(--text-display);
+  font-weight: 600;
+  line-height: 1.05;
   letter-spacing: -0.03em;
   text-wrap: balance;
 }
@@ -201,7 +178,7 @@ h1 {
   max-width: 42rem;
   margin-top: 24px;
   color: var(--muted);
-  font-size: 1.2rem;
+  font-size: var(--text-body);
 }
 .learn-section {
   max-width: 48rem;
@@ -211,7 +188,7 @@ h1 {
 }
 h2 {
   margin: 0 0 12px;
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-size: var(--text-title-sm);
   line-height: 1.1;
 }
 .learn-section p {
@@ -232,7 +209,7 @@ h2 {
   border-bottom: 1px solid var(--border);
 }
 .regions dt {
-  font-weight: 700;
+  font-weight: 600;
 }
 .source-note {
   max-width: 48rem;
@@ -257,14 +234,14 @@ h2 {
 figcaption {
   margin-top: 10px;
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
 }
 details {
   margin-top: 24px;
 }
 summary {
   cursor: pointer;
-  font-weight: 650;
+  font-weight: 600;
 }
 .table-wrap {
   overflow-x: auto;
@@ -273,30 +250,23 @@ summary {
 table {
   border-collapse: collapse;
   width: 100%;
-  font-size: 0.95rem;
+  max-width: 100%;
+  table-layout: fixed;
+  font-size: var(--text-meta);
 }
 th,
 td {
   padding: 8px 14px 8px 0;
   border-bottom: 1px solid var(--border);
   text-align: left;
-  white-space: nowrap;
-}
-@media (max-width: 900px) {
-  .header {
-    flex-wrap: wrap;
-    gap: 12px 20px;
-  }
-  .brand {
-    flex-basis: 100%;
-  }
+  overflow-wrap: anywhere;
 }
 @media (max-width: 599px) {
-  .header {
-    padding-inline: 16px;
-  }
   main {
     padding: 40px 16px 56px;
+  }
+  h1 {
+    font-size: var(--text-title);
   }
   .figure :deep(.chart),
   .chart-placeholder {

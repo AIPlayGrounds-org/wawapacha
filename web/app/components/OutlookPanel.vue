@@ -156,15 +156,15 @@ const option = computed(() => {
 }
 h2 {
   margin: 0 0 8px;
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  font-weight: 800;
+  font-size: var(--text-title-sm);
+  font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
 .source-label {
   margin: 0;
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
   font-style: italic;
 }
 .figure {
@@ -179,7 +179,7 @@ h2 {
   gap: 4px 16px;
   padding: 0 0 16px;
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
 }
 .chart {
   width: 100%;
@@ -205,7 +205,7 @@ h2 {
   border-top: 1px solid var(--border);
   list-style: none;
   color: var(--muted);
-  font-size: var(--fs-small);
+  font-size: var(--text-meta);
   line-height: 1.35;
 }
 .swatch {

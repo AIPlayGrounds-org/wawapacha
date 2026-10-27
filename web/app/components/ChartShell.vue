@@ -122,7 +122,7 @@ const periodDetails = [
   max-width: 60rem;
   margin: 12px 16px 0;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 .provenance {
   display: grid;
@@ -131,15 +131,15 @@ const periodDetails = [
   margin: 20px 16px 0;
   padding-top: 16px;
   border-top: 1px solid var(--border);
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 .provenance div {
   min-width: 0;
 }
 .provenance dt {
   color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 650;
+  font-size: var(--text-label);
+  font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
@@ -152,11 +152,11 @@ const periodDetails = [
   padding: 10px 12px;
   border-left: 3px solid var(--accent);
   background: var(--band);
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 .stale-notice {
   margin: 0 16px 16px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 </style>

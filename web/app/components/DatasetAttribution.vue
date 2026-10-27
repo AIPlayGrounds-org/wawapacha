@@ -22,6 +22,6 @@ const credit = messages.attribution.credits[props.dataset.id]
 .dataset-attribution {
   margin: 16px 0 0;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--text-meta);
 }
 </style>

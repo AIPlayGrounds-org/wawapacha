@@ -317,11 +317,11 @@ const oniChartOption = computed(() =>
 .oni-note {
   margin: 0 0 16px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 h3 {
   margin: 0 0 12px;
-  font-size: 1.25rem;
+  font-size: var(--text-title-sm);
 }
 .controls label,
 fieldset {
@@ -351,8 +351,8 @@ legend {
   width: 100%;
   margin-bottom: 4px;
   color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 650;
+  font-size: var(--text-meta);
+  font-weight: 600;
 }
 fieldset label {
   min-height: 44px;
@@ -373,13 +373,13 @@ input {
 input::after {
   width: 10px;
   height: 5px;
-  transform: rotate(-45deg) scale(0);
+  transform: rotate(-45deg);
   border-bottom: 2px solid currentColor;
   border-left: 2px solid currentColor;
   content: '';
 }
 input:checked::after {
-  transform: rotate(-45deg) scale(1);
+  transform: rotate(-45deg);
 }
 input:focus-visible {
   outline: 2px solid var(--focus);
@@ -407,7 +407,7 @@ input:focus-visible {
   margin: 18px 0 0;
   padding: 0;
   list-style: none;
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 .swatch {
   display: inline-block;
@@ -418,8 +418,10 @@ input:focus-visible {
 }
 table {
   width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
-  font-size: 0.92rem;
+  font-size: var(--text-meta);
   white-space: nowrap;
 }
 caption {
@@ -432,13 +434,14 @@ td {
   padding: 8px 10px;
   border-bottom: 1px solid var(--border);
   text-align: right;
+  overflow-wrap: anywhere;
 }
 th:first-child,
 td:first-child {
   text-align: left;
 }
 th {
-  font-weight: 650;
+  font-weight: 600;
 }
 @media (max-width: 599px) {
   .chart {

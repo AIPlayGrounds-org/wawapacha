@@ -265,7 +265,7 @@ select {
 .station-note,
 .provenance-note {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-meta);
 }
 .provenance-note {
   margin: 20px 0 0;
@@ -290,7 +290,7 @@ select {
   padding: 0;
   list-style: none;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--text-meta);
 }
 .swatch {
   display: inline-block;
@@ -312,7 +312,7 @@ select {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: var(--text-meta);
 }
 th,
 td {
