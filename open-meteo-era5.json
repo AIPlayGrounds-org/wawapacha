@@ -10,7 +10,7 @@
   "data_type": "estimated",
   "spatial_resolution": "0,25° (unos 28 km)",
   "temporal_resolution": "Diaria; también horaria",
-  "ingestion_time": "2026-11-24T01:40:14+00:00",
+  "ingestion_time": "2026-11-24T23:28:23+00:00",
   "processing_version": "0.2.0",
   "records": [
     {
