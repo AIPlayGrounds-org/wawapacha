@@ -56,6 +56,13 @@ and a repeated `id`, is an error when the registry is read.
 - A scan without a text layer is transcribed from the page image, and its
   locator says so.
 - A data file has no pages. Its locator names the row or rows.
+- A video's `ref` is its watch URL with `&t=<seconds>`. Its locator gives the
+  title, the channel, `YouTube, uploaded YYYY-MM-DD` and the `[mm:ss]` where
+  the quote starts. The quote is the spoken words, copied from the video's
+  captions and checked against a second speech recognizer, since automatic
+  captions misspell names and numbers. Where the two disagree, the quote takes
+  the reading a third pass and the context support, and the locator says what
+  the captions read.
 
 No command compares quotes with documents. A person opens each `ref`, finds the
 `locator` and reads the `quote` there.

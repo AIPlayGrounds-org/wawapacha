@@ -205,6 +205,173 @@ const verifiedClaims = {
     'Las alertas de ENFEN se basan en pronósticos probabilísticos, con incertidumbre, y se actualizan con nuevas observaciones y con las predicciones de los modelos.',
   'icen-revises-plain':
     'El último ICEN se calcula con un dato en tiempo real que cambia al mes siguiente, por eso los valores recientes pueden variar un poco.',
+  'panamericana-2026-09-16-devastador':
+    'El 16 de septiembre de 2026, Panamericana tituló que ENFEN alertaba de un Niño «más devastador que el de 1997». La palabra «devastador» está solo en el titular; la vocera de ENFEN habló de similitudes con 1997 y 1998.',
+  'apoyo-2026-trajectory':
+    'En julio de 2026, APOYO Consultoría escribió que el mar frente a la costa alcanzó el umbral de un Niño extremo y seguía una trayectoria muy similar a la de 1997-1998.',
+  'infobae-2026-11-17-tumbes':
+    'El 17 de noviembre de 2026 a las 04:00, el río Tumbes llevaba 840,83 m³/s en El Tigre, sobre el umbral naranja de 800 m³/s; el rojo es 1 000 m³/s.',
+  'tv-1983-film-devastador':
+    'Un documental del gobierno de 1983 llamó «devastador» al fenómeno de El Niño.',
+  'tv-latina-1997-drenes':
+    'En 1997, Latina informó desde Piura que el barrio San José volvía a ser el más afectado, como en 1983, y que los drenes no funcionaron; Fujimori fue tres veces a Tumbes y trabajó pala en mano.',
+  'tv-tvperu-2017-2400':
+    'En 2018, TV Perú recordó que la cuenca del río Piura estaba preparada para 2 400 m³/s y que la costa, Lima incluida, no tiene alcantarillado ni drenaje para lluvias intensas; llamó a 2017 «el más brutal».',
+  'igp-woodman-2014-stable':
+    'En la costa no llueve porque la atmósfera es muy estable, por el mar frío y la subsidencia; para que llueva fuerte tiene que volverse inestable.',
+  'igp-woodman-2014-threshold':
+    'Basta con que el mar supere unos 26 °C para que llueva mucho; por debajo, la lluvia intensa es improbable, pero no imposible.',
+  'igp-woodman-2014-season': 'Si El Niño no ocurre en verano, probablemente no trae lluvias.',
+  'elcomercio-1925-alisio':
+    'En marzo de 1925, El Comercio explicó el aguacero de Lima con nubes del alisio que en ciertos años cruzan los Andes; admitía que la razón última no se sabía.',
+  'elperuano-2023-1983-cronica':
+    'Las lluvias de 1983 empezaron a fines de noviembre de 1982; Piura y Tumbes quedaron incomunicadas por aire, mar y tierra. El 28 de julio de 1983 se contaban 1 330 000 damnificados, 512 muertos y 120 000 hectáreas perdidas.',
+  'igp-woodman-2014-piura-1983':
+    'En 1983 llovieron 2 400 mm en la ciudad de Piura, donde el promedio es de 60 mm al año: unos cuarenta años de lluvia en uno.',
+  'igp-woodman-2014-28c':
+    'En 1982-83 y 1997-98 el mar frente a Piura pasó de 28 °C y la lluvia de un mes llegó a 70 cm.',
+  'uni-sanchez-piura-1983':
+    'En 1983, durante 189 días de crecida, el río Piura llegó a un caudal máximo de 3 200 m³/s el 7 de mayo.',
+  'udep-rojas-2014-aguinaldo':
+    'El 25 de diciembre de 1982, El Tiempo de Piura celebró que el río volvía a pasar bajo los puentes tras unos diez años seco, «como un aguinaldo de Navidad».',
+  'udep-rojas-2014-13-horas':
+    'El 27 de enero de 1983, El Tiempo de Piura tituló «Lluvia anegó las ciudades»: 13 horas seguidas de lluvia, 68 milímetros.',
+  'elcomercio-1983-senor-milagros':
+    'El 3 de mayo de 1983, El Comercio tituló que Lima devota imploró al Señor de los Milagros que cesaran las calamidades.',
+  'tv-1983-film-pronostico':
+    'El documental de 1983 cuenta que lo que parecía una fuerte temporada de lluvias se volvió tragedia, y que llovió día y noche casi hasta mediados de año, contra todo pronóstico.',
+  'tv-1983-film-alcantarillado':
+    'En 1983, según el documental, el agua potable y el alcantarillado no soportaron la lluvia y las calles se volvieron ríos.',
+  'tv-1984-belaunde-muros':
+    'En 1984, Belaunde presentó en televisión la defensa del río Piura, 60 km de muros de piedra, «sumamente costosa», y dijo que se reconstruía mejor.',
+  'tv-1984-film-manta':
+    'La película de 1984 dice que familias enteras perdieron casa y enseres, sin siquiera una manta para la lluvia o el frío.',
+  'glantz-2000-onset':
+    'Solo un grupo de pronóstico predijo razonablemente el inicio de El Niño 1997-98; los demás, una docena en el mundo, fallaron.',
+  'glantz-2000-news': 'El pronóstico del inicio de un Niño es noticia en todo el mundo.',
+  'glantz-2000-peru-mobilised':
+    'Cuando el jefe de gobierno toma nota de El Niño, el gobierno se moviliza rápido; así pasó en Perú al inicio de 1997-98.',
+  'elcomercio-1998-huaico-palacio':
+    'El 23 de febrero de 1998, el huaico del Huaycoloro llegó a 80 metros de Palacio de Gobierno; no hubo muertos y se atendió a 200 heridos.',
+  'uni-sanchez-piura-1998':
+    'En 1998, tras 161 días de crecida, el río Piura llegó a 4 424 m³/s el 12 de marzo, el máximo desde 1926; cayeron los puentes San Miguel y Bolognesi.',
+  'infomercado-2018-bolognesi':
+    'El puente Bolognesi cayó el 16 de marzo de 1998 a las 10.20 de la mañana, cuatro días después del puente San Miguel.',
+  'igp-woodman-1997-lejos':
+    'En julio de 1997, el IGP esperaba un Niño lluvioso pero «lejos» de los niveles desastrosos de 1983, porque en 450 años de historia de Piura no hubo otro igual.',
+  'igp-woodman-1997-4c':
+    'En julio de 1997 el mar frente al Perú ya estaba 4 °C sobre lo normal; bastan 2 °C para declarar un Niño.',
+  'caretas-1998-10-a-1':
+    'El 16 de marzo de 1998, Fujimori calculó que cada sol en prevención rendía diez. Ese mes, el desborde del río Ica dejó 120 000 damnificados.',
+  'tv-rpp-1998-ya-se-conocia':
+    'Según RPP, el Niño de 1982-83 tomó al Perú desprevenido; en 1997-98 ya se conocía y el país se preparó.',
+  'tv-ap-1997-fujimori-drenaje':
+    'En Tumbes, a fines de 1997, Fujimori dijo que el río llegó de golpe a 1 580 m³/s y que el drenaje funcionaba.',
+  'tv-america-1998-lima-techos':
+    'En 1998, con el huaico del Huaycoloro, los vecinos de la avenida Santa Rosa se refugiaron en los techos.',
+  'tv-america-1998-03-12-historia':
+    'El 12 de marzo de 1998, América Noticias informó que el río Piura alcanzó el mayor nivel de su historia, 4 424 m³/s, y destruyó un puente.',
+  'tv-america-1998-03-16-bolognesi':
+    'El 16 de marzo de 1998, América Noticias abrió con la caída del puente Bolognesi, con gente y vehículos encima: el segundo puente que Piura perdía en cuatro días.',
+  'tv-america-1998-03-16-2300':
+    'Tras la caída del Bolognesi, el gobierno dispuso que los puentes de Piura se cerraran al paso cuando el río superara 2 300 m³/s.',
+  'andina-2017-chamorro':
+    'El 15 de marzo de 2017, Evangelina Chamorro salió del lodo de un huaico que la arrastró en Punta Hermosa; su imagen recorrió los medios del país y del mundo.',
+  'canaln-chamorro':
+    'Evangelina Chamorro emergió del lodo la tarde del 15 de marzo de 2017 sin heridas de consideración.',
+  'garreaud-2018-unpredicted':
+    'El Niño costero de 2017 casi no se pronosticó: en diciembre de 2016 los centros climáticos, ENFEN incluido, esperaban condiciones casi neutras.',
+  'garreaud-2018-1925':
+    'Un Niño costero como el de 2017 solo se había visto en 1891 y 1925, y el de 2017 fue el más extremo.',
+  'garreaud-2018-piura':
+    'En 2017 llovieron más de 700 mm en San Miguel (Piura), unas 15 veces lo normal, como solo en 1983 y 1998; el río Piura, casi seco en 2016, pasó de 700 m³/s a mediados de febrero.',
+  'echevin-2018-1925': 'El Niño costero de 1925 se parece al de 2017.',
+  'ramirez-2017-since-1925':
+    'Un Niño tan localizado como el de 2017 no se había documentado desde 1925.',
+  'takahashi-1925-lima-rain':
+    'El 10 de marzo de 1925 cayeron 12 mm en Lima en nueve horas, la segunda lluvia más grande registrada allí.',
+  'tv-panorama-2017-inesperadamente':
+    'En marzo de 2017, Panorama dijo que el Niño costero llegó «inesperadamente» y que se activaron quebradas sin actividad en más de 50 años.',
+  'tv-panorama-2017-huarmey':
+    'En 2017, un vecino pidió ayuda al presidente: su pueblo llevaba tres días bajo el agua y solo tenía cinco volquetes y dos excavadoras para cerrar el corte del río.',
+  'tv-panorama-2017-motobombas':
+    'En Lambayeque, en 2017, los vecinos pedían motobombas: «hemos perdido todo».',
+  'tv-panorama-2017-techos':
+    'En 2017, la policía rescató a quienes quedaron atrapados en techos y viviendas.',
+  'tv-latina-2017-tercera-vez':
+    'En Villa Nueva Navarra, en marzo de 2017, era «la tercera vez en este año».',
+  'enfen-co01-2017-probabilities':
+    'El 16 de enero de 2017, ENFEN daba 66 % a condiciones neutras, 30 % a un Niño costero débil y 1 % a uno moderado o mayor, sin alerta activa.',
+  'bausate-2017-2015-prevention':
+    'Un editor de La República recordó que en 2015 se anunció El Niño y hubo mucha preparación e inversión, y muchas notas de prevención.',
+  'ramirez-2017-credibility':
+    'El Niño de 2015-2016 dañó menos de lo temido en Perú, y eso pudo restar credibilidad a los avisos siguientes.',
+  'enfen-co03-2017-debil':
+    'El 2 de febrero de 2017, ENFEN pasó a «Alerta de El Niño Costero» y lo calificó de débil.',
+  'elcomercio-2017-03-04-debil':
+    'El 4 de marzo de 2017, El Comercio informaba de un Niño débil que podía pasar a moderado, con 26 muertos según Indeci.',
+  'enfen-co06-2017-moderada':
+    'El 16 de marzo de 2017, ENFEN subió la magnitud a moderada y previó el evento al menos hasta abril.',
+  'tv-tvperu-2026-02-16-inminente':
+    'El 16 de febrero de 2026, en TV Perú, ENFEN dio por casi inminente un Niño desde marzo que podría durar hasta noviembre.',
+  'tv-rpp-2026-02-24-alerta':
+    'El 24 de febrero de 2026, la directora de meteorología del Senamhi dijo en RPP que no se podía esperar tres meses para alertar: febrero marcaba el inicio del Niño costero.',
+  'bausate-2017-front-page':
+    'Según un editor de La República, en 2017 el desastre del norte no fue portada en Lima hasta que llegó a Lima, aunque sí en la edición del norte.',
+  'ucv-2023-yaku-centralised':
+    'En 2023, la cobertura televisiva del ciclón Yaku empezó nacional y se fue centralizando en Lima.',
+  'pucp-1925-trujillo-ha-terminado':
+    'El 18 de marzo de 1925, El Comercio publicó en primera plana el radiograma del prefecto: «Trujillo ha terminado». Esa misma tarde, un senador dijo que no era tan grave.',
+  'pucp-1925-worldwide':
+    'La noticia de que Trujillo había desaparecido era exagerada, pero dio la vuelta al mundo.',
+  'udep-rojas-2014-locutores':
+    'En febrero de 1983, una laguna de lluvia en Piura confundió a dos locutores de televisión, que anunciaron al país que el río inundaba la ciudad.',
+  'ucv-2017-la-industria-headlines':
+    'Del 18 al 27 de marzo de 2017, las portadas de La Industria de Trujillo tuvieron titulares amarillistas como «Devastador» y «Que dios nos ayude», con poca información sobre refugios o prevención.',
+  'glantz-2000-wanes': 'Cuando termina el clima inusual, el interés de los medios decae.',
+  'igp-woodman-2014-press':
+    'La gran cobertura de 1982-83 y 1997-98 en prensa y televisión hace que hoy se confunda un Niño normal con uno extraordinario.',
+  'tv-america-1998-titulares':
+    'En marzo de 1998, América Noticias abrió su edición central con Piura en los titulares.',
+  'tv-panorama-2017-simbolo':
+    'Panorama llamó a Evangelina Chamorro «el símbolo de la sobrevivencia»; su imagen dio la vuelta al mundo.',
+  'tv-1984-belaunde-culpa':
+    'En 1984, Belaunde se quejó en televisión de que se culpara a las autoridades «hasta de los embates de la naturaleza».',
+  'andina-2026-02-19-tumbes-rojo':
+    'El 19 de febrero de 2026, el río Tumbes alcanzó el umbral rojo con 1 181,35 m³/s en El Tigre.',
+  'elperuano-2026-09-28-adelanto':
+    'En septiembre de 2026, la estación Cañaveral registró 78,5 mm en 24 horas, cuando su normal mensual es 0,5 mm. El mayor impacto se proyecta entre diciembre y el verano de 2027.',
+  'senamhi-aviso24h-327-2026':
+    'El 23 de noviembre de 2026, el Senamhi emitió el aviso 327, nivel rojo, por lluvias de fuerte a extrema intensidad en la costa interior de Tumbes y Piura: hasta 70 mm en 24 horas.',
+  'takahashi-2011-extreme-regime':
+    'Los Niños extremos forman su propio régimen, visto en 1982-83 y 1997-98, y en menor grado en 1877-78; por eso se puede decir poco de ellos a partir de observaciones.',
+  'tv-elcomercio-2026-11-21-preparado':
+    'En noviembre de 2026, El Comercio planteó que la gran pregunta no es solo cuán fuerte será El Niño 2026-2027, sino cuán preparado está el país.',
+  'elbuho-2024-reconstruction':
+    'Al cerrar en 2023, la Autoridad para la Reconstrucción con Cambios había terminado 7 890 de 10 772 obras, el 73,2 %.',
+  'apoyo-2026-readiness':
+    'Según APOYO, el país llega mejor preparado que en 2017, pero aún no está listo para un evento extremo.',
+  'apoyo-2026-piura-works':
+    'Piura concentra más del 25 % del monto de las obras de río y drenaje, con avance físico cercano a cero.',
+  'apoyo-2026-sat':
+    'La alerta temprana del río Piura avanza 34 % y la del Ica 38 %, sin sirenas ni planes de evacuación; Tumbes, Lambayeque, La Libertad, Áncash y Lima no tienen una.',
+  'elcomercio-2023-04-14-chilcal':
+    'Desde 1983, Piura pide un dren pluvial que en 2023 seguía sin existir; en El Chilcal, un vecino dice: «Desde el 83 vivimos esto aquí».',
+  'tv-elcomercio-2023-lima-drenaje': 'Lima sigue siendo una ciudad sin drenaje para la lluvia.',
+  'tv-bdp-2026-sin-drenaje':
+    'En 2026, Buenos Días Perú dijo que el país creció, pero también el riesgo: más casas en las riberas y las mismas obras sin drenaje.',
+  'tv-rpp-2023-yaku-maquinaria':
+    'En 2023, con el ciclón Yaku, no hubo maquinaria para Piura, Tumbes ni La Libertad.',
+  'tv-rpp-2026-clamado':
+    'En febrero de 2026, RPP informó que las autoridades locales decían no tener lo necesario para atender la emergencia.',
+  'caretas-1998-13-puentes':
+    'En 1998, trece de los 68 puentes afectados en el país tenían 14 años o menos.',
+  'tv-1985-belaunde-leccion':
+    'En 1985, Belaunde llamó a El Niño y a otra desgracia un obstáculo tremendo para su gobierno, y sacó la lección de que el pueblo peruano reacciona ante la adversidad.',
+  'tv-panorama-2017-ley-naturaleza':
+    'En 2017, una vecina de Trujillo dijo: «es la ley de la naturaleza, no podemos hacer nada contra ella».',
+  'glantz-2000-peru-lesson':
+    'El ciclo de El Niño debe planificarse como un hecho recurrente, en defensa civil, zonificación y normas de construcción, no como una anomalía pasajera.',
 } as const
 
 export type ClaimId = keyof typeof verifiedClaims

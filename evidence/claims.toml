@@ -1,7 +1,7 @@
 # The claim registry. Its fields, quote rules and checks are in docs/claims.md.
 # Claim text is in Spanish. Registry fields and source notes are in English.
 
-checked_at = "2026-10-10"
+checked_at = "2026-11-25"
 
 [[claim]]
 id = "enso-is-ocean-atmosphere-pattern"
@@ -1755,3 +1755,1239 @@ date_checked = "2026-10-10"
 ref = "https://repositorio.igp.gob.pe/bitstreams/b7560525-c705-4ad7-a423-9d897ca7e5bb/download"
 locator = "Informe Técnico IGP N° PpR/El Niño-IGP/2026-07 (14/08/2026), PDF p. 2, section \"Índice Costero El Niño (ICEN) y el ICEN relativo\", first paragraph"
 quote = "Cabe señalar que para el cálculo del último ICEN se utiliza la última información del archivo de ERSSTv5 publicada en la web, cuyo último valor (“dato en tiempo real”) siempre cambiará en el siguiente mes. Por este motivo, existirán pequeñas discrepancias en el valor del ICEN para los meses anteriores cuando se use la data actualizada."
+
+[[claim]]
+id = "panamericana-2026-09-16-devastador"
+claim_es = "El 16 de septiembre de 2026, Panamericana tituló que ENFEN alertaba de un Niño «más devastador que el de 1997». La palabra «devastador» está solo en el titular; la vocera de ENFEN habló de similitudes con 1997 y 1998."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://panamericana.pe/buenosdiasperu/nacionales/474433-enfen-alerta-nino-devastador-1997"
+locator = "Panamericana, \"Enfen alerta que 'El Niño' sería más devastador que el de 1997\" (web page, no page numbers), headline"
+quote = "Enfen alerta que \"El Niño\" sería más devastador que el de 1997"
+
+[[claim.source]]
+ref = "https://panamericana.pe/buenosdiasperu/nacionales/474433-enfen-alerta-nino-devastador-1997"
+locator = "Panamericana, \"Enfen alerta que 'El Niño' sería más devastador que el de 1997\" (web page, no page numbers), body"
+quote = "Rina Gabriel Valverde, vocera de ENFEN, indicó que las condiciones actuales muestran similitudes con los eventos ocurridos en 1997 y 1998, aunque con estimaciones de calentamiento que podrían superar dichos registros históricos."
+
+[[claim]]
+id = "apoyo-2026-trajectory"
+claim_es = "En julio de 2026, APOYO Consultoría escribió que el mar frente a la costa alcanzó el umbral de un Niño extremo y seguía una trayectoria muy similar a la de 1997-1998."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf"
+locator = "APOYO Consultoría, \"Preparación ante el Fenómeno El Niño 2026–2027\", July 2026, PDF p. 3, Introducción, first paragraph"
+quote = "A inicios de julio, la temperatura del mar frente a la costa peruana alcanzó el umbral de un Niño extremo y sigue una trayectoria muy similar a la del FEN 1997-1998"
+
+[[claim]]
+id = "infobae-2026-11-17-tumbes"
+claim_es = "El 17 de noviembre de 2026 a las 04:00, el río Tumbes llevaba 840,83 m³/s en El Tigre, sobre el umbral naranja de 800 m³/s; el rojo es 1 000 m³/s."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/"
+locator = "Infobae, \"Lluvias por El Niño vuelven a poner en alerta el norte del Perú: el río Tumbes alcanzará el umbral rojo\" (web page, no page numbers), paragraph beginning \"Las lluvias que afectan el norte del Perú\""
+quote = "El Servicio Nacional de Meteorología e Hidrología del Perú (Senamhi) informó que el afluente llegó a 840,83 metros cúbicos por segundo a las 04:00 del 17 de noviembre, una cifra que superó el umbral naranja y que podría avanzar hacia el nivel rojo en las próximas horas."
+
+[[claim.source]]
+ref = "https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/"
+locator = "Infobae, \"Lluvias por El Niño vuelven a poner en alerta el norte del Perú: el río Tumbes alcanzará el umbral rojo\" (web page, no page numbers), paragraph beginning \"El gráfico hidrológico difundido para la estación El\""
+quote = "El gráfico hidrológico difundido para la estación El Tigre estableció el umbral amarillo en 600 metros cúbicos por segundo, el naranja en 800 y el rojo en 1.000."
+
+[[claim]]
+id = "tv-1983-film-devastador"
+claim_es = "Un documental del gobierno de 1983 llamó «devastador» al fenómeno de El Niño."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=44kmFwnJUz0&t=412"
+locator = "Primera Dama Violeta Correa de Belaunde - Fenómeno de El Niño 1983, Perú Tv Blanco y Negro, YouTube, uploaded 2018-01-13, [06:52]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "presa de los efectos del devastador fenómeno de 'el niño'"
+
+[[claim]]
+id = "tv-latina-1997-drenes"
+claim_es = "En 1997, Latina informó desde Piura que el barrio San José volvía a ser el más afectado, como en 1983, y que los drenes no funcionaron; Fujimori fue tres veces a Tumbes y trabajó pala en mano."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=74"
+locator = "Fenómeno 'El Niño' de 1997 en Piura: Imágenes inéditas, Latina Noticias, YouTube, uploaded 2024-08-13, [01:14]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "al igual que en 1983 el barrio San José fue el más afectado"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=105"
+locator = "Fenómeno 'El Niño' de 1997 en Piura: Imágenes inéditas, Latina Noticias, YouTube, uploaded 2024-08-13, [01:45]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "los drenes no funcionaron algunos están inconclusos y otros han sido tapados irresponsablemente con arena y desperdicios"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=306"
+locator = "Fenómeno 'El Niño' de 1997 en Piura: Imágenes inéditas, Latina Noticias, YouTube, uploaded 2024-08-13, [05:06]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "algunas familias han tenido que improvisar zanjas para retirar el agua pero es insuficiente defensa civil no les ha brindado motobombas"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=367"
+locator = "Fenómeno 'El Niño' de 1997 en Piura: Imágenes inéditas, Latina Noticias, YouTube, uploaded 2024-08-13, [06:07]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "el presidente fujimori estuvo tres veces en tumbes y pala en mano participó en trabajos para reabrir canales y drenes"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=11"
+locator = "Fenómeno 'El Niño' de 1997 en Piura: Imágenes inéditas, Latina Noticias, YouTube, uploaded 2024-08-13, [00:11]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "tan solo es el inicio pero ya se presenta devastador el fenómeno del niño"
+
+[[claim]]
+id = "tv-tvperu-2017-2400"
+claim_es = "En 2018, TV Perú recordó que la cuenca del río Piura estaba preparada para 2 400 m³/s y que la costa, Lima incluida, no tiene alcantarillado ni drenaje para lluvias intensas; llamó a 2017 «el más brutal»."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=IPblSP_dUTQ&t=274"
+locator = "El Niño Costero que dejó miles de damnificados en el 2017, TVPerú Noticias, YouTube, uploaded 2018-01-02, [04:34]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "la cuenca del río piura estaba preparada para soportar 2400 metros cúbicos por segundo"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=IPblSP_dUTQ&t=338"
+locator = "El Niño Costero que dejó miles de damnificados en el 2017, TVPerú Noticias, YouTube, uploaded 2018-01-02, [05:38]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "la zona costera de nuestro país incluido lima no poseemos un sistema de alcantarillado y de drenaje adecuado para soportar esas lluvias intensas"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=IPblSP_dUTQ&t=25"
+locator = "El Niño Costero que dejó miles de damnificados en el 2017, TVPerú Noticias, YouTube, uploaded 2018-01-02, [00:25]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "el del 83 el del 97 y ahora el del 2017 y este ha sido el más brutal"
+
+[[claim]]
+id = "igp-woodman-2014-stable"
+claim_es = "En la costa no llueve porque la atmósfera es muy estable, por el mar frío y la subsidencia; para que llueva fuerte tiene que volverse inestable."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/24619447-76e0-4241-8091-416c76127594/download"
+locator = "Woodman, \"¿Por qué no llueve en la costa del Perú (salvo durante El Niño)?\", Boletín Técnico PPR/El Niño-IGP Vol. 1 Nº 6, June 2014, PDF p. 1, section \"¿Por qué no llueve en la costa?\", paragraph 1"
+quote = "La respuesta, en resumen, es que nuestra atmósfera es muy estable debido a la frialdad de las aguas de nuestro mar y la subsidencia atmosférica. Para que llueva fuerte se necesita que la atmósfera sea inestable."
+
+[[claim]]
+id = "igp-woodman-2014-threshold"
+claim_es = "Basta con que el mar supere unos 26 °C para que llueva mucho; por debajo, la lluvia intensa es improbable, pero no imposible."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/24619447-76e0-4241-8091-416c76127594/download"
+locator = "Woodman, \"¿Por qué no llueve en la costa del Perú (salvo durante El Niño)?\", Boletín Técnico PPR/El Niño-IGP Vol. 1 Nº 6, June 2014, PDF p. 2, paragraph on the 26 °C threshold"
+quote = "En la práctica, es suficiente con que la temperatura exceda unos 26 °C para tener mucha lluvia, tal como se puede apreciar para Piura en la Figura 2. Por debajo de esta temperatura es improbable (pero no imposible) que llueva en forma intensa."
+
+[[claim]]
+id = "igp-woodman-2014-season"
+claim_es = "Si El Niño no ocurre en verano, probablemente no trae lluvias."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/24619447-76e0-4241-8091-416c76127594/download"
+locator = "Woodman, \"¿Por qué no llueve en la costa del Perú (salvo durante El Niño)?\", Boletín Técnico PPR/El Niño-IGP Vol. 1 Nº 6, June 2014, PDF p. 3, section \"Las lluvias y El Niño en un contexto histórico\""
+quote = "Además, si el fenómeno no ocurre en verano, probablemente no estará asociado a lluvias."
+
+[[claim]]
+id = "elcomercio-1925-alisio"
+claim_es = "En marzo de 1925, El Comercio explicó el aguacero de Lima con nubes del alisio que en ciertos años cruzan los Andes; admitía que la razón última no se sabía."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://elcomercio.pe/archivo-elcomercio/lluvias-en-lima-inundaciones-en-el-norte-huaicos-en-el-peru-fenomenos-naturales-hace-100-anos-peru-decada-del-20-nnsp-noticia/"
+locator = "El Comercio, \"Lluvias en Lima, inundaciones en el norte, huaicos en el Perú: fenómenos naturales hace 100 años\" (web page, no page numbers), paragraph beginning \"L a gran pregunta era entonces, ¿por qué\""
+quote = "La prensa de marzo de 1925 daba esta interesante explicación del fenómeno: si bien la razón última no se sabía (pero se podía entender desde una “meteorología general del mundo”), lo que sí era una certeza era que “hay ciertos años en que la abundancia de nubes que arrastra el alisio del sur es tal y la fuerza del viento tan grande, que muchas de ellas salvan el obstáculo de los Andes y llegan hasta nosotros para volcar sobre la zona de la costa su aguacero violento”. (EC, 12/03/1925)"
+
+[[claim]]
+id = "elperuano-2023-1983-cronica"
+claim_es = "Las lluvias de 1983 empezaron a fines de noviembre de 1982; Piura y Tumbes quedaron incomunicadas por aire, mar y tierra. El 28 de julio de 1983 se contaban 1 330 000 damnificados, 512 muertos y 120 000 hectáreas perdidas."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.elperuano.pe/noticia/209618-el-nino-mas-majadero-fue-el-de-1983-cronica"
+locator = "El Peruano, \"El Niño más majadero fue el de 1983 (crónica)\" (web page, no page numbers), paragraph beginning \"Las precipitaciones pluviales empezaron a fines de noviembre\""
+quote = "Las precipitaciones pluviales empezaron a fines de noviembre de 1982"
+
+[[claim.source]]
+ref = "https://www.elperuano.pe/noticia/209618-el-nino-mas-majadero-fue-el-de-1983-cronica"
+locator = "El Peruano, \"El Niño más majadero fue el de 1983 (crónica)\" (web page, no page numbers), paragraph beginning \"Piura y Tumbes quedarían incomunicados del resto del\""
+quote = "Piura y Tumbes quedarían incomunicados del resto del país."
+
+[[claim.source]]
+ref = "https://www.elperuano.pe/noticia/209618-el-nino-mas-majadero-fue-el-de-1983-cronica"
+locator = "El Peruano, \"El Niño más majadero fue el de 1983 (crónica)\" (web page, no page numbers), paragraph beginning \"Piura y Tumbes quedarían incomunicados del resto del\""
+quote = "No había acceso por aire, mar y tierra"
+
+[[claim.source]]
+ref = "https://www.elperuano.pe/noticia/209618-el-nino-mas-majadero-fue-el-de-1983-cronica"
+locator = "El Peruano, \"El Niño más majadero fue el de 1983 (crónica)\" (web page, no page numbers), paragraph beginning \"Meses después, en su Mensaje a la Nación,\""
+quote = "Meses después, en su Mensaje a la Nación, el 28 de julio de 1983, el presidente Fernando Belaunde, ante la cantidad de pérdidas humanas y económicas, con lluvias intensas en el norte y sequías en el sur, con un millón 330,000 damnificados, 512 muertos y 120,000 hectáreas perdidas, dijo"
+
+[[claim]]
+id = "igp-woodman-2014-piura-1983"
+claim_es = "En 1983 llovieron 2 400 mm en la ciudad de Piura, donde el promedio es de 60 mm al año: unos cuarenta años de lluvia en uno."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/24619447-76e0-4241-8091-416c76127594/download"
+locator = "Woodman, \"¿Por qué no llueve en la costa del Perú (salvo durante El Niño)?\", Boletín Técnico PPR/El Niño-IGP Vol. 1 Nº 6, June 2014, PDF p. 3, Figure 4 discussion"
+quote = "las lluvias acumuladas en 1983, las cuales llegaron a ¡2400 mm!"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/24619447-76e0-4241-8091-416c76127594/download"
+locator = "Woodman, \"¿Por qué no llueve en la costa del Perú (salvo durante El Niño)?\", Boletín Técnico PPR/El Niño-IGP Vol. 1 Nº 6, June 2014, PDF p. 3, Figure 4 discussion"
+quote = "El promedio de las precipitaciones en la ciudad de Piura, incluyendo años El Niño “normales”, es de sólo 60 mm anuales, por lo que las lluvias de 1983 fueron aproximadamente equivalentes al acumulado en los cuarenta años precedentes."
+
+[[claim]]
+id = "igp-woodman-2014-28c"
+claim_es = "En 1982-83 y 1997-98 el mar frente a Piura pasó de 28 °C y la lluvia de un mes llegó a 70 cm."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/24619447-76e0-4241-8091-416c76127594/download"
+locator = "Woodman, \"¿Por qué no llueve en la costa del Perú (salvo durante El Niño)?\", Boletín Técnico PPR/El Niño-IGP Vol. 1 Nº 6, June 2014, PDF p. 2, paragraph on Figure 2"
+quote = "Se observa en la figura que durante los eventos El Niño extraordinarios de 1982-83 y 1997-98 las temperaturas excedieron 28 °C y la lluvia mensual alcanzó 70 cm en Piura."
+
+[[claim]]
+id = "uni-sanchez-piura-1983"
+claim_es = "En 1983, durante 189 días de crecida, el río Piura llegó a un caudal máximo de 3 200 m³/s el 7 de mayo."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.cismid.uni.edu.pe/wp-content/uploads/2020/01/v_sanchez1_.pdf"
+locator = "Sánchez Moya, \"Vulnerabilidad de los Puentes\", Instituto de Investigación FIC UNI, PDF p. 4, Piura river, 1983"
+quote = "En el caso del fenómeno hidrológico de 1983, durante un periodo de 189 días, el caudal máximo registrado alcanzó 3.200 m3/s (07 de mayo)"
+
+[[claim]]
+id = "udep-rojas-2014-aguinaldo"
+claim_es = "El 25 de diciembre de 1982, El Tiempo de Piura celebró que el río volvía a pasar bajo los puentes tras unos diez años seco, «como un aguinaldo de Navidad»."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://pirhua.udep.edu.pe/backend/api/core/bitstreams/eab378af-7520-43d4-8ef6-a8f492f9f688/content"
+locator = "Rojas Rosas, \"La fotografía como elemento informativo del diario 'El Tiempo' de Piura\", Universidad de Piura, 2014, PDF p. 142, quoting El Tiempo of 25 December 1982"
+quote = "Desde las primeras horas de hoy comenzaron a pasar bajo los puentes de Piura y luego de diez años, aproximadamente, las aguas del río Piura, rumbo al Océano Pacífico. Su paso estaba previsto para las cuatro de la mañana y desde ya se anunciaba con júbilo su recibimiento como un aguinaldo de Navidad y los piuranos se aprestaban a recibirlo."
+
+[[claim]]
+id = "udep-rojas-2014-13-horas"
+claim_es = "El 27 de enero de 1983, El Tiempo de Piura tituló «Lluvia anegó las ciudades»: 13 horas seguidas de lluvia, 68 milímetros."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://pirhua.udep.edu.pe/backend/api/core/bitstreams/eab378af-7520-43d4-8ef6-a8f492f9f688/content"
+locator = "Rojas Rosas, \"La fotografía como elemento informativo del diario 'El Tiempo' de Piura\", Universidad de Piura, 2014, PDF p. 121, on El Tiempo's front page of 27 January 1983"
+quote = "Lluvia anegó las ciudades"
+
+[[claim.source]]
+ref = "https://pirhua.udep.edu.pe/backend/api/core/bitstreams/eab378af-7520-43d4-8ef6-a8f492f9f688/content"
+locator = "Rojas Rosas, \"La fotografía como elemento informativo del diario 'El Tiempo' de Piura\", Universidad de Piura, 2014, PDF p. 121, on El Tiempo's front page of 27 January 1983"
+quote = "la más fuerte precipitación pluvial, de 13 horas consecutivas, caída entre la noche del martes y mañana del miércoles, que tuvo una intensidad de 68 milímetros"
+
+[[claim]]
+id = "elcomercio-1983-senor-milagros"
+claim_es = "El 3 de mayo de 1983, El Comercio tituló que Lima devota imploró al Señor de los Milagros que cesaran las calamidades."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://elcomercio.pe/peru/fenomeno-nino-viejo-conocido-peru-408668-noticia/"
+locator = "El Comercio, \"El Fenómeno de El Niño: un viejo conocido para el Perú\" (web page, no page numbers), paragraph beginning \"“Lima devota le imploró al Señor de los\""
+quote = "“Lima devota le imploró al Señor de los Milagros que cesen calamidades”, tituló El Comercio el 3 de mayo de 1983. La imagen religiosa había salido a las calles como un acto de redención ante la devastación producida por el clima."
+
+[[claim]]
+id = "tv-1983-film-pronostico"
+claim_es = "El documental de 1983 cuenta que lo que parecía una fuerte temporada de lluvias se volvió tragedia, y que llovió día y noche casi hasta mediados de año, contra todo pronóstico."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=44kmFwnJUz0&t=316"
+locator = "Primera Dama Violeta Correa de Belaunde - Fenómeno de El Niño 1983, Perú Tv Blanco y Negro, YouTube, uploaded 2018-01-13, [05:16]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "lo que al comienzo se pensó sería una fuerte temporada de lluvias se convirtió luego con el paso de los días en una tragedia de incalculables proporciones"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=44kmFwnJUz0&t=349"
+locator = "Primera Dama Violeta Correa de Belaunde - Fenómeno de El Niño 1983, Perú Tv Blanco y Negro, YouTube, uploaded 2018-01-13, [05:49]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "la lluvia día y noche casi hasta mediados de año contra todo pronóstico siguió cayendo en forma incesante"
+
+[[claim]]
+id = "tv-1983-film-alcantarillado"
+claim_es = "En 1983, según el documental, el agua potable y el alcantarillado no soportaron la lluvia y las calles se volvieron ríos."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=44kmFwnJUz0&t=477"
+locator = "Primera Dama Violeta Correa de Belaunde - Fenómeno de El Niño 1983, Perú Tv Blanco y Negro, YouTube, uploaded 2018-01-13, [07:57]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "las redes de agua potable y alcantarillado resultaron insuficientes para soportar la presión de estos enormes volúmenes de agua las calles pistas y avenidas se convirtieron en ríos intransitables"
+
+[[claim]]
+id = "tv-1984-belaunde-muros"
+claim_es = "En 1984, Belaunde presentó en televisión la defensa del río Piura, 60 km de muros de piedra, «sumamente costosa», y dijo que se reconstruía mejor."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=0oT-y-vRdTM&t=76"
+locator = "Reconstrucción del Norte Peruano - 1984, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2022-04-24, [01:16]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "buenas noches hoy voy a hablar de algo sumamente grato para el país"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=0oT-y-vRdTM&t=581"
+locator = "Reconstrucción del Norte Peruano - 1984, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2022-04-24, [09:41]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "la magna obra de defensa del río piura 60 kilómetros de muros de defensa de piedra es decir una obra realmente meritoria infortunadamente una obra sumamente costosa"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=0oT-y-vRdTM&t=425"
+locator = "Reconstrucción del Norte Peruano - 1984, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2022-04-24, [07:05]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "se está haciendo de nuevo y haciéndose mejor"
+
+[[claim]]
+id = "tv-1984-film-manta"
+claim_es = "La película de 1984 dice que familias enteras perdieron casa y enseres, sin siquiera una manta para la lluvia o el frío."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=0oT-y-vRdTM&t=923"
+locator = "Reconstrucción del Norte Peruano - 1984, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2022-04-24, [15:23]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "familias enteras habían perdido sus viviendas y enseres domésticos no tenían techo ni siquiera una manta para protegerse de la lluvia o del frío de la noche"
+
+[[claim]]
+id = "glantz-2000-onset"
+claim_es = "Solo un grupo de pronóstico predijo razonablemente el inicio de El Niño 1997-98; los demás, una docena en el mundo, fallaron."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://sigrid.cenepred.gob.pe/sigridv3/documento/1128/descargar"
+locator = "Glantz (ed.), \"Lessons Learned from the 1997–98 El Niño: Once Burned, Twice Shy?\", UNEP/NCAR/UNU/WMO/ISDR, October 2000, PDF p. 9, forecasting lessons"
+quote = "only one forecast group made a reasonable forecast of the onset of the 1997–98 El Niño."
+
+[[claim.source]]
+ref = "https://sigrid.cenepred.gob.pe/sigridv3/documento/1128/descargar"
+locator = "Glantz (ed.), \"Lessons Learned from the 1997–98 El Niño: Once Burned, Twice Shy?\", UNEP/NCAR/UNU/WMO/ISDR, October 2000, PDF p. 9, forecasting lessons"
+quote = "Why did the dozen or so forecast groups around the globe miss making a correct forecast of the biggest El Niño of the century in 1997–98?"
+
+[[claim]]
+id = "glantz-2000-news"
+claim_es = "El pronóstico del inicio de un Niño es noticia en todo el mundo."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://sigrid.cenepred.gob.pe/sigridv3/documento/1128/descargar"
+locator = "Glantz (ed.), \"Lessons Learned from the 1997–98 El Niño: Once Burned, Twice Shy?\", UNEP/NCAR/UNU/WMO/ISDR, October 2000, PDF p. 15, media lessons"
+quote = "Forecast of the onset of the ENSO cycle is apparently a major global news event."
+
+[[claim]]
+id = "glantz-2000-peru-mobilised"
+claim_es = "Cuando el jefe de gobierno toma nota de El Niño, el gobierno se moviliza rápido; así pasó en Perú al inicio de 1997-98."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://sigrid.cenepred.gob.pe/sigridv3/documento/1128/descargar"
+locator = "Glantz (ed.), \"Lessons Learned from the 1997–98 El Niño: Once Burned, Twice Shy?\", UNEP/NCAR/UNU/WMO/ISDR, October 2000, PDF p. 17, policy lessons"
+quote = "Once the head of government or head of state publicly takes notice of El Niño, a government becomes quickly mobilized to deal with it. This was clearly the case at the onset of the 1997–98 event in Peru"
+
+[[claim]]
+id = "elcomercio-1998-huaico-palacio"
+claim_es = "El 23 de febrero de 1998, el huaico del Huaycoloro llegó a 80 metros de Palacio de Gobierno; no hubo muertos y se atendió a 200 heridos."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://elcomercio.pe/archivo-elcomercio/huaicos-historicos-lima-inundada-cuando-un-huaico-gigante-arraso-parte-de-sjl-el-rimac-y-llego-a-las-espaldas-de-palacio-de-gobierno-fotos-desborde-en-lima-rio-seco-rio-huaicoloro-rio-rimac-lima-en-emergencia-fenomeno-el-nino-25-anos-nnsp-noticia/"
+locator = "El Comercio, \"Lima inundada: cuando un huaico gigante arrasó parte de SJL, el Rímac y llegó a las espaldas de Palacio de Gobierno\" (web page, no page numbers), paragraph beginning \"Un mes después de esa noticia que preveía\""
+quote = "a solo 80 metros de distancia del Palacio de Gobierno."
+
+[[claim.source]]
+ref = "https://elcomercio.pe/archivo-elcomercio/huaicos-historicos-lima-inundada-cuando-un-huaico-gigante-arraso-parte-de-sjl-el-rimac-y-llego-a-las-espaldas-de-palacio-de-gobierno-fotos-desborde-en-lima-rio-seco-rio-huaicoloro-rio-rimac-lima-en-emergencia-fenomeno-el-nino-25-anos-nnsp-noticia/"
+locator = "El Comercio, \"Lima inundada: cuando un huaico gigante arrasó parte de SJL, el Rímac y llegó a las espaldas de Palacio de Gobierno\" (web page, no page numbers), paragraph beginning \"En medio de lo peor, la buena noticia\""
+quote = "no hubo víctimas fatales."
+
+[[claim.source]]
+ref = "https://elcomercio.pe/archivo-elcomercio/huaicos-historicos-lima-inundada-cuando-un-huaico-gigante-arraso-parte-de-sjl-el-rimac-y-llego-a-las-espaldas-de-palacio-de-gobierno-fotos-desborde-en-lima-rio-seco-rio-huaicoloro-rio-rimac-lima-en-emergencia-fenomeno-el-nino-25-anos-nnsp-noticia/"
+locator = "El Comercio, \"Lima inundada: cuando un huaico gigante arrasó parte de SJL, el Rímac y llegó a las espaldas de Palacio de Gobierno\" (web page, no page numbers), paragraph beginning \"En medio de lo peor, la buena noticia\""
+quote = "se atendieron a 200 personas heridas."
+
+[[claim.source]]
+ref = "https://elcomercio.pe/archivo-elcomercio/huaicos-historicos-lima-inundada-cuando-un-huaico-gigante-arraso-parte-de-sjl-el-rimac-y-llego-a-las-espaldas-de-palacio-de-gobierno-fotos-desborde-en-lima-rio-seco-rio-huaicoloro-rio-rimac-lima-en-emergencia-fenomeno-el-nino-25-anos-nnsp-noticia/"
+locator = "El Comercio, \"Lima inundada: cuando un huaico gigante arrasó parte de SJL, el Rímac y llegó a las espaldas de Palacio de Gobierno\" (web page, no page numbers), paragraph beginning \"/ PAOLO AGUILAR En la edición del martes\""
+quote = "Pasamos entonces de llamarnos la “Ciudad de los Reyes” a ser la “Ciudad de los Huaicos”."
+
+[[claim]]
+id = "uni-sanchez-piura-1998"
+claim_es = "En 1998, tras 161 días de crecida, el río Piura llegó a 4 424 m³/s el 12 de marzo, el máximo desde 1926; cayeron los puentes San Miguel y Bolognesi."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.cismid.uni.edu.pe/wp-content/uploads/2020/01/v_sanchez1_.pdf"
+locator = "Sánchez Moya, \"Vulnerabilidad de los Puentes\", Instituto de Investigación FIC UNI, PDF p. 4, Piura river, 1998"
+quote = "Durante un periodo de 161 días, el caudal en el río Piura alcanzó el valor máximo de 4424 m3/s (12 de marzo)"
+
+[[claim.source]]
+ref = "https://www.cismid.uni.edu.pe/wp-content/uploads/2020/01/v_sanchez1_.pdf"
+locator = "Sánchez Moya, \"Vulnerabilidad de los Puentes\", Instituto de Investigación FIC UNI, PDF p. 4, Piura river, 1998"
+quote = "todos los valores históricos que se están analizando desde 1926 (estación Sánchez Cerro)."
+
+[[claim.source]]
+ref = "https://www.cismid.uni.edu.pe/wp-content/uploads/2020/01/v_sanchez1_.pdf"
+locator = "Sánchez Moya, \"Vulnerabilidad de los Puentes\", Instituto de Investigación FIC UNI, PDF p. 4, Piura river, 1998"
+quote = "en la ciudad de Piura colapsaron dos puentes, puente San Miguel (Viejo) y Bolognesi, perdiéndose en estos accidentes varias vidas humanas"
+
+[[claim]]
+id = "infomercado-2018-bolognesi"
+claim_es = "El puente Bolognesi cayó el 16 de marzo de 1998 a las 10.20 de la mañana, cuatro días después del puente San Miguel."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://infomercado.pe/motos-lineales-en-piura-20-anos-de-un-servicio-que-no-se-ha-podido-erradicar/"
+locator = "Infomercado, \"Motos lineales en Piura: 20 años de un servicio que no se ha podido erradicar\" (web page, no page numbers), paragraph beginning \"16 de marzo de 1998. 10.20 de la\""
+quote = "16 de marzo de 1998. 10.20 de la mañana."
+
+[[claim.source]]
+ref = "https://infomercado.pe/motos-lineales-en-piura-20-anos-de-un-servicio-que-no-se-ha-podido-erradicar/"
+locator = "Infomercado, \"Motos lineales en Piura: 20 años de un servicio que no se ha podido erradicar\" (web page, no page numbers), paragraph beginning \"16 de marzo de 1998. 10.20 de la\""
+quote = "4 días antes, había caído el puente San Miguel."
+
+[[claim]]
+id = "igp-woodman-1997-lejos"
+claim_es = "En julio de 1997, el IGP esperaba un Niño lluvioso pero «lejos» de los niveles desastrosos de 1983, porque en 450 años de historia de Piura no hubo otro igual."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/0f44f604-6777-4978-9d0a-d97a42f45d53/download"
+locator = "Woodman, \"El Niño 1997-1998: situación reciente y futura\", IGP, 5 July 1997, PDF p. 4, section on the forecast; a scan, quote transcribed from the page image"
+quote = "Esta inexactitud, combinados con la baja probabilidad de que se presente nuevamente un fenómeno tan intenso y tan poco frecuente como el de 1982-83, nos hace ser optimistas para la época de verano y esperar como caso extremo un Niño lluvioso como el predicho, sobre todo al inicio del verano, pero lejos de tener los niveles desastrosos que se presentaron en 1983. Hay que tener presente que no encontramos en los 450 años de historia de Piura un Niño con intensidad comparable a la de 1983"
+
+[[claim]]
+id = "igp-woodman-1997-4c"
+claim_es = "En julio de 1997 el mar frente al Perú ya estaba 4 °C sobre lo normal; bastan 2 °C para declarar un Niño."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/0f44f604-6777-4978-9d0a-d97a42f45d53/download"
+locator = "Woodman, \"El Niño 1997-1998: situación reciente y futura\", IGP, 5 July 1997, PDF p. 2, paragraph on Figure 1; a scan, quote transcribed from the page image"
+quote = "desviaciones frente a las costas del Perú de 4° C (bastan 2° C para declarar un Niño)"
+
+[[claim]]
+id = "caretas-1998-10-a-1"
+claim_es = "El 16 de marzo de 1998, Fujimori calculó que cada sol en prevención rendía diez. Ese mes, el desborde del río Ica dejó 120 000 damnificados."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20021215031044/http://www.caretas.com.pe/1998/1508/puentes/puentes.htm"
+locator = "Caretas no. 1508, March 1998, \"Del Puente A La Tragedia\" (archived web page, no page numbers), photo caption"
+quote = "La inversión en medidas de prevención es de altísima rentabilidad. Calculo, grosso modo, de 10 a 1. Es decir, la inversión en El Niño supone una rentabilidad de nada menos del 1,000%. Presidente Alberto Fujimori, el 16 de marzo, en Cartagena de Indias, Colombia"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20021215031044/http://www.caretas.com.pe/1998/1508/puentes/puentes.htm"
+locator = "Caretas no. 1508, March 1998, \"Del Puente A La Tragedia\" (archived web page, no page numbers), photo caption"
+quote = "la ciudad de Ica, treinta días después del desborde del río del mismo nombre que dejó 120,000 damnificados."
+
+[[claim]]
+id = "tv-rpp-1998-ya-se-conocia"
+claim_es = "Según RPP, el Niño de 1982-83 tomó al Perú desprevenido; en 1997-98 ya se conocía y el país se preparó."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=Ri9YG5lwtCk&t=30"
+locator = "RPP Noticias 50 años: Fenómeno del Niño, RPP Noticias, YouTube, uploaded 2013-10-07, [00:30]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Cogió desapercibido eh al Perú."
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=Ri9YG5lwtCk&t=30"
+locator = "RPP Noticias 50 años: Fenómeno del Niño, RPP Noticias, YouTube, uploaded 2013-10-07, [00:30]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper); the captions read '1982-183'; both speech recognizers hear '1982-1983'"
+quote = "En 1997-1998 el niño ya se conocía. El país se preparó para el para un evento de la misma envergadura del 1982-1983."
+
+[[claim]]
+id = "tv-ap-1997-fujimori-drenaje"
+claim_es = "En Tumbes, a fines de 1997, Fujimori dijo que el río llegó de golpe a 1 580 m³/s y que el drenaje funcionaba."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=6o-dJBASsWA&t=58"
+locator = "PERU: TUMBES: PRESIDENT FUJIMORI VISITS FLOOD DAMAGE AREAS, AP Archive, YouTube, uploaded 2015-07-21, [00:58]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper); the captions read '1580 Met cú por segundoa'; faster-whisper hears '1580 metros cúbicos por segundo'"
+quote = "el niño se ha iniciado ya aquí en el departamento de tumbes con inusitada fuerza súbitamente se ha presentado 1580 metros cúbicos por segundo"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=6o-dJBASsWA&t=89"
+locator = "PERU: TUMBES: PRESIDENT FUJIMORI VISITS FLOOD DAMAGE AREAS, AP Archive, YouTube, uploaded 2015-07-21, [01:29]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "el sistema de drenaje está funcionando bien las aguas que se acumulan en los campos están siendo evacuados y Esperamos que en 18 horas no quede Campos inundados"
+
+[[claim]]
+id = "tv-america-1998-lima-techos"
+claim_es = "En 1998, con el huaico del Huaycoloro, los vecinos de la avenida Santa Rosa se refugiaron en los techos."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=eyfosKwEObQ&t=165"
+locator = "Fenómeno de El Niño en Lima - 1998, Perú Tv Blanco y Negro, YouTube, uploaded 2017-11-17, [02:45]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Los pobladores de las primeras cinco cuadras de la avenida Santa Rosa se vieron obligados a refugiarse en los techos de sus casas."
+
+[[claim]]
+id = "tv-america-1998-03-12-historia"
+claim_es = "El 12 de marzo de 1998, América Noticias informó que el río Piura alcanzó el mayor nivel de su historia, 4 424 m³/s, y destruyó un puente."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=wGb7Z4qDmEE"
+locator = "Caida del Puente Viejo de Piura - 12 /marzo /1998, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-11-09, [00:00]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "río piura alcanzó el mayor nivel de su historia destruido puente"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=wGb7Z4qDmEE&t=130"
+locator = "Caida del Puente Viejo de Piura - 12 /marzo /1998, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-11-09, [02:10]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "un caudal récord de 4.424 metros cúbicos por segundo"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=wGb7Z4qDmEE&t=130"
+locator = "Caida del Puente Viejo de Piura - 12 /marzo /1998, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-11-09, [02:10]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "nunca antes en la historia de piura el río del mismo nombre alcanzó un caudal tan alto"
+
+[[claim]]
+id = "tv-america-1998-03-16-bolognesi"
+claim_es = "El 16 de marzo de 1998, América Noticias abrió con la caída del puente Bolognesi, con gente y vehículos encima: el segundo puente que Piura perdía en cuatro días."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=0t5f-Di-jpo&t=6"
+locator = "Piura - Caída del Puente Bolognesi - 16/03/1998 ( 1/2 ), Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-12-30, [00:06]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Puente Bolognesi en Piura se cayó hoy con decenas de personas y vehículos que lo cruzaban."
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=0t5f-Di-jpo&t=158"
+locator = "Piura - Caída del Puente Bolognesi - 16/03/1998 ( 1/2 ), Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-12-30, [02:38]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Este es el segundo puente que pierde Piura en tan solo cuatro días."
+
+[[claim]]
+id = "tv-america-1998-03-16-2300"
+claim_es = "Tras la caída del Bolognesi, el gobierno dispuso que los puentes de Piura se cerraran al paso cuando el río superara 2 300 m³/s."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=hVor54bHayg&t=64"
+locator = "Piura - Caída del Puente Bolognesi - 16/03/1998 ( 2/2 ), Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-11-09, [01:04]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "cuando el caudal del río supere los 2300 metros cúbicos por segundo se suspenderá automáticamente el pase"
+
+[[claim]]
+id = "andina-2017-chamorro"
+claim_es = "El 15 de marzo de 2017, Evangelina Chamorro salió del lodo de un huaico que la arrastró en Punta Hermosa; su imagen recorrió los medios del país y del mundo."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://andina.pe/agencia/noticia-evangelina-chamorro-hoy-se-cumple-un-mes-de-imagen-asombro-al-mundo-662940.aspx"
+locator = "Andina, \"Evangelina Chamorro: hoy se cumple un mes de imagen que asombró al mundo\" (web page, no page numbers), paragraph beginning \"Hace exactamente un mes, Evangelina Chamorro, de 32\""
+quote = "Hace exactamente un mes, Evangelina Chamorro, de 32 años y madre de dos hijas, hizo noticia"
+
+[[claim.source]]
+ref = "https://andina.pe/agencia/noticia-evangelina-chamorro-hoy-se-cumple-un-mes-de-imagen-asombro-al-mundo-662940.aspx"
+locator = "Andina, \"Evangelina Chamorro: hoy se cumple un mes de imagen que asombró al mundo\" (web page, no page numbers), paragraph beginning \"Hace exactamente un mes, Evangelina Chamorro, de 32\""
+quote = "que la arrastraron tres kilómetros en Punta Hermosa, al sur de Lima, donde había caído un huaico."
+
+[[claim.source]]
+ref = "https://andina.pe/agencia/noticia-evangelina-chamorro-hoy-se-cumple-un-mes-de-imagen-asombro-al-mundo-662940.aspx"
+locator = "Andina, \"Evangelina Chamorro: hoy se cumple un mes de imagen que asombró al mundo\" (web page, no page numbers), paragraph beginning \"El video que registra ese preciso momento, grabado\""
+quote = "fue reproducido en prácticamente todos los medios de comunicación del país y el mundo."
+
+[[claim]]
+id = "canaln-chamorro"
+claim_es = "Evangelina Chamorro emergió del lodo la tarde del 15 de marzo de 2017 sin heridas de consideración."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://canaln.pe/actualidad/dia-como-hoy-hace-seis-anos-evangelina-chamorro-emergio-huaico-punta-hermosa-n459667"
+locator = "Canal N, \"Un día como hoy, hace seis años, Evangelina Chamorro emergió de un huaico en Punta Hermosa\" (web page, no page numbers), paragraph beginning \"Era la tarde del 15 de marzo del\""
+quote = "Era la tarde del 15 de marzo del 2017 cuando repentinamente un estruendo alertó a los vecinos"
+
+[[claim.source]]
+ref = "https://canaln.pe/actualidad/dia-como-hoy-hace-seis-anos-evangelina-chamorro-emergio-huaico-punta-hermosa-n459667"
+locator = "Canal N, \"Un día como hoy, hace seis años, Evangelina Chamorro emergió de un huaico en Punta Hermosa\" (web page, no page numbers), paragraph beginning \"Cuando se pensó que el hecho culminaría en\""
+quote = "en medio del lodo emergió una figura, era Evangelina Chamorro"
+
+[[claim.source]]
+ref = "https://canaln.pe/actualidad/dia-como-hoy-hace-seis-anos-evangelina-chamorro-emergio-huaico-punta-hermosa-n459667"
+locator = "Canal N, \"Un día como hoy, hace seis años, Evangelina Chamorro emergió de un huaico en Punta Hermosa\" (web page, no page numbers), paragraph beginning \"Pese a que le gritaban para dirigirla a\""
+quote = "no tuvo heridas de consideración."
+
+[[claim]]
+id = "garreaud-2018-unpredicted"
+claim_es = "El Niño costero de 2017 casi no se pronosticó: en diciembre de 2016 los centros climáticos, ENFEN incluido, esperaban condiciones casi neutras."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20260128101421id_/https://repositorio.uchile.cl/bitstream/handle/2250/152026/A-plausible-atmospheric-trigger-for-the-2017-coastal-El-Nino.pdf"
+locator = "Garreaud, \"A plausible atmospheric trigger for the 2017 coastal El Niño\", Int. J. Climatol. 38 (Suppl. 1), 2018, printed p. e1296 (PDF p. 1), abstract"
+quote = "This strong coastal El Niño was largely unpredicted, even a few weeks before its onset"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20260128101421id_/https://repositorio.uchile.cl/bitstream/handle/2250/152026/A-plausible-atmospheric-trigger-for-the-2017-coastal-El-Nino.pdf"
+locator = "Garreaud, \"A plausible atmospheric trigger for the 2017 coastal El Niño\", Int. J. Climatol. 38 (Suppl. 1), 2018, printed p. e1296 (PDF p. 1), Introduction"
+quote = "by December 2016 many operational climate centres anticipated near-neutral conditions for the next quarter over the central (IRI; CPC-USA) and eastern Pacific (ERFEN Ecuador; ENFEN Peru). Then came January 2017"
+
+[[claim]]
+id = "garreaud-2018-1925"
+claim_es = "Un Niño costero como el de 2017 solo se había visto en 1891 y 1925, y el de 2017 fue el más extremo."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20260128101421id_/https://repositorio.uchile.cl/bitstream/handle/2250/152026/A-plausible-atmospheric-trigger-for-the-2017-coastal-El-Nino.pdf"
+locator = "Garreaud, \"A plausible atmospheric trigger for the 2017 coastal El Niño\", Int. J. Climatol. 38 (Suppl. 1), 2018, printed p. e1297 (PDF p. 2), section 2"
+quote = "have occurred previously only in 1891 and 1925 (Takahashi and Martínez, 2017), with the 2017 case being the most extreme"
+
+[[claim]]
+id = "garreaud-2018-piura"
+claim_es = "En 2017 llovieron más de 700 mm en San Miguel (Piura), unas 15 veces lo normal, como solo en 1983 y 1998; el río Piura, casi seco en 2016, pasó de 700 m³/s a mediados de febrero."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20260128101421id_/https://repositorio.uchile.cl/bitstream/handle/2250/152026/A-plausible-atmospheric-trigger-for-the-2017-coastal-El-Nino.pdf"
+locator = "Garreaud, \"A plausible atmospheric trigger for the 2017 coastal El Niño\", Int. J. Climatol. 38 (Suppl. 1), 2018, printed p. e1298 (PDF p. 3), section 2"
+quote = "Between January and April the rainfall accumulated at San Miguel station exceeded 700 mm, about 15-times larger than the long-term mean accumulation, only comparable to the values observed in the summer of 1983 and 1998"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20260128101421id_/https://repositorio.uchile.cl/bitstream/handle/2250/152026/A-plausible-atmospheric-trigger-for-the-2017-coastal-El-Nino.pdf"
+locator = "Garreaud, \"A plausible atmospheric trigger for the 2017 coastal El Niño\", Int. J. Climatol. 38 (Suppl. 1), 2018, printed p. e1298 (PDF p. 3), section 2"
+quote = "the Piura river was virtually dry for most of the austral winter and spring 2016 but its flow suddenly increased around the third week of January 2017 and by mid February it exceeded 700 m3 s−1 (∼seven times the long-term mean) for most days"
+
+[[claim]]
+id = "echevin-2018-1925"
+claim_es = "El Niño costero de 1925 se parece al de 2017."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.frontiersin.org/articles/10.3389/fmars.2018.00367/pdf"
+locator = "Echevin et al., \"Forcings and Evolution of the 2017 Coastal El Niño Off Northern Peru and Ecuador\", Front. Mar. Sci. 5:367, 2018, PDF p. 14, Discussion"
+quote = "During the 1925 coastal El Niño, which bears similarities with the 2017 event, the northeasterly flow related with the Panama gap jet and the southeasterly trades associated with the SPA were not particularly anomalous (Takahashi and Martínez, 2017)."
+
+[[claim]]
+id = "ramirez-2017-since-1925"
+claim_es = "Un Niño tan localizado como el de 2017 no se había documentado desde 1925."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://link.springer.com/content/pdf/10.1007/s13753-017-0151-8.pdf"
+locator = "Ramírez & Briones, \"Understanding the El Niño Costero of 2017\", Int. J. Disaster Risk Sci. 8, 2017, printed p. 489 (PDF p. 1), section 1"
+quote = "Such a localized El Niño was not documented since 1925."
+
+[[claim]]
+id = "takahashi-1925-lima-rain"
+claim_es = "El 10 de marzo de 1925 cayeron 12 mm en Lima en nueve horas, la segunda lluvia más grande registrada allí."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20220120185625id_/http://link.springer.com/content/pdf/10.1007/s00382-017-3702-1.pdf"
+locator = "Takahashi & Martínez, \"The very strong coastal El Niño in 1925 in the far-eastern Pacific\", Clim. Dyn. 52, 2019, printed p. 7410 (PDF p. 22), Appendix A.7"
+quote = "The second largest event ever recorded was in March 10, 1925, when 12 mm of rain fell in nine hours (1:30–10:30 a.m.), according to the Unanue Observatory"
+
+[[claim]]
+id = "tv-panorama-2017-inesperadamente"
+claim_es = "En marzo de 2017, Panorama dijo que el Niño costero llegó «inesperadamente» y que se activaron quebradas sin actividad en más de 50 años."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=638"
+locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [10:38]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "la capital también se ha visto amenazada por este niño costero que llegó inesperadamente para instalarse sembrando el caos pero sobre todo el desconcierto"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1465"
+locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [24:25]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "quebradas que no mostraron actividad desde hace más de 50 años se activaron con una furia asombrosa"
+
+[[claim]]
+id = "tv-panorama-2017-huarmey"
+claim_es = "En 2017, un vecino pidió ayuda al presidente: su pueblo llevaba tres días bajo el agua y solo tenía cinco volquetes y dos excavadoras para cerrar el corte del río."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1360"
+locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [22:40]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Vengo por ayuda presidente mi pueblo está bajo el agua tres días ya estamos bajo el agua y no llega ni una ayuda todavía a mi pueblo"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1360"
+locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [22:40]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper); the captions read 'tien el río'; faster-whisper large-v3 hears 'tiene el río'"
+quote = "solamente cinco volquetes y dos excavadoras para cerrar ese corte que tiene el río"
+
+[[claim]]
+id = "tv-panorama-2017-motobombas"
+claim_es = "En Lambayeque, en 2017, los vecinos pedían motobombas: «hemos perdido todo»."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1173"
+locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [19:33]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "estamos inundados por favor envíen motobombas ya nos hemos inundado y hemos perdido todo que jamás nunca ha pasado"
+
+[[claim]]
+id = "tv-panorama-2017-techos"
+claim_es = "En 2017, la policía rescató a quienes quedaron atrapados en techos y viviendas."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=910"
+locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [15:10]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "ante la emergencia la policía rescató a todos los que se quedaron atrapados en los techos y en sus viviendas"
+
+[[claim]]
+id = "tv-latina-2017-tercera-vez"
+claim_es = "En Villa Nueva Navarra, en marzo de 2017, era «la tercera vez en este año»."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=ChmmggWR3Y4&t=721"
+locator = "Evangelina Chamorro, milagro y esperanza en medio del desastre, Latina Noticias, YouTube, uploaded 2017-03-19, [12:01]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "ya es la tercera vez en este año"
+
+[[claim]]
+id = "enfen-co01-2017-probabilities"
+claim_es = "El 16 de enero de 2017, ENFEN daba 66 % a condiciones neutras, 30 % a un Niño costero débil y 1 % a uno moderado o mayor, sin alerta activa."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/handle/20.500.12816/2412"
+locator = "Comunicado Oficial ENFEN N° 01-2017, Callao, 16 January 2017, PDF p. 1, first paragraph"
+quote = "mantiene el estado de Alerta “No activo”."
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/handle/20.500.12816/2412"
+locator = "Comunicado Oficial ENFEN N° 01-2017, Callao, 16 January 2017, PDF p. 1, first paragraph"
+quote = "ha ajustado las probabilidades de ocurrencia de condiciones neutras en el Pacífico Oriental a un 66% y de El Niño Costero Débil a un 30% en el presente verano."
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/handle/20.500.12816/2412"
+locator = "Comunicado Oficial ENFEN N° 01-2017, Callao, 16 January 2017, PDF p. 4, Tabla 1"
+quote = "El Niño moderado-fuerte-extraordinario 1%"
+
+[[claim]]
+id = "bausate-2017-2015-prevention"
+claim_es = "Un editor de La República recordó que en 2015 se anunció El Niño y hubo mucha preparación e inversión, y muchas notas de prevención."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.bausate.edu.pe/bitstream/handle/20.500.14229/108/NISHIZAKA_MALCA_KAREN_HIDEKO_DILDA.pdf"
+locator = "Nishizaka Malca, \"Enfoque del lado humano en el fenómeno del Niño destacado por la prensa seria y la prensa sensacionalista de Lima\", Universidad Jaime Bausate y Meza, 2017, PDF p. 85, Apéndice E, interview with Juan Álvarez"
+quote = "se anunció que vendría El Niño (2015- 2016), y hubo una fuerte preparación e inversión"
+
+[[claim.source]]
+ref = "https://repositorio.bausate.edu.pe/bitstream/handle/20.500.14229/108/NISHIZAKA_MALCA_KAREN_HIDEKO_DILDA.pdf"
+locator = "Nishizaka Malca, \"Enfoque del lado humano en el fenómeno del Niño destacado por la prensa seria y la prensa sensacionalista de Lima\", Universidad Jaime Bausate y Meza, 2017, PDF p. 85, Apéndice E, interview with Juan Álvarez"
+quote = "en ese año hubo muchas notas de prevención."
+
+[[claim]]
+id = "ramirez-2017-credibility"
+claim_es = "El Niño de 2015-2016 dañó menos de lo temido en Perú, y eso pudo restar credibilidad a los avisos siguientes."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://link.springer.com/content/pdf/10.1007/s13753-017-0151-8.pdf"
+locator = "Ramírez & Briones, \"Understanding the El Niño Costero of 2017\", Int. J. Disaster Risk Sci. 8, 2017, printed p. 491 (PDF p. 3), section 3"
+quote = "Perceived risk (and subsequent inaction or inadequate government disaster responses) may have been influenced by the fact that impacts from the 2015–2016 El Niño turned out to be less than expected and feared in Peru, which in turn may also have diminished the credibility of subsequent climate information."
+
+[[claim]]
+id = "enfen-co03-2017-debil"
+claim_es = "El 2 de febrero de 2017, ENFEN pasó a «Alerta de El Niño Costero» y lo calificó de débil."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/3ea80185-bd3a-4f27-8bc5-d31b58b0c1b0/download"
+locator = "Comunicado Oficial ENFEN N° 03-2017, Callao, 2 February 2017, PDF p. 1, first paragraph"
+quote = "considera que se han consolidado las condiciones para un evento El Niño costero débil en el presente verano"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/3ea80185-bd3a-4f27-8bc5-d31b58b0c1b0/download"
+locator = "Comunicado Oficial ENFEN N° 03-2017, Callao, 2 February 2017, PDF p. 1, first paragraph"
+quote = "establece pasar del estado de “Vigilancia de El Niño Costero” al estado de “Alerta de El Niño Costero”"
+
+[[claim]]
+id = "elcomercio-2017-03-04-debil"
+claim_es = "El 4 de marzo de 2017, El Comercio informaba de un Niño débil que podía pasar a moderado, con 26 muertos según Indeci."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://elcomercio.pe/peru/fenomeno-nino-afecto-pais-anos-1997-1998-142502-noticia/"
+locator = "El Comercio, \"Fenómeno de El Niño: así afectó al país en los años 1997 y 1998\" (web page, no page numbers), paragraph beginning \"Actualmente el país soporta un fenómeno de El\""
+quote = "Actualmente el país soporta un fenómeno de El Niño débil, pero este podría pasar a ser 'moderado'"
+
+[[claim.source]]
+ref = "https://elcomercio.pe/peru/fenomeno-nino-afecto-pais-anos-1997-1998-142502-noticia/"
+locator = "El Comercio, \"Fenómeno de El Niño: así afectó al país en los años 1997 y 1998\" (web page, no page numbers), paragraph beginning \"Según cifras del Instituto Nacional de Defensa Civil,\""
+quote = "Según cifras del Instituto Nacional de Defensa Civil, 26 personas ha perdido la vida"
+
+[[claim]]
+id = "enfen-co06-2017-moderada"
+claim_es = "El 16 de marzo de 2017, ENFEN subió la magnitud a moderada y previó el evento al menos hasta abril."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/703b4703-54b3-460e-b38c-fecf4938c5da/download"
+locator = "Comunicado Oficial ENFEN N° 06-2017, Callao, 16 March 2017, PDF p. 1, first paragraph"
+quote = "El Comité Multisectorial ENFEN prevé la continuación del evento El Niño costero por lo menos hasta abril, con una magnitud moderada."
+
+[[claim]]
+id = "tv-tvperu-2026-02-16-inminente"
+claim_es = "El 16 de febrero de 2026, en TV Perú, ENFEN dio por casi inminente un Niño desde marzo que podría durar hasta noviembre."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=_tw3lE7mQac&t=61"
+locator = "Enfen: El Niño costero se iniciaría en marzo y se prolongaría hasta noviembre, TVPerú Noticias, YouTube, uploaded 2026-02-16, [01:01]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "nos indican que e la la eh es casi inminente la la presencia de un niño a partir del mes de marzo, ¿no? Que puede estar durando hasta noviembre."
+
+[[claim]]
+id = "tv-rpp-2026-02-24-alerta"
+claim_es = "El 24 de febrero de 2026, la directora de meteorología del Senamhi dijo en RPP que no se podía esperar tres meses para alertar: febrero marcaba el inicio del Niño costero."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=jdppRLOp14g&t=31"
+locator = "Fenómeno Niño Costero ya inició en Perú: ¿cuáles serán sus efectos? #CONEXIONRPP, RPP Noticias, YouTube, uploaded 2026-02-24, [00:31]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper); the captions read 'SENAMI'"
+quote = "la doctora Grinia Ávalos, directora de meteorología del Senamhi"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=jdppRLOp14g&t=156"
+locator = "Fenómeno Niño Costero ya inició en Perú: ¿cuáles serán sus efectos? #CONEXIONRPP, RPP Noticias, YouTube, uploaded 2026-02-24, [02:36]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "por temas precautorios, no podemos esperar a que transcurran 3 meses"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=jdppRLOp14g&t=156"
+locator = "Fenómeno Niño Costero ya inició en Perú: ¿cuáles serán sus efectos? #CONEXIONRPP, RPP Noticias, YouTube, uploaded 2026-02-24, [02:36]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Los sistemas de alerta no funcionan así."
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=jdppRLOp14g&t=156"
+locator = "Fenómeno Niño Costero ya inició en Perú: ¿cuáles serán sus efectos? #CONEXIONRPP, RPP Noticias, YouTube, uploaded 2026-02-24, [02:36]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Febrero ya marca el inicio prácticamente del niño costero 2026"
+
+[[claim]]
+id = "bausate-2017-front-page"
+claim_es = "Según un editor de La República, en 2017 el desastre del norte no fue portada en Lima hasta que llegó a Lima, aunque sí en la edición del norte."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.bausate.edu.pe/bitstream/handle/20.500.14229/108/NISHIZAKA_MALCA_KAREN_HIDEKO_DILDA.pdf"
+locator = "Nishizaka Malca, \"Enfoque del lado humano en el fenómeno del Niño destacado por la prensa seria y la prensa sensacionalista de Lima\", Universidad Jaime Bausate y Meza, 2017, PDF p. 84, Apéndice E, interview with Juan Álvarez"
+quote = "todavía existe mucho centralismo, es decir, se miran las cosas de lejos hasta que llegan a Lima. Hasta que llego a Lima, la noticia era importante pero no para estar en primera plana."
+
+[[claim.source]]
+ref = "https://repositorio.bausate.edu.pe/bitstream/handle/20.500.14229/108/NISHIZAKA_MALCA_KAREN_HIDEKO_DILDA.pdf"
+locator = "Nishizaka Malca, \"Enfoque del lado humano en el fenómeno del Niño destacado por la prensa seria y la prensa sensacionalista de Lima\", Universidad Jaime Bausate y Meza, 2017, PDF p. 84, Apéndice E, interview with Juan Álvarez"
+quote = "en el suceso aquí estaban en la sección sociedad, pero en La República del norte, estaba en la portada."
+
+[[claim.source]]
+ref = "https://repositorio.bausate.edu.pe/bitstream/handle/20.500.14229/108/NISHIZAKA_MALCA_KAREN_HIDEKO_DILDA.pdf"
+locator = "Nishizaka Malca, \"Enfoque del lado humano en el fenómeno del Niño destacado por la prensa seria y la prensa sensacionalista de Lima\", Universidad Jaime Bausate y Meza, 2017, PDF p. 60, Conclusiones, item 9"
+quote = "cuando el desastre ambiental llega a la capital se vuelve portada."
+
+[[claim]]
+id = "ucv-2023-yaku-centralised"
+claim_es = "En 2023, la cobertura televisiva del ciclón Yaku empezó nacional y se fue centralizando en Lima."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.ucv.edu.pe/bitstream/handle/20.500.12692/145172/Correa_DLDF-Romero_RMN-SD.pdf?sequence=1&isAllowed=y"
+locator = "Correa & Romero, \"Entre lluvias y huaycos\", Universidad César Vallejo, PDF p. 7, Resumen"
+quote = "la cobertura de las noticias sobre el fenómeno climatológico, al inicio, tuvo un alcance nacional; con el correr de los días, se fue centralizando en la capital"
+
+[[claim]]
+id = "pucp-1925-trujillo-ha-terminado"
+claim_es = "El 18 de marzo de 1925, El Comercio publicó en primera plana el radiograma del prefecto: «Trujillo ha terminado». Esa misma tarde, un senador dijo que no era tan grave."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20221013221154id_/https://tesis.pucp.edu.pe/repositorio/bitstream/handle/20.500.12404/5609/CHANG_HUAYANCA_ANTONIO_FENOMENO_NINO.pdf"
+locator = "Chang Huayanca, \"La cobertura periodística del Fenómeno El Niño de 1925-1926 en el diario El Comercio de Lima\", PUCP, 2014, PDF p. 25, on El Comercio of 18 March 1925"
+quote = "un artículo extenso publicado en la primera plana"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20221013221154id_/https://tesis.pucp.edu.pe/repositorio/bitstream/handle/20.500.12404/5609/CHANG_HUAYANCA_ANTONIO_FENOMENO_NINO.pdf"
+locator = "Chang Huayanca, \"La cobertura periodística del Fenómeno El Niño de 1925-1926 en el diario El Comercio de Lima\", PUCP, 2014, PDF p. 25, radiogram of the prefect Temístocles Molina Derteano"
+quote = "Ya no hay nada que hacer, porque todo esfuerzo es insuficiente. Trujillo ha terminado."
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20221013221154id_/https://tesis.pucp.edu.pe/repositorio/bitstream/handle/20.500.12404/5609/CHANG_HUAYANCA_ANTONIO_FENOMENO_NINO.pdf"
+locator = "Chang Huayanca, \"La cobertura periodística del Fenómeno El Niño de 1925-1926 en el diario El Comercio de Lima\", PUCP, 2014, PDF p. 26, on the evening edition"
+quote = "en la edición vespertina de aquel mismo día se publica un nuevo telegrama de parte del senador del departamento de La Libertad, Sr. Gonzáles Orbegoso, en la que se dice que las desgracias que asolan Trujillo no eran tan graves como se pensaba al inicio."
+
+[[claim]]
+id = "pucp-1925-worldwide"
+claim_es = "La noticia de que Trujillo había desaparecido era exagerada, pero dio la vuelta al mundo."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20221013221154id_/https://tesis.pucp.edu.pe/repositorio/bitstream/handle/20.500.12404/5609/CHANG_HUAYANCA_ANTONIO_FENOMENO_NINO.pdf"
+locator = "Chang Huayanca, \"La cobertura periodística del Fenómeno El Niño de 1925-1926 en el diario El Comercio de Lima\", PUCP, 2014, PDF p. 52, chapter conclusions"
+quote = "La noticia resultó ser exagerada, lo que fue corroborado por el mismo diario luego de recibir más informaciones sobre la situación en el norte del país. Sin embargo, la noticia de la desaparición de Trujillo tuvo una amplia difusión internacional."
+
+[[claim]]
+id = "udep-rojas-2014-locutores"
+claim_es = "En febrero de 1983, una laguna de lluvia en Piura confundió a dos locutores de televisión, que anunciaron al país que el río inundaba la ciudad."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://pirhua.udep.edu.pe/backend/api/core/bitstreams/eab378af-7520-43d4-8ef6-a8f492f9f688/content"
+locator = "Rojas Rosas, \"La fotografía como elemento informativo del diario 'El Tiempo' de Piura\", Universidad de Piura, 2014, PDF p. 129, note 194, quoting El Tiempo of 16 February 1983"
+quote = "esta acumulación de aguas, se recuerda, confundió a dos locutores de un canal de televisión, quienes lanzaron al país la noticia de que el río inundaba la ciudad de Piura"
+
+[[claim]]
+id = "ucv-2017-la-industria-headlines"
+claim_es = "Del 18 al 27 de marzo de 2017, las portadas de La Industria de Trujillo tuvieron titulares amarillistas como «Devastador» y «Que dios nos ayude», con poca información sobre refugios o prevención."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.ucv.edu.pe/bitstream/handle/20.500.12692/11193/agreda_sa.pdf?sequence=1&isAllowed=y"
+locator = "Agreda Sánchez, \"Análisis del contenido de las notas periodísticas del diario La Industria de Trujillo durante el fenómeno de El Niño Costero\", Universidad César Vallejo, PDF p. 68, Conclusiones"
+quote = "Los diarios publicados desde el 18 de marzo hasta el 27 de ese mismo mes, sus portadas tenían un toque amarillista en sus titulares que eran “Basta de ayudar a más invasores”, “El peligro no se aleja de Trujillo”, “El agua se seguirá escaseando”, “Lo peor aún no ha pasado”, “Devastador”, “Que dios nos ayude”"
+
+[[claim.source]]
+ref = "https://repositorio.ucv.edu.pe/bitstream/handle/20.500.12692/11193/agreda_sa.pdf?sequence=1&isAllowed=y"
+locator = "Agreda Sánchez, \"Análisis del contenido de las notas periodísticas del diario La Industria de Trujillo durante el fenómeno de El Niño Costero\", Universidad César Vallejo, PDF p. 68, Conclusiones"
+quote = "la usencia de información sobre refugios, estrategias de prevención"
+
+[[claim]]
+id = "glantz-2000-wanes"
+claim_es = "Cuando termina el clima inusual, el interés de los medios decae."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://sigrid.cenepred.gob.pe/sigridv3/documento/1128/descargar"
+locator = "Glantz (ed.), \"Lessons Learned from the 1997–98 El Niño: Once Burned, Twice Shy?\", UNEP/NCAR/UNU/WMO/ISDR, October 2000, PDF p. 15, media lessons"
+quote = "However, once the unusual weather patterns end, media interest wanes."
+
+[[claim]]
+id = "igp-woodman-2014-press"
+claim_es = "La gran cobertura de 1982-83 y 1997-98 en prensa y televisión hace que hoy se confunda un Niño normal con uno extraordinario."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://repositorio.igp.gob.pe/bitstreams/24619447-76e0-4241-8091-416c76127594/download"
+locator = "Woodman, \"¿Por qué no llueve en la costa del Perú (salvo durante El Niño)?\", Boletín Técnico PPR/El Niño-IGP Vol. 1 Nº 6, June 2014, PDF p. 3, section \"Las lluvias y El Niño en un contexto histórico\""
+quote = "Las fuertes lluvias de los El Niño de 1982-83 y 1997-98 (rojo y azul en la Figura 2, respectivamente) y la gran cobertura que estas tuvieron en la prensa y televisión, tanto a nivel nacional como internacional, hacen que en la actualidad se confundan las manifestaciones de un fenómeno El Niño “normal” con las de un Niño “extraordinario”."
+
+[[claim]]
+id = "tv-america-1998-titulares"
+claim_es = "En marzo de 1998, América Noticias abrió su edición central con Piura en los titulares."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=wGb7Z4qDmEE"
+locator = "Caida del Puente Viejo de Piura - 12 /marzo /1998, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-11-09, [00:00]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "buenas noches bienvenidos a la edición central america noticias estos son nuestros titulares río piura alcanzó el mayor nivel de su historia"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=0t5f-Di-jpo&t=6"
+locator = "Piura - Caída del Puente Bolognesi - 16/03/1998 ( 1/2 ), Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-12-30, [00:06]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Buenas noches. Muy buenas noches. Bienvenidos a la edición central de América Noticias, estos son nuestros titulares. Puente Bolognesi en Piura se cayó hoy"
+
+[[claim]]
+id = "tv-panorama-2017-simbolo"
+claim_es = "Panorama llamó a Evangelina Chamorro «el símbolo de la sobrevivencia»; su imagen dio la vuelta al mundo."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=2vPn7qXk1nI&t=2"
+locator = "La fortaleza de Evangelina Chamorro: la sobreviviente del huaico, Panorama, YouTube, uploaded 2017-03-20, [00:02]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Evangelina Chamorro Díaz es la mujer que esta semana se impuso ante la muerte convertida en el símbolo de la sobrevivencia en medio del desastre su imagen emergiendo entre el lodo ha dado por supuesto La vuelta al mundo"
+
+[[claim]]
+id = "tv-1984-belaunde-culpa"
+claim_es = "En 1984, Belaunde se quejó en televisión de que se culpara a las autoridades «hasta de los embates de la naturaleza»."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=0oT-y-vRdTM&t=138"
+locator = "Reconstrucción del Norte Peruano - 1984, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2022-04-24, [02:18]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "se le echa la culpa a las autoridades hasta de los embates de la naturaleza"
+
+[[claim]]
+id = "andina-2026-02-19-tumbes-rojo"
+claim_es = "El 19 de febrero de 2026, el río Tumbes alcanzó el umbral rojo con 1 181,35 m³/s en El Tigre."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://andina.pe/agencia/noticia-alerta-tumbes-y-piura-rios-alcanzan-umbral-rojo-tras-fuertes-lluvias-y-temen-desbordes-1063669.aspx"
+locator = "Andina, \"Alerta en Tumbes y Piura: ríos alcanzan umbral rojo tras fuertes lluvias y temen desbordes\" (web page, no page numbers), paragraph beginning \"Citando información del Servicio Nacional de Meteorología e\""
+quote = "Citando información del Servicio Nacional de Meteorología e Hidrología (Senamhi), el COEN reveló que el río Tumbes alcanzó el umbral rojo en la madrugada de hoy jueves 19 tras registrar un caudal de 1,181.35 metros cúbicos por segundo en el puesto de control El Tigre ubicado en el distrito de San Jacinto."
+
+[[claim]]
+id = "elperuano-2026-09-28-adelanto"
+claim_es = "En septiembre de 2026, la estación Cañaveral registró 78,5 mm en 24 horas, cuando su normal mensual es 0,5 mm. El mayor impacto se proyecta entre diciembre y el verano de 2027."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://elperuano.pe/noticia/305630"
+locator = "El Peruano, \"Senamhi: lluvias excepcionales en Tumbes y Piura confirman adelanto de temporada de precipitaciones\" (web page, no page numbers), paragraph beginning \"Por ejemplo, en Tumbes, la estación Cañaveral registró\""
+quote = "la estación Cañaveral registró 78.5 milímetros (mm) en 24 horas"
+
+[[claim.source]]
+ref = "https://elperuano.pe/noticia/305630"
+locator = "El Peruano, \"Senamhi: lluvias excepcionales en Tumbes y Piura confirman adelanto de temporada de precipitaciones\" (web page, no page numbers), paragraph beginning \"Por ejemplo, en Tumbes, la estación Cañaveral registró\""
+quote = "su normal climática mensual, estimada en apenas 0.5 mm."
+
+[[claim.source]]
+ref = "https://elperuano.pe/noticia/305630"
+locator = "El Peruano, \"Senamhi: lluvias excepcionales en Tumbes y Piura confirman adelanto de temporada de precipitaciones\" (web page, no page numbers), paragraph beginning \"El periodo de mayor impacto, asociado a la\""
+quote = "El periodo de mayor impacto, asociado a la posibilidad de desbordes de ríos, activación de quebradas e inundaciones, se proyecta entre diciembre y parte del verano de 2027, cuando las condiciones de El Niño costero podrían ubicarse entre niveles extraordinario y fuerte."
+
+[[claim]]
+id = "senamhi-aviso24h-327-2026"
+claim_es = "El 23 de noviembre de 2026, el Senamhi emitió el aviso 327, nivel rojo, por lluvias de fuerte a extrema intensidad en la costa interior de Tumbes y Piura: hasta 70 mm en 24 horas."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.senamhi.gob.pe/?p=aviso-24H&f=23-11-2026"
+locator = "Senamhi, Aviso de corto plazo ante lluvias intensas N°327-2026 (web page, no page numbers), aviso header"
+quote = "N°327 - 2026 NIVEL ROJO AVISO DE CORTO PLAZO ANTE LLUVIAS INTENSAS Fecha de inicio: Lunes 23 noviembre 2026 - 13:00 horas Duración: 24 hrs"
+
+[[claim.source]]
+ref = "https://www.senamhi.gob.pe/?p=aviso-24H&f=23-11-2026"
+locator = "Senamhi, Aviso de corto plazo ante lluvias intensas N°327-2026 (web page, no page numbers), COSTA paragraph"
+quote = "COSTA: Se prevén lluvias de fuerte a extrema intensidad en sectores de la costa norte, principalmente en la costa interior de Tumbes y Piura."
+
+[[claim.source]]
+ref = "https://www.senamhi.gob.pe/?p=aviso-24H&f=23-11-2026"
+locator = "Senamhi, Aviso de corto plazo ante lluvias intensas N°327-2026 (web page, no page numbers), table, row COSTA"
+quote = "COSTA LLOVIZNA / LLUVIA 0.5 – 70 ALTA"
+
+[[claim]]
+id = "takahashi-2011-extreme-regime"
+claim_es = "Los Niños extremos forman su propio régimen, visto en 1982-83 y 1997-98, y en menor grado en 1877-78; por eso se puede decir poco de ellos a partir de observaciones."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://hal.science/hal-00994266v1/document"
+locator = "Takahashi, Montecinos, Goubanova & Dewitte, \"ENSO regimes: Reinterpreting the canonical and Modoki El Niño\", Geophys. Res. Lett. 38, L10704, 2011, HAL copy, PDF p. 5, section 4"
+quote = "The regime of extreme warm events is illustrated in nature by the 1982–83 and 1997–98 events and, to a lesser extent, by the 1877–78 event."
+
+[[claim.source]]
+ref = "https://hal.science/hal-00994266v1/document"
+locator = "Takahashi, Montecinos, Goubanova & Dewitte, \"ENSO regimes: Reinterpreting the canonical and Modoki El Niño\", Geophys. Res. Lett. 38, L10704, 2011, HAL copy, PDF p. 2, abstract"
+quote = "little can be said observationally with respect to the extreme warm regime."
+
+[[claim]]
+id = "tv-elcomercio-2026-11-21-preparado"
+claim_es = "En noviembre de 2026, El Comercio planteó que la gran pregunta no es solo cuán fuerte será El Niño 2026-2027, sino cuán preparado está el país."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=0gwvtwwT9i4&t=383"
+locator = "Los 3 Fenómenos del Niño más mortales y destructivos de la historia de Perú | El Comercio, Diario El Comercio, YouTube, uploaded 2026-11-21, [06:23]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "la gran interrogante no es solamente qué tan fuerte será el Niño de 2026 a 2027, sino qué tan preparado está el país para enfrentarlo."
+
+[[claim]]
+id = "elbuho-2024-reconstruction"
+claim_es = "Al cerrar en 2023, la Autoridad para la Reconstrucción con Cambios había terminado 7 890 de 10 772 obras, el 73,2 %."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://elbuho.pe/?p=329713"
+locator = "El Búho, \"El Niño en Perú: ARCC no concluyó casi el 30% de las obras del plan integral\" (web page, no page numbers), paragraph beginning \"Norte Sostenible solicitó por la ley de transparencia\""
+quote = "En esa línea, del total de intervenciones (10,772) en los componentes de construcción y reconstrucción contempladas en el plan integral, solo culminó el 73,2% de ellas, es decir, 7,890."
+
+[[claim]]
+id = "apoyo-2026-readiness"
+claim_es = "Según APOYO, el país llega mejor preparado que en 2017, pero aún no está listo para un evento extremo."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf"
+locator = "APOYO Consultoría, \"Preparación ante el Fenómeno El Niño 2026–2027\", July 2026, PDF p. 2, section 2 \"Diagnóstico: Qué tan preparado está el país\", first sentence"
+quote = "El país llega mejor preparado que en 2017, pero aún no está listo para enfrentar un evento extremo."
+
+[[claim]]
+id = "apoyo-2026-piura-works"
+claim_es = "Piura concentra más del 25 % del monto de las obras de río y drenaje, con avance físico cercano a cero."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf"
+locator = "APOYO Consultoría, \"Preparación ante el Fenómeno El Niño 2026–2027\", July 2026, PDF p. 6, infrastructure diagnosis"
+quote = "Piura concentra más del 25% del monto estimado total (río y drenajes) con avance físico cercano a cero en ambos componentes."
+
+[[claim]]
+id = "apoyo-2026-sat"
+claim_es = "La alerta temprana del río Piura avanza 34 % y la del Ica 38 %, sin sirenas ni planes de evacuación; Tumbes, Lambayeque, La Libertad, Áncash y Lima no tienen una."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf"
+locator = "APOYO Consultoría, \"Preparación ante el Fenómeno El Niño 2026–2027\", July 2026, PDF p. 9, early warning systems"
+quote = "El SAT del río Piura registra un avance de 34% y el del río Ica alcanza 38%. En ambos casos opera el radar, pero aún faltan las sirenas, los umbrales de activación y los planes de evacuación necesarios para convertir el monitoreo técnico en una alerta efectiva. En cambio, Tumbes, Lambayeque, La Libertad, Áncash y Lima todavía no cuentan con sistemas de alerta temprana frente a inundaciones."
+
+[[claim]]
+id = "elcomercio-2023-04-14-chilcal"
+claim_es = "Desde 1983, Piura pide un dren pluvial que en 2023 seguía sin existir; en El Chilcal, un vecino dice: «Desde el 83 vivimos esto aquí»."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://elcomercio.pe/peru/historia-de-un-meganino-40-anos-de-lecciones-no-aprendidas-cuanto-le-afecto-al-peru-lluvias-inundaciones-en-la-costa-politica-de-prevencion-tumbes-piura-noticia/"
+locator = "El Comercio, \"Historia de un Meganiño: 40 años de lecciones no aprendidas\" (web page, no page numbers), paragraph beginning \"Desde el 83, la ciudad de Piura pide\""
+quote = "Desde el 83, la ciudad de Piura pide a gritos un dren pluvial. Sin embargo, esa obra hasta ahora no es realidad"
+
+[[claim.source]]
+ref = "https://elcomercio.pe/peru/historia-de-un-meganino-40-anos-de-lecciones-no-aprendidas-cuanto-le-afecto-al-peru-lluvias-inundaciones-en-la-costa-politica-de-prevencion-tumbes-piura-noticia/"
+locator = "El Comercio, \"Historia de un Meganiño: 40 años de lecciones no aprendidas\" (web page, no page numbers), paragraph beginning \"Cerca de esta zona se ubica otra urbanización,\""
+quote = "Desde el 83 vivimos esto aquí."
+
+[[claim]]
+id = "tv-elcomercio-2023-lima-drenaje"
+claim_es = "Lima sigue siendo una ciudad sin drenaje para la lluvia."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=bvdnUF8USL4&t=127"
+locator = "EL DILUVIO QUE INUNDÓ LIMA EN 1976: UNA HISTORIA QUE RESUENA EN 2026 | Cuenta la Historia | EP. 8, Diario El Comercio, YouTube, uploaded 2023-10-17, [02:07]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "hasta hoy es una ciudad sin drenaje para la lluvia"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=bvdnUF8USL4&t=284"
+locator = "EL DILUVIO QUE INUNDÓ LIMA EN 1976: UNA HISTORIA QUE RESUENA EN 2026 | Cuenta la Historia | EP. 8, Diario El Comercio, YouTube, uploaded 2023-10-17, [04:44]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Y es que al parecer nunca aprendemos"
+
+[[claim]]
+id = "tv-bdp-2026-sin-drenaje"
+claim_es = "En 2026, Buenos Días Perú dijo que el país creció, pero también el riesgo: más casas en las riberas y las mismas obras sin drenaje."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=KV6zaHYQjU8&t=124"
+locator = "¿Cómo golpeó el fenómeno “El Niño” de 1983 el PBI del país?, Buenos Días Perú, YouTube, uploaded 2026-08-19, [02:04]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "El Perú creció, pero también creció el riesgo. Hoy hay más casas en las riberas, más gente expuesta y las mismas obras sin drenaje."
+
+[[claim]]
+id = "tv-rpp-2023-yaku-maquinaria"
+claim_es = "En 2023, con el ciclón Yaku, no hubo maquinaria para Piura, Tumbes ni La Libertad."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=2Rb5aactsgw&t=185"
+locator = "Fenómeno de ‘El Niño’: ¿Cuáles sería su impacto en la economía?, RPP Noticias, YouTube, uploaded 2023-06-06, [03:05]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Recordemos lo que nos ha pasado ahora con Yaku que no había maquinaria para Piura, para Tumbes, para eh La Libertad."
+
+[[claim]]
+id = "tv-rpp-2026-clamado"
+claim_es = "En febrero de 2026, RPP informó que las autoridades locales decían no tener lo necesario para atender la emergencia."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=jdppRLOp14g"
+locator = "Fenómeno Niño Costero ya inició en Perú: ¿cuáles serán sus efectos? #CONEXIONRPP, RPP Noticias, YouTube, uploaded 2026-02-24, [00:00]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "Las autoridades locales han clamado a viva voz de que no tienen lo que necesitan para poder atender la emergencia."
+
+[[claim]]
+id = "caretas-1998-13-puentes"
+claim_es = "En 1998, trece de los 68 puentes afectados en el país tenían 14 años o menos."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://web.archive.org/web/20021215031044/http://www.caretas.com.pe/1998/1508/puentes/puentes.htm"
+locator = "Caretas no. 1508, March 1998, \"Del Puente A La Tragedia\" (archived web page, no page numbers), body"
+quote = "Trece de los 68 puentes afectados en todo el país no tienen más de 14 años de antigüedad"
+
+[[claim]]
+id = "tv-1985-belaunde-leccion"
+claim_es = "En 1985, Belaunde llamó a El Niño y a otra desgracia un obstáculo tremendo para su gobierno, y sacó la lección de que el pueblo peruano reacciona ante la adversidad."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=Ok_vgh7YktE&t=1680"
+locator = "Reconstrucción del Norte - Conferencia del Presidente Belaunde 1985, Perú Archivo de TV, YouTube, uploaded 2022-04-24, [28:00]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "esas constituyen dos desgracias que han sido un obstáculo tremendo en el desenvolvimiento del gobierno que me honro en presidir pero hay que sacar de estas duras experiencias una lección la lección de que el pueblo peruano reacciona victoriosamente frente a la adversidad"
+
+[[claim]]
+id = "tv-panorama-2017-ley-naturaleza"
+claim_es = "En 2017, una vecina de Trujillo dijo: «es la ley de la naturaleza, no podemos hacer nada contra ella»."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1562"
+locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [26:02]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+quote = "es la ley de la naturaleza no podemos hacer nada contra ella"
+
+[[claim]]
+id = "glantz-2000-peru-lesson"
+claim_es = "El ciclo de El Niño debe planificarse como un hecho recurrente, en defensa civil, zonificación y normas de construcción, no como una anomalía pasajera."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://sigrid.cenepred.gob.pe/sigridv3/documento/1128/descargar"
+locator = "Glantz (ed.), \"Lessons Learned from the 1997–98 El Niño: Once Burned, Twice Shy?\", UNEP/NCAR/UNU/WMO/ISDR, October 2000, PDF p. 26, lessons for Peru"
+quote = "The ENSO cycle must be considered by policy makers as a recurrent event in national planning (civil defense, urban zoning, construction codes) rather than as an anomalous and temporary condition."
