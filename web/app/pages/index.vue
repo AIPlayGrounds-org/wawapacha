@@ -3,7 +3,8 @@ import { computed, onMounted, ref } from 'vue'
 import { messages } from '~/messages'
 import { useDataset } from '~/composables/useDataset'
 import { useActiveId } from '~/composables/useActiveId'
-import { buildOisstMap, cropOisst } from '~/utils/oisstMap'
+import { coastalReach, cropOisst, recordAYearBefore, valueAt, warmestCell } from '~/utils/oisstMap'
+import type { GridRecord } from '~/types/dataset'
 import { formatAnomaly } from '~/utils/enso'
 import { formatDay, formatDegrees, formatMonth, formatMonthName, formatValue } from '~/utils/format'
 import { icenPeak } from '~/utils/icen'
@@ -30,7 +31,7 @@ import IcenTimeline, { type TimelineMark } from '~/components/IcenTimeline.vue'
 import PaperCard from '~/components/PaperCard.vue'
 import PressTimeline from '~/components/PressTimeline.vue'
 import ScaleBars from '~/components/ScaleBars.vue'
-import SeaMap from '~/components/SeaMap.vue'
+import SeaMap, { type SeaPanel, type SeaRing } from '~/components/SeaMap.vue'
 import SeasonChart, { type SeasonLine } from '~/components/SeasonChart.vue'
 import UnitGrid from '~/components/UnitGrid.vue'
 
@@ -146,14 +147,47 @@ const todayMark: TimelineMark[] = latestIcen
     ]
   : []
 
-// Where the heat is: the latest map and the latest week against its normal.
+// Where the heat is: the latest map beside the same day a year before.
 const seaRecord = oisst.records[0]
-const warmest = seaRecord ? buildOisstMap(seaRecord).warmest : null
-const warmestValue = warmest ? formatDegrees(warmest.value) : null
-const calorAnswer = warmestValue ? story.calor.answer(warmestValue) : story.calor.empty
-const mapWarmest = warmest
-  ? { lat: warmest.lat, lon: warmest.lon, label: story.map.warmest(warmestValue!) }
-  : null
+const seaYearBefore = recordAYearBefore(oisst.records)
+const warmest = warmestCell(seaRecord)
+const reach = coastalReach(seaRecord)
+const calorAnswer = reach
+  ? story.calor.answer(reach.from.name, reach.toEnd ? null : reach.to.name)
+  : story.calor.unreached
+const warmestThen =
+  warmest && seaYearBefore ? valueAt(seaYearBefore, warmest.lat, warmest.lon) : null
+const calorLead = [
+  warmest ? story.calor.warmest(formatDegrees(warmest.value)) : null,
+  warmestThen === null
+    ? null
+    : story.calor.yearBefore(
+        formatDegrees(Math.abs(warmestThen)),
+        formatDegrees(warmestThen) === formatDegrees(0)
+          ? 'normal'
+          : warmestThen > 0
+            ? 'above'
+            : 'below',
+      ),
+]
+  .filter(Boolean)
+  .join(' ')
+const ringAt = (record: GridRecord, muted: boolean): SeaRing | null => {
+  const value = warmest ? valueAt(record, warmest.lat, warmest.lon) : null
+  return warmest && value !== null
+    ? { lat: warmest.lat, lon: warmest.lon, label: story.map.ring(formatValue(value)), muted }
+    : null
+}
+const seaPanels: SeaPanel[] = [
+  { title: story.map.today, record: seaRecord, ring: ringAt(seaRecord, false), locator: true },
+  ...(seaYearBefore
+    ? [{ title: story.map.yearBefore, record: seaYearBefore, ring: ringAt(seaYearBefore, true) }]
+    : []),
+]
+const seaSummary = story.map.summary(
+  formatDay(seaRecord.end),
+  seaYearBefore ? formatDay(seaYearBefore.end) : null,
+)
 
 // The three past events against the latest value.
 const pastEvents = (
@@ -346,18 +380,18 @@ useSiteSeo({
     </div>
 
     <section id="calor" class="scene scene--blue" aria-labelledby="calor-title">
-      <div class="beat beat--split">
-        <div class="beat-text">
-          <h2 id="calor-title">
-            <span class="ask">{{ story.calor.question }}</span>
-            <span class="answer">{{ calorAnswer }}</span>
-          </h2>
-        </div>
-        <div v-if="seaRecord" class="figure figure--map">
-          <ChartShell bare :dataset="oisst" :summary="story.map.summary(formatDay(seaRecord.end))">
-            <SeaMap :record="seaRecord" :warmest="mapWarmest" />
+      <div class="beat">
+        <h2 id="calor-title">
+          <span class="ask">{{ story.calor.question }}</span>
+          <span class="answer">{{ calorAnswer }}</span>
+        </h2>
+        <p v-if="calorLead" class="lead">{{ calorLead }}</p>
+        <div class="figure figure--map">
+          <ChartShell bare :dataset="oisst" :summary="seaSummary">
+            <SeaMap :panels="seaPanels" />
           </ChartShell>
         </div>
+        <p class="lead">{{ story.calor.handoff }}</p>
       </div>
     </section>
 
@@ -811,16 +845,9 @@ h2 .answer {
 .figure {
   min-width: 0;
 }
-
-/* Where: the words on the left, the sea on the right. */
-.beat--split {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  align-items: center;
-  gap: var(--space-12);
-}
-.beat--split .answer {
-  max-width: 12ch;
+/* Both days stay in one screen on a laptop: each map is close to square. */
+.figure--map {
+  max-width: 58rem;
 }
 
 /* History: the steps scroll past one chart. */
@@ -978,11 +1005,6 @@ h2 .answer {
   font-weight: 800;
   letter-spacing: -0.03em;
   text-decoration: none;
-}
-@media (max-width: 960px) {
-  .beat--split {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 @media (max-width: 860px) {
   .scrolly {

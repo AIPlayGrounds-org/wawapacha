@@ -188,7 +188,7 @@ Reviewed on 2026-10-02.
 | Update              | daily                                                                                                                      |
 | Spatial resolution  | Malla de 0,5° × 0,5° entre 20°N–25°S y 120°W–60°W                                                                          |
 | Temporal resolution | Diaria                                                                                                                     |
-| History             | From 1981-09-01. The published file holds only the latest day.                                                             |
+| History             | From 1981-09-01. The published file holds the latest day and the same day a year earlier.                                  |
 | Cadence             | Daily, with preliminary data. On 2026-10-02 PSL held up to 2026-10-01. NCEI's final version arrives about two weeks later. |
 | Reference period    | 1991–2020                                                                                                                  |
 | License             | The ERDDAP metadata allow free use and redistribution, with a disclaimer. They do not name a formal license.               |
@@ -201,9 +201,12 @@ Notes:
 
 - A level 4 product: it merges satellite (AVHRR and VIIRS) and in situ
   observations, interpolated onto a complete grid.
-- Computed here: the daily SST of the latest day minus the PSL daily climatology
-  (`sst.day.mean.ltm.1991-2020.nc`) for the same month and day, on the 0.25°
-  grid. The product's own `anom` variable is not used: it is based on 1971–2000.
+- Computed here: the daily SST of the latest day, and of the same day a year
+  earlier, minus the PSL daily climatology (`sst.day.mean.ltm.1991-2020.nc`) for
+  that month and day, on the 0.25° grid. The latest day is the first record. A
+  year before 29 February is 28 February, so both days always share one
+  climatology day. The product's own `anom` variable is not used: it is based on
+  1971–2000.
 - The published grid is the mean of each 2 × 2 block of 0.25° cells, ignoring
   missing cells, rounded to 2 decimals. A block with no value is `null`. The
   axes are the block centers, with longitude in °E, negative to the west
@@ -220,10 +223,10 @@ Notes:
   first day of the file, because Python decodes the dates two days early.
 - PSL keeps one SST file per year (`sst.day.mean.<year>.nc`). The pipeline reads
   the server's last day from the file's NCSS `dataset.xml` (`TimeSpan/end`) and
-  asks for that day only. PSL often lags a few days. When the current year's
-  file does not exist yet (HTTP 404), it reads the previous year's. When the
-  server has no day after the published one, the run downloads nothing,
-  publishes nothing and exits 0.
+  asks for that day, then for the same day a year earlier from that year's file.
+  PSL often lags a few days. When the current year's file does not exist yet
+  (HTTP 404), it reads the previous year's. When the server has no day after the
+  published one, the run downloads nothing, publishes nothing and exits 0.
 - PSL answers HTTP 429 when it is busy. The run then exits 75 and the previous
   JSON stays.
 - NCSS returns the cells just outside the box too (one row and one column). The

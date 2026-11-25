@@ -54,9 +54,17 @@ measured in one place, cannot say how far the heat reaches.
 
 ## ¿Dónde está ese calor?
 
-The answer gives the warmest anomaly on the map without naming a place, because
-the warmest cell moves. The map shows the anomaly of each cell and rings the
-warmest one.
+The answer says how far along the coast the heat reaches. It reads the sea
+cell nearest each of nine coast points, from Ecuador to Ilo, and takes the run
+from the first point above +2 °C to the first point below it, so a cold
+stretch ends the run. It names the southernmost place of the run that the map
+labels, or "el sur del Perú" when the run reaches Ilo. With one point it says
+"solo frente a" that place; with none, that the coast stays under +2 °C.
+
+The lead gives the warmest anomaly without naming a place, because the warmest
+cell moves. Then it gives the same cell on the same day a year earlier: above,
+below, or normal when it rounds to zero. The two maps show both days. The beat
+hands off to rain: a warm sea does no harm by itself.
 
 ## ¿Por qué no llueve en Lima si está junto al mar?
 

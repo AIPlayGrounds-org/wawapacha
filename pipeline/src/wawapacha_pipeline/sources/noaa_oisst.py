@@ -23,7 +23,7 @@ from wawapacha_pipeline.contract import (
 )
 
 # Bump it when the logic changes: it stays in every published JSON.
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 
 ID = "noaa-oisst"
 SOURCE = registry.get(ID)
@@ -51,11 +51,12 @@ MIN_VALID_SHARE = 0.5
 
 def fetch(
     now: datetime | None = None, url: str = URL, timeout: int = 120
-) -> tuple[bytes, bytes]:
-    """Download the SST of the server's newest day and the climatology of that day.
+) -> tuple[bytes, bytes, bytes]:
+    """Download the SST of the server's newest day, the SST of the same day a year earlier, and their climatology.
 
     PSL keeps one SST file per year, and the NetCDF Subset Service cuts the region on the server.
     Until the new year's file exists, the previous year's file is the newest.
+    Both days share one climatology day, because 29 February uses 28 February's.
     Raises Unchanged when the newest day is already published.
     """
     now = now or datetime.now(UTC)
@@ -66,8 +67,14 @@ def fetch(
     if published is not None and day <= published:
         raise Unchanged(f"PSL has no day after {published} yet.")
 
-    sst = download(
-        f"{url}/sst.day.mean.{day.year}.nc", timeout=timeout, time=f"{day}T00:00:00Z"
+    earlier = a_year_before(day)
+    sst, sst_a_year_before = (
+        download(
+            f"{url}/sst.day.mean.{when.year}.nc",
+            timeout=timeout,
+            time=f"{when}T00:00:00Z",
+        )
+        for when in (day, earlier)
     )
     month, day_of_month = climatology_day(day)
     climatology = download(
@@ -75,7 +82,14 @@ def fetch(
         timeout=timeout,
         time=f"{CLIMATOLOGY_YEAR:04d}-{month:02d}-{day_of_month:02d}T00:00:00Z",
     )
-    return sst, climatology
+    return sst, sst_a_year_before, climatology
+
+
+def a_year_before(day: date) -> date:
+    """The same day a year earlier. 29 February falls back to 28 February."""
+    if (day.month, day.day) == (2, 29):
+        return date(day.year - 1, 2, 28)
+    return day.replace(year=day.year - 1)
 
 
 def newest_day(url: str, year: int, timeout: int) -> date | None:
@@ -153,13 +167,24 @@ def attribute(variable, name: str):
     return value.decode("latin-1") if isinstance(value, bytes) else value
 
 
-def parse(sst: bytes, climatology: bytes) -> list[dict]:
-    """Turn the two files into the record of the latest day and validate it as docs/data-contract.md requires."""
-    return anomaly_record(read_netcdf(sst), read_netcdf(climatology))
+def parse(sst: bytes, sst_a_year_before: bytes, climatology: bytes) -> list[dict]:
+    """Turn the three files into the records of the latest day and of the same day a year earlier.
+
+    Each record is validated as docs/data-contract.md requires. The latest day comes first.
+    """
+    normal = read_netcdf(climatology)
+    today = anomaly_record(read_netcdf(sst), normal)
+    earlier = anomaly_record(read_netcdf(sst_a_year_before), normal)
+    expected = a_year_before(date.fromisoformat(today["start"]))
+    if earlier["start"] != expected.isoformat():
+        raise ValidationError(
+            f"The SST a year before {today['start']} is for {earlier['start']}, not {expected}."
+        )
+    return [today, earlier]
 
 
-def anomaly_record(sst: netcdf_file, climatology: netcdf_file) -> list[dict]:
-    """Subtract the climatology from the latest day of SST and average it onto the published grid."""
+def anomaly_record(sst: netcdf_file, climatology: netcdf_file) -> dict:
+    """Subtract the climatology from the latest day of SST and average it onto the published grid, as one record."""
     for name, nc in (("SST", sst), ("climatology", climatology)):
         for variable in ("lat", "lon", "time", "sst"):
             if variable not in nc.variables:
@@ -210,21 +235,19 @@ def anomaly_record(sst: netcdf_file, climatology: netcdf_file) -> list[dict]:
             f"Only {valid} of {len(grid) * len(grid[0])} cells have a value."
         )
 
-    return [
-        {
-            "start": day.isoformat(),
-            "end": day.isoformat(),
-            "lat": [
-                round(float(lat[i : i + BLOCK].mean()), 2)
-                for i in range(0, len(lat), BLOCK)
-            ],
-            "lon": [
-                round(float(lon[j : j + BLOCK].mean()) - 360, 2)
-                for j in range(0, len(lon), BLOCK)
-            ],
-            "anomaly": grid,
-        }
-    ]
+    return {
+        "start": day.isoformat(),
+        "end": day.isoformat(),
+        "lat": [
+            round(float(lat[i : i + BLOCK].mean()), 2)
+            for i in range(0, len(lat), BLOCK)
+        ],
+        "lon": [
+            round(float(lon[j : j + BLOCK].mean()) - 360, 2)
+            for j in range(0, len(lon), BLOCK)
+        ],
+        "anomaly": grid,
+    }
 
 
 def axis(
