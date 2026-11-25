@@ -5,26 +5,127 @@ import { useDataset } from '~/composables/useDataset'
 import { useActiveId } from '~/composables/useActiveId'
 import { buildOisstMap, cropOisst } from '~/utils/oisstMap'
 import { formatAnomaly } from '~/utils/enso'
-import { formatDay, formatDegrees, formatMonth } from '~/utils/format'
-import { icenEpisodesAbove, icenPeak } from '~/utils/icen'
+import { formatDay, formatDegrees, formatMonth, formatMonthName, formatValue } from '~/utils/format'
+import { icenPeak } from '~/utils/icen'
+import {
+  RAIN_THRESHOLD,
+  formatSeason,
+  monthsAbove,
+  normalCurve,
+  seasonDay,
+  seasonOf,
+  seasonPoints,
+  shapeSeasons,
+  warmestNormalMonth,
+  weekBefore,
+} from '~/utils/season'
 import { ENFEN_COMUNICADOS, SENAMHI_AVISOS } from '~/links'
 import { useSiteSeo } from '~/composables/useSiteSeo'
 import IcenTimeline, { type TimelineMark } from '~/components/IcenTimeline.vue'
 import SeaMap from '~/components/SeaMap.vue'
+import SeasonChart, { type SeasonLine } from '~/components/SeasonChart.vue'
 
 const story = messages.story
 
 const oisst = await useDataset('noaa-oisst', cropOisst)
-const weekly = await useDataset('noaa-cpc-nino-weekly')
+const weekly = await useDataset('noaa-cpc-nino-weekly', shapeSeasons([]))
 const icen = await useDataset('enfen-icen')
 const enfen = await useDataset('enfen-communique')
 
+// How hot: this week against its normal, a year earlier and the warmest month of a normal year.
+const week = weekly.records.at(-1) ?? null
+const season = week ? seasonOf(week.start) : null
+const normal = normalCurve(weekly.records)
+const peakMonth = warmestNormalMonth(normal)
+const gap = week ? Math.round((week.sst - week.normal) * 10) / 10 : null
+const heroAnswer =
+  gap === null
+    ? story.hero.empty
+    : story.hero.answer(formatDegrees(Math.abs(gap)), Math.abs(gap) < 0.3 ? null : gap > 0)
+const yearBefore = week ? weekBefore(weekly.records, week) : null
+const yearBeforeRelation = (anomaly: number) =>
+  anomaly < -0.5
+    ? 'below'
+    : anomaly <= -0.2
+      ? 'slightlyBelow'
+      : anomaly < 0.2
+        ? 'normal'
+        : anomaly <= 0.5
+          ? 'slightlyAbove'
+          : 'above'
+const heroLead = week
+  ? [
+      story.hero.week(formatDay(week.start), formatDegrees(week.sst), formatDegrees(week.normal)),
+      yearBefore
+        ? story.hero.yearBefore(
+            formatDegrees(yearBefore.sst),
+            yearBeforeRelation(Math.round((yearBefore.sst - yearBefore.normal) * 10) / 10),
+          )
+        : '',
+    ]
+      .filter(Boolean)
+      .join(' ')
+  : null
+const peakLine =
+  week && peakMonth && gap !== null
+    ? week.sst > peakMonth.value
+      ? story.hero.warmerThanPeak(
+          formatDegrees(gap),
+          formatMonthName(Number(week.start.slice(5, 7))),
+          formatMonthName(peakMonth.month),
+          formatDegrees(peakMonth.value),
+        )
+      : story.hero.peak(formatMonthName(peakMonth.month), formatDegrees(peakMonth.value))
+    : null
+const peakPoint = peakMonth
+  ? normal
+      .filter((point) => Number(point.date.slice(5, 7)) === peakMonth.month)
+      .reduce((best, point) => (point.value > best.value ? point : best))
+  : null
+const accentLine: SeasonLine | null =
+  season === null
+    ? null
+    : {
+        id: 'season',
+        label: formatSeason(season),
+        points: seasonPoints(weekly.records, season),
+        tone: 'accent',
+      }
+const pastLine: SeasonLine | null =
+  season === null || seasonPoints(weekly.records, season - 1).length === 0
+    ? null
+    : {
+        id: 'past',
+        label: formatSeason(season - 1),
+        points: seasonPoints(weekly.records, season - 1),
+        tone: 'past',
+      }
+const heroArrow =
+  week && peakPoint && peakMonth && week.sst > peakMonth.value
+    ? {
+        from: { day: seasonDay(week.start), value: week.sst },
+        to: { day: peakPoint.day, value: peakPoint.value },
+        label: story.hero.arrow(formatMonthName(peakMonth.month)),
+      }
+    : undefined
+
+// Why it does not rain: the normal crosses 26 °C only in late summer.
+const normalAboveMonths = monthsAbove(normal, RAIN_THRESHOLD).map(formatMonthName)
+const seasonAbove = accentLine?.points.find((point) => point.value > RAIN_THRESHOLD)
+const thresholdSummary = [
+  story.porque.normalAbove(normalAboveMonths),
+  seasonAbove && accentLine
+    ? story.porque.seasonAbove(
+        accentLine.label,
+        formatMonthName(Number(seasonAbove.date.slice(5, 7))),
+      )
+    : '',
+]
+  .filter(Boolean)
+  .join(' ')
+
 const latestIcen = icen.records.at(-1)
 const latestIcenMonth = latestIcen ? formatMonth(latestIcen.start) : null
-const icenSince = icen.records[0]?.start.slice(0, 4) ?? ''
-const heroAnswer = latestIcen
-  ? story.hero.answer(icenEpisodesAbove(icen.records, latestIcen.icen), icenSince)
-  : story.hero.empty
 const todayMark: TimelineMark[] = latestIcen
   ? [
       {
@@ -43,16 +144,6 @@ const warmestValue = warmest ? formatDegrees(warmest.value) : null
 const calorAnswer = warmestValue ? story.calor.answer(warmestValue) : story.calor.empty
 const mapWarmest = warmest
   ? { lat: warmest.lat, lon: warmest.lon, label: story.map.warmest(warmestValue!) }
-  : null
-const latestWeek = weekly.records.findLast(
-  (record) => record.nino_1_2_anomaly !== null && record.nino_1_2_sst !== null,
-)
-const weekLine = latestWeek
-  ? story.calor.week(
-      formatDay(latestWeek.end),
-      formatDegrees(latestWeek.nino_1_2_sst!),
-      formatDegrees(latestWeek.nino_1_2_sst! - latestWeek.nino_1_2_anomaly!),
-    )
   : null
 
 // The three past events against the latest value.
@@ -152,19 +243,26 @@ useSiteSeo({
               ><span class="strip">{{ heroAnswer }}</span></span
             >
           </h1>
-          <p v-if="latestIcen" class="lead">
-            {{ story.hero.detail(latestIcenMonth!, formatDegrees(latestIcen.icen)) }}
-          </p>
-          <div v-if="latestIcen" class="figure figure--wide">
-            <ChartShell bare :dataset="icen" :summary="story.hero.chartSummary(icenSince)">
-              <IcenTimeline
-                :records="icen.records"
-                :marks="todayMark"
-                :level="latestIcen.icen"
-                :focus="null"
+          <p v-if="heroLead" class="lead">{{ heroLead }}</p>
+          <p v-if="peakLine" class="lead">{{ peakLine }}</p>
+          <div v-if="accentLine" class="figure">
+            <ChartShell bare :dataset="weekly" :summary="story.hero.chartSummary">
+              <SeasonChart
+                :normal="normal"
+                :normal-label="story.hero.normal"
+                :lines="pastLine ? [pastLine, accentLine] : [accentLine]"
+                :gap="
+                  gap === null
+                    ? undefined
+                    : { lineId: accentLine.id, label: story.hero.gap(formatValue(gap)) }
+                "
+                :arrow="heroArrow"
+                :scrub-label="story.hero.scrub"
+                :table-caption="story.hero.table"
               />
             </ChartShell>
           </div>
+          <p class="lead">{{ story.hero.handoff }}</p>
         </section>
       </main>
     </div>
@@ -176,13 +274,43 @@ useSiteSeo({
             <span class="ask">{{ story.calor.question }}</span>
             <span class="answer">{{ calorAnswer }}</span>
           </h2>
-          <p v-if="weekLine" class="lead">{{ weekLine }}</p>
         </div>
         <div v-if="seaRecord" class="figure figure--map">
           <ChartShell bare :dataset="oisst" :summary="story.map.summary(formatDay(seaRecord.end))">
             <SeaMap :record="seaRecord" :warmest="mapWarmest" />
           </ChartShell>
         </div>
+      </div>
+    </section>
+
+    <section id="porque" class="scene scene--green" aria-labelledby="porque-title">
+      <div class="beat">
+        <h2 id="porque-title">
+          <span class="ask">{{ story.porque.question }}</span>
+          <span class="answer">{{ story.porque.answer }}</span>
+        </h2>
+        <p class="lead">
+          {{ story.porque.physicist }} {{ story.porque.stable }} {{ story.porque.threshold }}
+          {{ story.porque.season }}
+        </p>
+        <div v-if="accentLine" class="figure">
+          <ChartShell bare :dataset="weekly" :summary="thresholdSummary">
+            <SeasonChart
+              :normal="normal"
+              :normal-label="story.hero.normal"
+              :lines="[accentLine]"
+              :threshold="{ value: RAIN_THRESHOLD, label: story.porque.line }"
+              plain-end
+              :scrub-label="story.hero.scrub"
+              :table-caption="story.porque.table"
+            />
+          </ChartShell>
+        </div>
+        <p class="lead">{{ story.porque.press1925 }} {{ story.porque.seaAbsent }}</p>
+        <p class="lead">{{ story.porque.conditions }}</p>
+        <p class="punch">
+          <span class="strip">{{ story.porque.punch }}</span>
+        </p>
       </div>
     </section>
 

@@ -1,7 +1,7 @@
 # WawaPacha story
 
 The home page answers one question: how hot is the sea off Peru, and what does
-that mean for the coast. It tells that answer in five short beats. Each beat
+that mean for the coast. It tells that answer in six short beats. Each beat
 opens with the question a reader would ask and answers it in the heading. One
 chart or one line of evidence follows. The page does not show everything the
 project knows. Sources, chart method and limits belong to `/metodologia`,
@@ -23,17 +23,36 @@ communiqué's forecast as the current one.
 
 ## First screen: ¿Qué tan caliente está el mar?
 
-The answer compares the latest ICEN with every month since 1950 and names the
-episodes that went higher, such as "salvo en 1983 y 1997–98". One line gives
-the month and its value. The timeline of the whole series sits below, with only
-the latest month marked and its level drawn across the series.
+The answer is the gap between the latest Niño 1+2 week and its weekly normal,
+such as "5,7 °C más que lo normal". The lead gives that week's temperature and
+normal, then the same week a year earlier. A second line compares today with
+the warmest month of a normal year, so the reader can judge the size of the
+gap.
+
+The chart puts each season on a July–June axis: the normal as a thick muted
+line, last season as a thin line and this season as the accent line that ends
+in its value. A bracket shows the gap. A hand-drawn arrow points to the normal
+peak when today is already warmer. The beat hands off to the map: one line,
+measured in one place, cannot say how far the heat reaches.
 
 ## ¿Dónde está ese calor?
 
 The answer gives the warmest anomaly on the map without naming a place, because
-the warmest cell moves. One line gives the latest weekly sea temperature of the
-north coast and its normal. The map shows the anomaly of each cell and rings
-the warmest one.
+the warmest cell moves. The map shows the anomaly of each cell and rings the
+warmest one.
+
+## ¿Por qué no llueve en Lima si está junto al mar?
+
+The answer is that the sea is cold. The lead quotes an IGP physicist:
+[igp-woodman-2014-stable](../evidence/claims.toml),
+[igp-woodman-2014-threshold](../evidence/claims.toml) and
+[igp-woodman-2014-season](../evidence/claims.toml). The season chart returns
+with the 26 °C line, and the normal brightens only where it reaches the line.
+Its summary names the months a normal year passes 26 °C and the month this
+season did. A 1925 press quote,
+[elcomercio-1925-alisio](../evidence/claims.toml), shows that the explanation
+of the time left the sea out. The beat ends on the three conditions and the
+punch line: in the summer of 1983 all three came together.
 
 ## ¿Es como 1983, 1998 o 2017?
 

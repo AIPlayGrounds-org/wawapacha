@@ -103,18 +103,61 @@ export const messages = {
   },
   story: {
     hero: {
-      question: '¿Qué tan caliente está el mar frente al Perú?',
-      answer: (above: string[], since: string) =>
-        above.length === 0
-          ? `Más que nunca desde ${since}.`
-          : above.length <= 3
-            ? `Más que nunca desde ${since}, salvo en ${listFormat.format(above)}.`
-            : `Lo superaron ${above.length} episodios desde ${since}.`,
-      empty: 'Sin datos del ICEN',
-      detail: (month: string, value: string) =>
-        `En ${month}, el índice oficial del Perú marcó ${degrees(value)} sobre lo normal.`,
-      chartSummary: (since: string) =>
-        `Índice Costero El Niño (ICEN), mes a mes desde ${since}. Arriba de la línea, mar más caliente que lo normal.`,
+      question: '¿Qué tan caliente está el mar?',
+      /** `gap` is the signed difference already formatted without its sign. */
+      answer: (gap: string, warmer: boolean | null) =>
+        warmer === null
+          ? 'Como lo normal'
+          : `${degrees(gap)} ${warmer ? 'más' : 'menos'} que lo normal`,
+      empty: 'Sin datos semanales del mar',
+      week: (day: string, sst: string, normal: string) =>
+        `La semana del ${day}, frente a Piura, el mar está a ${degrees(sst)}. Lo normal para esta semana es ${degrees(normal)}.`,
+      yearBefore: (
+        sst: string,
+        relation: 'below' | 'slightlyBelow' | 'normal' | 'slightlyAbove' | 'above',
+      ) =>
+        `Hace un año estaba a ${degrees(sst)}: ${
+          {
+            below: 'por debajo de lo normal',
+            slightlyBelow: 'un poco por debajo de lo normal',
+            normal: 'lo normal para esa semana',
+            slightlyAbove: 'un poco por encima de lo normal',
+            above: 'por encima de lo normal',
+          }[relation]
+        }.`,
+      warmerThanPeak: (gap: string, month: string, peakMonth: string, peak: string) =>
+        `¿${degrees(gap)} más es mucho? Hoy, en ${month}, el mar está más caliente que en un ${peakMonth} normal, y ${peakMonth} es el mes más caliente del año (${degrees(peak)}).`,
+      peak: (peakMonth: string, peak: string) =>
+        `En un año normal, el mes más caliente es ${peakMonth}, con ${degrees(peak)}.`,
+      handoff: 'Pero esa es una sola línea, medida en un solo lugar. ¿Hasta dónde llega el calor?',
+      normal: 'lo normal',
+      gap: (value: string) => degrees(value),
+      arrow: (peakMonth: string) => `más que un ${peakMonth} normal`,
+      scrub: 'Temperatura del mar por semana',
+      chartSummary:
+        'Esta línea muestra la temperatura del mar frente a Piura, semana a semana, en la región Niño 1+2: un recuadro de mar frente a Ecuador y el norte del Perú.',
+      table: 'Temperatura del mar en Niño 1+2 por semana, de julio a junio.',
+    },
+    porque: {
+      question: '¿Por qué no llueve en Lima si está junto al mar?',
+      answer: 'Porque el mar está frío.',
+      physicist: 'Un físico del IGP lo explica así:',
+      stable: claim('igp-woodman-2014-stable'),
+      threshold: claim('igp-woodman-2014-threshold'),
+      season: claim('igp-woodman-2014-season'),
+      line: 'desde aquí, lluvia fuerte',
+      normalAbove: (months: string[]) =>
+        months.length === 0
+          ? 'En un año normal, el mar no pasa de 26 °C.'
+          : `En un año normal, el mar pasa de 26 °C solo en ${conjunction.format(months)}.`,
+      seasonAbove: (season: string, month: string) =>
+        `En ${season}, el mar ya lo pasó en ${month}.`,
+      press1925: claim('elcomercio-1925-alisio'),
+      seaAbsent: 'En esa explicación, el mar no aparece.',
+      conditions:
+        'Ahí están las dos primeras condiciones. La tercera no es del mar: es si el país está preparado.',
+      punch: 'En el verano de 1983 se juntaron las tres.',
+      table: 'Temperatura del mar en Niño 1+2 por semana, con la línea de 26 °C.',
     },
     timeline: {
       mark: (label: string, value: string) => `${label}\n${degrees(value)}`,
@@ -129,8 +172,6 @@ export const messages = {
       question: '¿Dónde está ese calor?',
       answer: (value: string) => `En su punto más caliente, ${degrees(value)} sobre lo normal.`,
       empty: 'Sin mapa de temperatura del mar',
-      week: (day: string, sst: string, normal: string) =>
-        `La semana del ${day}, el mar de la costa norte estuvo a ${degrees(sst)}. Lo normal son unos ${degrees(normal)}.`,
     },
     historia: {
       question: '¿Es como 1983, 1998 o 2017?',
@@ -169,10 +210,15 @@ export const messages = {
     lead: 'Cada número del sitio viene de una fuente pública. Aquí están las fuentes, cómo se dibuja cada gráfico y lo que este sitio no hace.',
     chartsTitle: 'Cómo se construye cada gráfico',
     charts: {
+      season: {
+        title: 'La línea de la temporada',
+        body: 'Cada punto es la temperatura semanal del mar en la región Niño 1+2, del producto OISST semanal de NOAA CPC. Lo normal de cada semana es esa temperatura menos su anomalía frente a 1991–2020. El eje va de julio a junio, para que el verano quede entero en el medio.',
+        where: 'Aparece en «¿Qué tan caliente está el mar?» y «¿Por qué no llueve en Lima?».',
+      },
       icen: {
         title: 'La línea del índice',
         body: claim('icen-definition'),
-        where: 'Aparece al inicio y en la comparación con 1983, 1998 y 2017.',
+        where: 'Aparece en la comparación con 1983, 1998 y 2017.',
       },
       sea: {
         title: 'El mapa del mar',
