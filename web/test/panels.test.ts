@@ -77,8 +77,10 @@ describe('home page', () => {
     const weekly = await loadDataset('noaa-cpc-nino-weekly')
     const latest = weekly.records.filter((record) => record.nino_1_2_sst !== null).at(-1)!
 
-    expect(wrapper.get('#home-title .ask').text()).toBe(messages.story.hero.question)
-    expect(wrapper.get('#home-title .answer').text()).not.toBe(messages.story.hero.empty)
+    expect(wrapper.findAll('h1')).toHaveLength(1)
+    expect(wrapper.get('#home-title').text()).toBe(messages.story.apertura.question)
+    expect(wrapper.get('#hero-title .ask').text()).toBe(messages.story.hero.question)
+    expect(wrapper.get('#hero-title .answer').text()).not.toBe(messages.story.hero.empty)
     expect(wrapper.get('.hero .lead').text()).toContain(formatDay(latest.start))
     expect(wrapper.get('.hero .lead').text()).toContain(formatDegrees(latest.nino_1_2_sst!))
     const chapters = ['calor', 'porque', 'historia', 'lluvia', 'hacer'] as const

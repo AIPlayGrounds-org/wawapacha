@@ -215,6 +215,8 @@ const verifiedClaims = {
     'Un documental del gobierno de 1983 llamó «devastador» al fenómeno de El Niño.',
   'tv-latina-1997-drenes':
     'En 1997, Latina informó desde Piura que el barrio San José volvía a ser el más afectado, como en 1983, y que los drenes no funcionaron; Fujimori fue tres veces a Tumbes y trabajó pala en mano.',
+  'tv-latina-1997-devastador':
+    'En 1997, Latina dijo desde Piura que el fenómeno de El Niño ya se presentaba devastador.',
   'tv-tvperu-2017-2400':
     'En 2018, TV Perú recordó que la cuenca del río Piura estaba preparada para 2 400 m³/s y que la costa, Lima incluida, no tiene alcantarillado ni drenaje para lluvias intensas; llamó a 2017 «el más brutal».',
   'igp-woodman-2014-stable':
@@ -380,4 +382,47 @@ export const claim = (id: ClaimId): (typeof verifiedClaims)[ClaimId] => {
   const text = verifiedClaims[id]
   if (!text) throw new Error(`unknown or unverified claim id: ${id}`)
   return text
+}
+
+/** A press source's outlet, date (`YYYY-MM-DD` or `YYYY-MM`), verbatim lifted phrase and link. */
+export type PaperCard = {
+  readonly outlet: string
+  readonly published: string
+  readonly lift: string
+  readonly href: string
+}
+
+const paperCards = {
+  'panamericana-2026-09-16-devastador': {
+    outlet: 'Panamericana',
+    published: '2026-09-16',
+    lift: 'más devastador que el de 1997',
+    href: 'https://panamericana.pe/buenosdiasperu/nacionales/474433-enfen-alerta-nino-devastador-1997',
+  },
+  'apoyo-2026-trajectory': {
+    outlet: 'APOYO Consultoría',
+    published: '2026-07',
+    lift: 'sigue una trayectoria muy similar a la del FEN 1997-1998',
+    href: 'https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf',
+  },
+  'infobae-2026-11-17-tumbes': {
+    outlet: 'Infobae',
+    published: '2026-11-17',
+    lift: 'superó el umbral naranja',
+    href: 'https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/',
+  },
+  'elcomercio-1925-alisio': {
+    outlet: 'El Comercio',
+    published: '1925-03-12',
+    lift: 'salvan el obstáculo de los Andes',
+    href: 'https://elcomercio.pe/archivo-elcomercio/lluvias-en-lima-inundaciones-en-el-norte-huaicos-en-el-peru-fenomenos-naturales-hace-100-anos-peru-decada-del-20-nnsp-noticia/',
+  },
+} as const satisfies Record<string, PaperCard>
+
+export type PaperCardId = keyof typeof paperCards
+
+export const paperCard = (id: PaperCardId): PaperCard => {
+  const card: PaperCard | undefined = paperCards[id]
+  if (!card) throw new Error(`no paper card for claim id: ${id}`)
+  return card
 }

@@ -41,7 +41,8 @@ previous file stays in place.
 
 ## Features
 
-- `/` tells the story in six questions: how hot the sea is this week against
+- `/` opens on three press clippings and asks how worried to be, then tells
+  the story in six questions: how hot the sea is this week against
   its normal, where the heat is on the OISST map, why Lima does not get rain,
   how it compares with 1983, 1998 and 2017, what ENFEN forecasts and what to do
   now.

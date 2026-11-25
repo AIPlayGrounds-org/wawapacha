@@ -43,6 +43,23 @@ claim whose quotes are checked out of the site: the claim is not bundled, and
 Changing a claim to `verified` is the step that publishes it. Any other status,
 and a repeated `id`, is an error when the registry is read.
 
+### Paper cards
+
+A press source can carry a paper card: what the site prints when it shows a
+clipping. Three optional fields on a `[[claim.source]]` entry define it.
+
+| Field       | Rule                                                                                                      |
+| ----------- | --------------------------------------------------------------------------------------------------------- |
+| `outlet`    | The outlet as readers know it, such as `Panamericana` or `El Comercio`.                                   |
+| `published` | `YYYY-MM-DD`, or `YYYY-MM` for a document dated by month. The date of the lifted words.                   |
+| `lift`      | The phrase the card sets large. It must be a substring of the source's `quote`, so the card is verbatim. |
+
+A source defines all three fields or none, and a claim has at most one card.
+The card links to the source's `ref`. When the quote comes from a later
+reprint, as the 1925 El Comercio edition quoted in 2023, `published` is the
+original edition's date and `ref` is the reprint. The site reads a card with
+`paperCard('id')`, which `check:claims` counts as a use of the claim.
+
 ## Quotes and locators
 
 - Copy the quote from the document. Keep its spelling, accents and typographic
@@ -101,7 +118,8 @@ bun run check:claims
 [`claims.ts`](../web/app/data/claims.ts), so each one ships in the site bundle.
 `check:claims` fails when:
 
-- a `claim('id')` call in `web/app` or a `[id](../evidence/claims.toml)` link in
+- a `claim('id')` or `paperCard('id')` call in `web/app` or a
+  `[id](../evidence/claims.toml)` link in
   [`story.md`](story.md) names an id that is missing or not `verified`;
 - `claims.ts` differs from what the registry generates.
 
