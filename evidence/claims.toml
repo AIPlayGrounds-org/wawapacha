@@ -492,6 +492,76 @@ ref = "https://enfen.imarpe.gob.pe/download/informe-tecnico-enfen-ano-12-n17-al-
 locator = "Informe Técnico ENFEN, Año 12 N° 17, PDF p. 26, closing paragraph"
 quote = "El próximo Comunicado Oficial se emitirá el jueves 15 de octubre de 2026."
 [[claim]]
+id = "enfen-co20-coast-extraordinaria-feb2027"
+claim_es = "El Comunicado Oficial ENFEN N° 20-2026 dice que El Niño Costero (región Niño 1+2), iniciado en marzo de 2026, se mantendría con magnitud extraordinaria hasta febrero de 2027 y se debilitaría progresivamente hasta julio de 2027."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/"
+locator = "Comunicado Oficial ENFEN N° 20-2026, PDF p. 1, first paragraph, sentence 2 (footnote marker 2 omitted)"
+quote = "El Niño costero (región Niño 1+2), iniciado en marzo de 2026, se mantendría con una magnitud extraordinaria hasta febrero de 2027 (Figura 2) debilitándose progresivamente hasta julio de 2027."
+[[claim]]
+id = "enfen-co20-nov-jan-rain"
+claim_es = "De noviembre de 2026 a enero de 2027 el Comunicado Oficial ENFEN N° 20-2026 prevé lluvias por encima de lo normal en la costa norte, la sierra norte occidental, la costa central y la sierra central occidental, con más episodios de intensidad moderada a fuerte, en particular en la costa norte."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/"
+locator = "Comunicado Oficial ENFEN N° 20-2026, PDF p. 2, first bullet, sentence 1 (footnote marker 6 omitted)"
+quote = "Las precipitaciones, de noviembre 2026 a enero 2027 continuarían por encima de lo normal en la costa norte, sierra norte occidental, costa central y sierra central occidental, incrementándose la ocurrencia de los episodios de moderada a fuerte intensidad, en particular en la costa norte."
+[[claim]]
+id = "enfen-co20-summer2027-rain"
+claim_es = "Para el verano de 2027 el Comunicado Oficial ENFEN N° 20-2026 prevé lluvias por encima de lo normal a lo largo de toda la costa, la sierra norte occidental y la sierra central occidental, más intensas y frecuentes en la costa norte."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/"
+locator = "Comunicado Oficial ENFEN N° 20-2026, PDF p. 2, second bullet (footnote marker 7 omitted)"
+quote = "Para el verano de 2027, las precipitaciones se mantendrían por encima de lo normal a lo largo de toda la costa, la sierra norte occidental y central occidental, siendo estas más intensas y con mayor frecuencia en la costa norte"
+[[claim]]
+id = "enfen-co20-rivers"
+claim_es = "El Comunicado Oficial ENFEN N° 20-2026 prevé caudales superiores a lo normal en los ríos de la costa norte, como el Tumbes, el Chira, el Piura, La Leche y el Jequetepeque, muy superiores en el Tumbes y el Piura, y desde enero de 2027 también en el Chillón, el Rímac, el Lurín, el Pisco y el Ica."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/"
+locator = "Comunicado Oficial ENFEN N° 20-2026, PDF p. 2, third bullet, sentences 1-2 (footnote marker 8 omitted)"
+quote = "Los caudales continuarían superiores a lo normal en los ríos de la costa norte, tales como Tumbes, Chira, Piura, La Leche y Jequetepeque, en particular los ríos Tumbes y Piura donde serían muy superiores. Esta tendencia se extendería hacia la costa centro y sur desde enero de 2027 para los ríos Chillón, Rímac, Lurín, Pisco e Ica."
+[[claim]]
+id = "enfen-co20-air-temperature-records"
+claim_es = "El Comunicado Oficial ENFEN N° 20-2026 prevé temperaturas del aire muy superiores a lo habitual en toda la costa peruana, con nuevos récords hacia el verano."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/"
+locator = "Comunicado Oficial ENFEN N° 20-2026, PDF p. 2, fourth bullet"
+quote = "La temperatura del aire mantendría registros muy superiores a lo habitual en toda la costa peruana, con el registro de nuevos récords hacia el verano."
+[[claim]]
+id = "enfen-co20-waves-dec-jan"
+claim_es = "Para diciembre de 2026 y enero de 2027 el Comunicado Oficial ENFEN N° 20-2026 prevé una mayor probabilidad de oleajes anómalos del norte que, con el mar por encima de su nivel medio, aumentaría el riesgo de inundación y erosión costera, principalmente en playas de baja pendiente."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/"
+locator = "Comunicado Oficial ENFEN N° 20-2026, PDF p. 2, seventh bullet, sentences 1-3"
+quote = "El nivel del mar se mantendría por encima de su nivel medio en todo el litoral, con una mayor elevación en la zona norte. Asimismo, durante diciembre 2026 y enero 2027, se prevé una mayor probabilidad de ocurrencia de oleajes anómalos provenientes del norte, potencialmente de mayor impacto, sin descartar la presencia de oleajes provenientes del sur. Estas condiciones, al coincidir con niveles elevados del mar, incrementaría el riesgo de inundación y erosión costera, principalmente en playas de baja pendiente."
+[[claim]]
+id = "enfen-co20-recommendation"
+claim_es = "El Comunicado Oficial ENFEN N° 20-2026 recomienda a la población de zonas expuestas a lluvias intensas, inundaciones y movimientos en masa reforzar la protección de sus viviendas y estar alerta a la información de las autoridades locales."
+status = "verified"
+date_checked = "2026-11-25"
+
+[[claim.source]]
+ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/"
+locator = "Comunicado Oficial ENFEN N° 20-2026, PDF p. 3, second paragraph"
+quote = "Se mantiene la recomendación hacia la población ubicada en zonas expuestas a lluvias intensas, inundaciones, movimientos en masa y peligros asociados, que deben reforzar la protección de sus viviendas y estar alerta de la información de las autoridades locales."
+[[claim]]
 id = "enfen-co01-vigilancia-2026-01-15"
 claim_es = "El 15 de enero de 2026, en el Comunicado Oficial ENFEN N° 01-2026, ENFEN cambió el estado del sistema de alerta de \"No Activo\" a \"Vigilancia de El Niño Costero\"."
 status = "verified"

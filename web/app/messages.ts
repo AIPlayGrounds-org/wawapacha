@@ -2,10 +2,38 @@ import type { Dataset } from '~/types/dataset'
 import { claim } from '~/data/claims'
 import { formatDay } from '~/utils/format'
 
+// Communiqué copy is keyed by `${number}-${year}`. A newer communiqué falls back
+// to a line that points to the official text, so an old forecast never reads
+// as the current one.
 const homeLeadByCommunique: Record<string, string> = {
   '17-2026': claim('enfen-co17-coast-extraordinaria-jan2027'),
+  '20-2026': claim('enfen-co20-coast-extraordinaria-feb2027'),
 }
-const genericHomeLead = 'Una lectura breve de la señal.'
+const forecastByCommunique: Record<string, { title: string; points: string[] }> = {
+  '17-2026': {
+    title: 'ENFEN prevé lluvias sobre lo normal en la costa norte y central',
+    points: [
+      claim('enfen-co17-ond-rain-rivers'),
+      claim('enfen-co17-summer2027-rain'),
+      claim('enfen-co17-air-temperature-records'),
+    ],
+  },
+  '20-2026': {
+    title: 'ENFEN prevé lluvias sobre lo normal y ríos más altos en la costa hasta el verano',
+    points: [
+      claim('enfen-co20-nov-jan-rain'),
+      claim('enfen-co20-summer2027-rain'),
+      claim('enfen-co20-rivers'),
+      claim('enfen-co20-air-temperature-records'),
+      claim('enfen-co20-waves-dec-jan'),
+    ],
+  },
+}
+const actionByCommunique: Record<string, string> = {
+  '20-2026': claim('enfen-co20-recommendation'),
+}
+const communiqueKey = (number: number, year: number) => `${number}-${year}`
+const listFormat = new Intl.ListFormat('es', { type: 'conjunction' })
 
 const dataTypeDescriptions = {
   observed: 'Observación',
@@ -69,6 +97,7 @@ export const messages = {
     lastUpdate: 'Última actualización',
     latestData: 'Último dato',
     staleSource: 'Último dato disponible',
+    howMeasured: 'Cómo se mide',
     ageToday: 'hoy',
     ageDay: (days: number) => `hace ${days} día${days === 1 ? '' : 's'}`,
     ageMonth: (months: number) => `hace ${months} mes${months === 1 ? '' : 'es'}`,
@@ -83,35 +112,91 @@ export const messages = {
     homeEyebrow: (number: number, year: number) => `Estado oficial · Comunicado ${number}-${year}`,
     communiqueMeta: (number: number, year: number) => `ENFEN · Comunicado ${number}-${year} ·`,
     homeLead: (number: number, year: number) =>
-      homeLeadByCommunique[`${number}-${year}`] ?? genericHomeLead,
+      homeLeadByCommunique[communiqueKey(number, year)] ??
+      `ENFEN publicó el comunicado ${number}-${year}. Este sitio aún no resume su pronóstico; léelo en el enlace oficial.`,
     homeNext: (date: string) => `Próximo comunicado previsto · ${date}`,
-    coastTitle: 'Dos regiones, una costa',
-    coastLead: claim('global-and-coastal-can-differ'),
-    mapTitle: 'La señal sobre el mar',
-    evidenceTitle: 'La evidencia, semana a semana',
-    comparisonTitle: 'Contra los eventos que recordamos',
+    homeHeadline: (month: string, value: string, rank: number, since: string) =>
+      rank === 1
+        ? `El ICEN de ${month} es ${value} °C, el más alto desde ${since}`
+        : rank <= 10
+          ? `El ICEN de ${month} es ${value} °C, el ${rank}.º más alto desde ${since}`
+          : `El ICEN de ${month} es ${value} °C`,
+    homeEmptyHeadline: 'Sin datos del ICEN',
+    homeCategory: (label: string) => `Categoría ${label} según los umbrales de ENFEN.`,
+    icenCategories: {
+      neutral: 'neutra',
+      weak: 'cálida débil',
+      moderate: 'cálida moderada',
+      strong: 'cálida fuerte',
+      extraordinary: 'extraordinaria',
+    },
+    homeSource: (institution: string, month: string) =>
+      `Fuente: ${institution} · ICEN mensual · último mes, ${month}.`,
+    sectionScale: '01 · La escala',
+    comparisonTitle: (above: string[], below: string[]) =>
+      below.length === 0
+        ? `El último ICEN supera los picos de ${listFormat.format(above)}`
+        : above.length === 0
+          ? `El último ICEN todavía no alcanza los picos de ${listFormat.format(below)}`
+          : `El último ICEN supera el pico de ${listFormat.format(above)}, pero no el de ${listFormat.format(below)}`,
     comparisonLead: claim('historical-coastal-chronology'),
+    comparisonEvents: {
+      '1982-83': '1982–83',
+      '1997-98': '1997–98',
+      '2017': '2017',
+    },
     peakLabel: (month: string) => `Pico ICEN · ${month}`,
     latestLabel: 'Último valor disponible',
     currentLabel: (year: string) => `${year} · último valor disponible`,
-    impactTitle: 'Lluvias de los eventos extraordinarios',
-    impactLead: 'Compara las lluvias observadas con la mediana mensual.',
-    impactCoverage: claim('senamhi-hydrometeorological-stations'),
-    forecastTitle: 'Qué espera la autoridad',
-    forecastLead: claim('enfen-co17-ond-rain-rivers'),
-    summerLead: claim('enfen-co17-summer2027-rain'),
-    temperatureLead: claim('enfen-co17-air-temperature-records'),
-    localTitle: 'Para seguir desde tu territorio',
-    localLead: 'Sigue la situación desde tu territorio.',
-    officialStatus: 'Estado oficial de ENFEN',
-    sectionSignal: '01 · La señal',
-    sectionMeasure: '02 · La medida',
-    sectionScale: '03 · La escala',
-    sectionPrecedent: '04 · El precedente',
-    sectionNext: '05 · Lo que sigue',
-    sectionDecision: '06 · Para decidir',
+    damageTitle: 'La magnitud no mide el daño',
+    damageLead: claim('impact-2017-enfen-qualitative'),
+    sectionMap: '02 · El mapa',
+    mapTitle: (value: string, location: string) =>
+      `El punto más cálido del mapa está ${value} °C por encima de lo normal, en ${location}`,
+    mapEmptyTitle: 'Sin mapa de temperatura del mar',
+    coastLead: claim('global-and-coastal-can-differ'),
+    sectionWeekly: '03 · Semana a semana',
+    weeklyTitle: (day: string, value: string, warm: boolean) =>
+      warm
+        ? `La semana del ${day}, Niño 1+2 estuvo ${value} °C por encima de lo normal`
+        : `La semana del ${day}, la anomalía de Niño 1+2 fue ${value} °C`,
+    weeklyEmptyTitle: 'Sin datos semanales',
     weeklyLead: claim('weekly-nino-anomalies'),
-    icenTitle: 'ICEN · el índice de la costa',
+    icenTitle: 'El ICEN promedia tres meses, por eso llega después del dato semanal',
+    icenLead: claim('icen-definition'),
+    icenLag: (month: string, day: string) =>
+      `El último ICEN es de ${month}; el último dato semanal, del ${day}.`,
+    sectionForecast: '04 · Lo que prevé ENFEN',
+    forecastTitle: (number: number, year: number) =>
+      forecastByCommunique[communiqueKey(number, year)]?.title ??
+      `ENFEN publicó el comunicado ${number}-${year}`,
+    forecastPoints: (number: number, year: number) =>
+      forecastByCommunique[communiqueKey(number, year)]?.points ?? [
+        'Este sitio aún no resume ese comunicado. Su pronóstico está en el enlace oficial.',
+      ],
+    forecastSource: (number: number, year: number, date: string) =>
+      `Comunicado Oficial ENFEN N° ${number}-${year}, ${date}.`,
+    forecastEmptyTitle: 'Sin comunicado oficial vigente',
+    sectionPrecedent: '05 · El precedente',
+    impactTitle: 'En 2017 y 2023, las lluvias más extremas cayeron en la costa norte',
+    impactLead: claim('senamhi-69-2026-nino-costero-composite-coasts'),
+    impactLimits: claim('senamhi-69-2026-nino-costero-composite-limits'),
+    impactChartLead:
+      'El gráfico compara la lluvia mensual de 1982–83 y 1997–98 con la mediana de cada estación.',
+    impactCoverage: claim('senamhi-hydrometeorological-stations'),
+    notShownTitle: 'Lo que estos datos no muestran',
+    notShown:
+      'Ningún gráfico de esta página dice dónde ni cuánto lloverá en tu localidad. Esos avisos los emiten SENAMHI y las autoridades locales.',
+    sectionAction: '06 · Qué hacer',
+    actionTitle: 'Si vives en una zona expuesta, prepárate y sigue los avisos oficiales',
+    actionLead: (number: number, year: number) =>
+      actionByCommunique[communiqueKey(number, year)] ?? null,
+    localLead: 'Sigue la lluvia, los ríos y el archivo desde tu territorio.',
+    sectionSources: '07 · Cómo lo sabemos',
+    sourcesTitle: 'Cada cifra de esta página sale de una fuente pública',
+    sourcesLead:
+      'Cada gráfico muestra su fuente, unidad, periodo y antigüedad; «Cómo se mide» abre el detalle.',
+    officialStatus: 'Estado oficial de ENFEN',
     localTerritoryLabel: 'Territorio',
     localRiversLabel: 'Ríos',
     localArchiveLabel: 'Archivo',
@@ -431,7 +516,11 @@ export const messages = {
     summary: (first: string, last: string, current: string, status: string) =>
       `ONI ${first}–${last} · ${current} · ${status}`,
     rangeLabel: (phase: 'warm' | 'neutral' | 'cold') =>
-      ({ warm: 'Sobre +0,5 °C', neutral: 'Rango neutral', cold: 'Bajo −0,5 °C' })[phase],
+      ({
+        warm: 'Sobre +0,5 °C',
+        neutral: 'Rango neutral',
+        cold: 'Bajo −0,5 °C',
+      })[phase],
     chartAxis: 'Anomalía (°C)',
   },
 }

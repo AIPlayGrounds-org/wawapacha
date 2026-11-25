@@ -19,6 +19,10 @@ block from the result. The fields come from the
 | Where does it come from?                         | `source.institution`, `source.product`, `source.url`             |
 | When was it last updated?                        | `ingestion_time` and the last record's date                      |
 
+Below the chart, one visible line gives the source link, unit, period and update
+age. The full block sits in a "Cómo se mide" disclosure. It stays in the static
+HTML, so it remains readable without JavaScript.
+
 `ChartShell` also prints the accessible summary and the age of the data. It
 shows a stale-source notice when `ingestion_time` is older than the source's
 limit from the [freshness check](freshness.md#on-the-site) or the newest record
@@ -26,6 +30,9 @@ ended 90 days ago or more.
 
 ## Display
 
+- Head each chart section with the finding the chart supports, built from the
+  data, such as "El ICEN de septiembre de 2026 es +4,50 °C". A topic label goes
+  in the eyebrow, not in the heading.
 - Keep observed, estimated, forecast and official data visibly distinct.
 - Put the definition, resolution, reference period and method below the chart.
 - State both direction and size for a trend. An arrow alone is not enough.

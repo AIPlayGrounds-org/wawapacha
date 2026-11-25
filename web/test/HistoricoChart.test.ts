@@ -58,7 +58,7 @@ describe('HistoricoChart', () => {
     expect(wrapper.find('select').element.value).toBe('nino34')
     expect(wrapper.findAll('input[type="checkbox"]')).toHaveLength(4)
     expect(wrapper.text()).toContain(messages.historico.oniNote)
-    expect(wrapper.findAll('details')).toHaveLength(2)
+    expect(wrapper.findAll('details.table-fallback')).toHaveLength(2)
     expect(wrapper.findAll('tbody tr').length).toBeGreaterThan(0)
     expect(wrapper.text()).toContain('+0,5 °C')
     expect(wrapper.text()).toContain('+0,8 °C')
