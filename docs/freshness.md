@@ -30,6 +30,11 @@ The values are `CADENCE_RULES` in
 [`registry.py`](../pipeline/src/wawapacha_pipeline/registry.py), and
 [`test_cli.py`](../pipeline/tests/test_cli.py) covers them.
 
+A source module that defines `stale_reason(path, now)` replaces the age rule
+with its own. `enfen-communique` uses it: a communiqué states the date of the
+next one, so the source is stale from the second day after that date in Lima,
+however recently the pipeline checked the feed.
+
 [`freshness.yml`](../.github/workflows/freshness.yml) runs the same command
 daily at 14:47 UTC against a worktree of the `data` branch. It keeps one open
 issue labelled `stale-data`, titled `Stale data: <id>`, for each stale source.
@@ -39,16 +44,22 @@ job fails only when the check itself cannot run.
 
 ## Upstream outages
 
-A source whose server is down, throttling or has nothing new exits
-`wawapacha-pipeline run` with status 75 and publishes nothing. The update
-workflow records a warning, not a failure, because no change in this repository
-can fix it. A transient download error is one of: HTTP 408, 425, 429 or any 5xx,
-a timeout, or a refused or reset connection. Any other HTTP 4xx means our
-request is wrong and fails the run. `UpstreamError` and `download_error` in
+A source whose server is down or throttling exits `wawapacha-pipeline run` with
+status 75 and publishes nothing. The update workflow records a warning, not a
+failure, because no change in this repository can fix it. A transient download
+error is one of: HTTP 408, 425, 429 or any 5xx, a timeout, or a refused or reset
+connection. Any other HTTP 4xx means our request is wrong and fails the run.
+`UpstreamError` and `download_error` in
 [`contract.py`](../pipeline/src/wawapacha_pipeline/contract.py) hold the rule.
 
-An outage that outlasts the cadence tolerance reaches this check and opens the
-source's issue. A short one leaves no trace beyond the warning.
+A source whose server has nothing newer than the published JSON prints
+`<id>: nothing new.` with the reason, publishes nothing and exits 0. `Unchanged`
+in `contract.py` is that outcome. OISST raises it when PSL has no new day, and
+ENFEN when the newest communiqué is already published.
+
+An outage or a silent upstream that outlasts the cadence tolerance reaches this
+check and opens the source's issue. A short one leaves no trace beyond the
+warning.
 
 ## On the site
 
@@ -64,5 +75,7 @@ stale notice when:
 - its newest record ended 90 days ago or more, whatever the last run was.
 
 A `manual` source has no `stale_after_hours`, so only the second condition
-applies. The site keeps showing the last valid record and its age. The display
-rule is in [`chart-rules.md`](chart-rules.md).
+applies. Neither has a source with its own `stale_reason`: its records carry the
+lateness, as the ENFEN communiqué's `stale` does. The site keeps showing the
+last valid record and its age. The display rule is in
+[`chart-rules.md`](chart-rules.md).

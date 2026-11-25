@@ -15,6 +15,7 @@ import pytest
 from wawapacha_pipeline import contract, registry
 from wawapacha_pipeline.contract import (
     REPO_ROOT,
+    Unchanged,
     UpstreamError,
     ValidationError,
     publish,
@@ -492,7 +493,7 @@ def test_in_early_january_fetch_reads_the_previous_years_file(upstream, data_dir
 def test_fetch_reports_no_new_day_without_downloading(upstream, data_dir):
     publish_day(data_dir, "2026-10-01")
 
-    with pytest.raises(UpstreamError, match="no day after 2026-10-01"):
+    with pytest.raises(Unchanged, match="no day after 2026-10-01"):
         oisst.fetch(NOW, upstream.url)
 
     assert upstream.names() == ["sst.day.mean.2026.nc/dataset.xml"]
@@ -553,14 +554,17 @@ def test_cli_keeps_the_previous_json_when_validation_fails(upstream, tmp_path, b
     assert previous.read_text(encoding="utf-8") == '{"version": "previous"}'
 
 
-def test_cli_exits_75_and_keeps_the_json_when_there_is_no_new_day(upstream, tmp_path):
+def test_cli_exits_0_and_keeps_the_json_when_there_is_no_new_day(upstream, tmp_path):
     publish_day(tmp_path, "2026-10-01")
     previous = (tmp_path / "noaa-oisst.json").read_text(encoding="utf-8")
 
     result = run_cli(upstream, tmp_path)
 
-    assert result.returncode == 75
-    assert "upstream unavailable" in result.stderr
+    assert result.returncode == 0, result.stderr
+    assert (
+        result.stdout
+        == "noaa-oisst: nothing new. PSL has no day after 2026-10-01 yet.\n"
+    )
     assert (tmp_path / "noaa-oisst.json").read_text(encoding="utf-8") == previous
 
 

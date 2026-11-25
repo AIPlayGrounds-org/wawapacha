@@ -25,7 +25,6 @@ export const enfenFixture = {
       start: '2026-09-28',
       end: '2026-10-15',
       stale: false,
-      checked_at: '2026-10-02',
     },
   ],
 } satisfies DatasetFor<'enfen-communique'>

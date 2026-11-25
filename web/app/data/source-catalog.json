@@ -68,7 +68,7 @@
       "spatial_resolution": "Costa del Perú",
       "temporal_resolution": "Por comunicado, cada dos semanas aproximadamente",
       "provider_url": "https://enfen.imarpe.gob.pe/downloads/comunicados/",
-      "data_url": "https://enfen.imarpe.gob.pe/downloads/comunicados/",
+      "data_url": "https://enfen.imarpe.gob.pe/downloads/comunicados/feed/",
       "site_pages": [
         "/"
       ]

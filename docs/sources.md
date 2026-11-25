@@ -124,52 +124,54 @@ Notes:
 
 ### enfen-communique
 
-Reviewed on 2026-10-02.
+Reviewed on 2026-11-25.
 [Official page](https://enfen.imarpe.gob.pe/downloads/comunicados/).
 
-| Field               | Value                                                                                   |
-| ------------------- | --------------------------------------------------------------------------------------- |
-| Institution         | Comisión Multisectorial ENFEN                                                           |
-| Product             | Comunicado Oficial ENFEN                                                                |
-| Variable            | Estado del sistema de alerta de El Niño Costero                                         |
-| Unit                | Estado oficial                                                                          |
-| Data type           | official                                                                                |
-| Update              | manual                                                                                  |
-| Spatial resolution  | Costa del Perú                                                                          |
-| Temporal resolution | Por comunicado, cada dos semanas aproximadamente                                        |
-| Cadence             | Irregular. In the archive consulted, about every two weeks.                             |
-| Access              | Hand-filled YAML, read from the communiqué HTML                                         |
-| Download URL        | https://enfen.imarpe.gob.pe/downloads/comunicados/                                      |
-| Format              | YAML: one `enfen` mapping with number, year, date, status, url, next_due and checked_at |
-| Authentication      | none                                                                                    |
+| Field               | Value                                                                                         |
+| ------------------- | --------------------------------------------------------------------------------------------- |
+| Institution         | Comisión Multisectorial ENFEN                                                                 |
+| Product             | Comunicado Oficial ENFEN                                                                      |
+| Variable            | Estado del sistema de alerta de El Niño Costero                                               |
+| Unit                | Estado oficial                                                                                |
+| Data type           | official                                                                                      |
+| Update              | daily                                                                                         |
+| Spatial resolution  | Costa del Perú                                                                                |
+| Temporal resolution | Por comunicado, cada dos semanas aproximadamente                                              |
+| Cadence             | Irregular, about every two weeks; each communiqué states the date of the next. Checked daily. |
+| Access              | RSS feed with the full communiqué text                                                        |
+| Download URL        | https://enfen.imarpe.gob.pe/downloads/comunicados/feed/                                       |
+| Format              | RSS 2.0 with `content:encoded` HTML; 10 items per page                                        |
+| Authentication      | none                                                                                          |
 
 Notes:
 
-- A person fills `pipeline/inputs/enfen.yaml` from the newest communiqué, about
-  every two weeks and at least once a month. Open the archive, copy the number,
-  date, exact status and detail URL from the communiqué HTML, copy the next-due
-  date it states, set `checked_at` to today, then run
-  `uv run wawapacha-pipeline run enfen-communique` from `pipeline/`. The
-  `update` is `manual` for this reason: due selection never runs it.
-- The pipeline does not download. It validates the YAML and publishes one
-  record. `access.url` is the archive where the person reads the communiqué.
+- The feed is the RSS of the communiqué archive. Each item carries the title,
+  the detail-page link, the publication time and the full communiqué text in
+  `content:encoded`. `?paged=2` lists older items. The server answers HTTP 403
+  to curl's default User-Agent, so the pipeline sends `WawaPacha/0.1`.
+- The pipeline publishes the newest item by publication time. The number and
+  year come from the title, which reads `Comunicado Oficial ENFEN N° 20-2026` or
+  `Comunicado Extraordinario Enfen N° 01-2025`, with varying case and spacing.
+  The URL is the item's link; its slug does not always repeat the number.
 - The status is one of five exact phrases: `No Activo`,
   `Vigilancia de El Niño Costero`, `Alerta de El Niño Costero`,
-  `Vigilancia de La Niña Costera`, `Alerta de La Niña Costera`. Anything else is
-  rejected, never normalized. The communiqué's own sentence around the phrase
-  varies, so only the phrase is stored.
-- The URL must be the IMARPE detail page of the same number and year,
-  `https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-<number>-<year>/`.
-  The PDF is not the canonical link.
-- Computed: the record's `start` is the communiqué date and its `end` is the
-  next-due date the communiqué states, because the status holds until the next
-  communiqué. `stale` is true when the ingestion date, in Lima time, is after
-  `end`. A stale record means nobody has refreshed the YAML in time. The
-  pipeline sets it when it runs, and each web build recomputes it from the
-  build's Lima date.
-- Each communiqué has an HTML page and one PDF. Communiqué No. 17-2026, of
-  2026-09-28, states `Alerta de El Niño Costero` in the HTML and says the next
-  one is due on 2026-10-15.
+  `Vigilancia de La Niña Costera`, `Alerta de La Niña Costera`. The text usually
+  labels it `Estado del sistema de alerta:` or `Estado de sistema de alerta:`,
+  followed by a footnote mark. Without the label, the status is the first phrase
+  in the first 200 characters. `No activo` and `No activa` mean `No Activo`. Any
+  other wording fails the run, and the previous JSON stays.
+- The next-due date is the one in the sentence about the
+  `próximo Comunicado Oficial`, in the form `<day> de <month> de <year>`. A
+  communiqué without it fails the run.
+- Computed: `start` is the publication date in Lima and `end` is the next-due
+  date, because the status holds until the next communiqué. `stale` is true when
+  the ingestion date in Lima is after `end`. Each web build recomputes it from
+  the build's Lima date.
+- A run whose record equals the published one publishes nothing and exits 0. The
+  freshness check follows `end`, not the ingestion time: the source is stale
+  from the second day after `end` in Lima.
+- Communiqué N° 20-2026, published 2026-11-13, states
+  `Alerta de El Niño Costero` and says the next one is due on 2026-11-30.
 
 ### noaa-oisst
 
@@ -220,8 +222,8 @@ Notes:
   the server's last day from the file's NCSS `dataset.xml` (`TimeSpan/end`) and
   asks for that day only. PSL often lags a few days. When the current year's
   file does not exist yet (HTTP 404), it reads the previous year's. When the
-  server has no day after the published one, the run downloads nothing and
-  exits 75.
+  server has no day after the published one, the run downloads nothing,
+  publishes nothing and exits 0.
 - PSL answers HTTP 429 when it is busy. The run then exits 75 and the previous
   JSON stays.
 - NCSS returns the cells just outside the box too (one row and one column). The

@@ -400,13 +400,12 @@
           ]
         },
         "url": {
-          "description": "The IMARPE detail page of the communiqué.",
+          "description": "The IMARPE detail page of the communiqué. Its slug does not always repeat the number.",
           "type": "string",
-          "pattern": "^https://enfen\\.imarpe\\.gob\\.pe/download/comunicado-oficial-enfen-n-\\d+-\\d{4}/?$"
+          "pattern": "^https://enfen\\.imarpe\\.gob\\.pe/download/comunicado-[a-z0-9-]+/?$"
         },
-        "start": { "description": "The communiqué date.", "$ref": "#/$defs/day" },
+        "start": { "description": "The communiqué's publication date in Lima.", "$ref": "#/$defs/day" },
         "end": { "description": "The next-due date the communiqué states.", "$ref": "#/$defs/day" },
-        "checked_at": { "description": "The day a person last checked the archive.", "$ref": "#/$defs/day" },
         "stale": { "description": "True when the next-due date had passed at ingestion, in Lima time.", "type": "boolean" }
       }
     },

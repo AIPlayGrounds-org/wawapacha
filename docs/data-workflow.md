@@ -48,8 +48,9 @@ The job commits changed JSON to the `data` branch with the message
 `data: update <ids>`, then dispatches
 [`deploy.yml`](../.github/workflows/deploy.yml). A source that fails keeps its
 previous JSON, and the job runs the others and publishes their results. A source
-that exits 75 because its server is unavailable or has nothing new is a warning.
-Any other failure fails the job after the remaining sources finish. See
+that exits 75 because its server is unavailable is a warning. A source with
+nothing new exits 0 and changes nothing. Any other failure fails the job after
+the remaining sources finish. See
 [`freshness.md`](freshness.md#upstream-outages).
 
 [`freshness.yml`](../.github/workflows/freshness.yml) checks the published files

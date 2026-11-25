@@ -2,30 +2,41 @@ import json
 import os
 import subprocess
 import sys
-from datetime import UTC, date, datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
 
-from wawapacha_pipeline import registry
-from wawapacha_pipeline.contract import ValidationError, publish
+from wawapacha_pipeline import contract, registry
+from wawapacha_pipeline.contract import (
+    Unchanged,
+    UpstreamError,
+    ValidationError,
+    publish,
+)
 from wawapacha_pipeline.sources import enfen_communique as enfen
 
 PIPELINE_DIR = Path(__file__).parents[1]
-SAMPLE_PATH = Path(__file__).parent / "samples" / "enfen_17_2026.yaml"
-SAMPLE = SAMPLE_PATH.read_text(encoding="utf-8")
-TODAY = date(2026, 10, 2)
+SAMPLES_DIR = Path(__file__).parent / "samples"
+# The feed of 2026-11-25: communiqués N° 20-2026 and N° 19-2026.
+ALERTA = SAMPLES_DIR / "enfen_feed_alerta.xml"
+# 2026-11-20 12:00 in Lima, between N° 20-2026 and its next-due date.
+NOW = datetime(2026, 11, 20, 17, tzinfo=UTC)
 
 
-def replace_line(text: str, old: str, new: str) -> str:
-    assert old in text
-    return text.replace(old, new, 1)
+def feed(name: str) -> bytes:
+    return (SAMPLES_DIR / f"enfen_feed_{name}.xml").read_bytes()
+
+
+def edit(text: bytes, old: str, new: str) -> bytes:
+    assert old.encode() in text
+    return text.replace(old.encode(), new.encode())
 
 
 def run_cli(source: Path, data_dir: Path) -> subprocess.CompletedProcess:
-    """Run the CLI as in production, reading `source` and publishing in `data_dir`."""
+    """Run the CLI as in production, reading the feed at `source` and publishing in `data_dir`."""
     env = os.environ | {
-        "ENFEN_COMMUNIQUE_PATH": str(source),
+        "ENFEN_FEED_URL": source.as_uri(),
         "WAWAPACHA_DATA_DIR": str(data_dir),
     }
     return subprocess.run(
@@ -38,139 +49,238 @@ def run_cli(source: Path, data_dir: Path) -> subprocess.CompletedProcess:
     )
 
 
-def test_reads_the_communique():
-    assert enfen.parse(SAMPLE, TODAY) == [
-        {
-            "number": 17,
-            "year": 2026,
-            "status": "Alerta de El Niño Costero",
-            "url": "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-17-2026/",
-            "start": "2026-09-28",
-            "end": "2026-10-15",
-            "stale": False,
-            "checked_at": "2026-10-02",
-        }
-    ]
+@pytest.mark.parametrize(
+    ("name", "record"),
+    [
+        (
+            "alerta",
+            {
+                "number": 20,
+                "year": 2026,
+                "status": "Alerta de El Niño Costero",
+                "url": "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-20-2026/",
+                "start": "2026-11-13",
+                "end": "2026-11-30",
+            },
+        ),
+        (
+            "vigilancia",
+            {
+                "number": 1,
+                "year": 2026,
+                "status": "Vigilancia de El Niño Costero",
+                "url": "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-01-2026/",
+                "start": "2026-01-16",
+                "end": "2026-01-30",
+            },
+        ),
+        (
+            "no_activo",
+            {
+                "number": 13,
+                "year": 2025,
+                "status": "No Activo",
+                "url": "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n13-2025/",
+                "start": "2025-12-18",
+                "end": "2026-01-15",
+            },
+        ),
+        (
+            "extraordinario",
+            {
+                "number": 1,
+                "year": 2025,
+                "status": "Vigilancia de El Niño Costero",
+                "url": "https://enfen.imarpe.gob.pe/download/comunicado-extraordinario-enfen-n-01-2025/",
+                "start": "2025-02-28",
+                "end": "2025-03-14",
+            },
+        ),
+    ],
+)
+def test_reads_the_newest_communique_of_a_real_feed(name, record):
+    assert enfen.parse(feed(name)) == record
 
 
-def test_the_seeded_input_is_valid():
-    records = enfen.parse(enfen.INPUT_PATH.read_text(encoding="utf-8"), TODAY)
+def test_the_newest_item_wins_whatever_the_feed_order():
+    text = feed("extraordinario")
+    first = text.index(b"<item>")
+    second = text.index(b"<item>", first + 1)
+    end = text.index(b"</channel>")
+    swapped = text[:first] + text[second:end] + text[first:second] + text[end:]
 
-    assert (records[0]["number"], records[0]["year"]) == (17, 2026)
-
-
-@pytest.mark.parametrize("status", enfen.STATUSES)
-def test_accepts_every_official_status(status):
-    text = replace_line(SAMPLE, "Alerta de El Niño Costero", status)
-
-    assert enfen.parse(text, TODAY)[0]["status"] == status
+    assert enfen.parse(swapped)["number"] == 1
 
 
-def test_checked_at_is_optional():
-    text = replace_line(SAMPLE, "  checked_at: 2026-10-02\n", "")
+def test_no_activa_is_the_no_activo_status():
+    # N° 02-2025 writes `No activa1`, with the footnote mark glued to the word.
+    text = feed("extraordinario")
+    first = text.index(b"<item>")
+    second = text.index(b"<item>", first + 1)
+    only_02 = text[:first] + text[second:]
 
-    assert "checked_at" not in enfen.parse(text, TODAY)[0]
+    record = enfen.parse(only_02)
+
+    assert (record["number"], record["status"]) == (2, "No Activo")
 
 
-def test_is_not_stale_on_the_next_due_day():
-    assert enfen.parse(SAMPLE, date(2026, 10, 15))[0]["stale"] is False
+def test_the_publication_date_is_the_lima_date():
+    # 19:38 UTC is 14:38 in Lima, the same day; 03:00 UTC is the previous evening.
+    text = edit(feed("alerta"), "13 Nov 2026 19:38:00", "14 Nov 2026 03:00:00")
+
+    assert enfen.parse(text)["start"] == "2026-11-13"
 
 
-def test_is_stale_the_day_after_the_next_due_date():
-    assert enfen.parse(SAMPLE, date(2026, 10, 16))[0]["stale"] is True
+def test_without_the_label_the_status_is_the_first_phrase_near_the_top():
+    text = feed("vigilancia").replace(b"Estado de sistema de alerta:", b"")
+
+    assert enfen.parse(text)["status"] == "Vigilancia de El Niño Costero"
 
 
 @pytest.mark.parametrize(
     ("old", "new", "message"),
     [
-        ("enfen:", "communique:", "top-level key"),
-        ("  number: 17\n", "", "Missing fields"),
-        ("  next_due: 2026-10-15\n", "", "Missing fields"),
+        ("Vigilancia de El Niño Costero<sup>1</sup>", "Emergencia", "unknown status"),
         (
-            "  checked_at: 2026-10-02\n",
-            "  checked_at: 2026-10-02\n  color: red\n",
-            "Unknown fields",
+            'Estado de sistema de alerta:</span><span style="color: #339966;"> '
+            '<span style="color: #ff6600;">Vigilancia de El Niño Costero<sup>1</sup>',
+            "Nada que reportar",
+            "no status",
         ),
-        ("number: 17", "number: 0", "positive integer"),
-        ("number: 17", 'number: "17"', "positive integer"),
-        ("number: 17", "number: 17.5", "positive integer"),
-        ("year: 2026", "year: 26", "four digits"),
-        ("date: 2026-09-28", 'date: "2026-09-28"', "unquoted"),
-        ("date: 2026-09-28", "date: 2026-02-30", "cannot be read"),
-        ("date: 2026-09-28", "date: 2025-09-28", "not in year"),
-        ("date: 2026-09-28", "date: 2026-10-03", "in the future"),
-        ("next_due: 2026-10-15", "next_due: 2026-09-28", "after date"),
-        ("checked_at: 2026-10-02", "checked_at: 2026-09-27", "before date"),
-        ("checked_at: 2026-10-02", "checked_at: 2026-10-03", "in the future"),
-        ('"Alerta de El Niño Costero"', '"alerta de el niño costero"', "status"),
-        ('"Alerta de El Niño Costero"', '"El Niño Costero Alert"', "status"),
-        ('"Alerta de El Niño Costero"', "red", "status"),
-        ("https://enfen.imarpe", "http://enfen.imarpe", "url"),
+        ("próximo Comunicado Oficial", "siguiente boletín", "no date"),
+        ("30 de enero de 2026", "30 de brumario de 2026", "unknown month"),
+        ("30 de enero de 2026", "31 de febrero de 2026", "day is out of range"),
+        ("30 de enero de 2026", "10 de enero de 2026", "not after"),
+        ("N° 01-2026", "N° uno", "names no communiqué number"),
         (
-            "https://enfen.imarpe.gob.pe",
-            "https://enfen.imarpe.gob.pe.evil.example",
-            "url",
+            "<link>https://enfen.imarpe.gob.pe/download/",
+            "<link>https://example.org/",
+            "not a detail page",
         ),
-        ("https://enfen.imarpe.gob.pe", "https://www.gob.pe", "url"),
-        ("-n-17-2026/", "-n-17-2026.pdf", "url"),
-        ("-n-17-2026/", "-n-16-2026/", "different communiqué"),
-        ("-n-17-2026/", "-n-17-2025/", "different communiqué"),
+        ("16 Jan 2026 08:39:57 +0000", "mañana", "Unreadable pubDate"),
     ],
 )
-def test_rejects_an_invalid_input(old, new, message):
+def test_an_unreadable_communique_fails_rather_than_guesses(old, new, message):
+    text = edit(feed("vigilancia"), old, new)
+
     with pytest.raises(ValidationError, match=message):
-        enfen.parse(replace_line(SAMPLE, old, new), TODAY)
-
-
-def test_rejects_a_repeated_communique():
-    with pytest.raises(ValidationError, match="appears twice"):
-        enfen.parse(SAMPLE + SAMPLE, TODAY)
-
-
-@pytest.mark.parametrize("key", ["[a, b]", "{a: b}"])
-def test_rejects_a_key_that_is_a_list_or_a_mapping(key):
-    # YAML allows `? [a, b]` as a key. It cannot be a field name, and must not crash the run.
-    text = replace_line(SAMPLE, "  number: 17\n", f"  ? {key}\n  : 17\n")
-
-    with pytest.raises(ValidationError, match="single value"):
-        enfen.parse(text, TODAY)
-
-
-def test_cli_reports_a_key_that_is_a_list_without_a_traceback(tmp_path):
-    broken = tmp_path / "broken.yaml"
-    broken.write_text("enfen:\n  ? [a, b]\n  : 1\n", encoding="utf-8")
-
-    result = run_cli(broken, tmp_path)
-
-    assert result.returncode == 1
-    assert "Traceback" not in result.stderr
-    assert "single value" in result.stderr
+        enfen.parse(text)
 
 
 @pytest.mark.parametrize(
-    "text", ["", "enfen:\n", "enfen: 17\n", "- enfen\n", "enfen: [unclosed\n"]
+    "text",
+    [b"", b"<html>Mantenimiento</html>", b"<rss><channel></channel></rss>"],
 )
-def test_rejects_a_file_that_is_not_one_enfen_mapping(text):
+def test_a_feed_without_communiques_fails_validation(text):
     with pytest.raises(ValidationError):
-        enfen.parse(text, TODAY)
+        enfen.parse(text)
 
 
-def test_fetch_reports_a_missing_file(tmp_path):
-    with pytest.raises(ValidationError, match="Cannot read"):
-        enfen.fetch(tmp_path / "absent.yaml")
+def test_fetch_sends_the_user_agent_the_server_accepts(monkeypatch):
+    seen = {}
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+        def read(self):
+            return b"ok"
+
+    def urlopen(request, timeout):
+        seen["agent"] = request.get_header("User-agent")
+        return Response()
+
+    monkeypatch.setattr(enfen.urllib.request, "urlopen", urlopen)
+
+    assert enfen.fetch("https://enfen.example/feed/") == b"ok"
+    assert seen["agent"] == "WawaPacha/0.1"
 
 
-def test_run_stamps_the_lima_date(tmp_path, monkeypatch):
-    monkeypatch.setattr(
-        "wawapacha_pipeline.sources.enfen_communique.publish",
-        lambda dataset: publish(dataset, tmp_path),
-    )
-    monkeypatch.setattr(enfen, "PATH", SAMPLE_PATH)
-    # 2026-10-16 03:00 UTC is still 2026-10-15 22:00 in Lima: not stale yet.
-    count, path = enfen.run(datetime(2026, 10, 16, 3, tzinfo=UTC))
+@pytest.mark.parametrize(
+    ("status", "error"),
+    [(429, UpstreamError), (503, UpstreamError), (403, ValidationError)],
+)
+def test_a_busy_server_is_upstream_and_a_refused_request_is_ours(
+    monkeypatch, status, error
+):
+    def urlopen(request, timeout):
+        raise enfen.urllib.error.HTTPError(request.full_url, status, "", {}, None)
+
+    monkeypatch.setattr(enfen.urllib.request, "urlopen", urlopen)
+
+    with pytest.raises(error):
+        enfen.fetch("https://enfen.example/feed/")
+
+
+@pytest.fixture
+def data_dir(tmp_path, monkeypatch):
+    monkeypatch.setattr(contract, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(enfen, "publish", lambda dataset: publish(dataset, tmp_path))
+    monkeypatch.setattr(enfen, "fetch", lambda: ALERTA.read_bytes())
+    return tmp_path
+
+
+def published(data_dir: Path) -> dict:
+    return json.loads((data_dir / "enfen-communique.json").read_text(encoding="utf-8"))
+
+
+def test_run_publishes_and_then_reports_nothing_new(data_dir):
+    count, path = enfen.run(NOW)
 
     assert count == 1
-    assert json.loads(path.read_text(encoding="utf-8"))["records"][0]["stale"] is False
+    assert published(data_dir)["records"][0]["stale"] is False
+    with pytest.raises(Unchanged, match="N° 20-2026"):
+        enfen.run(datetime(2026, 11, 21, 17, tzinfo=UTC))
+
+
+def test_run_republishes_when_the_record_turns_stale(data_dir):
+    enfen.run(NOW)
+    # 2026-12-01 03:00 UTC is still 2026-11-30 in Lima: the due day itself.
+    with pytest.raises(Unchanged):
+        enfen.run(datetime(2026, 12, 1, 3, tzinfo=UTC))
+
+    enfen.run(datetime(2026, 12, 1, 17, tzinfo=UTC))
+
+    assert published(data_dir)["records"][0]["stale"] is True
+
+
+def test_run_republishes_what_an_older_version_wrote(data_dir):
+    enfen.run(NOW)
+    dataset = published(data_dir)
+    dataset["processing_version"] = "0.1.0"
+    (data_dir / "enfen-communique.json").write_text(json.dumps(dataset))
+
+    enfen.run(NOW)
+
+    assert published(data_dir)["processing_version"] == enfen.VERSION
+
+
+@pytest.mark.parametrize(
+    ("now", "stale"),
+    [
+        (datetime(2026, 11, 30, 23, tzinfo=UTC), False),
+        # 2026-12-02 04:00 UTC is 2026-12-01 23:00 in Lima: one day late is allowed.
+        (datetime(2026, 12, 2, 4, tzinfo=UTC), False),
+        (datetime(2026, 12, 2, 5, tzinfo=UTC), True),
+    ],
+)
+def test_freshness_follows_the_next_due_date(data_dir, now, stale):
+    enfen.run(NOW)
+
+    reason = enfen.stale_reason(data_dir / "enfen-communique.json", now)
+
+    assert (reason is not None) == stale
+    if stale:
+        assert "N° 20-2026" in reason and "2026-11-30" in reason
+
+
+def test_freshness_reports_a_missing_file(tmp_path):
+    assert enfen.stale_reason(tmp_path / "enfen-communique.json", NOW) == (
+        "missing or invalid communiqué record"
+    )
 
 
 def assert_matches_registry(dataset: dict) -> None:
@@ -189,24 +299,14 @@ def assert_matches_registry(dataset: dict) -> None:
 
 
 def test_build_adds_provenance_metadata():
-    dataset = enfen.build(
-        enfen.parse(SAMPLE, TODAY), datetime(2026, 10, 2, 12, tzinfo=UTC)
-    )
+    record = enfen.parse(ALERTA.read_bytes()) | {"stale": False}
+    dataset = enfen.build([record], datetime(2026, 11, 20, 12, tzinfo=UTC))
 
     assert dataset["id"] == "enfen-communique"
-    assert dataset["ingestion_time"] == "2026-10-02T12:00:00+00:00"
+    assert dataset["ingestion_time"] == "2026-11-20T12:00:00+00:00"
     assert dataset["processing_version"] == enfen.VERSION
-    assert len(dataset["records"]) == 1
+    assert dataset["records"] == [record]
     assert_matches_registry(dataset)
-
-
-def test_publish_writes_the_json(tmp_path):
-    dataset = enfen.build(enfen.parse(SAMPLE, TODAY), datetime(2026, 10, 2, tzinfo=UTC))
-
-    path = publish(dataset, tmp_path)
-
-    assert path == tmp_path / "enfen-communique.json"
-    assert json.loads(path.read_text(encoding="utf-8")) == dataset
 
 
 @pytest.mark.parametrize(
@@ -216,35 +316,43 @@ def test_publish_writes_the_json(tmp_path):
         ("stale", "no"),
         ("start", "2026-9-28"),
         ("url", "https://example.org/communique"),
+        ("url", "https://enfen.imarpe.gob.pe/download/comunicado.pdf"),
         ("number", 0),
         ("extra", 1),
     ],
 )
 def test_the_schema_rejects_a_bad_record(tmp_path, field, value):
-    dataset = enfen.build(enfen.parse(SAMPLE, TODAY), datetime(2026, 10, 2, tzinfo=UTC))
-    dataset["records"][0][field] = value
+    record = enfen.parse(ALERTA.read_bytes()) | {"stale": False, field: value}
+    dataset = enfen.build([record], NOW)
 
     with pytest.raises(ValidationError, match="schema"):
         publish(dataset, tmp_path)
     assert list(tmp_path.iterdir()) == []
 
 
-def test_cli_publishes_the_json(tmp_path):
-    result = run_cli(SAMPLE_PATH, tmp_path)
+def test_cli_publishes_then_reports_nothing_new(tmp_path):
+    result = run_cli(ALERTA, tmp_path)
 
     assert result.returncode == 0, result.stderr
     assert result.stdout.startswith("Published enfen-communique: 1 records in ")
-    published = json.loads(
-        (tmp_path / "enfen-communique.json").read_text(encoding="utf-8")
+    dataset = published(tmp_path)
+    assert dataset["records"][0]["number"] == 20
+    assert_matches_registry(dataset)
+
+    again = run_cli(ALERTA, tmp_path)
+
+    assert again.returncode == 0, again.stderr
+    assert again.stdout == (
+        "enfen-communique: nothing new. No communiqué after N° 20-2026 yet.\n"
     )
-    assert published["records"][0]["status"] == "Alerta de El Niño Costero"
-    assert_matches_registry(published)
 
 
-def test_cli_keeps_the_previous_json_when_validation_fails(tmp_path):
-    broken = tmp_path / "broken.yaml"
-    broken.write_text(
-        replace_line(SAMPLE, "Alerta de El Niño Costero", "red"), encoding="utf-8"
+def test_cli_keeps_the_previous_json_when_the_communique_is_unreadable(tmp_path):
+    broken = tmp_path / "feed.xml"
+    broken.write_bytes(
+        edit(
+            ALERTA.read_bytes(), "<p>Alerta de El Niño Costero</p>", "<p>Emergencia</p>"
+        )
     )
     previous = tmp_path / "enfen-communique.json"
     previous.write_text('{"previous": true}', encoding="utf-8")
@@ -252,100 +360,16 @@ def test_cli_keeps_the_previous_json_when_validation_fails(tmp_path):
     result = run_cli(broken, tmp_path)
 
     assert result.returncode == 1
-    assert "status" in result.stderr
+    assert "no status near the top" in result.stderr
     assert previous.read_text(encoding="utf-8") == '{"previous": true}'
 
 
-def test_add_writes_an_input_the_parser_reads_and_shows_the_diff(tmp_path):
-    path = tmp_path / "enfen.yaml"
-    path.write_text(SAMPLE, encoding="utf-8")
-
-    diff = enfen.add(
-        18,
-        date(2026, 10, 15),
-        "Vigilancia de El Niño Costero",
-        date(2026, 10, 29),
-        date(2026, 10, 16),
-        path,
-        today=date(2026, 10, 16),
-    )
-
-    record = enfen.parse(path.read_text(encoding="utf-8"), date(2026, 10, 16))[0]
-    assert record["number"] == 18
-    assert record["url"].endswith("comunicado-oficial-enfen-n-18-2026/")
-    assert record["end"] == "2026-10-29"
-    assert "-  number: 17" in diff
-    assert "+  number: 18" in diff
-    assert '+  status: "Vigilancia de El Niño Costero"' in diff
-
-
-def test_add_leaves_the_input_unchanged_when_the_communique_is_invalid(tmp_path):
-    path = tmp_path / "enfen.yaml"
-    path.write_text(SAMPLE, encoding="utf-8")
-
-    with pytest.raises(ValidationError, match="status"):
-        enfen.add(
-            18, date(2026, 10, 1), "red", date(2026, 10, 29), TODAY, path, today=TODAY
+def test_the_published_json_is_the_registered_source():
+    dataset = json.loads(
+        (contract.REPO_ROOT / "data" / "enfen-communique.json").read_text(
+            encoding="utf-8"
         )
-    with pytest.raises(ValidationError, match="in the future"):
-        enfen.add(
-            18,
-            date(2026, 11, 15),
-            "No Activo",
-            date(2026, 11, 29),
-            TODAY,
-            path,
-            today=TODAY,
-        )
-
-    assert path.read_text(encoding="utf-8") == SAMPLE
-
-
-def test_the_committed_input_is_what_enfen_add_writes(tmp_path):
-    path = tmp_path / "enfen.yaml"
-    committed = enfen.INPUT_PATH.read_text(encoding="utf-8")
-    record = enfen.parse(committed, TODAY)[0]
-
-    enfen.add(
-        record["number"],
-        date.fromisoformat(record["start"]),
-        record["status"],
-        date.fromisoformat(record["end"]),
-        date.fromisoformat(record["checked_at"]),
-        path,
-        today=TODAY,
     )
 
-    assert path.read_text(encoding="utf-8") == committed
-
-
-def test_enfen_add_command_records_the_communique(tmp_path):
-    path = tmp_path / "enfen.yaml"
-    env = os.environ | {"ENFEN_COMMUNIQUE_PATH": str(path)}
-
-    result = subprocess.run(
-        [
-            sys.executable,
-            "-m",
-            "wawapacha_pipeline",
-            "enfen-add",
-            "17",
-            "--date",
-            "2026-09-28",
-            "--status",
-            "Alerta de El Niño Costero",
-            "--next-due",
-            "2026-10-15",
-            "--checked-at",
-            "2026-10-02",
-        ],
-        cwd=PIPELINE_DIR,
-        env=env,
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
-
-    assert result.returncode == 0, result.stderr
-    assert "+  number: 17" in result.stdout
-    assert enfen.parse(path.read_text(encoding="utf-8"), TODAY)[0]["number"] == 17
+    assert dataset["processing_version"] == enfen.VERSION
+    assert_matches_registry(dataset)
