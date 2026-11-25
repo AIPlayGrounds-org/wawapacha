@@ -24,8 +24,8 @@ read those tokens; page styles do not add local colour or type scales.
 | Rule              | Token or behavior                                                                                                                                                                                                          |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Type scale        | 12, 14, 16, 20, 24, 32, 48px. Home questions and answers scale with the viewport width.                                                                                                                                    |
-| Families          | Source Serif 4 is the only family. Home questions use its italic.                                                                                                                                                          |
-| Weights           | 400 for body text and 600 for emphasis.                                                                                                                                                                                    |
+| Families          | Source Serif 4 for questions, prose and data labels. Inter Tight for answers, the brand, chart and map values, and buttons.                                                                                                |
+| Weights           | Serif: 300 for home questions, 400 for body, 600 for emphasis. Inter Tight: 700 for values, 800 for answers and the brand.                                                                                                 |
 | Body and metadata | 16px body; 14px metadata; 12px labels. Home prose is 20px.                                                                                                                                                                 |
 | Colour            | One ocean-blue accent. Tinted neutral roles and data ramps use the shared palette. Warm and cold hues describe data direction, not danger.                                                                                 |
 | Surfaces          | The paper, sea, sand and raised-surface roles separate evidence groups. Borders carry structure; shadows mark raised status only.                                                                                          |
@@ -34,19 +34,22 @@ read those tokens; page styles do not add local colour or type scales.
 | Motion            | Marks on the timeline fade and grow when their step is read. Reduced motion removes every transition. No content enters from scale zero.                                                                                   |
 | Data chrome       | `ChartShell` owns variable, unit, period, type, source and update age: one visible line plus a "Cómo se mide" disclosure. On the home page its `bare` mode keeps a one-line caption, the source link and the stale notice. |
 
-## The home stage
+## The home scenes
 
-The home page is a dark stage in the deep sea colour. Warm tones mark water
-above normal and blue marks water below it, in the map, the timeline and the
-text that names them. The `.on-stage` wrapper restates the shared tokens for
-components drawn on the stage, so `ChartShell` and `SiteHeader` need no dark
-variant.
+Each home beat is a full-bleed scene on its own ground: green for the opening
+and the rain beat, blue for the sea, ink for history and the footer, brick red
+for what to do. Every scene carries the same grain and a soft highlight, so the
+page reads as one printed piece. A `.scene` restates the shared tokens for its
+ground, so `ChartShell`, `SiteHeader` and the charts need no dark variant. Warm
+tones mark water above normal and blue marks water below it.
 
-| Element    | Rule                                                                                                         |
-| ---------- | ------------------------------------------------------------------------------------------------------------ |
-| Beat       | Opens with the question in warm italic and the answer as the heading. No kicker, count or rail.              |
-| Annotation | A chart labels only the marks its beat talks about, on the chart where the value sits. No legend to consult. |
-| Scrolly    | One chart stays on screen while its steps scroll past. Each step brings one mark forward and dims the rest.  |
+| Element    | Rule                                                                                                                       |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Beat       | The question in light serif, then the answer as a heavy Inter Tight heading. No kicker, count or rail.                     |
+| Strip      | A torn red strip sits behind the few words the story turns on: the opening answer, the punch line and the official status. |
+| Map        | Place names in spaced italic serif. A hand-drawn chalk ring marks the warmest point, with its value beside it.             |
+| Annotation | A chart labels only the marks its beat talks about, on the chart where the value sits. No legend to consult.               |
+| Scrolly    | One chart stays on screen while its steps scroll past. Each step brings one mark forward and dims the rest.                |
 
 ## Layout
 
