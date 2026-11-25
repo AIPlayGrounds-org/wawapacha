@@ -17,7 +17,11 @@ const actionByCommunique: Record<string, string> = {
   '20-2026': claim('enfen-co20-recommendation'),
 }
 const communiqueKey = (number: number, year: number) => `${number}-${year}`
-const listFormat = new Intl.ListFormat('es', { type: 'conjunction' })
+const conjunction = new Intl.ListFormat('es', { type: 'conjunction' })
+/** Lists year labels. A word joiner keeps a span such as "1982–83" on one line. */
+const listFormat = {
+  format: (years: string[]) => conjunction.format(years.map((year) => year.replace('–', '–⁠'))),
+}
 
 const dataTypeDescriptions = {
   observed: 'Observación',

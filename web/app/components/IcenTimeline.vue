@@ -182,6 +182,9 @@ line {
 .mark--dim {
   opacity: 0.3;
 }
+.mark--dim .mark-label {
+  visibility: hidden;
+}
 .mark--focus {
   transform: scale(1.25);
   background: var(--warm-on-deep);
