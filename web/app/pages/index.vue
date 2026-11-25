@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { messages } from '~/messages'
 import { useDataset } from '~/composables/useDataset'
 import { useActiveId } from '~/composables/useActiveId'
@@ -18,19 +18,23 @@ import {
   shapeSeasons,
   warmestNormalMonth,
   weekBefore,
+  weekNearest,
+  weeksBetween,
 } from '~/utils/season'
+import { STEPS_2017, STEPS_2026, tollMarks, wordMarks, type PressStep } from '~/utils/palabra'
 import { ENFEN_COMUNICADOS, SENAMHI_AVISOS } from '~/links'
 import { useSiteSeo } from '~/composables/useSiteSeo'
 import { paperCard } from '~/data/claims'
 import IcenTimeline, { type TimelineMark } from '~/components/IcenTimeline.vue'
 import PaperCard from '~/components/PaperCard.vue'
+import PressTimeline from '~/components/PressTimeline.vue'
 import SeaMap from '~/components/SeaMap.vue'
 import SeasonChart, { type SeasonLine } from '~/components/SeasonChart.vue'
 
 const story = messages.story
 
 const oisst = await useDataset('noaa-oisst', cropOisst)
-const weekly = await useDataset('noaa-cpc-nino-weekly', shapeSeasons([]))
+const weekly = await useDataset('noaa-cpc-nino-weekly', shapeSeasons([2016]))
 const icen = await useDataset('enfen-icen')
 const enfen = await useDataset('enfen-communique')
 
@@ -217,6 +221,40 @@ const activeStep = useActiveId(
 )
 const focus = computed(() => (activeStep.value ? activeStep.value.slice(stepId('').length) : null))
 
+// The word and the water: each step names the sea of its week beside the word.
+const palabra = (prefix: string, steps: readonly PressStep[], from: string, to: string) => {
+  const weeks = weeksBetween(weekly.records, from, to)
+  const items = steps.map((step) => {
+    const water = weekNearest(weeks, step.date)
+    return {
+      ...step,
+      domId: `${prefix}-${step.id}`,
+      lead: water
+        ? story.palabra.water(formatDegrees(water.sst), formatDegrees(water.normal))
+        : null,
+    }
+  })
+  const active = useActiveId(
+    items.map((item) => item.domId),
+    '-50% 0px -30% 0px',
+  )
+  // Before the first step crosses the band the chart waits at that step's date.
+  const until = computed(() =>
+    active.value === null
+      ? mounted.value
+        ? (items[0]?.date ?? null)
+        : null
+      : (items.find((item) => item.domId === active.value)?.date ?? null),
+  )
+  return { from, to, weeks, items, active, until }
+}
+const mounted = ref(false)
+onMounted(() => {
+  mounted.value = true
+})
+const palabra2017 = palabra('palabra17', STEPS_2017, '2017-01-01', '2017-06-30')
+const palabra2026 = palabra('palabra26', STEPS_2026, '2026-01-01', '2026-09-30')
+
 // Rain and what to do, from the communiqué in force.
 const enfenRecord = enfen.records[0]
 const forecastTitle = enfenRecord
@@ -368,6 +406,107 @@ useSiteSeo({
         </div>
         <p class="punch">
           <span class="strip">{{ story.historia.punch }}</span>
+        </p>
+      </div>
+    </section>
+
+    <section id="palabra" class="scene scene--blue" aria-labelledby="palabra-title">
+      <div class="beat">
+        <h2 id="palabra-title">
+          <span class="ask">{{ story.palabra.question }}</span>
+          <span class="answer">{{ story.palabra.answer }}</span>
+        </h2>
+        <p class="lead">{{ story.palabra.intro }}</p>
+        <!-- The figure holds the steps too, so its caption leaves the sticky chart small. -->
+        <ChartShell
+          v-if="palabra2017.weeks.length"
+          bare
+          class="press-figure"
+          :dataset="weekly"
+          :summary="story.palabra.chart2017"
+        >
+          <div class="scrolly">
+            <div class="scrolly-chart">
+              <PressTimeline
+                :weeks="palabra2017.weeks"
+                :from="palabra2017.from"
+                :to="palabra2017.to"
+                :sst-label="story.palabra.sst"
+                :normal-label="story.hero.normal"
+                :words="wordMarks(STEPS_2017)"
+                :tolls="tollMarks(STEPS_2017)"
+                :threshold="{ value: RAIN_THRESHOLD, label: story.porque.line }"
+                ring="2017-03-16"
+                :until="palabra2017.until.value"
+                :table-caption="story.palabra.table2017"
+              />
+            </div>
+            <ol class="scrolly-steps">
+              <li
+                v-for="step in palabra2017.items"
+                :id="step.domId"
+                :key="step.id"
+                class="scrolly-step"
+                :class="{ 'is-active': palabra2017.active.value === step.domId }"
+              >
+                <PaperCard v-if="step.card" :card="step.card" />
+                <p v-if="step.toll" class="step-lead">{{ story.palabra.toll(step.toll) }}</p>
+                <p v-if="step.lead" :class="step.toll ? null : 'step-lead'">{{ step.lead }}</p>
+                <p v-for="text in step.texts" :key="text">{{ text }}</p>
+              </li>
+            </ol>
+          </div>
+        </ChartShell>
+        <p class="lead">{{ story.palabra.scale }}</p>
+        <p class="punch">
+          <span class="strip">{{ story.palabra.punch }}</span>
+        </p>
+        <p class="lead">{{ story.palabra.ranking }}</p>
+        <p class="lead">{{ story.palabra.before }}</p>
+        <p class="lead">{{ story.palabra.prevention }} {{ story.palabra.credibility }}</p>
+        <p class="punch punch--turn">{{ story.palabra.open2026 }}</p>
+        <ChartShell
+          v-if="palabra2026.weeks.length"
+          bare
+          class="press-figure"
+          :dataset="weekly"
+          :summary="story.palabra.chart2026"
+        >
+          <div class="scrolly">
+            <div class="scrolly-chart">
+              <PressTimeline
+                :weeks="palabra2026.weeks"
+                :from="palabra2026.from"
+                :to="palabra2026.to"
+                :sst-label="story.palabra.sst"
+                :normal-label="story.hero.normal"
+                :words="wordMarks(STEPS_2026)"
+                :until="palabra2026.until.value"
+                :table-caption="story.palabra.table2026"
+              />
+            </div>
+            <ol class="scrolly-steps">
+              <li
+                v-for="step in palabra2026.items"
+                :id="step.domId"
+                :key="step.id"
+                class="scrolly-step"
+                :class="{ 'is-active': palabra2026.active.value === step.domId }"
+              >
+                <div v-if="step.report" class="press-pair">
+                  <PaperCard v-if="step.card" :card="step.card" />
+                  <PaperCard :card="step.report.card" />
+                </div>
+                <PaperCard v-else-if="step.card" :card="step.card" />
+                <p v-if="step.lead" class="step-lead">{{ step.lead }}</p>
+                <p v-for="text in step.texts" :key="text">{{ text }}</p>
+                <p v-if="step.report">{{ step.report.text }}</p>
+              </li>
+            </ol>
+          </div>
+        </ChartShell>
+        <p class="punch">
+          <span class="strip">{{ story.palabra.handoff }}</span>
         </p>
       </div>
     </section>
@@ -537,7 +676,8 @@ p {
   margin-top: var(--space-8);
 }
 .beat > .figure,
-.beat > .scrolly {
+.beat > .scrolly,
+.beat > .press-figure {
   margin-top: var(--space-16);
 }
 
@@ -650,6 +790,24 @@ h2 .answer {
 }
 .beat > .punch {
   margin-top: var(--space-24);
+}
+/* The turn to 2026 opens the second chart, so it is a heading line, not a strip. */
+.punch--turn {
+  max-width: 20ch;
+  font-size: clamp(2rem, 1.3rem + 2.8vw, 3.75rem);
+}
+
+/* The headline over what the forecaster wrote that fortnight. */
+.press-pair {
+  display: grid;
+  gap: var(--space-6);
+}
+.press-pair > :first-child {
+  --tilt: -1deg;
+}
+.press-pair > :last-child {
+  --tilt: 0.6deg;
+  --drop-delay: 160ms;
 }
 
 /* Rain: the official status is the one thing to read. */

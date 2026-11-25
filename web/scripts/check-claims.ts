@@ -12,7 +12,7 @@ export type ClaimCheckResult = {
 type AppSource = { fileName: string; source: string }
 
 /** The accessors of the generated module; each call names a claim the site shows. */
-const CLAIM_ACCESSORS = ['claim', 'paperCard']
+const CLAIM_ACCESSORS = ['claim', 'paperCard', 'paperCards']
 
 const claimCallIds = (source: string, fileName: string): string[] => {
   const file = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true)
@@ -35,7 +35,7 @@ const claimCallIds = (source: string, fileName: string): string[] => {
 
 const templateClaimIds = (source: string): string[] => {
   const ids: string[] = []
-  const callPattern = /\b(?:claim|paperCard)\(\s*(['"])([^'"]+)\1\s*\)/gu
+  const callPattern = /\b(?:claim|paperCards?)\(\s*(['"])([^'"]+)\1\s*\)/gu
   for (const match of source.matchAll(callPattern)) ids.push(match[2])
   return ids
 }
@@ -74,10 +74,14 @@ const validateClaimIds = (registryText: string, claimIds: string[]): ClaimCheckR
 
 const UNREADABLE = Symbol('unreadable')
 
-/** The value of a literal of strings and nested objects, or UNREADABLE for anything else. */
+/** The value of a literal of strings, arrays and nested objects, or UNREADABLE for anything else. */
 const literalValue = (node: ts.Expression): unknown => {
   while (ts.isAsExpression(node) || ts.isSatisfiesExpression(node)) node = node.expression
   if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return node.text
+  if (ts.isArrayLiteralExpression(node)) {
+    const items = node.elements.map((element) => literalValue(element))
+    return items.includes(UNREADABLE) ? UNREADABLE : items
+  }
   if (!ts.isObjectLiteralExpression(node)) return UNREADABLE
   const entries: [string, unknown][] = []
   for (const property of node.properties) {

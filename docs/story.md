@@ -81,6 +81,47 @@ that a low index came with heavy damage:
 [impact-2017-people](../evidence/claims.toml). The beat ends on the sentence
 the reader should keep: the index measures the sea, not the damage.
 
+## Si los Niños se pronostican, ¿por qué siempre nos sorprenden?
+
+The answer is "La palabra y el agua". The weekly Niño 1+2 temperature of 2017
+stays on screen while its steps scroll past, and the line is drawn only up to
+the step in view. Each step sets on the chart the word a card printed that day,
+above the line, or a death count at its cut date, below it:
+
+1. January: ENFEN gives a coastal Niño a 1%,
+   [enfen-co01-2017-probabilities](../evidence/claims.toml).
+2. February: ENFEN says "débil",
+   [enfen-co03-2017-debil](../evidence/claims.toml).
+3. March: El Comercio still prints "débil" with 26 dead,
+   [elcomercio-2017-03-04-debil](../evidence/claims.toml).
+4. Mid-March: ENFEN says "moderada" the week the sea peaks, and a chalk ring
+   circles that week, [enfen-co06-2017-moderada](../evidence/claims.toml).
+5. May and June: the dead reach 143 and 159,
+   [impact-2017-paho-sinpad-may](../evidence/claims.toml) and
+   [impact-2017-people](../evidence/claims.toml).
+
+Each step leads with the sea and its normal that week. The beat then says that
+débil and moderada measure the sea, not the damage, and lands the punch line:
+the word came after the water. The ranking,
+[impact-2017-plain](../evidence/claims.toml), and the reason not to believe,
+[bausate-2017-2015-prevention](../evidence/claims.toml) and
+[ramirez-2017-credibility](../evidence/claims.toml), follow.
+
+A turn line opens 2026: the word did not wait for the water. A second chart
+runs January to September 2026. ENFEN's words climb from débil to fuerte and
+extraordinaria, from one claim with three cards,
+[enfen-2026-coast-magnitude-wording](../evidence/claims.toml). Between them,
+television and Andina raise the alarm in February,
+[tv-tvperu-2026-02-16-inminente](../evidence/claims.toml),
+[andina-2026-02-19-tumbes-rojo](../evidence/claims.toml) and
+[tv-rpp-2026-02-24-alerta](../evidence/claims.toml). The last step pairs the
+Panamericana headline,
+[panamericana-2026-09-16-devastador](../evidence/claims.toml), with what ENFEN
+wrote the same fortnight,
+[enfen-it17-ai-model-e-index](../evidence/claims.toml), while the sea line
+falls. The beat hands off to the rain beat: ENFEN has one word, and the press
+chooses the one that reaches the house.
+
 ## ¿Va a llover donde vivo?
 
 The answer is the title of the current communiqué's forecast. The lead quotes

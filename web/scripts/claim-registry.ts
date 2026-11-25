@@ -71,9 +71,6 @@ const parseSources = (id: string, value: unknown): ClaimSource[] => {
       ? { ref: source.ref, quote: source.quote, card }
       : { ref: source.ref, quote: source.quote }
   })
-  if (sources.filter((source) => source.card).length > 1) {
-    throw new Error(`claim ${id} has more than one paper card`)
-  }
   return sources
 }
 
@@ -101,6 +98,6 @@ export const parseClaims = (registryText: string): RegistryClaim[] => {
   })
 }
 
-/** The paper card of a claim, from the one source that carries card fields. */
-export const claimCard = (claim: RegistryClaim): PaperCard | undefined =>
-  claim.sources.find((source) => source.card)?.card
+/** The paper cards of a claim, one per source that carries card fields, in source order. */
+export const sourceCards = (claim: RegistryClaim): PaperCard[] =>
+  claim.sources.flatMap((source) => (source.card ? [source.card] : []))

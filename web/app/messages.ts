@@ -207,6 +207,55 @@ export const messages = {
       punch: 'El índice mide el mar. No mide el daño.',
       chartSummary: 'El mismo índice, con los picos de 1982–83, 1997–98 y 2017.',
     },
+    palabra: {
+      question: 'Si los Niños se pronostican, ¿por qué siempre nos sorprenden?',
+      answer: 'La palabra y el agua',
+      intro: 'Mira cómo se nombró el Niño de 2017 mientras pasaba.',
+      water: (sst: string, normal: string) =>
+        `El mar, ${degrees(sst)}. Lo normal, ${degrees(normal)}.`,
+      /** Each `word` is a part of its card's lift and each `toll` a number in its claim text. */
+      steps2017: {
+        enero: { word: '1%', text: claim('enfen-co01-2017-probabilities') },
+        febrero: { word: 'débil', text: claim('enfen-co03-2017-debil') },
+        marzo: { word: 'débil', toll: '26', text: claim('elcomercio-2017-03-04-debil') },
+        moderada: { word: 'moderada', text: claim('enfen-co06-2017-moderada') },
+        mayo: { toll: '143', text: claim('impact-2017-paho-sinpad-may') },
+        junio: { toll: '159', text: claim('impact-2017-people') },
+      },
+      toll: (count: string) => `${count} fallecidos`,
+      scale: 'Débil y moderada miden el calor del mar. No miden el daño.',
+      punch: 'La palabra llegó después que el agua.',
+      ranking: claim('impact-2017-plain'),
+      before: 'Hubo una razón más para no creer.',
+      prevention: claim('bausate-2017-2015-prevention'),
+      credibility: claim('ramirez-2017-credibility'),
+      open2026: 'En 2026, la palabra no esperó al agua.',
+      steps2026: {
+        debil: { word: 'débil' },
+        alerta: {
+          texts: [
+            claim('tv-tvperu-2026-02-16-inminente'),
+            claim('andina-2026-02-19-tumbes-rojo'),
+            claim('tv-rpp-2026-02-24-alerta'),
+          ],
+        },
+        fuerte: { word: 'fuerte', text: 'Y la palabra siguió subiendo.' },
+        extraordinaria: { word: 'extraordinaria' },
+        titular: {
+          word: 'más devastador',
+          text: 'Lo que el ENFEN escribió esa quincena fue otra cosa.',
+          report: claim('enfen-it17-ai-model-e-index'),
+        },
+      },
+      handoff: 'La palabra del ENFEN es una. La que llega a la casa la pone la prensa.',
+      sst: 'el mar',
+      chart2017:
+        'La temperatura del mar en Niño 1+2 por semana, de enero a junio de 2017, con las palabras de la prensa y del ENFEN en sus fechas.',
+      chart2026:
+        'La temperatura del mar en Niño 1+2 por semana, de enero a septiembre de 2026, con las palabras del ENFEN y de la prensa en sus fechas.',
+      table2017: 'Temperatura del mar en Niño 1+2 por semana, enero a junio de 2017.',
+      table2026: 'Temperatura del mar en Niño 1+2 por semana, enero a septiembre de 2026.',
+    },
     lluvia: {
       question: '¿Va a llover donde vivo?',
     },
@@ -230,6 +279,11 @@ export const messages = {
         title: 'La línea del índice',
         body: claim('icen-definition'),
         where: 'Aparece en la comparación con 1983, 1998 y 2017.',
+      },
+      press: {
+        title: 'La línea de las palabras',
+        body: 'La misma temperatura semanal del mar en Niño 1+2, sobre un eje de fechas. Cada palabra está en la fecha del comunicado o de la nota que la dijo, y cada cifra de fallecidos en la fecha de su corte.',
+        where: 'Aparece en «¿Por qué siempre nos sorprenden?».',
       },
       sea: {
         title: 'El mapa del mar',

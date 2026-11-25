@@ -101,6 +101,20 @@ export const weekBefore = (weeks: readonly SeasonWeek[], week: SeasonWeek) =>
     (other) => Math.abs(utc(week.start) - utc(other.start) - 364 * DAY_MS) <= 3 * DAY_MS,
   ) ?? null
 
+/** The week whose start is nearest to `date`, or null with no weeks. */
+export const weekNearest = (weeks: readonly SeasonWeek[], date: string) =>
+  weeks.reduce<SeasonWeek | null>(
+    (best, week) =>
+      !best || Math.abs(utc(week.start) - utc(date)) < Math.abs(utc(best.start) - utc(date))
+        ? week
+        : best,
+    null,
+  )
+
+/** The weeks that start between `from` and `to`, both included. */
+export const weeksBetween = (weeks: readonly SeasonWeek[], from: string, to: string) =>
+  weeks.filter((week) => week.start >= from && week.start <= to)
+
 /** The month with the highest mean normal, 1 to 12, and that mean. */
 export const warmestNormalMonth = (curve: readonly SeasonPoint[]) => {
   const months = new Map<number, number[]>()
