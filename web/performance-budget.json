@@ -3,33 +3,13 @@
   "routes": {
     "/": {
       "payloadBytes": 544420,
-      "entryJsBytes": 276238,
-      "cssBytes": 2752
-    },
-    "/territorio": {
-      "payloadBytes": 140491,
-      "entryJsBytes": 818512,
-      "cssBytes": 2853
-    },
-    "/historico": {
-      "payloadBytes": 147398,
-      "entryJsBytes": 801829,
-      "cssBytes": 3409
-    },
-    "/rios": {
-      "payloadBytes": 383072,
-      "entryJsBytes": 844825,
-      "cssBytes": 3510
-    },
-    "/aprende": {
-      "payloadBytes": 74671,
-      "entryJsBytes": 889446,
-      "cssBytes": 2752
+      "entryJsBytes": 275412,
+      "cssBytes": 1163
     },
     "/metodologia": {
-      "payloadBytes": 9390,
-      "entryJsBytes": 272590,
-      "cssBytes": 1256
+      "payloadBytes": 2771,
+      "entryJsBytes": 270338,
+      "cssBytes": 1163
     }
   }
 }

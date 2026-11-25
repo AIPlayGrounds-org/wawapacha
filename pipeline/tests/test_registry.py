@@ -19,16 +19,13 @@ AUTOMATED = ENTRY | {
     "data_type": "observed",
     "spatial_resolution": "Global",
     "temporal_resolution": "Monthly",
-    "site_pages": ["/"],
     "access": {"url": "https://example.org/data.txt"},
 }
 
 
 def write_registry(tmp_path, *blocks: str):
     path = tmp_path / "sources.toml"
-    path.write_text(
-        '[routes]\n"/" = "Inicio"\n\n' + "\n".join(blocks), encoding="utf-8"
-    )
+    path.write_text("\n".join(blocks), encoding="utf-8")
     return path
 
 
@@ -61,9 +58,8 @@ def test_discovery_rejects_an_automatable_entry_without_a_module(tmp_path):
         + "\n".join(
             f'{key} = "{value}"'
             for key, value in entry.items()
-            if key not in {"access", "id", "site_pages"}
+            if key not in {"access", "id"}
         )
-        + '\nsite_pages = ["/"]\n'
         + '\nid = "missing-source"\n'
         + '\n[ source.access ]\nurl = "https://example.org/data.txt"\n'
     )
@@ -81,14 +77,6 @@ def test_the_real_registry_loads_and_has_unique_ids():
 
 def test_registry_data_type_enum_matches_the_schema_enum():
     assert registry.DATA_TYPES == contract.DATA_TYPES
-
-
-def test_every_published_source_has_a_site_page():
-    assert all(
-        entry.get("site_pages")
-        for entry in registry.load().values()
-        if entry["verdict"] == "automatable"
-    )
 
 
 def test_load_keeps_the_order_of_the_file(tmp_path):
@@ -131,8 +119,8 @@ def test_check_accepts_a_pending_and_an_automated_entry():
         (AUTOMATED | {"data_type": "status"}, "data_type"),
         ({k: v for k, v in AUTOMATED.items() if k != "unit"}, "unit"),
         (AUTOMATED | {"access": {}}, "access.url"),
-        (AUTOMATED | {"site_pages": []}, "site_pages"),
-        (AUTOMATED | {"site_pages": ["/unknown"]}, "no label for route"),
+        (AUTOMATED | {"on_site": "yes"}, "on_site"),
+        (AUTOMATED | {"site_pages": ["/"]}, "unknown fields"),
     ],
 )
 def test_check_rejects_a_bad_entry(entry, message):

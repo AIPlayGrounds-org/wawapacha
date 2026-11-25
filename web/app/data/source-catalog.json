@@ -1,10 +1,4 @@
 {
-  "routes": {
-    "/": "Inicio",
-    "/territorio": "Territorio",
-    "/rios": "Ríos",
-    "/historico": "Histórico"
-  },
   "sources": [
     {
       "id": "noaa-cpc-oni",
@@ -17,10 +11,7 @@
       "temporal_resolution": "Trimestral móvil",
       "provider_url": "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso/oni/v6/",
       "data_url": "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt",
-      "site_pages": [
-        "/",
-        "/historico"
-      ],
+      "on_site": false,
       "reference_period": "Periodos de 30 años que CPC actualiza cada 5 años",
       "stale_after_hours": 1512
     },
@@ -35,9 +26,7 @@
       "temporal_resolution": "Semanal",
       "provider_url": "https://www.cpc.ncep.noaa.gov/data/indices/",
       "data_url": "https://www.cpc.ncep.noaa.gov/data/indices/wksst9120.for",
-      "site_pages": [
-        "/"
-      ],
+      "on_site": true,
       "reference_period": "1991–2020",
       "stale_after_hours": 360
     },
@@ -52,9 +41,7 @@
       "temporal_resolution": "Mensual, media móvil de tres meses",
       "provider_url": "https://enfen.imarpe.gob.pe/",
       "data_url": "http://met.igp.gob.pe/datos/ICEN.txt",
-      "site_pages": [
-        "/historico"
-      ],
+      "on_site": true,
       "reference_period": "Climatología móvil de 30 años; 1991–2020 desde 2006 (ENFEN, 2024)",
       "stale_after_hours": 52
     },
@@ -69,9 +56,7 @@
       "temporal_resolution": "Por comunicado, cada dos semanas aproximadamente",
       "provider_url": "https://enfen.imarpe.gob.pe/downloads/comunicados/",
       "data_url": "https://enfen.imarpe.gob.pe/downloads/comunicados/feed/",
-      "site_pages": [
-        "/"
-      ]
+      "on_site": true
     },
     {
       "id": "noaa-oisst",
@@ -84,9 +69,7 @@
       "temporal_resolution": "Diaria",
       "provider_url": "https://www.ncei.noaa.gov/products/optimum-interpolation-sst",
       "data_url": "https://psl.noaa.gov/thredds/ncss/grid/Datasets/noaa.oisst.v2.highres",
-      "site_pages": [
-        "/"
-      ],
+      "on_site": true,
       "reference_period": "1991–2020",
       "license": "The ERDDAP metadata allow free use and redistribution, with a disclaimer. They do not name a formal license.",
       "stale_after_hours": 52
@@ -102,9 +85,7 @@
       "temporal_resolution": "Nueve temporadas móviles de tres meses",
       "provider_url": "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso/roni/strengths/",
       "data_url": "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso/roni/strengths/",
-      "site_pages": [
-        "/"
-      ],
+      "on_site": false,
       "reference_period": "1991–2020 (RONI)",
       "stale_after_hours": 1512
     },
@@ -119,9 +100,7 @@
       "temporal_resolution": "Pentadal (P = 1–6; P6 va del día 26 al fin de mes)",
       "provider_url": "https://chc.ucsb.edu/data/chirps3",
       "data_url": "https://data.chc.ucsb.edu/products/CHIRPS/v3.0/prelim/pentads/latam/tifs/",
-      "site_pages": [
-        "/territorio"
-      ],
+      "on_site": false,
       "reference_period": "1991–2020",
       "license": "CC BY 4.0. Attribution: CHIRPS v3, Climate Hazards Center, UC Santa Barbara, in collaboration with FEWS NET and USGS EROS; CC BY 4.0.",
       "stale_after_hours": 360
@@ -137,9 +116,7 @@
       "temporal_resolution": "Diaria; también horaria",
       "provider_url": "https://open-meteo.com/en/docs/historical-weather-api",
       "data_url": "https://archive-api.open-meteo.com/v1/archive",
-      "site_pages": [
-        "/territorio"
-      ],
+      "on_site": false,
       "license": "CC BY 4.0. Free use is non-commercial only. The terms include public research and educational content.",
       "stale_after_hours": 52
     },
@@ -154,9 +131,7 @@
       "temporal_resolution": "Mensual",
       "provider_url": "https://www.senamhi.gob.pe/servicios/?p=estaciones",
       "data_url": "https://www.senamhi.gob.pe/site/descarga-datos/map_hist_data.php",
-      "site_pages": [
-        "/historico"
-      ],
+      "on_site": false,
       "license": "Unconfirmed; outreach pending"
     },
     {
@@ -170,9 +145,7 @@
       "temporal_resolution": "Versión cartográfica, no es una serie",
       "provider_url": "https://data.humdata.org/dataset/cod-ab-per",
       "data_url": "https://data.humdata.org/dataset/54fc7f4d-f4c0-4892-91f6-2fe7c1ecf363/resource/63647792-0951-40d2-a30e-4a0e60f7a176/download/per_admin_boundaries.geojson.zip",
-      "site_pages": [
-        "/territorio"
-      ],
+      "on_site": false,
       "license": "CC BY 3.0 IGO"
     },
     {
@@ -186,9 +159,7 @@
       "temporal_resolution": "Diaria",
       "provider_url": "https://open-meteo.com/en/docs/flood-api",
       "data_url": "https://flood-api.open-meteo.com/v1/flood?latitude=-5.175,-3.625,-4.875,-11.975,-8.975,-11.825,-12.975,-14.075,-13.675,-16.225,-12.075,-7.325&longitude=-80.675,-80.475,-80.725,-76.825,-78.675,-77.075,-76.225,-75.775,-76.225,-72.525,-75.275,-79.475&daily=river_discharge,river_discharge_mean,river_discharge_median,river_discharge_max,river_discharge_min,river_discharge_p25,river_discharge_p75&past_days=7&forecast_days=210&timezone=GMT",
-      "site_pages": [
-        "/rios"
-      ],
+      "on_site": false,
       "license": "CC BY 4.0. Free use is non-commercial only. The terms include public research and educational content.",
       "stale_after_hours": 52
     },
@@ -203,9 +174,7 @@
       "temporal_resolution": "Mensual",
       "provider_url": "https://www.ncei.noaa.gov/products/extended-reconstructed-sst",
       "data_url": "https://www.ncei.noaa.gov/pub/data/cmb/ersst/v5/index/ersst.v5.el_nino.dat",
-      "site_pages": [
-        "/historico"
-      ],
+      "on_site": false,
       "reference_period": "1971–2000",
       "license": "No access or use restrictions according to the NCEI ERDDAP metadata, with a disclaimer.",
       "stale_after_hours": 1512

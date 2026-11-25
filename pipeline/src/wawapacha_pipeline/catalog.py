@@ -117,11 +117,8 @@ def render(sources: dict[str, dict], built: Iterable[str]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def render_web(
-    sources: dict[str, dict], built: Iterable[str], routes: dict[str, str] | None = None
-) -> str:
+def render_web(sources: dict[str, dict], built: Iterable[str]) -> str:
     """Render the registry facts the web needs as a static JSON catalogue."""
-    routes = routes or registry.load_routes()
     built_ids = set(built)
     modules = registry.discover()
     entries = []
@@ -139,7 +136,7 @@ def render_web(
             "temporal_resolution": entry["temporal_resolution"],
             "provider_url": entry["page"],
             "data_url": entry["access"]["url"],
-            "site_pages": entry["site_pages"],
+            "on_site": entry.get("on_site", False),
         }
         for key in ("reference_period", "license"):
             if key in entry:
@@ -151,10 +148,7 @@ def render_web(
         ):
             source["stale_after_hours"] = int(stale_after.total_seconds() // 3600)
         entries.append(source)
-    return (
-        json.dumps({"routes": routes, "sources": entries}, ensure_ascii=False, indent=2)
-        + "\n"
-    )
+    return json.dumps({"sources": entries}, ensure_ascii=False, indent=2) + "\n"
 
 
 def write(

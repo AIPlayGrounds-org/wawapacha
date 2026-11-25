@@ -17,7 +17,6 @@ Each `[[source]]` entry has these fields:
 | `reviewed`                                                      | always        | `YYYY-MM-DD`.                                                                              |
 | `page`                                                          | always        | URL of the official page.                                                                  |
 | `update`                                                        | always        | `daily`, `weekly`, `monthly` or `manual`. [Freshness](freshness.md) reads it.              |
-| `site_pages`                                                    | `automatable` | Non-empty list of site routes that publish this source, such as `/` or `/rios`.            |
 | `variable`, `unit`, `spatial_resolution`, `temporal_resolution` | `automatable` | Text, in Spanish. Published as written.                                                    |
 | `data_type`                                                     | `automatable` | `observed`, `estimated`, `forecast` or `official`.                                         |
 | `access.url`                                                    | `automatable` | Download URL.                                                                              |
@@ -25,18 +24,19 @@ Each `[[source]]` entry has these fields:
 | `history`, `cadence`, `license`                                 | optional      | Text.                                                                                      |
 | `reference_period`                                              | optional      | Text, in Spanish. Published as written.                                                    |
 | `notes`                                                         | optional      | A list of checked format quirks and source-specific processing facts.                      |
+| `on_site`                                                       | optional      | `true` when the site shows this source and "Cómo lo sabemos" lists it. Defaults to `false`. |
 
-The `[routes]` table at the top of the file gives the Spanish label of each site
-route. Add a route and its label there before you list it in a source's
-`site_pages`.
+The web catalog lists every published source, so the site can load any of them.
+`on_site` marks the ones a reader sees. Set it in the same change that puts a
+source on the page.
 
 `variable`, `unit`, `temporal_resolution` and `reference_period` appear on every
 chart, and `spatial_resolution` appears on the methodology page. They stay in
 Spanish. Other registry prose is English.
 
 An `automatable` entry needs its module and gets a section in
-[`sources.md`](sources.md) and in the web catalog. A `manual` entry with
-`site_pages` has a module too: see [`manual-snapshots.md`](manual-snapshots.md).
+[`sources.md`](sources.md) and in the web catalog. A `manual` entry that
+publishes a checked-in snapshot has a module too: see [`manual-snapshots.md`](manual-snapshots.md).
 `discard` and `pending` entries stay in the registry only.
 
 ## Add a source

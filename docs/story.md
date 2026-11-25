@@ -4,8 +4,8 @@ The home page answers one question: how hot is the sea off Peru, and what does
 that mean for the coast. It tells that answer in five short beats. Each beat
 opens with the question a reader would ask and answers it in the heading. One
 chart or one line of evidence follows. The page does not show everything the
-project knows: definitions belong to `/aprende`, method to `/metodologia`, and
-local and archive views to their own routes.
+project knows. Sources, chart method and limits belong to `/metodologia`,
+"Cómo lo sabemos".
 
 ## How a beat is built
 
@@ -60,13 +60,12 @@ The lead quotes the current communiqué's recommendation; for N°20-2026 that is
 chart on the page gives local rainfall. Two links go to ENFEN communiqués and
 SENAMHI warnings.
 
-## Other routes
+## Cómo lo sabemos
 
-`/aprende` holds the ONI explorer, using
-[enso-is-ocean-atmosphere-pattern](../evidence/claims.toml),
-[oni-definition-and-threshold](../evidence/claims.toml) and
-[global-and-coastal-can-differ](../evidence/claims.toml). `/historico` shows
-the sea chronology, the coastal index and station observations in that order.
-The coastal event rule is [coastal-event-criterion](../evidence/claims.toml) and
-the index is [icen-definition](../evidence/claims.toml). `/territorio` and
-`/rios` hold the local views.
+`/metodologia` lists the sources the home page shows, with their update dates.
+It says how each chart is built, using
+[icen-definition](../evidence/claims.toml) for the timeline. It names what each
+data type means and what the site does not do.
+
+The site has no other pages. The old routes `/historico`, `/aprende`,
+`/territorio` and `/rios` redirect to the home chapter that took their place.

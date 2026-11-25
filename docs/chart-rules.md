@@ -24,7 +24,7 @@ age. The full block sits in a "Cómo se mide" disclosure. It stays in the static
 HTML, so it remains readable without JavaScript.
 
 The home story uses `bare` mode instead: one caption line with the summary and
-the source link. The full block stays on the secondary routes.
+the source link. The full method for each chart is on `/metodologia`.
 
 `ChartShell` also prints the accessible summary and the age of the data. It
 shows a stale-source notice when `ingestion_time` is older than the source's
@@ -49,8 +49,7 @@ ended 90 days ago or more.
 
 ## Attribution
 
-[`DatasetAttribution.vue`](../web/app/components/DatasetAttribution.vue) adds
-the Open-Meteo credit that the ERA5 and GloFAS pages require and names their
-Copernicus products. `/territorio` also prints the attribution and license of
-the boundary dataset from its geometry record. Source-specific facts and license
-notes are in [`sources.md`](sources.md).
+A chart that shows an Open-Meteo dataset (ERA5 or GloFAS) prints the Open-Meteo
+credit and names the Copernicus product. A map that draws the INEI–IGN
+boundaries prints their attribution and license from the geometry record.
+Source-specific facts and license notes are in [`sources.md`](sources.md).

@@ -1,11 +1,4 @@
-export const publicRoutes = [
-  '/',
-  '/territorio',
-  '/historico',
-  '/rios',
-  '/aprende',
-  '/metodologia',
-] as const
+export const publicRoutes = ['/', '/metodologia'] as const
 
 export const socialImagePath = '/og-image.png'
 

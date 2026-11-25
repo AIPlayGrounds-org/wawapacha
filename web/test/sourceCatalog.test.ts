@@ -4,53 +4,31 @@ import { loadDataset } from '../server/utils/loadDataset'
 import {
   sourceCatalogDatasetFixture,
   sourceCatalogRegistryFixture,
-  sourceCatalogVocabularyFixture,
 } from './fixtures/source-catalog'
 import { buildSourceCatalog, validateSourceCatalog } from '~/utils/sourceCatalog'
 
 describe('buildSourceCatalog', () => {
-  it('groups multi-page sources while preserving registry ordering and links', () => {
-    const catalog = buildSourceCatalog(
-      sourceCatalogRegistryFixture,
-      sourceCatalogDatasetFixture,
-      sourceCatalogVocabularyFixture.routes,
-    )
-    const home = catalog.groups.find((group) => group.page === '/')
-    const history = catalog.groups.find((group) => group.page === '/historico')
-    const territory = catalog.groups.find((group) => group.page === '/territorio')
+  it('keeps registry order and joins each source to its dataset update', () => {
+    const catalog = buildSourceCatalog(sourceCatalogRegistryFixture, sourceCatalogDatasetFixture)
 
-    expect(catalog.groups.map((group) => group.page)).toEqual(['/', '/historico', '/territorio'])
-    expect(catalog.groups.map((group) => group.label)).toEqual([
-      'Inicio',
-      'Histórico',
-      'Territorio',
-    ])
-    expect(home?.sources.map((source) => source.id)).toEqual(['noaa-cpc-oni', 'source-a'])
-    expect(history?.sources.map((source) => source.id)).toEqual(['noaa-cpc-oni'])
-    expect(territory?.sources.map((source) => source.id)).toEqual(['source-b'])
-    expect(home?.sources[0]).toMatchObject({
+    expect(catalog.map((source) => source.id)).toEqual(['noaa-cpc-oni', 'source-b'])
+    expect(catalog[0]).toMatchObject({
       providerUrl: 'https://example.com/provider-oni',
       dataUrl: 'https://example.com/data-oni',
       license: 'CC BY 4.0. Attribution text kept in the registry.',
       lastUpdate: '2026-09-30T00:00:00+00:00',
     })
-    expect(territory?.sources[0]).toMatchObject({
+    expect(catalog[1]).toMatchObject({
       referencePeriod: null,
       license: null,
       lastUpdate: '2026-10-01T00:00:00+00:00',
     })
   })
 
-  it('rejects a source with no page assignment', () => {
-    const unmapped = { ...sourceCatalogRegistryFixture[1]!, site_pages: [] }
-
-    expect(() =>
-      buildSourceCatalog(
-        [unmapped],
-        sourceCatalogDatasetFixture,
-        sourceCatalogVocabularyFixture.routes,
-      ),
-    ).toThrow('source-b has no site page')
+  it('rejects a source with no dataset', () => {
+    expect(() => buildSourceCatalog(sourceCatalogRegistryFixture, [])).toThrow(
+      'data/noaa-cpc-oni.json',
+    )
   })
 })
 
@@ -58,36 +36,41 @@ describe('validateSourceCatalog', () => {
   it.each([
     ['data_type', { data_type: 'bogus' }],
     ['name', { name: '' }],
-    ['site_pages', { site_pages: [] }],
-    ['site_pages', { site_pages: ['/unlabelled'] }],
+    ['provider_url', { provider_url: undefined }],
+    ['on_site', { on_site: 'yes' }],
   ])('rejects an invalid %s field', (field, change) => {
     const source = { ...sourceCatalogRegistryFixture[0]!, ...change } as unknown as Record<
       string,
       unknown
     >
 
-    expect(() =>
-      validateSourceCatalog({ ...sourceCatalogVocabularyFixture, sources: [source] }),
-    ).toThrow(field)
+    expect(() => validateSourceCatalog({ sources: [source] })).toThrow(field)
   })
 
-  it('takes route labels from the generated vocabulary', () => {
-    const document = validateSourceCatalog({
-      ...sourceCatalogVocabularyFixture,
-      sources: sourceCatalogRegistryFixture,
-    })
-
-    expect(document.routes).toEqual(sourceCatalogVocabularyFixture.routes)
+  it('rejects an empty catalogue', () => {
+    expect(() => validateSourceCatalog({ sources: [] })).toThrow('sources array')
   })
 })
 
 describe('generated source catalog', () => {
+  it('flags only the sources the site shows', () => {
+    const document = validateSourceCatalog(sourceCatalogJson)
+    const shown = document.sources.filter((source) => source.on_site)
+
+    expect(shown.map((source) => source.id).sort()).toEqual([
+      'enfen-communique',
+      'enfen-icen',
+      'noaa-cpc-nino-weekly',
+      'noaa-oisst',
+    ])
+  })
+
   it('takes the last update from the validated dataset loader', async () => {
     const document = validateSourceCatalog(sourceCatalogJson)
     const enfen = await loadDataset('enfen-communique')
     const source = document.sources.find((entry) => entry.id === enfen.id)!
-    const catalog = buildSourceCatalog([source], [enfen], document.routes)
+    const catalog = buildSourceCatalog([source], [enfen])
 
-    expect(catalog.groups[0]?.sources[0]?.lastUpdate).toBe(enfen.ingestion_time)
+    expect(catalog[0]?.lastUpdate).toBe(enfen.ingestion_time)
   })
 })

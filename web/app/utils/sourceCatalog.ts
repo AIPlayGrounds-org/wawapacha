@@ -14,7 +14,7 @@ export type SourceCatalogRecord = {
   license?: string
   provider_url: string
   data_url: string
-  site_pages: string[]
+  on_site: boolean
 }
 
 export type SourceDatasetMetadata = Pick<Dataset, 'id' | 'ingestion_time'>
@@ -35,26 +35,12 @@ export type SourceCatalogEntry = {
   dataUrl: string
 }
 
-export type SourceCatalogGroup = {
-  page: string
-  label: string
-  sources: SourceCatalogEntry[]
-}
-
-export type SourceCatalog = {
-  groups: SourceCatalogGroup[]
-}
-
 export type SourceCatalogDocument = {
-  routes: Record<string, string>
   sources: SourceCatalogRecord[]
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
-
-const stringArray = (value: unknown): value is string[] =>
-  Array.isArray(value) && value.every((item) => typeof item === 'string' && item.length > 0)
 
 const requiredString = (entry: Record<string, unknown>, key: string, source: number): string => {
   const value = entry[key]
@@ -77,28 +63,23 @@ const optionalString = (
   return value
 }
 
+const requiredBoolean = (entry: Record<string, unknown>, key: string, source: number): boolean => {
+  const value = entry[key]
+  if (typeof value !== 'boolean') {
+    throw new Error(`[sourceCatalog] sources[${source}].${key} must be true or false`)
+  }
+  return value
+}
+
+const isDataType = (dataType: string): dataType is Dataset['data_type'] =>
+  Object.hasOwn(messages.dataType, dataType)
+
 export const validateSourceCatalog = (value: unknown): SourceCatalogDocument => {
-  if (!isRecord(value) || !Array.isArray(value.sources)) {
+  if (!isRecord(value) || !Array.isArray(value.sources) || value.sources.length === 0) {
     throw new Error('[sourceCatalog] generated catalogue must contain a sources array')
   }
 
-  const rawRoutes = value.routes
-  if (!isRecord(rawRoutes) || Object.keys(rawRoutes).length === 0) {
-    throw new Error('[sourceCatalog] generated catalogue must contain labelled routes')
-  }
-  const routes: Record<string, string> = {}
-  for (const [route, label] of Object.entries(rawRoutes)) {
-    if (!route.startsWith('/') || typeof label !== 'string' || label.length === 0) {
-      throw new Error('[sourceCatalog] routes must map paths to non-empty labels')
-    }
-    routes[route] = label
-  }
-
-  const isDataType = (dataType: string): dataType is Dataset['data_type'] =>
-    Object.hasOwn(messages.dataType, dataType)
-
   return {
-    routes,
     sources: value.sources.map((raw, index) => {
       if (!isRecord(raw)) {
         throw new Error(`[sourceCatalog] sources[${index}] must be an object`)
@@ -106,14 +87,6 @@ export const validateSourceCatalog = (value: unknown): SourceCatalogDocument => 
       const dataType = requiredString(raw, 'data_type', index)
       if (!isDataType(dataType)) {
         throw new Error(`[sourceCatalog] sources[${index}].data_type is invalid`)
-      }
-      const sitePages = raw.site_pages
-      if (
-        !stringArray(sitePages) ||
-        sitePages.length === 0 ||
-        !sitePages.every((page) => routes[page] !== undefined)
-      ) {
-        throw new Error(`[sourceCatalog] sources[${index}].site_pages must use a labelled route`)
       }
 
       const source: SourceCatalogRecord = {
@@ -127,7 +100,7 @@ export const validateSourceCatalog = (value: unknown): SourceCatalogDocument => 
         temporal_resolution: requiredString(raw, 'temporal_resolution', index),
         provider_url: requiredString(raw, 'provider_url', index),
         data_url: requiredString(raw, 'data_url', index),
-        site_pages: sitePages,
+        on_site: requiredBoolean(raw, 'on_site', index),
       }
       const referencePeriod = optionalString(raw, 'reference_period', index)
       const license = optionalString(raw, 'license', index)
@@ -141,21 +114,15 @@ export const validateSourceCatalog = (value: unknown): SourceCatalogDocument => 
 export const buildSourceCatalog = (
   registry: SourceCatalogRecord[],
   datasets: SourceDatasetMetadata[],
-  routes: SourceCatalogDocument['routes'],
-): SourceCatalog => {
+): SourceCatalogEntry[] => {
   const datasetsById = new Map(datasets.map((dataset) => [dataset.id, dataset]))
-  const groups = new Map<string, { label: string; sources: SourceCatalogEntry[] }>()
 
-  for (const entry of registry) {
+  return registry.map((entry) => {
     const dataset = datasetsById.get(entry.id)
     if (!dataset) {
       throw new Error(`[sourceCatalog] data/${entry.id}.json is not available through loadDataset`)
     }
-    if (entry.site_pages.length === 0) {
-      throw new Error(`[sourceCatalog] ${entry.id} has no site page`)
-    }
-
-    const source: SourceCatalogEntry = {
+    return {
       id: entry.id,
       name: entry.name,
       provider: entry.provider,
@@ -170,26 +137,5 @@ export const buildSourceCatalog = (
       providerUrl: entry.provider_url,
       dataUrl: entry.data_url,
     }
-
-    for (const page of entry.site_pages) {
-      const label = routes[page]
-      if (!label) {
-        throw new Error(`[sourceCatalog] ${entry.id} has no label for route ${page}`)
-      }
-      const group = groups.get(page) ?? { label, sources: [] }
-      group.sources.push(source)
-      groups.set(page, group)
-    }
-  }
-
-  return {
-    groups: [...groups].map(([page, group]) => ({
-      page,
-      label: group.label,
-      sources: group.sources,
-    })),
-  }
+  })
 }
-
-export const sourceGroupId = (page: string) =>
-  `source-group-${page === '/' ? 'home' : page.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}`

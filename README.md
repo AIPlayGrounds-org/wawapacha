@@ -41,16 +41,11 @@ previous file stays in place.
 
 ## Features
 
-- `/` explains the current ONI signal with a history chart, weekly Niño indices,
-  the ENFEN status, CPC probabilities and an OISST anomaly map.
-- `/territorio` maps recent CHIRPS rainfall and anomalies by department, with an
-  ERA5 cross-check.
-- `/historico` compares the current year with tagged 1982–83, 1997–98 and 2017
-  events, the official ICEN series and a SENAMHI station snapshot.
-- `/rios` shows modeled discharge for selected Peruvian basins and links to
-  official alerts.
-- `/aprende` explains ENSO, the Niño regions, the ONI and the Peruvian coast.
-- `/metodologia` lists every source with its data type and last update.
+- `/` tells the story in five questions: how hot the sea is by the ICEN, where
+  the heat is on the OISST map, how it compares with 1983, 1998 and 2017, what
+  ENFEN forecasts and what to do now.
+- `/metodologia`, "Cómo lo sabemos", lists the sources the story shows with
+  their last update, says how each chart is built and names the site's limits.
 - Observed, estimated, forecast and official data stay visibly distinct.
 - One registry, [`sources.toml`](sources.toml), holds the facts about each
   source. The source catalog is generated from it. The TypeScript types are

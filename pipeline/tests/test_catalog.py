@@ -17,6 +17,16 @@ def test_web_source_catalog_is_up_to_date_with_the_registry():
     assert catalog.WEB_CATALOG_PATH.read_text(encoding="utf-8") == expected
 
 
+def test_web_catalog_flags_the_sources_the_site_shows():
+    sources = registry.load()
+    web = json.loads(catalog.render_web(sources, cli.CATALOG_SOURCES))["sources"]
+
+    shown = {source_id for source_id, entry in sources.items() if entry.get("on_site")}
+    assert shown
+    assert shown <= set(cli.CATALOG_SOURCES)
+    assert {entry["id"] for entry in web if entry["on_site"]} == shown
+
+
 def test_web_catalog_carries_the_stale_threshold_the_freshness_command_uses():
     sources = registry.load()
     web = json.loads(catalog.render_web(sources, cli.CATALOG_SOURCES))["sources"]

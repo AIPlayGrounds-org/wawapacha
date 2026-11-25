@@ -2,13 +2,7 @@
 import { messages } from '~/messages'
 
 const route = useRoute()
-const items = [
-  { to: '/historico', label: messages.historico.historyNav },
-  { to: '/territorio', label: messages.page.territoryLink },
-  { to: '/rios', label: messages.rios.sectionLabel },
-  { to: '/aprende', label: messages.page.learnLink },
-  { to: '/metodologia', label: messages.page.methodologyLink },
-]
+const items = [{ to: '/metodologia', label: messages.page.methodologyLink }]
 </script>
 
 <template>

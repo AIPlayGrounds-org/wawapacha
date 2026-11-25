@@ -3,8 +3,8 @@
 WawaPacha explains El Niño Costero to someone who lives on the Peruvian coast.
 The home page is a short story: it asks five questions in order and answers
 each with one chart or one sentence from an official source.
-[`story.md`](story.md) holds the reading path. Secondary routes use the same
-header and data frame.
+[`story.md`](story.md) holds the reading path. `/metodologia`, "Cómo lo sabemos",
+uses the same header.
 
 ## Screen goal
 
@@ -14,7 +14,7 @@ action is to read the official warning or open the local view of their region.
 
 The home page carries one argument from top to bottom. Each beat shows one
 thing. A chart, label or explanation that does not answer the beat's question
-belongs on a secondary route. Fewer labels read better than complete ones.
+belongs on `/metodologia` or nowhere. Fewer labels read better than complete ones.
 
 ## System
 
@@ -27,7 +27,7 @@ read those tokens; page styles do not add local colour or type scales.
 | Families          | Source Serif 4 for questions, prose and data labels. Inter Tight for answers, the brand, chart and map values, and buttons.                                                                                                |
 | Weights           | Serif: 300 for home questions, 400 for body, 600 for emphasis. Inter Tight: 700 for values, 800 for answers and the brand.                                                                                                 |
 | Body and metadata | 16px body; 14px metadata; 12px labels. Home prose is 20px.                                                                                                                                                                 |
-| Colour            | One ocean-blue accent. Tinted neutral roles and data ramps use the shared palette. Warm and cold hues describe data direction, not danger.                                                                                 |
+| Colour            | One ocean-blue accent. Tinted neutral roles and the warm and cold data hues use the shared palette. Warm and cold hues describe data direction, not danger.                                                                                 |
 | Surfaces          | The paper, sea, sand and raised-surface roles separate evidence groups. Borders carry structure; shadows mark raised status only.                                                                                          |
 | Spacing           | The 4px steps from `--space-1` through `--space-24` group content before surface treatment.                                                                                                                                |
 | Targets and focus | Interactive targets are at least 44px high. `:focus-visible` uses the accent outline.                                                                                                                                      |

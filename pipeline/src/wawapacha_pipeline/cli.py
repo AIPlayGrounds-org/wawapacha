@@ -2,6 +2,7 @@
 
 import argparse
 import importlib
+import importlib.util
 import json
 import sys
 from datetime import UTC, datetime
@@ -19,12 +20,14 @@ from wawapacha_pipeline.contract import (
 from wawapacha_pipeline.sources import senamhi_estaciones
 
 SOURCES = registry.discover()
+# A manual source with a module publishes from a checked-in snapshot, so due
+# selection never sees it.
 SNAPSHOT_IDS = tuple(
     source_id
     for source_id, entry in registry.load().items()
-    if entry["verdict"] == "manual" and entry.get("site_pages")
+    if entry["verdict"] == "manual"
+    and importlib.util.find_spec(registry.source_module_name(source_id))
 )
-# Snapshot sources publish from a checked-in file, so due selection never sees them.
 SNAPSHOTS = {
     source_id: importlib.import_module(registry.source_module_name(source_id))
     for source_id in SNAPSHOT_IDS
