@@ -22,6 +22,8 @@ const conjunction = new Intl.ListFormat('es', { type: 'conjunction' })
 const listFormat = {
   format: (years: string[]) => conjunction.format(years.map((year) => year.replace('–', '–⁠'))),
 }
+/** A value in degrees. The no-break space keeps "4,5 °C" on one line. */
+const degrees = (value: string) => `${value} °C`
 
 const dataTypeDescriptions = {
   observed: 'Observación',
@@ -141,25 +143,25 @@ export const messages = {
             : `Lo superaron ${above.length} episodios desde ${since}.`,
       empty: 'Sin datos del ICEN',
       detail: (month: string, value: string) =>
-        `En ${month}, el índice oficial del Perú marcó ${value} °C sobre lo normal.`,
+        `En ${month}, el índice oficial del Perú marcó ${degrees(value)} sobre lo normal.`,
       chartSummary: (since: string) =>
         `Índice Costero El Niño (ICEN), mes a mes desde ${since}. Arriba de la línea, mar más caliente que lo normal.`,
     },
     timeline: {
-      mark: (label: string, value: string) => `${label}\n${value} °C`,
+      mark: (label: string, value: string) => `${label}\n${degrees(value)}`,
       today: 'hoy',
     },
     map: {
       legend: '°C sobre lo normal',
-      warmest: (value: string) => `${value} °C`,
+      warmest: degrees,
       summary: (day: string) => `Cuánto se aparta el mar de lo normal, ${day}.`,
     },
     calor: {
       question: '¿Dónde está ese calor?',
-      answer: (value: string) => `En su punto más caliente, ${value} °C sobre lo normal.`,
+      answer: (value: string) => `En su punto más caliente, ${degrees(value)} sobre lo normal.`,
       empty: 'Sin mapa de temperatura del mar',
       week: (day: string, sst: string, normal: string) =>
-        `La semana del ${day}, el mar de la costa norte estuvo a ${sst} °C. Lo normal son unos ${normal} °C.`,
+        `La semana del ${day}, el mar de la costa norte estuvo a ${degrees(sst)}. Lo normal son unos ${degrees(normal)}.`,
     },
     historia: {
       question: '¿Es como 1983, 1998 o 2017?',
@@ -175,11 +177,11 @@ export const messages = {
         '1997-98': '1997–98',
         '2017': '2017',
       },
-      peak: (value: string, month: string) => `El índice llegó a ${value} °C en ${month}.`,
+      peak: (value: string, month: string) => `El índice llegó a ${degrees(value)} en ${month}.`,
       damage8298: claim('impact-8283-9798-caf-comparison'),
       low2017: 'En el gráfico casi no se ve. En tierra fue otra cosa.',
       todayStep: (value: string, month: string) =>
-        `Hoy: ${value} °C en ${month}. La línea punteada lleva ese nivel hacia atrás.`,
+        `Hoy: ${degrees(value)} en ${month}. La línea punteada lleva ese nivel hacia atrás.`,
       people: claim('impact-2017-people'),
       punch: 'El índice mide el mar. No mide el daño.',
       chartSummary: 'El mismo índice, con los picos de 1982–83, 1997–98 y 2017.',
