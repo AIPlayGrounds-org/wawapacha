@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, useId } from 'vue'
+import { computed, ref, useId } from 'vue'
+import { useChartFrame } from '~/composables/useChartFrame'
 import { formatDegrees, formatSeasonDay } from '~/utils/format'
 import { SEASON_DAYS, pointAt, type SeasonPoint } from '~/utils/season'
 
@@ -41,7 +42,7 @@ const MARGIN = { top: 36, right: 72, bottom: 28, left: 36 }
 const WEEK = 7
 
 const root = ref<HTMLElement | null>(null)
-const width = ref(1000)
+const { width, drawn } = useChartFrame(root)
 const height = computed(() => Math.round(Math.min(520, Math.max(280, width.value * 0.52))))
 const narrow = computed(() => width.value < 480)
 
@@ -239,37 +240,6 @@ const rows = computed(() =>
     values: series.value.map((line) => pointAt(line.points, point.day)?.value ?? null),
   })),
 )
-
-// The accent line starts drawn, so the server HTML, a reader without JavaScript and a reader
-// who asked for less motion all see the whole chart. Only a chart still below the fold redraws.
-const drawn = ref(true)
-let resize: ResizeObserver | undefined
-let reveal: IntersectionObserver | undefined
-onMounted(() => {
-  const element = root.value
-  if (!element) return
-  width.value = element.clientWidth || width.value
-  resize = new ResizeObserver(([entry]) => {
-    if (entry) width.value = entry.contentRect.width
-  })
-  resize.observe(element)
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (still || element.getBoundingClientRect().top < window.innerHeight) return
-  drawn.value = false
-  reveal = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry?.isIntersecting) return
-      drawn.value = true
-      reveal?.disconnect()
-    },
-    { rootMargin: '0px 0px -25% 0px' },
-  )
-  reveal.observe(element)
-})
-onBeforeUnmount(() => {
-  resize?.disconnect()
-  reveal?.disconnect()
-})
 
 const clipId = `season-hot-${useId()}`
 const tableId = `season-table-${useId()}`

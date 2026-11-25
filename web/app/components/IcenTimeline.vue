@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { messages } from '~/messages'
+import { ICEN_NEUTRAL } from '~/utils/icen'
 
 export type TimelineMark = {
   id: string
@@ -17,6 +17,8 @@ const props = defineProps<{
   level: number | null
   /** Id of the mark to bring forward. Null shows every mark alike. */
   focus: string | null
+  /** Names ENFEN's neutral band, drawn behind the series. */
+  bandLabel?: string
 }>()
 
 const WIDTH = 1000
@@ -75,6 +77,13 @@ const decades = computed(() =>
             <rect x="0" :y="y(0)" :width="WIDTH" :height="HEIGHT - y(0)" />
           </clipPath>
         </defs>
+        <rect
+          class="band"
+          x="0"
+          :y="y(ICEN_NEUTRAL.high)"
+          :width="WIDTH"
+          :height="y(ICEN_NEUTRAL.low) - y(ICEN_NEUTRAL.high)"
+        />
         <path class="area area--warm" :d="area" clip-path="url(#timeline-above)" />
         <path class="area area--cold" :d="area" clip-path="url(#timeline-below)" />
         <line class="zero" x1="0" :x2="WIDTH" :y1="y(0)" :y2="y(0)" />
@@ -87,6 +96,13 @@ const decades = computed(() =>
           :y2="y(level)"
         />
       </svg>
+      <span
+        v-if="bandLabel"
+        class="band-label"
+        :style="{ top: percent(y(ICEN_NEUTRAL.high), HEIGHT) }"
+        aria-hidden="true"
+        >{{ bandLabel }}</span
+      >
       <span
         v-for="mark in placedMarks"
         :key="mark.id"
@@ -127,6 +143,21 @@ svg {
   width: 100%;
   height: 100%;
   overflow: visible;
+}
+.band {
+  fill: color-mix(in srgb, var(--on-deep-muted) 16%, transparent);
+}
+.band-label {
+  position: absolute;
+  left: 0;
+  padding: 2px 0 0 4px;
+  color: var(--on-deep-muted);
+  font-size: var(--text-label);
+  font-style: italic;
+  line-height: 1.2;
+  text-shadow:
+    0 0 4px var(--deep),
+    0 0 2px var(--deep);
 }
 .area--warm {
   fill: var(--warm-on-deep);

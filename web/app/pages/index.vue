@@ -25,6 +25,7 @@ import { STEPS_2017, STEPS_2026, tollMarks, wordMarks, type PressStep } from '~/
 import { ENFEN_COMUNICADOS, SENAMHI_AVISOS } from '~/links'
 import { useSiteSeo } from '~/composables/useSiteSeo'
 import { paperCard } from '~/data/claims'
+import IcenOverlay, { type OverlaySeries } from '~/components/IcenOverlay.vue'
 import IcenTimeline, { type TimelineMark } from '~/components/IcenTimeline.vue'
 import PaperCard from '~/components/PaperCard.vue'
 import PressTimeline from '~/components/PressTimeline.vue'
@@ -166,6 +167,28 @@ const pastEvents = (
   name: story.historia.events[id],
   peak: icenPeak(icen.records, start, end),
 }))
+// Each overlay lines events up by calendar month, from April of the first year.
+const overlayFrom = { '1982-83': '1982-04', '1997-98': '1997-04', '2017': '2016-04' } as const
+const overlayLabel = { '1982-83': '1982–83', '1997-98': '1997–98', '2017': '2016–17' } as const
+const overlaySeries = (past: keyof typeof overlayFrom, accent: keyof typeof overlayFrom) =>
+  ([past, accent] as const).map((id): OverlaySeries => ({
+    id,
+    label: overlayLabel[id],
+    from: overlayFrom[id],
+    peak: pastEvents.find((event) => event.id === id)?.peak?.start ?? null,
+    tone: id === accent ? 'accent' : 'past',
+  }))
+const peak1983 = pastEvents[0]!.peak
+const peak2017 = pastEvents[2]!.peak
+const before1983 = peak1983 ? story.historia.before1983(formatAnomaly(peak1983.icen)) : null
+const third2017 =
+  peak1983 && peak2017
+    ? story.historia.third2017(
+        formatAnomaly(peak2017.icen),
+        formatAnomaly(peak1983.icen),
+        peak2017.icen < peak1983.icen / 3,
+      )
+    : null
 const comparedEvents = pastEvents.filter((event) => event.peak && latestIcen)
 const historiaAnswer = latestIcen
   ? story.historia.answer(
@@ -386,6 +409,7 @@ useSiteSeo({
                 :marks="marks"
                 :level="latestIcen.icen"
                 :focus="focus"
+                :band-label="story.historia.overlay.band"
               />
             </ChartShell>
           </div>
@@ -419,6 +443,24 @@ useSiteSeo({
                 </figure>
               </template>
               <template v-if="step.id === '1997-98'">
+                <p>{{ story.historia.woodman }}</p>
+                <PaperCard :card="paperCard('igp-woodman-1997-lejos')" />
+                <figure class="units-figure">
+                  <IcenOverlay
+                    :records="icen.records"
+                    :series="overlaySeries('1982-83', '1997-98')"
+                    :pin="{
+                      seriesId: '1997-98',
+                      start: '1997-07',
+                      label: story.historia.overlay.lejos,
+                    }"
+                    :band-label="story.historia.overlay.band"
+                    :scrub-label="story.historia.overlay.scrub"
+                    :table-caption="story.historia.overlay.table('1982–83', '1997–98')"
+                  />
+                  <figcaption>{{ story.historia.overlay.caption }}</figcaption>
+                </figure>
+                <p v-if="before1983">{{ before1983 }}</p>
                 <p>{{ story.historia.damage8298 }}</p>
                 <figure class="units-figure">
                   <ScaleBars
@@ -430,6 +472,17 @@ useSiteSeo({
                 </figure>
               </template>
               <template v-if="step.id === '2017'">
+                <figure class="units-figure">
+                  <IcenOverlay
+                    :records="icen.records"
+                    :series="overlaySeries('1982-83', '2017')"
+                    :band-label="story.historia.overlay.band"
+                    :scrub-label="story.historia.overlay.scrub"
+                    :table-caption="story.historia.overlay.table('1982–83', '2016–17')"
+                  />
+                  <figcaption>{{ story.historia.overlay.caption }}</figcaption>
+                </figure>
+                <p v-if="third2017">{{ third2017 }}</p>
                 <p>{{ story.historia.low2017 }}</p>
                 <p>{{ story.historia.people }}</p>
               </template>

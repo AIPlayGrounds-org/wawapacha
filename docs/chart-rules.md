@@ -51,6 +51,17 @@ ended 90 days ago or more.
   texts are its caption. Scale bars share one scale from zero, with no break, so
   a small value stays a sliver beside a big one. `web/test/units.test.ts` checks
   that each drawn number appears in its claims.
+- A chart of the ICEN draws ENFEN's neutral band, −0,7 to +0,5 °C,
+  [icen-category-thresholds](../evidence/claims.toml), as a grey band named
+  "normal". The bounds live once, as `ICEN_NEUTRAL` in `web/app/utils/icen.ts`.
+- Two events are compared by overlaying them on one calendar axis: each line
+  starts in the same month of its own first year, and each carries its years
+  in its own tone under the month ticks. A month with no record breaks the
+  line. The overlays start in April, so the tail of the event before, such as
+  January 2016's +1,75 °C, does not open the line.
+- A note never crosses a line. A peak note goes above its dot, then above to
+  the right, above to the left, then below, whichever no line crosses. The
+  band's name and a pin note follow the same rule.
 
 ## Reading a value
 

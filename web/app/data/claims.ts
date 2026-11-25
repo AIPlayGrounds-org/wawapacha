@@ -453,6 +453,14 @@ const claimCards = {
       href: 'https://elcomercio.pe/archivo-elcomercio/lluvias-en-lima-inundaciones-en-el-norte-huaicos-en-el-peru-fenomenos-naturales-hace-100-anos-peru-decada-del-20-nnsp-noticia/',
     },
   ],
+  'igp-woodman-1997-lejos': [
+    {
+      outlet: 'IGP',
+      published: '1997-07-05',
+      lift: 'lejos de tener los niveles desastrosos que se presentaron en 1983',
+      href: 'https://repositorio.igp.gob.pe/bitstreams/0f44f604-6777-4978-9d0a-d97a42f45d53/download',
+    },
+  ],
   'enfen-co01-2017-probabilities': [
     {
       outlet: 'ENFEN',
