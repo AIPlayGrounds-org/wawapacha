@@ -65,7 +65,17 @@ const legend = computed(() => {
         >{{ place.name }}</span
       >
       <span v-if="warmest" class="warmest" :style="at(warmest.lon, warmest.lat)" aria-hidden="true">
-        <span>{{ warmest.label }}</span>
+        <svg class="chalk" viewBox="0 0 64 64">
+          <filter id="sea-map-chalk">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" />
+            <feDisplacementMap in="SourceGraphic" scale="2.5" />
+          </filter>
+          <path
+            filter="url(#sea-map-chalk)"
+            d="M9 35C6 19 21 6 37 8s23 15 19 30-22 22-35 18S5 41 11 26c3-7 9-12 16-14"
+          />
+        </svg>
+        <span class="warmest-label">{{ warmest.label }}</span>
       </span>
     </div>
     <div class="legend" aria-hidden="true">
@@ -91,15 +101,26 @@ const legend = computed(() => {
   --step-7: #f5a23c;
   --step-8: #fcd062;
   --step-9: #fff3b8;
-  --land-on-deep: #06191e;
+  --land-on-deep: #17241e;
   display: grid;
   gap: var(--space-3);
 }
 .sea-frame {
   position: relative;
+  isolation: isolate;
   width: 100%;
   background: var(--land-on-deep);
   overflow: hidden;
+}
+/* Grain over sea and land alike, so the map reads as one printed sheet. */
+.sea-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--grain);
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+  pointer-events: none;
 }
 .sea-cells {
   display: block;
@@ -146,6 +167,10 @@ const legend = computed(() => {
   fill: var(--step-9);
   background: var(--step-9);
 }
+.place,
+.warmest {
+  z-index: 1;
+}
 .place {
   position: absolute;
   line-height: 1;
@@ -153,7 +178,9 @@ const legend = computed(() => {
   padding-left: 10px;
   transform: translateY(-50%);
   color: var(--on-deep);
-  font-size: var(--text-label);
+  font-size: var(--text-meta);
+  font-style: italic;
+  letter-spacing: 0.16em;
   text-shadow:
     0 0 3px var(--land-on-deep),
     0 0 3px var(--land-on-deep);
@@ -171,26 +198,38 @@ const legend = computed(() => {
 }
 .warmest {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  border: 2px solid var(--deep);
-  border-radius: 50%;
-  outline: 2px solid var(--on-deep);
+  width: 56px;
+  height: 56px;
   transform: translate(-50%, -50%);
 }
-.warmest span {
+.chalk {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.chalk path {
+  fill: none;
+  stroke: var(--on-deep);
+  stroke-linecap: round;
+  stroke-width: 2.5;
+}
+.warmest-label {
   position: absolute;
-  right: calc(100% + 8px);
+  right: calc(100% + 4px);
   top: 50%;
-  padding: 2px 6px;
   transform: translateY(-50%);
-  background: color-mix(in srgb, var(--deep) 82%, transparent);
   color: var(--on-deep);
-  font-size: var(--text-meta);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: var(--text-title-sm);
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
-  line-height: 1.2;
+  letter-spacing: -0.02em;
+  line-height: 1;
   white-space: nowrap;
+  text-shadow:
+    0 0 6px var(--land-on-deep),
+    0 0 2px var(--land-on-deep);
 }
 .legend {
   display: flex;

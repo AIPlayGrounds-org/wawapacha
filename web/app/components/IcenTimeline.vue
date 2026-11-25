@@ -162,12 +162,14 @@ line {
   position: absolute;
   left: 50%;
   bottom: calc(100% + 6px);
-  padding: 1px 4px;
   transform: translateX(-50%);
-  border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--deep) 85%, transparent);
   color: var(--on-deep);
+  font-family: var(--font-display);
   font-size: var(--text-meta);
+  font-weight: 700;
+  text-shadow:
+    0 0 4px var(--deep),
+    0 0 2px var(--deep);
   font-variant-numeric: tabular-nums;
   line-height: 1.25;
   text-align: center;
@@ -196,7 +198,9 @@ line {
   border-top: 1px solid color-mix(in srgb, var(--on-deep-muted) 40%, transparent);
   color: var(--on-deep-muted);
   font-size: var(--text-label);
+  font-style: italic;
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
 }
 .decades span {
   position: absolute;

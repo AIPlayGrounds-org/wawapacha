@@ -142,51 +142,58 @@ useSiteSeo({
 
 <template>
   <div class="home">
-    <div class="on-stage">
+    <div class="scene scene--green">
       <SiteHeader />
+      <main id="main-content">
+        <section class="hero beat" aria-labelledby="home-title">
+          <h1 id="home-title">
+            <span class="ask">{{ story.hero.question }}</span>
+            <span class="answer"
+              ><span class="strip">{{ heroAnswer }}</span></span
+            >
+          </h1>
+          <p v-if="latestIcen" class="lead">
+            {{ story.hero.detail(latestIcenMonth!, formatDegrees(latestIcen.icen)) }}
+          </p>
+          <div v-if="latestIcen" class="figure figure--wide">
+            <ChartShell bare :dataset="icen" :summary="story.hero.chartSummary(icenSince)">
+              <IcenTimeline
+                :records="icen.records"
+                :marks="todayMark"
+                :level="latestIcen.icen"
+                :focus="null"
+              />
+            </ChartShell>
+          </div>
+        </section>
+      </main>
     </div>
 
-    <main id="main-content">
-      <section class="hero" aria-labelledby="home-title">
-        <h1 id="home-title">
-          <span class="ask">{{ story.hero.question }}</span>
-          <span class="answer">{{ heroAnswer }}</span>
-        </h1>
-        <p v-if="latestIcen" class="lead">
-          {{ story.hero.detail(latestIcenMonth!, formatDegrees(latestIcen.icen)) }}
-        </p>
-        <div v-if="latestIcen" class="on-stage figure">
-          <ChartShell bare :dataset="icen" :summary="story.hero.chartSummary(icenSince)">
-            <IcenTimeline
-              :records="icen.records"
-              :marks="todayMark"
-              :level="latestIcen.icen"
-              :focus="null"
-            />
-          </ChartShell>
+    <section id="calor" class="scene scene--blue" aria-labelledby="calor-title">
+      <div class="beat beat--split">
+        <div class="beat-text">
+          <h2 id="calor-title">
+            <span class="ask">{{ story.calor.question }}</span>
+            <span class="answer">{{ calorAnswer }}</span>
+          </h2>
+          <p v-if="weekLine" class="lead">{{ weekLine }}</p>
         </div>
-      </section>
-
-      <section id="calor" class="chapter" aria-labelledby="calor-title">
-        <h2 id="calor-title">
-          <span class="ask">{{ story.calor.question }}</span>
-          <span class="answer">{{ calorAnswer }}</span>
-        </h2>
-        <p v-if="weekLine" class="lead">{{ weekLine }}</p>
-        <div v-if="seaRecord" class="on-stage figure figure--map">
+        <div v-if="seaRecord" class="figure figure--map">
           <ChartShell bare :dataset="oisst" :summary="story.map.summary(formatDay(seaRecord.end))">
             <SeaMap :record="seaRecord" :warmest="mapWarmest" />
           </ChartShell>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section id="historia" class="chapter" aria-labelledby="historia-title">
+    <section id="historia" class="scene scene--ink" aria-labelledby="historia-title">
+      <div class="beat">
         <h2 id="historia-title">
           <span class="ask">{{ story.historia.question }}</span>
           <span class="answer">{{ historiaAnswer }}</span>
         </h2>
         <div v-if="latestIcen" class="scrolly">
-          <div class="on-stage scrolly-chart">
+          <div class="scrolly-chart">
             <ChartShell bare :dataset="icen" :summary="story.historia.chartSummary">
               <IcenTimeline
                 :records="icen.records"
@@ -213,10 +220,14 @@ useSiteSeo({
             </li>
           </ol>
         </div>
-        <p class="punch">{{ story.historia.punch }}</p>
-      </section>
+        <p class="punch">
+          <span class="strip">{{ story.historia.punch }}</span>
+        </p>
+      </div>
+    </section>
 
-      <section id="lluvia" class="chapter" aria-labelledby="lluvia-title">
+    <section id="lluvia" class="scene scene--green" aria-labelledby="lluvia-title">
+      <div class="beat">
         <h2 id="lluvia-title">
           <span class="ask">{{ story.lluvia.question }}</span>
           <span class="answer">{{ forecastTitle }}</span>
@@ -224,7 +235,7 @@ useSiteSeo({
         <template v-if="enfenRecord">
           <p class="lead">{{ messages.page.homeLead(enfenRecord.number, enfenRecord.year) }}</p>
           <p class="source">
-            <strong class="status">{{ enfenRecord.status }}.</strong>{{ ' ' }}
+            <strong class="status strip">{{ enfenRecord.status }}.</strong>{{ ' ' }}
             <a :href="enfenRecord.url" target="_blank" rel="noopener">
               {{
                 messages.page.forecastSource(
@@ -239,9 +250,11 @@ useSiteSeo({
             {{ messages.panels.enfen.nextDueStale(formatDay(enfenRecord.end)) }}
           </p>
         </template>
-      </section>
+      </div>
+    </section>
 
-      <section id="hacer" class="chapter" aria-labelledby="hacer-title">
+    <section id="hacer" class="scene scene--red" aria-labelledby="hacer-title">
+      <div class="beat">
         <h2 id="hacer-title">
           <span class="ask">{{ story.hacer.question }}</span>
           <span class="answer">{{ messages.page.actionTitle }}</span>
@@ -256,123 +269,148 @@ useSiteSeo({
             {{ messages.page.senamhiLink }}<span class="sr-only">{{ messages.page.newTab }}</span>
           </a>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
 
-    <footer class="site-footer">
-      <NuxtLink class="brand" to="/">{{ messages.page.brand }}</NuxtLink>
-      <span>{{ messages.page.officialSources }}</span>
-      <NuxtLink to="/metodologia">{{ messages.page.methodologyLink }}</NuxtLink>
+    <footer class="scene scene--ink">
+      <div class="site-footer">
+        <NuxtLink class="brand" to="/">{{ messages.page.brand }}</NuxtLink>
+        <span>{{ messages.page.officialSources }}</span>
+        <NuxtLink to="/metodologia">{{ messages.page.methodologyLink }}</NuxtLink>
+      </div>
     </footer>
   </div>
 </template>
 
 <style scoped>
-.home {
-  --stage-line: color-mix(in srgb, var(--on-deep-muted) 30%, transparent);
-  min-height: 100svh;
-  background: var(--deep);
-  color: var(--on-deep);
-}
-/* Shared components read the page tokens, so the stage restates them in its own colours. */
-.on-stage {
-  --text: var(--on-deep);
-  --muted: var(--on-deep-muted);
-  --faint: var(--on-deep-muted);
-  --border: var(--stage-line);
+/* Each scene restates the shared tokens in its own colours, so SiteHeader, ChartShell
+   and the charts need no dark variant. */
+.scene {
+  --deep: var(--ground);
+  --on-deep: var(--on-scene);
+  --on-deep-muted: var(--on-scene-muted);
+  --text: var(--on-scene);
+  --muted: var(--on-scene-muted);
+  --faint: var(--on-scene-muted);
+  --border: color-mix(in srgb, var(--on-scene) 18%, transparent);
   --surface: transparent;
-  --band: color-mix(in srgb, var(--on-deep) 8%, transparent);
+  --band: color-mix(in srgb, var(--on-scene) 8%, transparent);
   --accent: var(--warm-on-deep);
-  --link: var(--on-deep);
-  --focus: var(--warm-on-deep);
-  color: var(--on-deep);
+  --link: var(--on-scene);
+  --focus: var(--on-scene);
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 80% at 20% 0%, color-mix(in srgb, white 7%, transparent), transparent 60%),
+    var(--ground);
+  color: var(--on-scene);
+}
+.scene::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--grain);
+  mix-blend-mode: overlay;
+  opacity: 0.22;
+  pointer-events: none;
+}
+.scene--green {
+  --ground: var(--scene-green);
+}
+.scene--blue {
+  --ground: var(--scene-blue);
+}
+.scene--ink {
+  --ground: var(--scene-ink);
+}
+.scene--red {
+  --ground: var(--scene-red);
+  --on-deep-muted: var(--on-red-muted);
+  --muted: var(--on-red-muted);
 }
 a {
-  color: var(--on-deep);
-}
-a:focus-visible {
-  outline-color: var(--warm-on-deep);
+  color: var(--on-scene);
 }
 h1,
 h2,
 p {
   margin: 0;
 }
-.hero,
-.chapter {
+.beat {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--space-24) var(--gutter);
+  padding: clamp(5rem, 4rem + 6vw, 10rem) var(--gutter);
 }
 .hero {
-  padding-top: var(--space-16);
+  padding-top: clamp(3rem, 2rem + 6vw, 7rem);
 }
-.hero > * + *,
-.chapter > * + * {
-  margin-top: var(--space-6);
+.beat > * + *,
+.beat-text > * + * {
+  margin-top: var(--space-8);
 }
-.hero > .figure,
-.chapter > .figure,
-.chapter > .scrolly {
-  margin-top: var(--space-12);
+.beat > .figure,
+.beat > .scrolly {
+  margin-top: var(--space-16);
 }
+
+/* Two voices: the reader's question in a light serif, the answer in a heavy grotesque. */
 .ask,
 .answer {
   display: block;
-  max-width: 22ch;
 }
 .ask {
-  color: var(--warm-on-deep);
-  font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
-  font-style: italic;
-  font-weight: 400;
-  line-height: 1.25;
+  max-width: 30ch;
+  font-size: clamp(1.375rem, 1rem + 1.5vw, 2.25rem);
+  font-weight: 300;
+  line-height: 1.2;
 }
 .answer {
-  margin-top: var(--space-3);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.05;
+  max-width: 17ch;
+  margin-top: var(--space-4);
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
 }
 h1 .answer {
-  font-size: clamp(2.5rem, 1.5rem + 4.5vw, 4.5rem);
+  max-width: 15ch;
+  font-size: clamp(2.75rem, 1.2rem + 6.4vw, 7rem);
+  line-height: 1.04;
 }
 h2 .answer {
-  font-size: clamp(1.875rem, 1.3rem + 2.4vw, 3rem);
+  font-size: clamp(2.25rem, 1.2rem + 4vw, 4.5rem);
+}
+/* A torn paper strip under the key words; each line gets its own piece. */
+.strip {
+  padding: 0.04em 0.16em 0.1em;
+  margin-left: -0.16em;
+  background: var(--strip) center / 100% 100% no-repeat;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 .lead {
-  max-width: var(--reading-width);
-  color: var(--on-deep-muted);
-  font-size: var(--text-lead);
+  max-width: 36rem;
+  color: var(--on-scene-muted);
+  font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem);
   line-height: 1.5;
 }
 .figure {
   min-width: 0;
 }
-.figure--map {
-  max-width: 52rem;
+
+/* Where: the words on the left, the sea on the right. */
+.beat--split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: var(--space-12);
 }
-.source {
-  color: var(--on-deep-muted);
-  font-size: var(--text-meta);
+.beat--split .answer {
+  max-width: 12ch;
 }
-.source a {
-  color: inherit;
-}
-.status {
-  color: var(--on-deep);
-}
-.punch {
-  max-width: 20ch;
-  color: var(--warm-on-deep);
-  font-size: clamp(2rem, 1.3rem + 3vw, 3.5rem);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
-}
-.chapter > .punch {
-  margin-top: var(--space-16);
-}
+
+/* History: the steps scroll past one chart. */
 .scrolly {
   display: grid;
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
@@ -398,43 +436,80 @@ h2 .answer {
   display: grid;
   align-content: center;
   gap: var(--space-4);
-  max-width: var(--reading-width);
-  min-height: 60vh;
+  max-width: 30rem;
+  min-height: 70vh;
   padding: var(--space-8) 0;
-  color: var(--on-deep-muted);
+  color: var(--on-scene-muted);
   font-size: var(--text-lead);
   line-height: 1.5;
   transition: opacity 200ms ease-out;
 }
 .step-lead {
-  color: var(--on-deep);
-  font-size: var(--text-title);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  color: var(--on-scene);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
 }
+.punch {
+  max-width: 14ch;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 1.4rem + 4.4vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+.beat > .punch {
+  margin-top: var(--space-24);
+}
+
+/* Rain: the official status is the one thing to read. */
+.source {
+  max-width: 40rem;
+  color: var(--on-scene-muted);
+  font-size: var(--text-body);
+  line-height: 1.7;
+}
+.source a {
+  color: inherit;
+}
+.status {
+  color: var(--on-scene);
+  font-family: var(--font-display);
+  font-size: var(--text-lead);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* What to do: two ways out to the official sources. */
 .actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
 }
-.chapter > .actions {
-  margin-top: var(--space-8);
+.beat > .actions {
+  margin-top: var(--space-12);
 }
 .actions a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  padding: 0 var(--space-5);
-  border: 1px solid var(--on-deep);
-  border-radius: var(--radius-sm);
-  font-weight: 600;
+  min-height: 52px;
+  padding: 0 var(--space-6);
+  border: 2px solid var(--on-scene);
+  font-family: var(--font-display);
+  font-size: var(--text-lead);
+  font-weight: 700;
+  letter-spacing: -0.01em;
   text-decoration: none;
 }
 .actions a:first-child {
-  border-color: var(--warm-on-deep);
-  background: var(--warm-on-deep);
-  color: var(--deep);
+  background: var(--on-scene);
+  color: var(--scene-red);
+}
+.actions a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 .site-footer {
   display: flex;
@@ -444,9 +519,8 @@ h2 .answer {
   gap: var(--space-6);
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: var(--space-5) var(--gutter);
-  border-top: 1px solid var(--stage-line);
-  color: var(--on-deep-muted);
+  padding: var(--space-8) var(--gutter);
+  color: var(--on-scene-muted);
   font-size: var(--text-meta);
 }
 .site-footer a {
@@ -454,12 +528,20 @@ h2 .answer {
   align-items: center;
   min-height: 44px;
 }
-@media (max-width: 860px) {
-  .hero,
-  .chapter {
-    padding-top: var(--space-16);
-    padding-bottom: var(--space-16);
+.site-footer .brand {
+  color: var(--on-scene);
+  font-family: var(--font-display);
+  font-size: var(--text-title-sm);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+}
+@media (max-width: 960px) {
+  .beat--split {
+    grid-template-columns: minmax(0, 1fr);
   }
+}
+@media (max-width: 860px) {
   .scrolly {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
@@ -472,8 +554,8 @@ h2 .answer {
     grid-column: 1;
     margin: 0 calc(var(--gutter) * -1);
     padding: var(--space-6) var(--gutter) var(--space-3);
-    border-bottom: 1px solid var(--stage-line);
-    background: var(--deep);
+    border-bottom: 1px solid var(--border);
+    background: var(--ground);
   }
   .scrolly-steps {
     grid-row: 2;
@@ -481,7 +563,7 @@ h2 .answer {
 }
 @media (scripting: enabled) {
   .scrolly-step {
-    opacity: 0.4;
+    opacity: 0.35;
   }
   .scrolly-step.is-active {
     opacity: 1;

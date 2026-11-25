@@ -40,9 +40,9 @@ const items = [
 .brand {
   flex: none;
   color: var(--text);
-  font-family: var(--font);
+  font-family: var(--font-display);
   font-size: var(--text-title-sm);
-  font-weight: 600;
+  font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;
   text-decoration: none;
