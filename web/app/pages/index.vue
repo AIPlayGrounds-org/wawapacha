@@ -18,6 +18,34 @@ const oisst = await useDataset('noaa-oisst', cropOisst)
 const weekly = await useDataset('noaa-cpc-nino-weekly')
 const icen = await useDataset('enfen-icen')
 const enfen = await useDataset('enfen-communique')
+// One stripe per year since 1950: the mean Niño 3.4 anomaly, built on the server so the payload stays small.
+const oniYears = await useDataset(
+  'noaa-cpc-oni',
+  (dataset) => {
+    const byYear = new Map<number, number[]>()
+    for (const record of dataset.records) {
+      const [year, month] = record.start.split('-').map(Number) as [number, number]
+      const centre = month === 12 ? year + 1 : year
+      if (centre < 1950) continue
+      byYear.set(centre, [...(byYear.get(centre) ?? []), record.anomaly])
+    }
+    return [...byYear].map(([year, values]) => ({
+      year,
+      step: Math.max(
+        1,
+        Math.min(
+          9,
+          Math.round(
+            ((Math.max(-2, Math.min(2, values.reduce((a, b) => a + b, 0) / values.length)) + 2) /
+              4) *
+              8,
+          ) + 1,
+        ),
+      ),
+    }))
+  },
+  'home:oni-years',
+)
 
 const latestIcen = icen.records.at(-1)
 const latestIcenMonth = latestIcen ? formatMonth(latestIcen.start) : null
@@ -142,10 +170,11 @@ useSiteSeo({
 
 <template>
   <div class="home">
-    <div class="scene scene--green">
+    <div class="scene scene--a">
       <SiteHeader />
       <main id="main-content">
         <section class="hero beat" aria-labelledby="home-title">
+          <p class="kicker">01 / 05 · {{ story.kickers[0] }}</p>
           <h1 id="home-title">
             <span class="ask">{{ story.hero.question }}</span>
             <span class="answer"
@@ -165,16 +194,30 @@ useSiteSeo({
               />
             </ChartShell>
           </div>
+          <div
+            class="stripes"
+            role="img"
+            :aria-label="story.hero.stripes(oniYears[0]!.year, oniYears.at(-1)!.year)"
+          >
+            <i v-for="item in oniYears" :key="item.year" :class="`r${item.step}`" />
+          </div>
+          <p class="kicker caption" aria-hidden="true">
+            <span>{{ oniYears[0]!.year }}</span
+            ><span>{{ oniYears.at(-1)!.year }}</span>
+          </p>
         </section>
       </main>
     </div>
 
-    <section id="calor" class="scene scene--blue" aria-labelledby="calor-title">
+    <section id="calor" class="scene scene--sea" aria-labelledby="calor-title">
       <div class="beat beat--split">
         <div class="beat-text">
+          <p class="kicker">02 / 05 · {{ story.kickers[1] }}</p>
           <h2 id="calor-title">
             <span class="ask">{{ story.calor.question }}</span>
-            <span class="answer">{{ calorAnswer }}</span>
+            <span class="answer"
+              ><span class="strip">{{ calorAnswer }}</span></span
+            >
           </h2>
           <p v-if="weekLine" class="lead">{{ weekLine }}</p>
         </div>
@@ -186,8 +229,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="historia" class="scene scene--ink" aria-labelledby="historia-title">
+    <section id="historia" class="scene scene--a" aria-labelledby="historia-title">
       <div class="beat">
+        <p class="kicker">03 / 05 · {{ story.kickers[2] }}</p>
         <h2 id="historia-title">
           <span class="ask">{{ story.historia.question }}</span>
           <span class="answer">{{ historiaAnswer }}</span>
@@ -226,8 +270,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="lluvia" class="scene scene--green" aria-labelledby="lluvia-title">
+    <section id="lluvia" class="scene scene--b" aria-labelledby="lluvia-title">
       <div class="beat">
+        <p class="kicker">04 / 05 · {{ story.kickers[3] }}</p>
         <h2 id="lluvia-title">
           <span class="ask">{{ story.lluvia.question }}</span>
           <span class="answer">{{ forecastTitle }}</span>
@@ -235,7 +280,9 @@ useSiteSeo({
         <template v-if="enfenRecord">
           <p class="lead">{{ messages.page.homeLead(enfenRecord.number, enfenRecord.year) }}</p>
           <p class="source">
-            <strong class="status strip">{{ enfenRecord.status }}.</strong>{{ ' ' }}
+            <strong class="status"
+              ><i class="dot" aria-hidden="true" />{{ enfenRecord.status }}.</strong
+            >{{ ' ' }}
             <a :href="enfenRecord.url" target="_blank" rel="noopener">
               {{
                 messages.page.forecastSource(
@@ -253,8 +300,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="hacer" class="scene scene--red" aria-labelledby="hacer-title">
+    <section id="hacer" class="scene scene--deep" aria-labelledby="hacer-title">
       <div class="beat">
+        <p class="kicker">05 / 05 · {{ story.kickers[4] }}</p>
         <h2 id="hacer-title">
           <span class="ask">{{ story.hacer.question }}</span>
           <span class="answer">{{ messages.page.actionTitle }}</span>
@@ -272,7 +320,7 @@ useSiteSeo({
       </div>
     </section>
 
-    <footer class="scene scene--ink">
+    <footer class="scene scene--b">
       <div class="site-footer">
         <NuxtLink class="brand" to="/">{{ messages.page.brand }}</NuxtLink>
         <span>{{ messages.page.officialSources }}</span>
@@ -286,6 +334,7 @@ useSiteSeo({
 /* Each scene restates the shared tokens in its own colours, so SiteHeader, ChartShell
    and the charts need no dark variant. */
 .scene {
+  --strip-kind: var(--strip-hot);
   --deep: var(--ground);
   --on-deep: var(--on-scene);
   --on-deep-muted: var(--on-scene-muted);
@@ -295,14 +344,14 @@ useSiteSeo({
   --border: color-mix(in srgb, var(--on-scene) 18%, transparent);
   --surface: transparent;
   --band: color-mix(in srgb, var(--on-scene) 8%, transparent);
-  --accent: var(--warm-on-deep);
+  --accent: var(--scene-accent);
+  --warm-on-deep: var(--ramp-7);
+  --scene-cold: var(--ramp-3);
   --link: var(--on-scene);
   --focus: var(--on-scene);
   position: relative;
   isolation: isolate;
-  background:
-    radial-gradient(120% 80% at 20% 0%, color-mix(in srgb, white 7%, transparent), transparent 60%),
-    var(--ground);
+  background: var(--ground);
   color: var(--on-scene);
 }
 .scene::before {
@@ -312,25 +361,35 @@ useSiteSeo({
   inset: 0;
   background: var(--grain);
   mix-blend-mode: overlay;
-  opacity: 0.22;
+  opacity: 0.12;
   pointer-events: none;
 }
-.scene--green {
-  --ground: var(--scene-green);
+.scene--a {
+  --ground: var(--scene-a);
 }
-.scene--blue {
-  --ground: var(--scene-blue);
+.scene--b {
+  --ground: var(--scene-b);
 }
-.scene--ink {
-  --ground: var(--scene-ink);
+/* The sea scene speaks in cold: a teal strip and accent. */
+.scene--sea {
+  --ground: var(--scene-sea);
+  --scene-accent: var(--scene-cold);
+  --strip-kind: var(--strip-cold);
 }
-.scene--red {
-  --ground: var(--scene-red);
-  --on-deep-muted: var(--on-red-muted);
-  --muted: var(--on-red-muted);
+/* The last scene is the call to act: deep teal with an amber accent. */
+.scene--deep {
+  --ground: var(--scene-deep);
+  --on-scene: var(--on-deep-scene);
+  --on-scene-muted: var(--on-deep-scene-muted);
+  --scene-accent: #ffd27a;
+}
+.scene + .scene {
+  border-top: 1px solid var(--border);
 }
 a {
   color: var(--on-scene);
+  text-decoration-color: var(--scene-accent);
+  text-decoration-thickness: 2px;
 }
 h1,
 h2,
@@ -354,6 +413,27 @@ p {
   margin-top: var(--space-16);
 }
 
+.kicker {
+  color: var(--on-scene-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.kicker.caption {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+}
+.dot {
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  margin-right: 0.5em;
+  border-radius: 50%;
+  background: var(--scene-accent);
+}
 /* Two voices: the reader's question in a light serif, the answer in a heavy grotesque. */
 .ask,
 .answer {
@@ -385,9 +465,46 @@ h2 .answer {
 .strip {
   padding: 0.04em 0.16em 0.1em;
   margin-left: -0.16em;
-  background: var(--strip) center / 100% 100% no-repeat;
+  background: var(--strip-kind) center / 100% 100% no-repeat;
+  color: var(--on-strip);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+/* Warming stripes: one band per year, cold to warm, closing the first scene. */
+.stripes {
+  display: flex;
+  height: 4rem;
+  margin-top: var(--space-16);
+}
+.stripes i {
+  flex: 1;
+}
+.r1 {
+  background: var(--ramp-1);
+}
+.r2 {
+  background: var(--ramp-2);
+}
+.r3 {
+  background: var(--ramp-3);
+}
+.r4 {
+  background: var(--ramp-4);
+}
+.r5 {
+  background: var(--ramp-5);
+}
+.r6 {
+  background: var(--ramp-6);
+}
+.r7 {
+  background: var(--ramp-7);
+}
+.r8 {
+  background: var(--ramp-8);
+}
+.r9 {
+  background: var(--ramp-9);
 }
 .lead {
   max-width: 36rem;
@@ -475,7 +592,6 @@ h2 .answer {
   color: inherit;
 }
 .status {
-  color: var(--on-scene);
   font-family: var(--font-display);
   font-size: var(--text-lead);
   font-weight: 700;
@@ -505,11 +621,11 @@ h2 .answer {
 }
 .actions a:first-child {
   background: var(--on-scene);
-  color: var(--scene-red);
+  color: var(--ground);
 }
-.actions a:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
+.actions a:hover,
+.actions a:focus-visible {
+  border-color: var(--scene-accent);
 }
 .site-footer {
   display: flex;

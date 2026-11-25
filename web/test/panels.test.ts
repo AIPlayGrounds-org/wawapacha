@@ -49,7 +49,7 @@ const emptyRecords = <T extends { records: unknown[] }>(dataset: T) =>
   }) as unknown as T
 
 const mountHome = async (enfen = enfenFixture) => {
-  const ids = ['noaa-oisst', 'noaa-cpc-nino-weekly', 'enfen-icen'] as const
+  const ids = ['noaa-oisst', 'noaa-cpc-nino-weekly', 'enfen-icen', 'noaa-cpc-oni'] as const
   const datasets = new Map(
     await Promise.all(ids.map(async (id) => [id, await loadDataset(id)] as const)),
   )

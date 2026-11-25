@@ -9,8 +9,10 @@ import type { DatasetFor, DatasetId, DatasetRecordMap } from '~/types/datasets'
 export const useDataset = async <Id extends DatasetId, Shaped = DatasetFor<Id>>(
   id: Id,
   shape?: (dataset: DatasetFor<Id>) => Shaped,
+  /** Names the payload entry. Give a shape its own key when another page loads the same dataset unshaped. */
+  key = `dataset:${id}`,
 ): Promise<Shaped> => {
-  const { data, error } = await useAsyncData<Shaped>(`dataset:${id}`, async () => {
+  const { data, error } = await useAsyncData<Shaped>(key, async () => {
     const isServer = (import.meta as ImportMeta & { readonly server: boolean }).server
     if (!isServer) {
       throw new Error(`[useDataset] data/${id}.json was not loaded in the server payload`)

@@ -27,7 +27,7 @@ read those tokens; page styles do not add local colour or type scales.
 | Families          | Source Serif 4 for questions, prose and data labels. Inter Tight for answers, the brand, chart and map values, and buttons.                                                                                                |
 | Weights           | Serif: 300 for home questions, 400 for body, 600 for emphasis. Inter Tight: 700 for values, 800 for answers and the brand.                                                                                                 |
 | Body and metadata | 16px body; 14px metadata; 12px labels. Home prose is 20px.                                                                                                                                                                 |
-| Colour            | One ocean-blue accent. Tinted neutral roles and data ramps use the shared palette. Warm and cold hues describe data direction, not danger.                                                                                 |
+| Colour            | One ocean-blue accent on inner pages; the home scenes add terracotta and teal. Tinted neutral roles and data ramps use the shared palette. Warm and cold hues describe data direction, not danger.                         |
 | Surfaces          | The paper, sea, sand and raised-surface roles separate evidence groups. Borders carry structure; shadows mark raised status only.                                                                                          |
 | Spacing           | The 4px steps from `--space-1` through `--space-24` group content before surface treatment.                                                                                                                                |
 | Targets and focus | Interactive targets are at least 44px high. `:focus-visible` uses the accent outline.                                                                                                                                      |
@@ -36,20 +36,27 @@ read those tokens; page styles do not add local colour or type scales.
 
 ## The home scenes
 
-Each home beat is a full-bleed scene on its own ground: green for the opening
-and the rain beat, blue for the sea, ink for history and the footer, brick red
-for what to do. Every scene carries the same grain and a soft highlight, so the
-page reads as one printed piece. A `.scene` restates the shared tokens for its
+Each home beat is a full-bleed scene on near-white paper and ink, so the data
+carries the colour. The opening, history and rain scenes sit on paper, the sea
+scene on a pale sea tint, and the last scene, what to do, on deep teal. With a
+dark system theme the paper becomes charcoal and the ink ivory. Every scene
+carries the same faint grain. A `.scene` restates the shared tokens for its
 ground, so `ChartShell`, `SiteHeader` and the charts need no dark variant. Warm
 tones mark water above normal and blue marks water below it.
 
-| Element    | Rule                                                                                                                       |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Beat       | The question in light serif, then the answer as a heavy Inter Tight heading. No kicker, count or rail.                     |
-| Strip      | A torn red strip sits behind the few words the story turns on: the opening answer, the punch line and the official status. |
-| Map        | Place names in spaced italic serif. A hand-drawn chalk ring marks the warmest point, with its value beside it.             |
-| Annotation | A chart labels only the marks its beat talks about, on the chart where the value sits. No legend to consult.               |
-| Scrolly    | One chart stays on screen while its steps scroll past. Each step brings one mark forward and dims the rest.                |
+Two accents split the scenes by temperature: terracotta for what is hot and
+official, teal for the sea. The last scene uses amber on teal.
+
+| Element    | Rule                                                                                                                                                    |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Kicker     | A small IBM Plex Mono label above each question: "01 / 05 · Estado del mar". Metadata and counts use mono; no other text does.                          |
+| Beat       | The question in light serif, then the answer as a heavy Inter Tight heading.                                                                            |
+| Strip      | A torn strip sits behind the few words the story turns on: the opening answer, the sea answer and the punch line. Terracotta, or teal in the sea scene. |
+| Stripes    | Under the opening chart, one stripe per year since 1950 from the mean Niño 3.4 anomaly, cold to warm, with the first and last year below.               |
+| Status     | The official status carries a terracotta dot. The communiqué link is underlined in the scene accent.                                                    |
+| Map        | A dark sheet of its own. Place names in spaced italic serif. A hand-drawn chalk ring marks the warmest point, with its value beside it.                 |
+| Annotation | A chart labels only the marks its beat talks about, on the chart where the value sits. No legend to consult.                                            |
+| Scrolly    | One chart stays on screen while its steps scroll past. Each step brings one mark forward and dims the rest.                                             |
 
 ## Layout
 

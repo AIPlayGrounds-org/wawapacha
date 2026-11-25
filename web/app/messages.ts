@@ -133,6 +133,7 @@ export const messages = {
     officialSources: 'Fuentes oficiales',
   },
   story: {
+    kickers: ['Estado del mar', 'Dónde está el calor', 'Historia', 'Lluvia', 'Qué hacer'],
     hero: {
       question: '¿Qué tan caliente está el mar frente al Perú?',
       answer: (above: string[], since: string) =>
@@ -142,6 +143,8 @@ export const messages = {
             ? `Más que nunca desde ${since}, salvo en ${listFormat.format(above)}.`
             : `Lo superaron ${above.length} episodios desde ${since}.`,
       empty: 'Sin datos del ICEN',
+      stripes: (from: number, to: number) =>
+        `Una franja por año, de ${from} a ${to}: azul, mar más frío que lo normal; naranja, más caliente.`,
       detail: (month: string, value: string) =>
         `En ${month}, el índice oficial del Perú marcó ${degrees(value)} sobre lo normal.`,
       chartSummary: (since: string) =>

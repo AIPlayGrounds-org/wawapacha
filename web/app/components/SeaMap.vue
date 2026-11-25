@@ -102,6 +102,8 @@ const legend = computed(() => {
   --step-8: #fcd062;
   --step-9: #fff3b8;
   --land-on-deep: #17241e;
+  --map-on: #f6f7f4;
+  --map-ring: #ff9a5a;
   display: grid;
   gap: var(--space-3);
 }
@@ -177,7 +179,7 @@ const legend = computed(() => {
   white-space: nowrap;
   padding-left: 10px;
   transform: translateY(-50%);
-  color: var(--on-deep);
+  color: var(--map-on);
   font-size: var(--text-meta);
   font-style: italic;
   letter-spacing: 0.16em;
@@ -193,7 +195,7 @@ const legend = computed(() => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--on-deep);
+  background: var(--map-on);
   transform: translateY(-50%);
 }
 .warmest {
@@ -210,7 +212,7 @@ const legend = computed(() => {
 }
 .chalk path {
   fill: none;
-  stroke: var(--on-deep);
+  stroke: var(--map-ring);
   stroke-linecap: round;
   stroke-width: 2.5;
 }
@@ -219,7 +221,7 @@ const legend = computed(() => {
   right: calc(100% + 4px);
   top: 50%;
   transform: translateY(-50%);
-  color: var(--on-deep);
+  color: var(--map-on);
   font-family: var(--font-display);
   font-size: var(--text-title-sm);
   font-weight: 800;
