@@ -68,19 +68,19 @@ const verifiedClaims = {
   'enfen-co17-next-2026-10-15':
     'El Comunicado Oficial ENFEN N° 17-2026 anuncia que el próximo comunicado oficial se emitirá el jueves 15 de octubre de 2026.',
   'enfen-co20-coast-extraordinaria-feb2027':
-    'El Comunicado Oficial ENFEN N° 20-2026 dice que El Niño Costero (región Niño 1+2), iniciado en marzo de 2026, se mantendría con magnitud extraordinaria hasta febrero de 2027 y se debilitaría progresivamente hasta julio de 2027.',
+    'En su comunicado 20-2026, ENFEN prevé que El Niño Costero, iniciado en marzo de 2026, siga con magnitud extraordinaria hasta febrero de 2027 y se debilite poco a poco hasta julio de 2027.',
   'enfen-co20-nov-jan-rain':
-    'De noviembre de 2026 a enero de 2027 el Comunicado Oficial ENFEN N° 20-2026 prevé lluvias por encima de lo normal en la costa norte, la sierra norte occidental, la costa central y la sierra central occidental, con más episodios de intensidad moderada a fuerte, en particular en la costa norte.',
+    'De noviembre de 2026 a enero de 2027, ENFEN prevé más lluvia de lo normal en la costa norte y central y en la sierra occidental norte y central, con más episodios de intensidad moderada a fuerte, sobre todo en la costa norte.',
   'enfen-co20-summer2027-rain':
-    'Para el verano de 2027 el Comunicado Oficial ENFEN N° 20-2026 prevé lluvias por encima de lo normal a lo largo de toda la costa, la sierra norte occidental y la sierra central occidental, más intensas y frecuentes en la costa norte.',
+    'Para el verano de 2027, ENFEN prevé más lluvia de lo normal en toda la costa y en la sierra occidental norte y central, más intensa y más frecuente en la costa norte.',
   'enfen-co20-rivers':
-    'El Comunicado Oficial ENFEN N° 20-2026 prevé caudales superiores a lo normal en los ríos de la costa norte, como el Tumbes, el Chira, el Piura, La Leche y el Jequetepeque, muy superiores en el Tumbes y el Piura, y desde enero de 2027 también en el Chillón, el Rímac, el Lurín, el Pisco y el Ica.',
+    'En su comunicado 20-2026, ENFEN prevé caudales superiores a lo normal en los ríos de la costa norte, como el Tumbes, el Chira, el Piura, La Leche y el Jequetepeque, muy superiores en el Tumbes y el Piura, y desde enero de 2027 también en el Chillón, el Rímac, el Lurín, el Pisco y el Ica.',
   'enfen-co20-air-temperature-records':
-    'El Comunicado Oficial ENFEN N° 20-2026 prevé temperaturas del aire muy superiores a lo habitual en toda la costa peruana, con nuevos récords hacia el verano.',
+    'En su comunicado 20-2026, ENFEN prevé temperaturas del aire muy superiores a lo habitual en toda la costa peruana, con nuevos récords hacia el verano.',
   'enfen-co20-waves-dec-jan':
-    'Para diciembre de 2026 y enero de 2027 el Comunicado Oficial ENFEN N° 20-2026 prevé una mayor probabilidad de oleajes anómalos del norte que, con el mar por encima de su nivel medio, aumentaría el riesgo de inundación y erosión costera, principalmente en playas de baja pendiente.',
+    'Para diciembre de 2026 y enero de 2027, ENFEN prevé más probabilidad de oleajes anómalos del norte que, con el mar por encima de su nivel medio, aumentarían el riesgo de inundación y erosión costera, sobre todo en playas de baja pendiente.',
   'enfen-co20-recommendation':
-    'El Comunicado Oficial ENFEN N° 20-2026 recomienda a la población de zonas expuestas a lluvias intensas, inundaciones y movimientos en masa reforzar la protección de sus viviendas y estar alerta a la información de las autoridades locales.',
+    'En su comunicado 20-2026, ENFEN recomienda a quienes viven en zonas expuestas a lluvias intensas, inundaciones y movimientos en masa reforzar la protección de sus viviendas y estar alerta a la información de las autoridades locales.',
   'enfen-co01-vigilancia-2026-01-15':
     'El 15 de enero de 2026, en el Comunicado Oficial ENFEN N° 01-2026, ENFEN cambió el estado del sistema de alerta de "No Activo" a "Vigilancia de El Niño Costero".',
   'enfen-co03-alerta-2026-02-13':
@@ -189,6 +189,22 @@ const verifiedClaims = {
     'CHIRPS3 es de dominio público, registrado con Creative Commons, y se licencia bajo Creative Commons Atribución 4.0 Internacional.',
   'chirps-daily-grid-not-finer':
     'La malla de 0,05° de los productos diarios de CHIRPS3 no indica que los datos de ERA5 o IMERG usados para la desagregación temporal contengan información a esa resolución.',
+  'icen-plain-definition':
+    'El ICEN es el promedio de tres meses de cuánto se aparta de lo normal la temperatura de la superficie del mar en la región Niño 1+2.',
+  'nino-1-2-box':
+    'La región Niño 1+2 es una caja de mar entre 0° y 10° de latitud sur y entre 90° y 80° de longitud oeste.',
+  'coastal-event-plain-criterion':
+    'ENFEN llama El Niño Costero al periodo en que el ICEN marca condiciones cálidas durante al menos tres meses seguidos.',
+  'icen-extraordinary-threshold':
+    'En la escala de ENFEN, un ICEN mayor que 3,5 es una condición cálida extraordinaria; mayor que 2,1, fuerte; mayor que 1,3, moderada; y mayor que 0,5, débil.',
+  'impact-2017-plain':
+    'ENFEN calificó El Niño Costero de 2017 como de magnitud moderada y dice que, por sus lluvias e inundaciones, se puede considerar el tercer Fenómeno El Niño más intenso de al menos los últimos cien años para el Perú.',
+  'impact-2017-people':
+    'Las cifras de INDECI al 28 de junio de 2017 para la temporada de lluvias de diciembre de 2016 a junio de 2017 son 159 fallecidos, 283 152 damnificados y 1 432 867 afectados.',
+  'forecast-uncertainty-plain':
+    'Las alertas de ENFEN se basan en pronósticos probabilísticos, con incertidumbre, y se actualizan con nuevas observaciones y con las predicciones de los modelos.',
+  'icen-revises-plain':
+    'El último ICEN se calcula con un dato en tiempo real que cambia al mes siguiente, por eso los valores recientes pueden variar un poco.',
 } as const
 
 export type ClaimId = keyof typeof verifiedClaims

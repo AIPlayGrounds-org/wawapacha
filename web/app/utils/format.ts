@@ -13,6 +13,14 @@ const dischargeFormat = new Intl.NumberFormat('es-PE', {
   maximumFractionDigits: 2,
 })
 
+const degreesFormat = new Intl.NumberFormat('es', {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+})
+
+/** «27,5»: one decimal and no plus sign, for a value the sentence already places. */
+export const formatDegrees = (value: number) => degreesFormat.format(value).replace('-', '−')
+
 /** «+0,5» o «−0,5»: un decimal y el signo menos tipográfico. */
 export const formatValue = (value: number) => valueFormat.format(value).replace('-', '−')
 
