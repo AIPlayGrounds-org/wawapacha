@@ -1036,6 +1036,9 @@ date_checked = "2026-10-10"
 ref = "https://enfen.imarpe.gob.pe/download/informe-tecnico-enfen-ano-12-n17-al-25-de-setiembre-de-2026/"
 locator = "Informe Técnico ENFEN Año 12 N° 17, PDF p. 23, first paragraph, sentence 1"
 quote = "El modelo IA pronostica valores positivos del índice E, por lo pronto, hasta julio de 2027, dichos valores son comparables al observado en el evento El Niño 1997/1998."
+outlet = "ENFEN"
+published = "2026-09"
+lift = "El modelo IA pronostica valores positivos del índice E"
 
 [[claim]]
 id = "enfen-2026-coast-magnitude-wording"
@@ -1047,6 +1050,9 @@ date_checked = "2026-10-10"
 ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-01-2026/"
 locator = "Comunicado Oficial ENFEN N° 01-2026, PDF p. 1, \"RESUMEN EJECUTIVO\", second paragraph, sentence 2; the header gives the date \"15 de enero 2026\""
 quote = "persistiendo al menos hasta octubre de 2026, lo cual configuraría el desarrollo de un evento de El Niño Costero de magnitud débil, por lo pronto."
+outlet = "ENFEN"
+published = "2026-01-15"
+lift = "magnitud débil"
 
 [[claim.source]]
 ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-03-2026/"
@@ -1062,6 +1068,9 @@ quote = "es más probable que El Niño costero continúe hasta enero de 2027 con
 ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-11-2026/"
 locator = "Comunicado Oficial ENFEN N° 11-2026, PDF p. 1, \"RESUMEN EJECUTIVO\", sentence 2; the header gives the date 15 de junio de 2026"
 quote = "con una mayor probabilidad de presentar una magnitud fuerte entre junio y septiembre, para luego disminuir a moderado hasta diciembre."
+outlet = "ENFEN"
+published = "2026-06-15"
+lift = "magnitud fuerte entre junio y septiembre"
 
 [[claim.source]]
 ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-13-2026/"
@@ -1077,6 +1086,9 @@ quote = "con una magnitud más probable entre fuerte y extraordinaria hasta el v
 ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-15-2026/"
 locator = "Comunicado Oficial ENFEN N° 15-2026, PDF p. 1, \"RESUMEN EJECUTIVO\", sentence 2; the header gives the date 28 de agosto de 2026"
 quote = "con una magnitud extraordinaria de setiembre 2026 a enero de 2027 (≥ 62%)"
+outlet = "ENFEN"
+published = "2026-08-28"
+lift = "magnitud extraordinaria de setiembre 2026 a enero de 2027"
 
 [[claim.source]]
 ref = "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-16-2026/"
@@ -2518,6 +2530,9 @@ quote = "ha ajustado las probabilidades de ocurrencia de condiciones neutras en 
 ref = "https://repositorio.igp.gob.pe/handle/20.500.12816/2412"
 locator = "Comunicado Oficial ENFEN N° 01-2017, Callao, 16 January 2017, PDF p. 4, Tabla 1"
 quote = "El Niño moderado-fuerte-extraordinario 1%"
+outlet = "ENFEN"
+published = "2017-01-16"
+lift = "El Niño moderado-fuerte-extraordinario 1%"
 
 [[claim]]
 id = "bausate-2017-2015-prevention"
@@ -2556,6 +2571,9 @@ date_checked = "2026-11-25"
 ref = "https://repositorio.igp.gob.pe/bitstreams/3ea80185-bd3a-4f27-8bc5-d31b58b0c1b0/download"
 locator = "Comunicado Oficial ENFEN N° 03-2017, Callao, 2 February 2017, PDF p. 1, first paragraph"
 quote = "considera que se han consolidado las condiciones para un evento El Niño costero débil en el presente verano"
+outlet = "ENFEN"
+published = "2017-02-02"
+lift = "un evento El Niño costero débil"
 
 [[claim.source]]
 ref = "https://repositorio.igp.gob.pe/bitstreams/3ea80185-bd3a-4f27-8bc5-d31b58b0c1b0/download"
@@ -2572,6 +2590,9 @@ date_checked = "2026-11-25"
 ref = "https://elcomercio.pe/peru/fenomeno-nino-afecto-pais-anos-1997-1998-142502-noticia/"
 locator = "El Comercio, \"Fenómeno de El Niño: así afectó al país en los años 1997 y 1998\" (web page, no page numbers), paragraph beginning \"Actualmente el país soporta un fenómeno de El\""
 quote = "Actualmente el país soporta un fenómeno de El Niño débil, pero este podría pasar a ser 'moderado'"
+outlet = "El Comercio"
+published = "2017-03-04"
+lift = "Actualmente el país soporta un fenómeno de El Niño débil"
 
 [[claim.source]]
 ref = "https://elcomercio.pe/peru/fenomeno-nino-afecto-pais-anos-1997-1998-142502-noticia/"
@@ -2588,6 +2609,9 @@ date_checked = "2026-11-25"
 ref = "https://repositorio.igp.gob.pe/bitstreams/703b4703-54b3-460e-b38c-fecf4938c5da/download"
 locator = "Comunicado Oficial ENFEN N° 06-2017, Callao, 16 March 2017, PDF p. 1, first paragraph"
 quote = "El Comité Multisectorial ENFEN prevé la continuación del evento El Niño costero por lo menos hasta abril, con una magnitud moderada."
+outlet = "ENFEN"
+published = "2017-03-16"
+lift = "con una magnitud moderada"
 
 [[claim]]
 id = "tv-tvperu-2026-02-16-inminente"

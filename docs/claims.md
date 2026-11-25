@@ -54,11 +54,13 @@ clipping. Three optional fields on a `[[claim.source]]` entry define it.
 | `published` | `YYYY-MM-DD`, or `YYYY-MM` for a document dated by month. The date of the lifted words.                   |
 | `lift`      | The phrase the card sets large. It must be a substring of the source's `quote`, so the card is verbatim. |
 
-A source defines all three fields or none, and a claim has at most one card.
-The card links to the source's `ref`. When the quote comes from a later
+A source defines all three fields or none, and each source with them is one
+card. The card links to the source's `ref`. When the quote comes from a later
 reprint, as the 1925 El Comercio edition quoted in 2023, `published` is the
-original edition's date and `ref` is the reprint. The site reads a card with
-`paperCard('id')`, which `check:claims` counts as a use of the claim.
+original edition's date and `ref` is the reprint. The site reads a claim's one
+card with `paperCard('id')`, which throws when the claim has more or none, and
+all its cards, in source order, with `paperCards('id')`. `check:claims` counts
+both as a use of the claim.
 
 ## Quotes and locators
 
@@ -118,7 +120,7 @@ bun run check:claims
 [`claims.ts`](../web/app/data/claims.ts), so each one ships in the site bundle.
 `check:claims` fails when:
 
-- a `claim('id')` or `paperCard('id')` call in `web/app` or a
+- a `claim('id')`, `paperCard('id')` or `paperCards('id')` call in `web/app` or a
   `[id](../evidence/claims.toml)` link in
   [`story.md`](story.md) names an id that is missing or not `verified`;
 - `claims.ts` differs from what the registry generates.

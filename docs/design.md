@@ -50,6 +50,7 @@ tones mark water above normal and blue marks water below it.
 | Map        | Place names in spaced italic serif. A hand-drawn chalk ring marks the warmest point, with its value beside it.             |
 | Annotation | A chart labels only the marks its beat talks about, on the chart where the value sits. No legend to consult.               |
 | Scrolly    | One chart stays on screen while its steps scroll past. Each step brings one mark forward and dims the rest.                |
+| Press line | The sea's weekly line is drawn up to the step in view. The words printed that day sit above it in serif italic with their « », death counts below it in the accent. Near labels stack in rows; a label that would pass the edge ends at its date. The chart's figure wraps its steps, so the caption follows them on a phone. |
 | Hand mark  | An arrow drawn as a loose curve, with a serif italic note, ties two points the sentence compares.                          |
 | Paper card | What the press printed, on newsprint in every scene and theme: outlet and date on top, one verbatim phrase set in bold serif, a link to the source. Laid down a little askew. Measurements never sit on a card. |
 

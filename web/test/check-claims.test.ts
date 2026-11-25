@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { parseClaims } from '../scripts/claim-registry'
 import { checkSiteClaims } from '../scripts/check-claims'
-import { renderClaims } from '../scripts/generate-claims'
+import { generatedValues, renderClaims } from '../scripts/generate-claims'
 
 const escapedQuote = String.fromCharCode(92)
 const registry = `
@@ -156,19 +156,30 @@ ${extraSource}
       )
     })
 
-    it('rejects a second card on one claim', () => {
-      const second = `[[claim.source]]\nref = "https://example.org/otra"\nquote = "trayectoria muy similar"\n${fullCard}`
-      expect(() => parseClaims(cardRegistry(fullCard, second))).toThrow(
-        'claim press-id has more than one paper card',
-      )
+    it('keeps one card per source, in source order', () => {
+      const second = `[[claim.source]]\nref = "https://example.org/otra"\nquote = "una segunda nota"\noutlet = "Otro"\npublished = "2026-08-01"\nlift = "segunda nota"`
+      const { claimCards } = generatedValues(cardRegistry(fullCard, second))
+      expect(claimCards['press-id']?.map((card) => card.outlet)).toEqual(['Diario', 'Otro'])
     })
 
-    it('counts paperCard() as a claim use', async () => {
+    it('counts paperCard() and paperCards() as claim uses', async () => {
       const result = await site(
-        "import { paperCard } from './claims'; paperCard('press-id')",
+        "import { paperCard, paperCards } from './claims'; paperCard('press-id'); paperCards('press-id')",
         cardRegistry(fullCard),
       )
       expect(result).toEqual({ claimIds: ['press-id'], errors: [] })
+    })
+
+    it('rejects a generated module whose second card is stale', async () => {
+      const second = `[[claim.source]]\nref = "https://example.org/otra"\nquote = "una segunda nota"\noutlet = "Otro"\npublished = "2026-08-01"\nlift = "segunda nota"`
+      const generated = renderClaims(cardRegistry(fullCard, second))
+      const result = await checkSiteClaims({
+        registry: cardRegistry(fullCard, second.replace('"Otro"', '"Tercero"')),
+        appSources: [{ fileName: 'messages.ts', source: '' }],
+        story: '',
+        generatedClaims: generated,
+      })
+      expect(result.errors).toEqual(['generated claims differ from registry'])
     })
 
     it('rejects a generated module whose cards are stale', async () => {

@@ -392,37 +392,116 @@ export type PaperCard = {
   readonly href: string
 }
 
-const paperCards = {
-  'panamericana-2026-09-16-devastador': {
-    outlet: 'Panamericana',
-    published: '2026-09-16',
-    lift: 'más devastador que el de 1997',
-    href: 'https://panamericana.pe/buenosdiasperu/nacionales/474433-enfen-alerta-nino-devastador-1997',
-  },
-  'apoyo-2026-trajectory': {
-    outlet: 'APOYO Consultoría',
-    published: '2026-07',
-    lift: 'sigue una trayectoria muy similar a la del FEN 1997-1998',
-    href: 'https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf',
-  },
-  'infobae-2026-11-17-tumbes': {
-    outlet: 'Infobae',
-    published: '2026-11-17',
-    lift: 'superó el umbral naranja',
-    href: 'https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/',
-  },
-  'elcomercio-1925-alisio': {
-    outlet: 'El Comercio',
-    published: '1925-03-12',
-    lift: 'salvan el obstáculo de los Andes',
-    href: 'https://elcomercio.pe/archivo-elcomercio/lluvias-en-lima-inundaciones-en-el-norte-huaicos-en-el-peru-fenomenos-naturales-hace-100-anos-peru-decada-del-20-nnsp-noticia/',
-  },
-} as const satisfies Record<string, PaperCard>
+const claimCards = {
+  'enfen-it17-ai-model-e-index': [
+    {
+      outlet: 'ENFEN',
+      published: '2026-09',
+      lift: 'El modelo IA pronostica valores positivos del índice E',
+      href: 'https://enfen.imarpe.gob.pe/download/informe-tecnico-enfen-ano-12-n17-al-25-de-setiembre-de-2026/',
+    },
+  ],
+  'enfen-2026-coast-magnitude-wording': [
+    {
+      outlet: 'ENFEN',
+      published: '2026-01-15',
+      lift: 'magnitud débil',
+      href: 'https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-01-2026/',
+    },
+    {
+      outlet: 'ENFEN',
+      published: '2026-06-15',
+      lift: 'magnitud fuerte entre junio y septiembre',
+      href: 'https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-11-2026/',
+    },
+    {
+      outlet: 'ENFEN',
+      published: '2026-08-28',
+      lift: 'magnitud extraordinaria de setiembre 2026 a enero de 2027',
+      href: 'https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-15-2026/',
+    },
+  ],
+  'panamericana-2026-09-16-devastador': [
+    {
+      outlet: 'Panamericana',
+      published: '2026-09-16',
+      lift: 'más devastador que el de 1997',
+      href: 'https://panamericana.pe/buenosdiasperu/nacionales/474433-enfen-alerta-nino-devastador-1997',
+    },
+  ],
+  'apoyo-2026-trajectory': [
+    {
+      outlet: 'APOYO Consultoría',
+      published: '2026-07',
+      lift: 'sigue una trayectoria muy similar a la del FEN 1997-1998',
+      href: 'https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf',
+    },
+  ],
+  'infobae-2026-11-17-tumbes': [
+    {
+      outlet: 'Infobae',
+      published: '2026-11-17',
+      lift: 'superó el umbral naranja',
+      href: 'https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/',
+    },
+  ],
+  'elcomercio-1925-alisio': [
+    {
+      outlet: 'El Comercio',
+      published: '1925-03-12',
+      lift: 'salvan el obstáculo de los Andes',
+      href: 'https://elcomercio.pe/archivo-elcomercio/lluvias-en-lima-inundaciones-en-el-norte-huaicos-en-el-peru-fenomenos-naturales-hace-100-anos-peru-decada-del-20-nnsp-noticia/',
+    },
+  ],
+  'enfen-co01-2017-probabilities': [
+    {
+      outlet: 'ENFEN',
+      published: '2017-01-16',
+      lift: 'El Niño moderado-fuerte-extraordinario 1%',
+      href: 'https://repositorio.igp.gob.pe/handle/20.500.12816/2412',
+    },
+  ],
+  'enfen-co03-2017-debil': [
+    {
+      outlet: 'ENFEN',
+      published: '2017-02-02',
+      lift: 'un evento El Niño costero débil',
+      href: 'https://repositorio.igp.gob.pe/bitstreams/3ea80185-bd3a-4f27-8bc5-d31b58b0c1b0/download',
+    },
+  ],
+  'elcomercio-2017-03-04-debil': [
+    {
+      outlet: 'El Comercio',
+      published: '2017-03-04',
+      lift: 'Actualmente el país soporta un fenómeno de El Niño débil',
+      href: 'https://elcomercio.pe/peru/fenomeno-nino-afecto-pais-anos-1997-1998-142502-noticia/',
+    },
+  ],
+  'enfen-co06-2017-moderada': [
+    {
+      outlet: 'ENFEN',
+      published: '2017-03-16',
+      lift: 'con una magnitud moderada',
+      href: 'https://repositorio.igp.gob.pe/bitstreams/703b4703-54b3-460e-b38c-fecf4938c5da/download',
+    },
+  ],
+} as const satisfies Record<string, readonly PaperCard[]>
 
-export type PaperCardId = keyof typeof paperCards
+export type PaperCardId = keyof typeof claimCards
 
+/** The cards of a claim, one per press source, in registry order. */
+export const paperCards = (id: PaperCardId): readonly PaperCard[] => {
+  const cards: readonly PaperCard[] | undefined = claimCards[id]
+  if (!cards) throw new Error(`no paper card for claim id: ${id}`)
+  return cards
+}
+
+/** The card of a claim that has exactly one. */
 export const paperCard = (id: PaperCardId): PaperCard => {
-  const card: PaperCard | undefined = paperCards[id]
-  if (!card) throw new Error(`no paper card for claim id: ${id}`)
+  const cards = paperCards(id)
+  const [card] = cards
+  if (!card || cards.length > 1) {
+    throw new Error(`claim ${id} has ${cards.length} paper cards; use paperCards`)
+  }
   return card
 }
