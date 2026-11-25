@@ -74,9 +74,24 @@ punch line: in the summer of 1983 all three came together.
 ## ¿Es como 1983, 1998 o 2017?
 
 The timeline stays on screen while four steps scroll past it: 1982-83, 1997-98,
-2017 and the latest month. Each step brings its mark forward. The comparison of
-the two great events uses
-[impact-8283-9798-caf-comparison](../evidence/claims.toml). The 2017 step shows
+2017 and the latest month. Each step brings its mark forward and says what the
+index does not: what happened on land.
+
+The 1982-83 step draws the rain of 1983 in Piura beside a normal year on one
+scale, 2 400 mm against 60,
+[igp-woodman-2014-piura-1983](../evidence/claims.toml). It then asks how many
+died and answers with two counts, one dot per person: 512 by the government in
+July 1983, [elperuano-2023-1983-cronica](../evidence/claims.toml), and 380 by a
+preliminary PAHO table, [impact-1983-paho-deaths](../evidence/claims.toml),
+drawn muted. The two counts stay side by side; the page does not pick one.
+
+The 1997-98 step compares the damage of the two great events,
+[impact-8283-9798-caf-comparison](../evidence/claims.toml), and draws the Piura
+river's peak flow in each, 3 200 and 4 424 m³/s,
+[uni-sanchez-piura-1983](../evidence/claims.toml) and
+[uni-sanchez-piura-1998](../evidence/claims.toml), against the 2 300 m³/s at
+which the bridges closed,
+[tv-america-1998-03-16-2300](../evidence/claims.toml). The 2017 step shows
 that a low index came with heavy damage:
 [impact-2017-people](../evidence/claims.toml). The beat ends on the sentence
 the reader should keep: the index measures the sea, not the damage.

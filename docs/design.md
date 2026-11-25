@@ -51,6 +51,8 @@ tones mark water above normal and blue marks water below it.
 | Annotation | A chart labels only the marks its beat talks about, on the chart where the value sits. No legend to consult.               |
 | Scrolly    | One chart stays on screen while its steps scroll past. Each step brings one mark forward and dims the rest.                |
 | Press line | The sea's weekly line is drawn up to the step in view. The words printed that day sit above it in serif italic with their « », death counts below it in the accent. Near labels stack in rows; a label that would pass the edge ends at its date. The chart's figure wraps its steps, so the caption follows them on a phone. |
+| Unit grid  | One dot or square per unit, 40 to a row, with the unit said once above the grid. Each row leads with its count in Inter Tight and a serif label. The accent fills the count; a second count of the same thing is muted; units out of a total are empty outlines. |
+| Scale bars | Flat accent bars on one scale from zero, each with its serif label and its value in Inter Tight. A level to read them against is a dotted line through every track, with its value and a short label ending at the line. |
 | Hand mark  | An arrow drawn as a loose curve, with a serif italic note, ties two points the sentence compares.                          |
 | Paper card | What the press printed, on newsprint in every scene and theme: outlet and date on top, one verbatim phrase set in bold serif, a link to the source. Laid down a little askew. Measurements never sit on a card. |
 

@@ -28,8 +28,10 @@ import { paperCard } from '~/data/claims'
 import IcenTimeline, { type TimelineMark } from '~/components/IcenTimeline.vue'
 import PaperCard from '~/components/PaperCard.vue'
 import PressTimeline from '~/components/PressTimeline.vue'
+import ScaleBars from '~/components/ScaleBars.vue'
 import SeaMap from '~/components/SeaMap.vue'
 import SeasonChart, { type SeasonLine } from '~/components/SeasonChart.vue'
+import UnitGrid from '~/components/UnitGrid.vue'
 
 const story = messages.story
 
@@ -396,7 +398,37 @@ useSiteSeo({
               :class="{ 'is-active': activeStep === stepId(step.id) }"
             >
               <p class="step-lead">{{ step.lead }}</p>
-              <p v-if="step.id === '1997-98'">{{ story.historia.damage8298 }}</p>
+              <template v-if="step.id === '1982-83'">
+                <figure class="units-figure">
+                  <ScaleBars
+                    :bars="story.historia.rain1983.bars"
+                    :unit="story.historia.rain1983.unit"
+                  />
+                  <figcaption>{{ story.historia.rain1983.texts.join(' ') }}</figcaption>
+                </figure>
+                <p>{{ story.historia.dead1983.question }}</p>
+                <figure class="units-figure">
+                  <UnitGrid
+                    shape="dot"
+                    :rows="story.historia.dead1983.rows"
+                    :unit="story.historia.dead1983.unit"
+                  />
+                  <figcaption>
+                    {{ story.historia.dead1983.rows.map((row) => row.text).join(' ') }}
+                  </figcaption>
+                </figure>
+              </template>
+              <template v-if="step.id === '1997-98'">
+                <p>{{ story.historia.damage8298 }}</p>
+                <figure class="units-figure">
+                  <ScaleBars
+                    :bars="story.historia.river.bars"
+                    :unit="story.historia.river.unit"
+                    :line="story.historia.river.line"
+                  />
+                  <figcaption>{{ story.historia.river.texts.join(' ') }}</figcaption>
+                </figure>
+              </template>
               <template v-if="step.id === '2017'">
                 <p>{{ story.historia.low2017 }}</p>
                 <p>{{ story.historia.people }}</p>
@@ -795,6 +827,18 @@ h2 .answer {
 .punch--turn {
   max-width: 20ch;
   font-size: clamp(2rem, 1.3rem + 2.8vw, 3.75rem);
+}
+
+/* A unit chart sits in its step, with the claims it draws as its caption. */
+.units-figure {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+.units-figure figcaption {
+  color: var(--on-scene-muted);
+  font-size: var(--text-meta);
+  line-height: 1.45;
 }
 
 /* The headline over what the forecaster wrote that fortnight. */
