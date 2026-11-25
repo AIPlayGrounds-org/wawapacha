@@ -46,9 +46,11 @@ independently. A manual dispatch can name one source to run instead.
 
 The job commits changed JSON to the `data` branch with the message
 `data: update <ids>`, then dispatches
-[`deploy.yml`](../.github/workflows/deploy.yml). If a source fails, the job runs
-the others, publishes their results and then fails. The failed source keeps its
-previous JSON.
+[`deploy.yml`](../.github/workflows/deploy.yml). A source that fails keeps its
+previous JSON, and the job runs the others and publishes their results. A source
+that exits 75 because its server is unavailable or has nothing new is a warning.
+Any other failure fails the job after the remaining sources finish. See
+[`freshness.md`](freshness.md#upstream-outages).
 
 [`freshness.yml`](../.github/workflows/freshness.yml) checks the published files
 separately. See [`freshness.md`](freshness.md).

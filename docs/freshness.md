@@ -12,7 +12,8 @@ uv run wawapacha-pipeline freshness --data-dir ../data
 
 A passing run prints `Published datasets are within their registry cadence.` A
 failing run prints one `::error title=data freshness::...` line per dataset on
-stderr and exits with status 1. `--as-of <ISO-8601 time>` evaluates the check at
+stderr and exits with status 1. `--format tsv` prints `<id><TAB><reason>` lines
+on stdout instead, for scripts. `--as-of <ISO-8601 time>` evaluates the check at
 another time, which makes a result reproducible.
 
 The command reads `ingestion_time` from the file of each automatable source and
@@ -30,7 +31,24 @@ The values are `CADENCE_RULES` in
 [`test_cli.py`](../pipeline/tests/test_cli.py) covers them.
 
 [`freshness.yml`](../.github/workflows/freshness.yml) runs the same command
-daily at 14:47 UTC against a worktree of the `data` branch.
+daily at 14:47 UTC against a worktree of the `data` branch. It keeps one open
+issue labelled `stale-data`, titled `Stale data: <id>`, for each stale source.
+Each run updates the issue's reason and closes the issue once the source is
+fresh again. Stale data does not fail the job; the open issue is the signal. The
+job fails only when the check itself cannot run.
+
+## Upstream outages
+
+A source whose server is down, throttling or has nothing new exits
+`wawapacha-pipeline run` with status 75 and publishes nothing. The update
+workflow records a warning, not a failure, because no change in this repository
+can fix it. A transient download error is one of: HTTP 408, 425, 429 or any 5xx,
+a timeout, or a refused or reset connection. Any other HTTP 4xx means our
+request is wrong and fails the run. `UpstreamError` and `download_error` in
+[`contract.py`](../pipeline/src/wawapacha_pipeline/contract.py) hold the rule.
+
+An outage that outlasts the cadence tolerance reaches this check and opens the
+source's issue. A short one leaves no trace beyond the warning.
 
 ## On the site
 

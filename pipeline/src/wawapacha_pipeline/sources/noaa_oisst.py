@@ -1,20 +1,28 @@
 """NOAA OISST v2.1 — daily SST anomaly over the Peruvian ocean region. Its provenance is in sources.toml."""
 
 import io
+import json
 import os
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
+from xml.etree import ElementTree
 
 import numpy as np
 from scipy.io import netcdf_file
 
-from wawapacha_pipeline import registry
-from wawapacha_pipeline.contract import ValidationError, publish
+from wawapacha_pipeline import contract, registry
+from wawapacha_pipeline.contract import (
+    UpstreamError,
+    ValidationError,
+    download_error,
+    publish,
+)
 
 # Bump it when the logic changes: it stays in every published JSON.
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 ID = "noaa-oisst"
 SOURCE = registry.get(ID)
@@ -26,9 +34,6 @@ SOUTH, NORTH = -25.0, 20.0
 WEST, EAST = 240.0, 300.0
 STEP = 0.25  # source grid, in degrees
 BLOCK = 2  # source cells per published cell, along each axis
-
-# The newest day is not always the same: ask for the last days and keep the latest.
-WINDOW_DAYS = 3
 
 TIME_EPOCH = date(1800, 1, 1)
 TIME_UNITS = "days since 1800-01-01 00:00:00"
@@ -46,26 +51,65 @@ MIN_VALID_SHARE = 0.5
 def fetch(
     now: datetime | None = None, url: str = URL, timeout: int = 120
 ) -> tuple[bytes, bytes]:
-    """Download the recent days of SST and the climatology of the latest one.
+    """Download the SST of the server's newest day and the climatology of that day.
 
     PSL keeps one SST file per year, and the NetCDF Subset Service cuts the region on the server.
-    The first days of January come from the previous year's file, which is still the newest.
+    Until the new year's file exists, the previous year's file is the newest.
+    Raises UpstreamError when the newest day is already published.
     """
     now = now or datetime.now(UTC)
-    start = (now - timedelta(days=WINDOW_DAYS)).date()
+    day = newest_day(url, now.year, timeout) or newest_day(url, now.year - 1, timeout)
+    if day is None:
+        raise UpstreamError(f"PSL has no SST file for {now.year} or {now.year - 1}.")
+    published = published_day()
+    if published is not None and day <= published:
+        raise UpstreamError(f"PSL has no day after {published} yet.")
+
     sst = download(
-        f"{url}/sst.day.mean.{start.year}.nc",
-        time_start=f"{start}T00:00:00Z",
-        time_end=f"{now.date()}T00:00:00Z",
-        timeout=timeout,
+        f"{url}/sst.day.mean.{day.year}.nc", timeout=timeout, time=f"{day}T00:00:00Z"
     )
-    month, day = climatology_day(days(read_netcdf(sst))[-1])
+    month, day_of_month = climatology_day(day)
     climatology = download(
         f"{url}/sst.day.mean.ltm.1991-2020.nc",
-        time=f"{CLIMATOLOGY_YEAR:04d}-{month:02d}-{day:02d}T00:00:00Z",
         timeout=timeout,
+        time=f"{CLIMATOLOGY_YEAR:04d}-{month:02d}-{day_of_month:02d}T00:00:00Z",
     )
     return sst, climatology
+
+
+def newest_day(url: str, year: int, timeout: int) -> date | None:
+    """The last day of the year's SST file, from its NCSS description. None if the file does not exist."""
+    message = f"Could not read the description of the {year} SST file"
+    try:
+        text = get(f"{url}/sst.day.mean.{year}.nc/dataset.xml", timeout)
+    except urllib.error.HTTPError as error:
+        if error.code == 404:
+            return None
+        raise download_error(message, error) from error
+    except OSError as error:
+        raise download_error(message, error) from error
+    try:
+        end = ElementTree.fromstring(text).findtext("TimeSpan/end")
+        return datetime.fromisoformat(end).date()
+    except (ElementTree.ParseError, TypeError, ValueError):
+        raise ValidationError(f"{message}: it has no TimeSpan end.") from None
+
+
+def published_day() -> date | None:
+    """The day of the published record, when this version published it."""
+    try:
+        dataset = json.loads((contract.DATA_DIR / f"{ID}.json").read_text("utf-8"))
+        if dataset["processing_version"] != VERSION:
+            return None
+        return date.fromisoformat(dataset["records"][0]["start"])
+    except (OSError, ValueError, KeyError, IndexError, TypeError):
+        return None
+
+
+def get(url: str, timeout: int) -> bytes:
+    request = urllib.request.Request(url, headers={"User-Agent": "WawaPacha/0.1"})
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return response.read()
 
 
 def download(url: str, timeout: int, **time: str) -> bytes:
@@ -79,12 +123,10 @@ def download(url: str, timeout: int, **time: str) -> bytes:
         "horizStride": 1,
         "accept": "netcdf",
     }
-    request = urllib.request.Request(
-        f"{url}?{urllib.parse.urlencode(query | time)}",
-        headers={"User-Agent": "WawaPacha/0.1"},
-    )
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        return response.read()
+    try:
+        return get(f"{url}?{urllib.parse.urlencode(query | time)}", timeout)
+    except OSError as error:
+        raise download_error(f"Could not download {url}", error) from error
 
 
 def run(ingestion_time: datetime | None = None) -> tuple[int, Path]:

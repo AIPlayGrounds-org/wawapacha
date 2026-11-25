@@ -161,7 +161,8 @@ notes = [
   "The published grid is the mean of each 2 × 2 block of 0.25° cells, ignoring missing cells, rounded to 2 decimals. A block with no value is `null`. The axes are the block centers, with longitude in °E, negative to the west (-119.75 to -60.25).",
   "Baseline checked on 2026-10-02. The climatology file's global metadata says 1971–2000, but its time axis says 1991/01/01–2020/12/31. Over the 38 CPC weeks of 2026 up to 23SEP2026, the mean of this anomaly over the Niño 3.4 box (5°N–5°S, 170°W–120°W) differs from `wksst9120.for` by -0.005 °C on average and by 0.10 °C at most. PSL's own 1971–2000 `anom` differs by +0.07 °C on average and by 0.23 °C at most. The baseline is 1991–2020, the same as CPC's weekly indices. The 1971–2000 text is inherited metadata.",
   "The climatology has 365 days, numbered in the Julian calendar, with no 29 February. 29 February uses 28 February. The pipeline places the day from the first day of the file, because Python decodes the dates two days early.",
-  "PSL keeps one SST file per year (`sst.day.mean.<year>.nc`). The pipeline asks for the last 3 days and keeps the latest. In the first days of January the newest day is still in the previous year's file.",
+  "PSL keeps one SST file per year (`sst.day.mean.<year>.nc`). The pipeline reads the server's last day from the file's NCSS `dataset.xml` (`TimeSpan/end`) and asks for that day only. PSL often lags a few days. When the current year's file does not exist yet (HTTP 404), it reads the previous year's. When the server has no day after the published one, the run downloads nothing and exits 75.",
+  "PSL answers HTTP 429 when it is busy. The run then exits 75 and the previous JSON stays.",
   "NCSS returns the cells just outside the box too (one row and one column). The pipeline keeps the 180 × 240 cells inside it. Land arrives as `NaN`.",
   "Data less than 15 days old is preliminary and can change.",
   "The NCEI ERDDAP returns final data as CSV, about two weeks late. It is not used. Its timestamp query failed with HTTP 400 on 2026-10-02: only the `last` index form works.",
@@ -369,6 +370,7 @@ notes = [
   "Preliminary pentads are published about two days after the pentad ends. Missing values are -9999; values above 5,000 mm per pentad fail validation.",
   "A department value is the exact overlap mean of valid 0.05° cells, weighted by the overlap area and cos(latitude) in WGS84.",
   "The live preliminary archive begins in 2025-01 and can omit a pentad or return HTTP 404 for it; the module skips that pentad, publishes only files it can download, and never fills gaps from the final product.",
+  "A run reuses the published department values of each pentad when the processing version matches. It downloads again only the newest 2 months, which preliminary updates can revise, and any pentad not yet published, with 2 parallel downloads. The server answers HTTP 429 when a client downloads too many files; the run then exits 75.",
   "The static department baseline is the exact overlap mean of 1991–2020 CHC v3 final pentad GeoTIFFs from https://data.chc.ucsb.edu/products/CHIRPS/v3.0/pentads/latam/tifs/, weighted by overlap area and cos(latitude) in WGS84; February P6 is split into common and leap years.",
   "Anomalies subtract this final-pentad climatology from preliminary pentad department means, so an anomaly compares a preliminary value with a final base and is provisional until the final product replaces it.",
 ]

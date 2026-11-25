@@ -1,6 +1,7 @@
 # Check due automatable sources daily and redeploy when any source changes.
-# Sources run independently. Failed sources keep their previous JSON, and the
-# job reports failures after the remaining sources finish.
+# Sources run independently and keep their previous JSON on any error. Exit 75
+# (upstream unavailable) is a warning; freshness.yml reports a long outage.
+# Other failures fail the job after the remaining sources finish.
 name: Update data
 
 on:
@@ -64,7 +65,11 @@ jobs:
           failed=""
           for id in $ids; do
             echo "::group::$id"
-            if ! uv run --project pipeline wawapacha-pipeline run "$id"; then
+            status=0
+            uv run --project pipeline wawapacha-pipeline run "$id" || status=$?
+            if [ "$status" -eq 75 ]; then
+              echo "::warning title=$id::upstream unavailable, nothing was published"
+            elif [ "$status" -ne 0 ]; then
               echo "::error title=$id::source failed, nothing was published"
               failed="$failed $id"
             fi

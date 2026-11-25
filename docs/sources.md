@@ -216,9 +216,14 @@ Notes:
 - The climatology has 365 days, numbered in the Julian calendar, with no 29
   February. 29 February uses 28 February. The pipeline places the day from the
   first day of the file, because Python decodes the dates two days early.
-- PSL keeps one SST file per year (`sst.day.mean.<year>.nc`). The pipeline asks
-  for the last 3 days and keeps the latest. In the first days of January the
-  newest day is still in the previous year's file.
+- PSL keeps one SST file per year (`sst.day.mean.<year>.nc`). The pipeline reads
+  the server's last day from the file's NCSS `dataset.xml` (`TimeSpan/end`) and
+  asks for that day only. PSL often lags a few days. When the current year's
+  file does not exist yet (HTTP 404), it reads the previous year's. When the
+  server has no day after the published one, the run downloads nothing and
+  exits 75.
+- PSL answers HTTP 429 when it is busy. The run then exits 75 and the previous
+  JSON stays.
 - NCSS returns the cells just outside the box too (one row and one column). The
   pipeline keeps the 180 × 240 cells inside it. Land arrives as `NaN`.
 - Data less than 15 days old is preliminary and can change.
@@ -299,6 +304,11 @@ Notes:
 - The live preliminary archive begins in 2025-01 and can omit a pentad or return
   HTTP 404 for it; the module skips that pentad, publishes only files it can
   download, and never fills gaps from the final product.
+- A run reuses the published department values of each pentad when the
+  processing version matches. It downloads again only the newest 2 months, which
+  preliminary updates can revise, and any pentad not yet published, with 2
+  parallel downloads. The server answers HTTP 429 when a client downloads too
+  many files; the run then exits 75.
 - The static department baseline is the exact overlap mean of 1991–2020 CHC v3
   final pentad GeoTIFFs from
   https://data.chc.ucsb.edu/products/CHIRPS/v3.0/pentads/latam/tifs/, weighted

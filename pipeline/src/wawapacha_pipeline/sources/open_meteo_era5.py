@@ -6,7 +6,6 @@ import json
 import math
 import os
 import re
-import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import UTC, date, datetime, timedelta
@@ -15,7 +14,12 @@ from pathlib import Path
 from shapely.geometry import Point, shape
 
 from wawapacha_pipeline import registry
-from wawapacha_pipeline.contract import MAX_GZIP_BYTES, ValidationError, publish
+from wawapacha_pipeline.contract import (
+    MAX_GZIP_BYTES,
+    ValidationError,
+    download_error,
+    publish,
+)
 
 VERSION = "0.2.0"
 ID = "open-meteo-era5"
@@ -123,12 +127,8 @@ def fetch(url: str = URL, timeout: int = 60) -> str:
             return response.read().decode("utf-8")
     except ValidationError:
         raise
-    except urllib.error.HTTPError as error:
-        raise ValidationError(
-            f"HTTP request failed with status {error.code}."
-        ) from error
-    except (urllib.error.URLError, OSError, TimeoutError) as error:
-        raise ValidationError(f"Could not download ERA5 data: {error}.") from error
+    except OSError as error:
+        raise download_error("Could not download ERA5 data", error) from error
 
 
 def parse(

@@ -21,10 +21,18 @@ import rasterio
 from rasterio.io import MemoryFile
 from shapely.geometry import box, shape
 
-from wawapacha_pipeline import registry
-from wawapacha_pipeline.contract import REPO_ROOT, ValidationError, publish
+from wawapacha_pipeline import contract, registry
+from wawapacha_pipeline.contract import (
+    REPO_ROOT,
+    UpstreamError,
+    ValidationError,
+    download_error,
+    publish,
+)
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
+# Versions whose records this version computes identically, so a run can reuse them.
+REUSABLE_VERSIONS = frozenset({"0.2.0", VERSION})
 ID = "chirps"
 SOURCE = registry.get(ID)
 INDEX_URL = os.environ.get("CHIRPS_INDEX_URL", SOURCE["access"]["url"])
@@ -42,6 +50,12 @@ BOUNDARIES_PATH = Path(
 MISSING_VALUE = -9999.0
 MAX_VALUE = 5000.0
 WINDOW_MONTHS = 36
+# Pentads in the newest months are downloaded again on every run; older ones are
+# reused from the published JSON. The archive listing on 2026-11-25 showed every
+# file last written 2 to 18 days after its pentad ended.
+REFETCH_MONTHS = 2
+# The CHC server throttles with HTTP 429; few parallel requests stay under it.
+WORKERS = 2
 EXPECTED_DEPARTMENTS = 25
 EXPECTED_DEPARTMENT_CODES = frozenset(f"PE{index:02d}" for index in range(1, 26))
 USER_AGENT = "WawaPacha/0.1"
@@ -102,14 +116,14 @@ def _request(url: str, timeout: int = 60, retries: int = 3) -> bytes:
             if error.code == 404:
                 raise _MissingResource(url) from error
             if error.code == 429:
-                raise ValidationError(
+                raise UpstreamError(
                     f"HTTP status 429 for {url}; quota exhausted."
                 ) from error
             last_error = error
-        except (urllib.error.URLError, TimeoutError, OSError) as error:
+        except OSError as error:
             last_error = error
-    raise ValidationError(
-        f"Could not download {url} after {retries} attempts: {last_error}"
+    raise download_error(
+        f"Could not download {url} after {retries} attempts", last_error
     )
 
 
@@ -172,6 +186,55 @@ def select_window(pentads: list[Pentad], months: int = WINDOW_MONTHS) -> list[Pe
             "The CHIRPS listing has no pentads in the rolling window."
         )
     return selected
+
+
+def load_published(path: Path | None = None) -> dict[str, list[dict]]:
+    """Group the published records by pentad start, or return {} if none are reusable."""
+    path = path or contract.DATA_DIR / f"{ID}.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        version = payload["processing_version"]
+        records = payload["records"]
+    except (OSError, KeyError, TypeError, json.JSONDecodeError):
+        return {}
+    if version not in REUSABLE_VERSIONS or not isinstance(records, list):
+        return {}
+    grouped: dict[str, list[dict]] = {}
+    for record in records:
+        grouped.setdefault(record["start"], []).append(record)
+    return grouped
+
+
+def to_download(
+    selected: list[Pentad],
+    published: dict[str, list[dict]],
+    months: int = REFETCH_MONTHS,
+) -> list[Pentad]:
+    """The pentads not yet published, plus every pentad of the newest months."""
+    latest = date(selected[-1].year, selected[-1].month, 1)
+    refetch_from = _shift_month(latest, -(months - 1))
+    return [
+        p
+        for p in selected
+        if date(p.year, p.month, 1) >= refetch_from
+        or p.start.isoformat() not in published
+    ]
+
+
+def merge(
+    selected: list[Pentad],
+    published: dict[str, list[dict]],
+    fresh: list[dict],
+) -> list[dict]:
+    """The window's records: fresh ones first, then published ones for the other pentads."""
+    by_start: dict[str, list[dict]] = {}
+    for record in fresh:
+        by_start.setdefault(record["start"], []).append(record)
+    records = []
+    for pentad in selected:
+        start = pentad.start.isoformat()
+        records.extend(by_start.get(start) or published.get(start, []))
+    return records
 
 
 def _shift_month(value: date, offset: int) -> date:
@@ -451,16 +514,19 @@ def build(records: list[dict], ingestion_time: datetime) -> dict:
 
 
 def run(ingestion_time: datetime | None = None) -> tuple[int, Path]:
-    """Discover, download, aggregate and publish the rolling CHIRPS window."""
+    """Download the new and recent pentads, reuse the rest, and publish the window."""
     pentads = discover(fetch(INDEX_URL), INDEX_URL)
     selected = select_window(pentads)
+    published = load_published()
+    needed = to_download(selected, published)
     boundaries = load_boundaries()
     baseline = load_baseline()
+    print(f"Downloading {len(needed)} of {len(selected)} CHIRPS pentads.")
     files = []
     missing = []
-    with ThreadPoolExecutor(max_workers=8) as executor:
+    with ThreadPoolExecutor(max_workers=WORKERS) as executor:
         jobs = {
-            executor.submit(fetch_optional, pentad.url): pentad for pentad in selected
+            executor.submit(fetch_optional, pentad.url): pentad for pentad in needed
         }
         for job in as_completed(jobs):
             pentad = jobs[job]
@@ -476,7 +542,7 @@ def run(ingestion_time: datetime | None = None) -> tuple[int, Path]:
             f"Skipped missing CHIRPS pentad {pentad.year}-{pentad.month:02d}."
             f"{pentad.number} (HTTP 404)."
         )
-    records = parse(files, boundaries, baseline)
+    records = merge(selected, published, parse(files, boundaries, baseline))
     dataset = build(records, ingestion_time or datetime.now(UTC))
     return len(records), publish(dataset)
 

@@ -133,19 +133,13 @@ def test_freshness_tolerance_is_independent_from_due_threshold(
         write_published_data(tmp_path / f"{candidate}.json", now.isoformat())
 
     write_published_data(tmp_path / f"{source_id}.json", (now - tolerance).isoformat())
-    assert not any(
-        issue.startswith(f"{source_id}:")
-        for issue in cli.freshness_issues(now, tmp_path)
-    )
+    assert source_id not in cli.freshness_issues(now, tmp_path)
 
     write_published_data(
         tmp_path / f"{source_id}.json",
         (now - tolerance - timedelta(seconds=1)).isoformat(),
     )
-    assert any(
-        issue.startswith(f"{source_id}: last update")
-        for issue in cli.freshness_issues(now, tmp_path)
-    )
+    assert cli.freshness_issues(now, tmp_path)[source_id].startswith("last update")
 
 
 def test_freshness_reports_stale_missing_and_invalid_data(tmp_path):
@@ -154,11 +148,28 @@ def test_freshness_reports_stale_missing_and_invalid_data(tmp_path):
     )
     issues = cli.freshness_issues(datetime(2026, 10, 4, 12, tzinfo=UTC), tmp_path)
 
-    assert any(
-        issue.startswith("noaa-cpc-nino-weekly: last update") for issue in issues
+    assert issues["noaa-cpc-nino-weekly"].startswith("last update")
+    assert issues["noaa-cpc-oni"].startswith("missing or invalid")
+    assert issues["noaa-oisst"].startswith("missing or invalid")
+
+
+def test_freshness_tsv_prints_one_stale_source_per_line(tmp_path, capsys):
+    for source_id in cli.SOURCES:
+        write_published_data(
+            tmp_path / f"{source_id}.json", "2026-10-04T00:00:00+00:00"
+        )
+    write_published_data(
+        tmp_path / "noaa-cpc-nino-weekly.json", "2026-09-19T11:59:59+00:00"
     )
-    assert any(issue.startswith("noaa-cpc-oni: missing or invalid") for issue in issues)
-    assert any(issue.startswith("noaa-oisst: missing or invalid") for issue in issues)
+    argv = ["freshness", "--data-dir", str(tmp_path), "--format", "tsv"]
+
+    assert cli.main([*argv, "--as-of", "2026-10-04T12:00:00+00:00"]) == 1
+    lines = capsys.readouterr().out.splitlines()
+    assert [line.split("\t")[0] for line in lines] == ["noaa-cpc-nino-weekly"]
+    assert lines[0].split("\t")[1].startswith("last update 2026-09-19")
+
+    assert cli.main([*argv, "--as-of", "2026-10-04T01:00:00+00:00"]) == 0
+    assert capsys.readouterr().out == ""
 
 
 def test_freshness_command_returns_failure_with_visible_errors(tmp_path, capsys):
