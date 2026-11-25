@@ -32,7 +32,7 @@ describe('IcenChart', () => {
 
     expect(wrapper.text()).toContain(messages.historico.icenNote)
     expect(wrapper.text()).toContain(messages.historico.icenTableCaption)
-    expect(wrapper.findAll('details')).toHaveLength(1)
+    expect(wrapper.findAll('details.table-fallback')).toHaveLength(1)
     expect(options).toHaveLength(1)
     expect(options[0]?.series[0]?.data).toHaveLength(dataset.records.length)
     expect(options[0]?.series[0]?.data[0]).toBe(-0.75)

@@ -67,6 +67,20 @@ const verifiedClaims = {
     'El Comunicado Oficial ENFEN N° 17-2026 prevé temperaturas del aire muy superiores a sus valores habituales en toda la costa peruana, con alta probabilidad de registrar nuevos récords térmicos; el comunicado no fija una ventana de tiempo para esa frase.',
   'enfen-co17-next-2026-10-15':
     'El Comunicado Oficial ENFEN N° 17-2026 anuncia que el próximo comunicado oficial se emitirá el jueves 15 de octubre de 2026.',
+  'enfen-co20-coast-extraordinaria-feb2027':
+    'El Comunicado Oficial ENFEN N° 20-2026 dice que El Niño Costero (región Niño 1+2), iniciado en marzo de 2026, se mantendría con magnitud extraordinaria hasta febrero de 2027 y se debilitaría progresivamente hasta julio de 2027.',
+  'enfen-co20-nov-jan-rain':
+    'De noviembre de 2026 a enero de 2027 el Comunicado Oficial ENFEN N° 20-2026 prevé lluvias por encima de lo normal en la costa norte, la sierra norte occidental, la costa central y la sierra central occidental, con más episodios de intensidad moderada a fuerte, en particular en la costa norte.',
+  'enfen-co20-summer2027-rain':
+    'Para el verano de 2027 el Comunicado Oficial ENFEN N° 20-2026 prevé lluvias por encima de lo normal a lo largo de toda la costa, la sierra norte occidental y la sierra central occidental, más intensas y frecuentes en la costa norte.',
+  'enfen-co20-rivers':
+    'El Comunicado Oficial ENFEN N° 20-2026 prevé caudales superiores a lo normal en los ríos de la costa norte, como el Tumbes, el Chira, el Piura, La Leche y el Jequetepeque, muy superiores en el Tumbes y el Piura, y desde enero de 2027 también en el Chillón, el Rímac, el Lurín, el Pisco y el Ica.',
+  'enfen-co20-air-temperature-records':
+    'El Comunicado Oficial ENFEN N° 20-2026 prevé temperaturas del aire muy superiores a lo habitual en toda la costa peruana, con nuevos récords hacia el verano.',
+  'enfen-co20-waves-dec-jan':
+    'Para diciembre de 2026 y enero de 2027 el Comunicado Oficial ENFEN N° 20-2026 prevé una mayor probabilidad de oleajes anómalos del norte que, con el mar por encima de su nivel medio, aumentaría el riesgo de inundación y erosión costera, principalmente en playas de baja pendiente.',
+  'enfen-co20-recommendation':
+    'El Comunicado Oficial ENFEN N° 20-2026 recomienda a la población de zonas expuestas a lluvias intensas, inundaciones y movimientos en masa reforzar la protección de sus viviendas y estar alerta a la información de las autoridades locales.',
   'enfen-co01-vigilancia-2026-01-15':
     'El 15 de enero de 2026, en el Comunicado Oficial ENFEN N° 01-2026, ENFEN cambió el estado del sistema de alerta de "No Activo" a "Vigilancia de El Niño Costero".',
   'enfen-co03-alerta-2026-02-13':

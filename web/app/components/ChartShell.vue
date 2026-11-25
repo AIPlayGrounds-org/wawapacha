@@ -17,9 +17,10 @@ const STALE_RECORD_DAYS = 90
 const now = ref<Date | null>(null)
 onMounted(() => (now.value = new Date()))
 const formatDate = (date: string) =>
-  new Intl.DateTimeFormat('es', { dateStyle: 'long', timeZone: 'America/Lima' }).format(
-    new Date(date),
-  )
+  new Intl.DateTimeFormat('es', {
+    dateStyle: 'long',
+    timeZone: 'America/Lima',
+  }).format(new Date(date))
 const updateDate = formatDate(props.dataset.ingestion_time)
 const updateAge = computed(() =>
   now.value ? ageLabel(props.dataset.ingestion_time, now.value) : null,
@@ -60,41 +61,52 @@ const periodDetails = [
       <slot />
     </div>
     <p class="chart-summary">{{ summary }}</p>
-    <dl class="provenance">
-      <div>
-        <dt>{{ messages.provenance.variable }}</dt>
-        <dd>{{ dataset.variable }}</dd>
-      </div>
-      <div>
-        <dt>{{ messages.provenance.unit }}</dt>
-        <dd>{{ dataset.unit }}</dd>
-      </div>
-      <div>
-        <dt>{{ messages.provenance.period }}</dt>
-        <dd>{{ periodDetails }}</dd>
-      </div>
-      <div>
-        <dt>{{ messages.provenance.dataType }}</dt>
-        <dd>{{ dataTypeLabel(dataset.data_type) }}</dd>
-      </div>
-      <div>
-        <dt>{{ messages.provenance.source }}</dt>
-        <dd>
-          <a :href="dataset.source.url" target="_blank" rel="noopener">
-            {{ dataset.source.institution }}
-            <span class="sr-only">{{ messages.page.newTab }}</span>
-          </a>
-          <span aria-hidden="true"> · {{ dataset.source.product }}</span>
-        </dd>
-      </div>
-      <div>
-        <dt>{{ messages.provenance.lastUpdate }}</dt>
-        <dd>
-          <time :datetime="dataset.ingestion_time">{{ updateDate }}</time>
-          <span v-if="updateAge"> ({{ updateAge }})</span>
-        </dd>
-      </div>
-    </dl>
+    <p class="provenance-line">
+      <a :href="dataset.source.url" target="_blank" rel="noopener">
+        {{ dataset.source.institution }}
+        <span class="sr-only">{{ messages.page.newTab }}</span>
+      </a>
+      · {{ dataset.unit }} · {{ period }} · {{ messages.provenance.lastUpdate }}
+      <time :datetime="dataset.ingestion_time">{{ updateAge ?? updateDate }}</time>
+    </p>
+    <details class="provenance-details">
+      <summary>{{ messages.provenance.howMeasured }}</summary>
+      <dl class="provenance">
+        <div>
+          <dt>{{ messages.provenance.variable }}</dt>
+          <dd>{{ dataset.variable }}</dd>
+        </div>
+        <div>
+          <dt>{{ messages.provenance.unit }}</dt>
+          <dd>{{ dataset.unit }}</dd>
+        </div>
+        <div>
+          <dt>{{ messages.provenance.period }}</dt>
+          <dd>{{ periodDetails }}</dd>
+        </div>
+        <div>
+          <dt>{{ messages.provenance.dataType }}</dt>
+          <dd>{{ dataTypeLabel(dataset.data_type) }}</dd>
+        </div>
+        <div>
+          <dt>{{ messages.provenance.source }}</dt>
+          <dd>
+            <a :href="dataset.source.url" target="_blank" rel="noopener">
+              {{ dataset.source.institution }}
+              <span class="sr-only">{{ messages.page.newTab }}</span>
+            </a>
+            <span aria-hidden="true"> · {{ dataset.source.product }}</span>
+          </dd>
+        </div>
+        <div>
+          <dt>{{ messages.provenance.lastUpdate }}</dt>
+          <dd>
+            <time :datetime="dataset.ingestion_time">{{ updateDate }}</time>
+            <span v-if="updateAge"> ({{ updateAge }})</span>
+          </dd>
+        </div>
+      </dl>
+    </details>
     <p v-if="dataAge" class="data-age">
       {{ messages.provenance.latestData }}: {{ lastRecord?.end ?? '—' }} ({{ dataAge }}).
     </p>
@@ -124,14 +136,28 @@ const periodDetails = [
   color: var(--muted);
   font-size: var(--text-meta);
 }
+.provenance-line {
+  margin: 12px 16px 0;
+  color: var(--muted);
+  font-size: var(--text-meta);
+}
+.provenance-details {
+  margin: 12px 16px 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: var(--text-meta);
+}
+.provenance-details summary {
+  width: fit-content;
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+}
 .provenance {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
   gap: 12px 20px;
-  margin: 20px 16px 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-  font-size: var(--text-meta);
+  margin: 12px 0 0;
 }
 .provenance div {
   min-width: 0;

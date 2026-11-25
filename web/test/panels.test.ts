@@ -225,8 +225,38 @@ describe('outlookCategoryLabel', () => {
 describe('home ENFEN status card', () => {
   it('uses the verified lead only for its matching communiqué', () => {
     expect(messages.page.homeLead(17, 2026)).toContain('magnitud extraordinaria')
-    expect(messages.page.homeLead(17, 2027)).toBe('Una lectura breve de la señal.')
-    expect(messages.page.homeLead(17, 2027)).not.toBe(messages.page.coastLead)
+    expect(messages.page.homeLead(20, 2026)).toContain('febrero de 2027')
+    expect(messages.page.homeLead(17, 2027)).toContain('comunicado 17-2027')
+    expect(messages.page.homeLead(17, 2027)).toContain('aún no resume su pronóstico')
+  })
+
+  it('keys the forecast points and the action to their communiqué', () => {
+    expect(messages.page.forecastPoints(20, 2026)).toHaveLength(5)
+    expect(messages.page.forecastPoints(17, 2027)).toHaveLength(1)
+    expect(messages.page.forecastPoints(17, 2027)[0]).toContain('aún no resume')
+    expect(messages.page.actionLead(20, 2026)).not.toBeNull()
+    expect(messages.page.actionLead(17, 2027)).toBeNull()
+  })
+
+  it('builds the headline from the latest ICEN month, value and rank', () => {
+    expect(messages.page.homeHeadline('julio de 2026', '+3,38', 1, '1950')).toBe(
+      'El ICEN de julio de 2026 es +3,38 °C, el más alto desde 1950',
+    )
+    expect(messages.page.homeHeadline('julio de 2026', '+3,38', 4, '1950')).toContain('4.º')
+    expect(messages.page.homeHeadline('julio de 2026', '+3,38', 40, '1950')).toBe(
+      'El ICEN de julio de 2026 es +3,38 °C',
+    )
+  })
+
+  it('heads the home sections with findings from the data', async () => {
+    const wrapper = await mountHome()
+    const icen = await loadDataset('enfen-icen')
+    const latest = icen.records.at(-1)!
+
+    expect(wrapper.get('#home-title').text()).toContain(formatMonth(latest.start))
+    expect(wrapper.get('#forecast-title').text()).toBe(messages.page.forecastTitle(17, 2026))
+    expect(wrapper.get('#weekly-title').text()).not.toBe(messages.page.weeklyEmptyTitle)
+    expect(wrapper.get('#map-title').text()).not.toBe(messages.page.mapEmptyTitle)
   })
 
   it('shows the official status, dates and detail link of a current communique', async () => {
@@ -262,8 +292,9 @@ describe('home ENFEN status card', () => {
     const wrapper = await mountHome(emptyRecords(enfenFixture))
 
     expect(wrapper.get('.eyebrow').text()).toBe(messages.page.emptyEnfenTitle)
-    expect(wrapper.get('#home-title').text()).toBe(messages.page.emptyEnfenTitle)
+    expect(wrapper.get('#forecast-title').text()).toBe(messages.page.forecastEmptyTitle)
     expect(wrapper.find('.status-card').exists()).toBe(false)
+    expect(wrapper.find('.forecast-copy').exists()).toBe(false)
     expect(wrapper.text()).not.toContain('Sin datos del ONI')
     expect(wrapper.text()).not.toMatch(/NaN|undefined/)
   })

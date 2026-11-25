@@ -11,10 +11,10 @@ The user's goal is to understand the current coastal state and what evidence
 supports it. The next action is to inspect the signal, forecast or local view
 that answers their question.
 
-The home page has one primary message: the current ENFEN status. The map,
-charts and local links support that message. Historical context, methodology
-and education remain available through navigation and are not presented as
-competing calls to action.
+The home page has one primary message: the current ENFEN status. The map, charts
+and local links support that message. Historical context, methodology and
+education remain available through navigation and are not presented as competing
+calls to action.
 
 ## System
 
@@ -33,7 +33,7 @@ read those tokens; page styles do not add local colour or type scales.
 | Spacing           | The 4px steps from `--space-1` through `--space-24` group content before surface treatment.                                                |
 | Targets and focus | Interactive targets are at least 44px high. `:focus-visible` uses the accent outline.                                                      |
 | Motion            | Only local-link hover uses transform. It is gated for fine pointers and removed for reduced motion. No content enters from scale zero.     |
-| Data chrome       | `ChartShell` owns variable, unit, period, type, source and update age for every chart.                                                     |
+| Data chrome       | `ChartShell` owns variable, unit, period, type, source and update age: one visible line plus a "Cómo se mide" disclosure.                  |
 
 ## Layout
 
@@ -42,15 +42,15 @@ map, status or forecast benefits from a side note. At 900px and below, those
 columns become one column. Tables keep their accessible fallback and scroll
 inside their own region when a long value needs more width.
 
-The shared header marks the current route with `aria-current="page"`. Every
-page keeps the skip link, one `main` landmark and one page heading.
+The shared header marks the current route with `aria-current="page"`. Every page
+keeps the skip link, one `main` landmark and one page heading.
 
 ## States
 
 Charts show their loading and error placeholders where the chart will land.
-Empty data uses a status message with the relevant next source or route. A
-stale source keeps its provenance and adds a status notice linking to the
-source. Table fallbacks remain available below the chart.
+Empty data uses a status message with the relevant next source or route. A stale
+source keeps its provenance and adds a status notice linking to the source.
+Table fallbacks remain available below the chart.
 
 ## Review answers
 
