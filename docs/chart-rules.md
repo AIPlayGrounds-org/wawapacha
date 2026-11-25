@@ -46,6 +46,11 @@ ended 90 days ago or more.
 - Give empty and error states a useful next action.
 - Link alerts to the official source.
 - Link to the original dataset.
+- A count or a size taken from a source, not from a dataset, is drawn as a unit
+  grid or as scale bars. It draws only numbers its claims state, and the claim
+  texts are its caption. Scale bars share one scale from zero, with no break, so
+  a small value stays a sliver beside a big one. `web/test/units.test.ts` checks
+  that each drawn number appears in its claims.
 
 ## Reading a value
 

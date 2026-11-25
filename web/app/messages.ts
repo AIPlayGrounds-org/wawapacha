@@ -199,6 +199,47 @@ export const messages = {
         '2017': '2017',
       },
       peak: (value: string, month: string) => `El índice llegó a ${degrees(value)} en ${month}.`,
+      /** Each value is a number its texts state, so a bar or a dot count is never ours. */
+      rain1983: {
+        unit: 'mm',
+        bars: [
+          { id: 'normal', label: 'Lluvia de un año normal en Piura', value: 60 },
+          { id: '1983', label: 'Lluvia de 1983', value: 2400 },
+        ],
+        texts: [claim('igp-woodman-2014-piura-1983')],
+      },
+      dead1983: {
+        question: '¿Cuántos murieron? Depende de a quién le preguntes.',
+        unit: 'Cada punto, una persona.',
+        rows: [
+          {
+            id: 'gobierno',
+            count: 512,
+            label: 'muertos, según el gobierno, julio de 1983',
+            text: claim('elperuano-2023-1983-cronica'),
+          },
+          {
+            id: 'ops',
+            count: 380,
+            label: 'muertos, según un conteo preliminar de la OPS',
+            muted: true,
+            text: claim('impact-1983-paho-deaths'),
+          },
+        ],
+      },
+      river: {
+        unit: 'm³/s',
+        bars: [
+          { id: '1983', label: 'El río Piura en 1983', value: 3200 },
+          { id: '1998', label: 'En 1998', value: 4424 },
+        ],
+        line: { value: 2300, label: 'se cierran los puentes' },
+        texts: [
+          claim('uni-sanchez-piura-1983'),
+          claim('uni-sanchez-piura-1998'),
+          claim('tv-america-1998-03-16-2300'),
+        ],
+      },
       damage8298: claim('impact-8283-9798-caf-comparison'),
       low2017: 'En el gráfico casi no se ve. En tierra fue otra cosa.',
       todayStep: (value: string, month: string) =>
