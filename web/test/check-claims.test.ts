@@ -100,9 +100,15 @@ describe('claim check', () => {
         id: 'verified-id',
         claimEs: 'Una afirmación verificada con "comillas".',
         status: 'verified',
+        sources: [],
       },
-      { id: 'held-id', claimEs: 'Afirmación retenida', status: 'held' },
-      { id: 'multiline-id', claimEs: 'Una afirmación\nen varias líneas.\n', status: 'verified' },
+      { id: 'held-id', claimEs: 'Afirmación retenida', status: 'held', sources: [] },
+      {
+        id: 'multiline-id',
+        claimEs: 'Una afirmación\nen varias líneas.\n',
+        status: 'verified',
+        sources: [],
+      },
     ])
     const result = await site("import { claim } from './claims'; claim('multiline-id')")
     expect(result.errors).toEqual([])

@@ -2,10 +2,16 @@ import { parse } from 'smol-toml'
 
 const CLAIM_STATUSES = ['verified', 'held']
 
+export type ClaimSource = {
+  ref: string
+  quote: string
+}
+
 export type RegistryClaim = {
   id: string
   claimEs: string
   status: string
+  sources: ClaimSource[]
 }
 
 type RegistryDocument = {
@@ -14,6 +20,17 @@ type RegistryDocument = {
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null
+
+const parseSources = (id: string, value: unknown): ClaimSource[] => {
+  if (value === undefined) return []
+  if (!Array.isArray(value)) throw new Error(`claim ${id} has a source that is not a table`)
+  return value.map((source, index) => {
+    if (!isRecord(source) || typeof source.ref !== 'string' || typeof source.quote !== 'string') {
+      throw new Error(`source ${index + 1} of claim ${id} must define ref and quote`)
+    }
+    return { ref: source.ref, quote: source.quote }
+  })
+}
 
 export const parseClaims = (registryText: string): RegistryClaim[] => {
   const document = parse(registryText) as RegistryDocument
@@ -35,6 +52,6 @@ export const parseClaims = (registryText: string): RegistryClaim[] => {
     }
     if (ids.has(id)) throw new Error(`duplicate claim id: ${id}`)
     ids.add(id)
-    return { id, claimEs, status }
+    return { id, claimEs, status, sources: parseSources(id, value.source) }
   })
 }

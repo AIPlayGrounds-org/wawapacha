@@ -2,6 +2,7 @@
 import { messages } from '~/messages'
 import '@fontsource-variable/source-serif-4/opsz.css'
 import '@fontsource-variable/source-serif-4/opsz-italic.css'
+import '@fontsource/patrick-hand/latin-400.css'
 </script>
 
 <template>
@@ -78,6 +79,7 @@ import '@fontsource-variable/source-serif-4/opsz-italic.css'
   --text-title: 2rem;
   --text-display: 3rem;
   --font: 'Source Serif 4 Variable', Georgia, serif;
+  --font-hand: 'Patrick Hand', var(--font);
   color-scheme: light dark;
 }
 @media (prefers-color-scheme: dark) {
