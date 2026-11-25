@@ -85,14 +85,21 @@ July 1983, [elperuano-2023-1983-cronica](../evidence/claims.toml), and 380 by a
 preliminary PAHO table, [impact-1983-paho-deaths](../evidence/claims.toml),
 drawn muted. The two counts stay side by side; the page does not pick one.
 
-The 1997-98 step compares the damage of the two great events,
+The 1997-98 step opens in July 1997: the sea was already 4 °C above normal,
+[igp-woodman-1997-4c](../evidence/claims.toml), and the IGP wrote that it was
+«lejos» of 1983, [igp-woodman-1997-lejos](../evidence/claims.toml), on a paper
+card. Below it, 1997-98 is drawn over 1982-83 month by month, with a pin on July
+1997, so the reader sees how soon the forecast was overtaken. The step then
+says how high 1983 went and compares the damage of the two great events,
 [impact-8283-9798-caf-comparison](../evidence/claims.toml), and draws the Piura
 river's peak flow in each, 3 200 and 4 424 m³/s,
 [uni-sanchez-piura-1983](../evidence/claims.toml) and
 [uni-sanchez-piura-1998](../evidence/claims.toml), against the 2 300 m³/s at
 which the bridges closed,
-[tv-america-1998-03-16-2300](../evidence/claims.toml). The 2017 step shows
-that a low index came with heavy damage:
+[tv-america-1998-03-16-2300](../evidence/claims.toml). The 2017 step draws
+2016-17 over 1982-83 the same way and says the share: 2017's peak was under a
+third of 1983's. The page says "menos de un tercio" only while the data makes it
+true. It then shows that the low index came with heavy damage:
 [impact-2017-people](../evidence/claims.toml). The beat ends on the sentence
 the reader should keep: the index measures the sea, not the damage.
 

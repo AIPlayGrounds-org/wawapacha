@@ -241,6 +241,20 @@ export const messages = {
         ],
       },
       damage8298: claim('impact-8283-9798-caf-comparison'),
+      woodman: claim('igp-woodman-1997-4c'),
+      overlay: {
+        band: 'normal',
+        lejos: '«lejos»',
+        scrub: 'Recorrer el índice mes a mes',
+        table: (first: string, second: string) => `El índice de ${first} y de ${second}, mes a mes`,
+        caption: 'El índice mes a mes, de abril del primer año a diciembre del segundo.',
+      },
+      before1983: (value: string) => `El de 1983 había llegado a ${degrees(value)}.`,
+      /** The share is said only when the data bears it out. */
+      third2017: (value: string, value1983: string, underThird: boolean) =>
+        underThird
+          ? `${degrees(value)}: menos de un tercio de los ${degrees(value1983)} de 1983.`
+          : `${degrees(value)}, frente a ${degrees(value1983)} en 1983.`,
       low2017: 'En el gráfico casi no se ve. En tierra fue otra cosa.',
       todayStep: (value: string, month: string) =>
         `Hoy: ${degrees(value)} en ${month}. La línea punteada lleva ese nivel hacia atrás.`,
