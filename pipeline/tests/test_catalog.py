@@ -21,9 +21,10 @@ def test_web_catalog_carries_the_stale_threshold_the_freshness_command_uses():
     sources = registry.load()
     web = json.loads(catalog.render_web(sources, cli.CATALOG_SOURCES))["sources"]
 
+    modules = registry.discover()
     for entry in web:
         update = sources[entry["id"]]["update"]
-        if update == "manual":
+        if update == "manual" or hasattr(modules.get(entry["id"]), "stale_reason"):
             assert "stale_after_hours" not in entry
         else:
             assert timedelta(hours=entry["stale_after_hours"]) == (

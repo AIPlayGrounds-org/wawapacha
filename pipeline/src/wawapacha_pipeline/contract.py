@@ -36,6 +36,15 @@ class UpstreamError(Exception):
     """
 
 
+class Unchanged(Exception):
+    """The source has nothing newer than the published JSON.
+
+    Nothing is published and the run exits 0: a source checked more often than
+    it updates is working as intended. The freshness check reports a source
+    that stays unchanged too long.
+    """
+
+
 # Statuses a server returns while busy. Any other 4xx means our request is wrong.
 TRANSIENT_STATUSES = frozenset({408, 425, 429})
 

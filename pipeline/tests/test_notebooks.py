@@ -32,9 +32,7 @@ ENVIRONMENTS = {
     "noaa_cpc_outlook": {"NOAA_CPC_OUTLOOK_URL": sample_uri("outlook.html")},
     "noaa_ersst": {"NOAA_ERSST_URL": sample_uri("ersst.v5.el_nino.dat")},
     "open_meteo_glofas": {"OPEN_METEO_GLOFAS_URL": sample_uri("glofas.json")},
-    "enfen_communique": {
-        "ENFEN_COMMUNIQUE_PATH": str(SAMPLES_DIR / "enfen_17_2026.yaml")
-    },
+    "enfen_communique": {"ENFEN_FEED_URL": sample_uri("enfen_feed_alerta.xml")},
     "chirps": {},
 }
 # ERA5 requires a date window, so its test uses a local server.

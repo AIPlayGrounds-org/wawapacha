@@ -344,7 +344,7 @@ export interface EnfenRecord {
     | 'Vigilancia de La Niña Costera'
     | 'Alerta de La Niña Costera'
   /**
-   * The IMARPE detail page of the communiqué.
+   * The IMARPE detail page of the communiqué. Its slug does not always repeat the number.
    */
   url: string
   /**
@@ -355,10 +355,6 @@ export interface EnfenRecord {
    * A day in ISO 8601: YYYY-MM-DD.
    */
   end: string
-  /**
-   * A day in ISO 8601: YYYY-MM-DD.
-   */
-  checked_at?: string
   /**
    * True when the next-due date had passed at ingestion, in Lima time.
    */

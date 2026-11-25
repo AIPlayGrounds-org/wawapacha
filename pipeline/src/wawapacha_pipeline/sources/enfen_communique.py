@@ -1,35 +1,42 @@
 """ENFEN official communiqué: the alert status. Its provenance is in sources.toml.
 
-A person records the newest communiqué in pipeline/inputs/enfen.yaml with
-`wawapacha-pipeline enfen-add`. This module validates that file and publishes it.
-It does not download anything.
+The module reads the RSS feed of the communiqué archive, which carries the full
+text of each communiqué, and publishes the newest one as a single record.
 """
 
-import difflib
+import html
+import json
 import os
 import re
-from collections.abc import Hashable
+import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import UTC, date, datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 
-import yaml
-
-from wawapacha_pipeline import registry
-from wawapacha_pipeline.contract import REPO_ROOT, ValidationError, publish
+from wawapacha_pipeline import contract, registry
+from wawapacha_pipeline.contract import (
+    Unchanged,
+    ValidationError,
+    download_error,
+    publish,
+)
 
 # Súbela cuando cambie la lógica: queda en cada JSON publicado.
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 ID = "enfen-communique"
 SOURCE = registry.get(ID)
-INPUT_PATH = REPO_ROOT / "pipeline" / "inputs" / "enfen.yaml"
-# ENFEN_COMMUNIQUE_PATH reads another file (for example, in tests).
-PATH = Path(os.environ.get("ENFEN_COMMUNIQUE_PATH", INPUT_PATH))
+URL = os.environ.get("ENFEN_FEED_URL", SOURCE["access"]["url"])
+# The site answers HTTP 403 to curl's default User-Agent.
+USER_AGENT = "WawaPacha/0.1"
 
-REQUIRED = ("number", "year", "date", "status", "url", "next_due")
-OPTIONAL = ("checked_at",)
+# ENFEN publishes in Lima. Peru has no daylight saving time, so a fixed offset is exact.
+LIMA = timezone(timedelta(hours=-5))
+# ENFEN posts in the afternoon or evening of the due day and the update runs each
+# morning, so a communiqué is late only from the second day after its due date.
+LATE_AFTER = timedelta(days=1)
 
-# The exact phrases ENFEN uses. The sentence around them varies, so only the phrase is stored.
 STATUSES = (
     "No Activo",
     "Vigilancia de El Niño Costero",
@@ -37,191 +44,190 @@ STATUSES = (
     "Vigilancia de La Niña Costera",
     "Alerta de La Niña Costera",
 )
-URL_PATTERN = re.compile(
-    r"https://enfen\.imarpe\.gob\.pe/download/comunicado-oficial-enfen-n-(\d+)-(\d{4})/?"
+# ENFEN writes the inactive status as "No activo" or "No activa". The other
+# phrases match only in their exact words, in any letter case.
+STATUS_PATTERNS = [
+    (re.compile(r"No\s+activ[oa]", re.I), "No Activo"),
+    *((re.compile(re.escape(s).replace(r"\ ", r"\s+"), re.I), s) for s in STATUSES[1:]),
+]
+STATUS_LABEL = re.compile(r"Estado\s+del?\s+sistema\s+de\s+alerta\s*:\s*", re.I)
+# The status follows the date near the top when the label is missing.
+HEAD_CHARS = 200
+
+TITLE = re.compile(
+    r"Comunicado\s+(?:Oficial|Extraordinario)\s+ENFEN\s+N\s*°\s*(\d+)\s*[-–]\s*(\d{4})",
+    re.I,
 )
-URL_TEMPLATE = (
-    "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-{number}-{year}/"
+MONTHS = {
+    name: number
+    for number, name in enumerate(
+        (
+            "enero",
+            "febrero",
+            "marzo",
+            "abril",
+            "mayo",
+            "junio",
+            "julio",
+            "agosto",
+            "septiembre",
+            "octubre",
+            "noviembre",
+            "diciembre",
+        ),
+        start=1,
+    )
+}
+MONTHS["setiembre"] = 9
+NEXT_DUE = re.compile(
+    r"pr[óo]ximo\s+comunicado\s+oficial\b[^.]*?(\d{1,2})\s+de\s+([a-zé]+)\s+del?\s+(\d{4})",
+    re.I,
 )
-INPUT_TEMPLATE = """\
-# Written by `wawapacha-pipeline enfen-add` from the newest communiqué:
-# https://enfen.imarpe.gob.pe/downloads/comunicados/
-# Dates are unquoted YYYY-MM-DD. `status` is the exact phrase ENFEN uses.
-# `next_due` is the date the communiqué says the next one is due.
-enfen:
-  number: {number}
-  year: {year}
-  date: {published}
-  status: "{status}"
-  url: "{url}"
-  next_due: {next_due}
-  checked_at: {checked_at}
-"""
-
-# ENFEN publishes in Lima. Peru has no daylight saving time, so a fixed offset is exact.
-LIMA = timezone(timedelta(hours=-5))
+DETAIL_PREFIX = "https://enfen.imarpe.gob.pe/download/"
+CONTENT = "{http://purl.org/rss/1.0/modules/content/}encoded"
 
 
-class _UniqueKeyLoader(yaml.SafeLoader):
-    """SafeLoader that rejects a repeated key instead of keeping the last one."""
-
-    def construct_mapping(self, node, deep=False):
-        seen = set()
-        for key_node, _ in node.value:
-            key = self.construct_object(key_node, deep=True)
-            if not isinstance(key, Hashable):
-                raise ValidationError(
-                    f"Key {key!r} must be a single value, not a list or a mapping."
-                )
-            if key in seen:
-                raise ValidationError(
-                    f"Repeated key {key!r}: a communiqué appears twice."
-                )
-            seen.add(key)
-        return super().construct_mapping(node, deep)
-
-
-def fetch(path: Path = PATH) -> str:
+def fetch(url: str = URL, timeout: int = 60) -> bytes:
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
-        return path.read_text(encoding="utf-8")
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            return response.read()
     except OSError as error:
-        raise ValidationError(f"Cannot read {path}: {error.strerror}.") from None
+        raise download_error(f"Could not download {url}", error) from None
 
 
 def run(ingestion_time: datetime | None = None) -> tuple[int, Path]:
-    """Return the record count and the path of the published JSON."""
-    ingestion_time = ingestion_time or datetime.now(UTC)
-    records = parse(fetch(), ingestion_time.astimezone(LIMA).date())
-    return len(records), publish(build(records, ingestion_time))
+    """Return the record count and the path of the published JSON.
 
-
-def parse(text: str, today: date | None = None) -> list[dict]:
-    """Validate the YAML and return its one communiqué as a record.
-
-    `today` is the date in Lima. It decides whether the communiqué lies in the future
-    and whether the record is stale.
+    Raise Unchanged when this version already published the same record, so
+    `stale` is rewritten only on the day it turns true.
     """
-    today = today or datetime.now(LIMA).date()
+    ingestion_time = ingestion_time or datetime.now(UTC)
+    record = parse(fetch())
+    today = ingestion_time.astimezone(LIMA).date()
+    record["stale"] = today > date.fromisoformat(record["end"])
+    if record == published_record():
+        raise Unchanged(
+            f"No communiqué after N° {record['number']}-{record['year']} yet."
+        )
+    return 1, publish(build([record], ingestion_time))
+
+
+def parse(feed: bytes) -> dict:
+    """Return the newest communiqué in the feed as a record, still without `stale`."""
     try:
-        document = yaml.load(text, Loader=_UniqueKeyLoader)
-    except (
-        yaml.YAMLError,
-        ValueError,
-    ) as error:  # ValueError: a date that does not exist, such as 2026-02-30
-        raise ValidationError(f"The YAML cannot be read: {error}") from None
-    if not isinstance(document, dict) or set(document) != {"enfen"}:
-        raise ValidationError("Expected one top-level key, `enfen`.")
-    entry = document["enfen"]
-    if not isinstance(entry, dict):
-        raise ValidationError("`enfen` must be a mapping.")
+        items = ET.fromstring(feed).findall("./channel/item")
+    except ET.ParseError as error:
+        raise ValidationError(f"The feed is not valid XML: {error}") from None
+    if not items:
+        raise ValidationError("The feed lists no communiqué.")
+    return read_item(max(items, key=published_at))
 
-    missing = [key for key in REQUIRED if entry.get(key) is None]
-    if missing:
-        raise ValidationError(f"Missing fields: {missing}.")
-    unknown = sorted(set(entry) - set(REQUIRED) - set(OPTIONAL))
-    if unknown:
-        raise ValidationError(f"Unknown fields: {unknown}.")
 
-    number, year = entry["number"], entry["year"]
-    if type(number) is not int or number < 1:
-        raise ValidationError(f"number must be a positive integer, not {number!r}.")
-    if type(year) is not int or not 1000 <= year <= 9999:
-        raise ValidationError(f"year must have four digits, not {year!r}.")
+def published_at(item: ET.Element) -> datetime:
+    value = item.findtext("pubDate") or ""
+    try:
+        return parsedate_to_datetime(value)
+    except (TypeError, ValueError):
+        raise ValidationError(f"Unreadable pubDate {value!r}.") from None
 
-    published = read_date(entry, "date")
-    next_due = read_date(entry, "next_due")
-    if published.year != year:
-        raise ValidationError(f"date {published} is not in year {year}.")
-    if published > today:
-        raise ValidationError(
-            f"date {published} is in the future (today is {today} in Lima)."
-        )
-    if next_due <= published:
-        raise ValidationError(f"next_due {next_due} must be after date {published}.")
 
-    status = entry["status"]
-    if status not in STATUSES:
-        raise ValidationError(f"status {status!r} is not one of {list(STATUSES)}.")
-
-    url = entry["url"]
-    match = URL_PATTERN.fullmatch(url) if isinstance(url, str) else None
+def read_item(item: ET.Element) -> dict:
+    title = item.findtext("title") or ""
+    match = TITLE.search(title)
     if match is None:
-        raise ValidationError(
-            f"url {url!r} is not an https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-<number>-<year>/ page."
-        )
-    if (int(match[1]), int(match[2])) != (number, year):
-        raise ValidationError(
-            f"url {url!r} names a different communiqué than {number}-{year}."
-        )
+        raise ValidationError(f"Title {title!r} names no communiqué number.")
+    number, year = int(match[1]), int(match[2])
 
-    record = {
+    url = (item.findtext("link") or "").strip()
+    if not url.startswith(DETAIL_PREFIX):
+        raise ValidationError(f"{title}: link {url!r} is not a detail page.")
+
+    text = plain_text(item.findtext(CONTENT) or item.findtext("description") or "")
+    published = published_at(item).astimezone(LIMA).date()
+    next_due = read_next_due(text, title)
+    if next_due <= published:
+        raise ValidationError(
+            f"{title}: next communiqué {next_due} is not after {published}."
+        )
+    return {
         "number": number,
         "year": year,
-        "status": status,
+        "status": read_status(text, title),
         "url": url,
         "start": published.isoformat(),
         "end": next_due.isoformat(),
-        "stale": today > next_due,
     }
-    if "checked_at" in entry:
-        checked_at = read_date(entry, "checked_at")
-        if checked_at < published:
-            raise ValidationError(
-                f"checked_at {checked_at} is before date {published}."
-            )
-        if checked_at > today:
-            raise ValidationError(
-                f"checked_at {checked_at} is in the future (today is {today} in Lima)."
-            )
-        record["checked_at"] = checked_at.isoformat()
-    return [record]
 
 
-def read_date(entry: dict, key: str) -> date:
-    """YAML turns an unquoted 2026-09-28 into a date. A quoted one stays text and is rejected."""
-    value = entry[key]
-    if type(value) is not date:
+def plain_text(markup: str) -> str:
+    return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", markup)).split())
+
+
+def read_status(text: str, title: str) -> str:
+    """Return the status the communiqué declares, or fail rather than guess."""
+    label = STATUS_LABEL.search(text)
+    if label:
+        for pattern, status in STATUS_PATTERNS:
+            if pattern.match(text, label.end()):
+                return status
         raise ValidationError(
-            f"{key} must be an unquoted YYYY-MM-DD date, not {value!r}."
+            f"{title}: unknown status after the label: {text[label.end() : label.end() + 60]!r}."
         )
-    return value
+    head = text[:HEAD_CHARS]
+    found = [
+        (match.start(), status)
+        for pattern, status in STATUS_PATTERNS
+        if (match := pattern.search(head))
+    ]
+    if not found:
+        raise ValidationError(f"{title}: no status near the top: {head!r}.")
+    return min(found)[1]
 
 
-def add(
-    number: int,
-    published: date,
-    status: str,
-    next_due: date,
-    checked_at: date,
-    path: Path | None = None,
-    today: date | None = None,
-) -> str:
-    """Validate and replace the input file for this communiqué.
+def read_next_due(text: str, title: str) -> date:
+    match = NEXT_DUE.search(text)
+    if match is None:
+        raise ValidationError(f"{title}: it states no date for the next communiqué.")
+    day, month, year = int(match[1]), match[2].lower(), int(match[3])
+    if month not in MONTHS:
+        raise ValidationError(f"{title}: unknown month {match[2]!r}.")
+    try:
+        return date(year, MONTHS[month], day)
+    except ValueError as error:
+        raise ValidationError(f"{title}: {error}.") from None
 
-    Return the diff. The year and detail URL follow from the number and date.
-    """
-    path = path or PATH
-    text = INPUT_TEMPLATE.format(
-        number=number,
-        published=published.isoformat(),
-        status=status,
-        url=URL_TEMPLATE.format(number=number, year=published.year),
-        next_due=next_due.isoformat(),
-        checked_at=checked_at.isoformat(),
-        year=published.year,
-    )
-    parse(text, today)
-    previous = fetch(path) if path.exists() else ""
-    path.write_text(text, encoding="utf-8", newline="\n")
-    return "\n".join(
-        difflib.unified_diff(
-            previous.splitlines(),
-            text.splitlines(),
-            fromfile=f"a/{path.name}",
-            tofile=f"b/{path.name}",
-            lineterm="",
+
+def read_published(path: Path) -> dict | None:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+
+
+def published_record() -> dict | None:
+    """Return the published record when this version wrote it."""
+    dataset = read_published(contract.DATA_DIR / f"{ID}.json")
+    if not dataset or dataset.get("processing_version") != VERSION:
+        return None
+    return dataset["records"][0]
+
+
+def stale_reason(path: Path, now: datetime) -> str | None:
+    """Freshness follows the next-due date the communiqué states, not the ingestion time."""
+    dataset = read_published(path)
+    try:
+        record = dataset["records"][0]
+        due = date.fromisoformat(record["end"])
+    except (TypeError, KeyError, IndexError, ValueError):
+        return "missing or invalid communiqué record"
+    today = now.astimezone(LIMA).date()
+    if today - due > LATE_AFTER:
+        return (
+            f"communiqué N° {record['number']}-{record['year']} said the next one "
+            f"was due {due}; today is {today} in Lima"
         )
-    )
+    return None
 
 
 def build(records: list[dict], ingestion_time: datetime) -> dict:

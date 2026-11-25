@@ -4,18 +4,19 @@ import argparse
 import importlib
 import json
 import sys
-from datetime import UTC, date, datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 from wawapacha_pipeline import catalog, registry, scaffold
 from wawapacha_pipeline.contract import (
     DATA_DIR,
+    Unchanged,
     UpstreamError,
     ValidationError,
     is_transient,
     relative_path,
 )
-from wawapacha_pipeline.sources import enfen_communique, senamhi_estaciones
+from wawapacha_pipeline.sources import senamhi_estaciones
 
 SOURCES = registry.discover()
 SNAPSHOT_IDS = tuple(
@@ -81,18 +82,26 @@ def due_source_ids(
 def freshness_issues(
     now: datetime | None = None, data_dir: Path | None = None
 ) -> dict[str, str]:
-    """Map each stale or missing published dataset to the reason, using cadence tolerances."""
+    """Map each stale or missing published dataset to the reason.
+
+    A source module with its own `stale_reason(path, now)` decides for itself;
+    the others use their cadence tolerance.
+    """
     now = now or datetime.now(UTC)
     now = now if now.tzinfo else now.replace(tzinfo=UTC)
     data_dir = data_dir or DATA_DIR
     sources = registry.load()
     issues = {}
-    for source_id in SOURCES:
+    for source_id, module in SOURCES.items():
         update = sources[source_id]["update"]
         tolerance = registry.stale_after(update)
         if tolerance is None:
             continue
         path = data_dir / f"{source_id}.json"
+        if hasattr(module, "stale_reason"):
+            if reason := module.stale_reason(path, now):
+                issues[source_id] = reason
+            continue
         last_update = _ingestion_time(path)
         if last_update is None:
             issues[source_id] = "missing or invalid ingestion/update timestamp"
@@ -151,28 +160,6 @@ def main(argv: list[str] | None = None) -> int:
         "snapshot-check", help="validate a SENAMHI station snapshot before it is run"
     )
     snapshot_parser.add_argument("file", type=Path)
-    enfen_parser = commands.add_parser(
-        "enfen-add",
-        help="record the newest ENFEN communiqué in pipeline/inputs/enfen.yaml",
-    )
-    enfen_parser.add_argument("number", type=int, help="communiqué number")
-    enfen_parser.add_argument(
-        "--date", type=date.fromisoformat, required=True, help="communiqué date"
-    )
-    enfen_parser.add_argument(
-        "--status", choices=enfen_communique.STATUSES, required=True
-    )
-    enfen_parser.add_argument(
-        "--next-due",
-        type=date.fromisoformat,
-        required=True,
-        help="date the communiqué gives for the next one",
-    )
-    enfen_parser.add_argument(
-        "--checked-at",
-        type=date.fromisoformat,
-        help="day the ENFEN archive was read (default: today in Lima)",
-    )
     args = parser.parse_args(argv)
 
     if args.command == "new-source":
@@ -199,22 +186,6 @@ def main(argv: list[str] | None = None) -> int:
             f"{args.file}: {len(stations)} stations, {min(years)}-{max(years)}, "
             f"taken {snapshot['snapshot']['taken']}"
         )
-        return 0
-
-    if args.command == "enfen-add":
-        try:
-            print(
-                enfen_communique.add(
-                    args.number,
-                    args.date,
-                    args.status,
-                    args.next_due,
-                    args.checked_at or datetime.now(enfen_communique.LIMA).date(),
-                )
-            )
-        except ValidationError as error:
-            print(f"cannot record the communiqué. {error}", file=sys.stderr)
-            return 1
         return 0
 
     if args.command == "sources":
@@ -263,6 +234,8 @@ def main(argv: list[str] | None = None) -> int:
     # Nothing is published on any error: the previous JSON stays in data/.
     try:
         print(run(args.source))
+    except Unchanged as error:
+        print(f"{args.source}: nothing new. {error}")
     except ValidationError as error:
         print(f"{args.source}: fails validation. {error}", file=sys.stderr)
         return 1

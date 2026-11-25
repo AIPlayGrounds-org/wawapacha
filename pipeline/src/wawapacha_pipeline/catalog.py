@@ -123,6 +123,7 @@ def render_web(
     """Render the registry facts the web needs as a static JSON catalogue."""
     routes = routes or registry.load_routes()
     built_ids = set(built)
+    modules = registry.discover()
     entries = []
     for entry in sources.values():
         if entry["id"] not in built_ids:
@@ -144,7 +145,10 @@ def render_web(
             if key in entry:
                 source[key] = entry[key]
         stale_after = registry.stale_after(entry["update"])
-        if stale_after is not None:
+        # A source with its own stale_reason publishes its lateness in its records.
+        if stale_after is not None and not hasattr(
+            modules.get(entry["id"]), "stale_reason"
+        ):
             source["stale_after_hours"] = int(stale_after.total_seconds() // 3600)
         entries.append(source)
     return (

@@ -12,7 +12,8 @@ instead of repeating them.
 4. [`source-registry.md`](source-registry.md): the fields of `sources.toml` and
    the steps to add a source.
 5. [`sources.md`](sources.md): the generated catalog of every source.
-6. [`manual-snapshots.md`](manual-snapshots.md): the inputs a person refreshes.
+6. [`manual-snapshots.md`](manual-snapshots.md): the SENAMHI station snapshot a
+   person refreshes.
 7. [`freshness.md`](freshness.md): the check that reports stale published data.
 8. [`chart-rules.md`](chart-rules.md): provenance, attribution and display rules
    for every chart.

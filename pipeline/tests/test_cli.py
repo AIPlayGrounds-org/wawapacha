@@ -19,7 +19,22 @@ def scheduled_ids(*updates: str) -> list[str]:
 
 
 def write_published_data(path, ingestion_time: str) -> None:
-    path.write_text(json.dumps({"ingestion_time": ingestion_time}), encoding="utf-8")
+    # The record serves sources with their own stale_reason: a communiqué due that day.
+    record = {"number": 1, "year": 2026, "end": ingestion_time[:10]}
+    path.write_text(
+        json.dumps({"ingestion_time": ingestion_time, "records": [record]}),
+        encoding="utf-8",
+    )
+
+
+def test_freshness_uses_a_source_rule_instead_of_the_cadence(tmp_path):
+    path = tmp_path / "enfen-communique.json"
+    write_published_data(path, "2026-10-01T12:00:00+00:00")
+
+    # 48 hours is within the daily tolerance, but the communiqué was due on 2026-10-01.
+    issues = cli.freshness_issues(datetime(2026, 10, 3, 12, tzinfo=UTC), tmp_path)
+
+    assert "due 2026-10-01" in issues["enfen-communique"]
 
 
 def test_due_selection_uses_the_registry_update_schedule(tmp_path):

@@ -15,6 +15,7 @@ from scipy.io import netcdf_file
 
 from wawapacha_pipeline import contract, registry
 from wawapacha_pipeline.contract import (
+    Unchanged,
     UpstreamError,
     ValidationError,
     download_error,
@@ -55,7 +56,7 @@ def fetch(
 
     PSL keeps one SST file per year, and the NetCDF Subset Service cuts the region on the server.
     Until the new year's file exists, the previous year's file is the newest.
-    Raises UpstreamError when the newest day is already published.
+    Raises Unchanged when the newest day is already published.
     """
     now = now or datetime.now(UTC)
     day = newest_day(url, now.year, timeout) or newest_day(url, now.year - 1, timeout)
@@ -63,7 +64,7 @@ def fetch(
         raise UpstreamError(f"PSL has no SST file for {now.year} or {now.year - 1}.")
     published = published_day()
     if published is not None and day <= published:
-        raise UpstreamError(f"PSL has no day after {published} yet.")
+        raise Unchanged(f"PSL has no day after {published} yet.")
 
     sst = download(
         f"{url}/sst.day.mean.{day.year}.nc", timeout=timeout, time=f"{day}T00:00:00Z"

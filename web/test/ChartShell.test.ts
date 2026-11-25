@@ -101,7 +101,7 @@ describe('ChartShell', () => {
     expect(late.get('.stale-notice').text()).toContain(messages.provenance.staleSource)
   })
 
-  it('has no update tolerance for a source that is updated by hand', async () => {
+  it('has no update tolerance for a source that judges its own lateness', async () => {
     expect(staleAfterHours['enfen-communique']).toBeUndefined()
 
     const wrapper = await mountAt((dataset) => {
