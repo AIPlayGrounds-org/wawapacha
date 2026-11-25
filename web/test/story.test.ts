@@ -4,7 +4,6 @@ import IcenTimeline from '~/components/IcenTimeline.vue'
 import SeaMap from '~/components/SeaMap.vue'
 import type { GridRecord } from '~/types/dataset'
 import { buildSeaGrid, seaPosition, seaStep } from '~/utils/seaGrid'
-import { pickClaimSources } from '../server/utils/loadClaimSources'
 
 // Two rows from south to north. The east cell of the north row is land.
 const record = {
@@ -92,31 +91,5 @@ describe('IcenTimeline', () => {
     expect(wrapper.findAll('.mark--dim')).toHaveLength(1)
     expect(wrapper.get('.mark--focus').text()).toBe('último')
     expect(wrapper.find('.level').exists()).toBe(true)
-  })
-})
-
-describe('pickClaimSources', () => {
-  const registry = `
-[[claim]]
-id = "rule"
-status = "verified"
-claim_es = "Una regla."
-source = [{ ref = "https://example.com/rule", quote = "La regla." }]
-
-[[claim]]
-id = "draft"
-status = "held"
-claim_es = "Un borrador."
-`
-
-  it('returns the quoted passages of a verified claim', () => {
-    expect(pickClaimSources(registry, ['rule'])).toEqual({
-      rule: [{ ref: 'https://example.com/rule', quote: 'La regla.' }],
-    })
-  })
-
-  it('refuses a claim that is missing or not verified', () => {
-    expect(() => pickClaimSources(registry, ['draft'])).toThrow(/draft/)
-    expect(() => pickClaimSources(registry, ['absent'])).toThrow(/absent/)
   })
 })

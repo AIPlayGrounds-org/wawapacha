@@ -112,6 +112,23 @@ describe('ChartShell', () => {
     expect(wrapper.find('.stale-notice').exists()).toBe(false)
   })
 
+  it('keeps the caption, source link and stale notice in bare mode', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(now)
+    const dataset = JSON.parse(JSON.stringify(timeSeriesFixture)) as typeof timeSeriesFixture
+    dataset.records.at(-1)!.end = '2026-01-01'
+    const wrapper = mount(ChartShell, {
+      props: { dataset, summary: 'Resumen accesible de prueba', bare: true },
+      slots: { default: '<div data-chart>chart</div>' },
+    })
+    await nextTick()
+
+    expect(wrapper.find('.provenance').exists()).toBe(false)
+    expect(wrapper.get('figcaption').text()).toContain('Resumen accesible de prueba')
+    expect(wrapper.get('figcaption a').attributes('href')).toBe(dataset.source.url)
+    expect(wrapper.get('.stale-notice').text()).toContain(messages.provenance.staleSource)
+  })
+
   it.each([
     [89, false],
     [90, true],

@@ -21,14 +21,11 @@ const props = defineProps<{
 
 const WIDTH = 1000
 const HEIGHT = 400
-/** ENFEN's lower bound of the extraordinary category (claim icen-extraordinary-threshold). */
-const EXTRAORDINARY = 3.5
-
 const domain = computed(() => {
   const values = props.records.map((record) => record.icen)
   return {
     min: Math.floor(Math.min(...values, 0)),
-    max: Math.ceil(Math.max(...values, EXTRAORDINARY)) + 1,
+    max: Math.ceil(Math.max(...values, 0)) + 1,
   }
 })
 const x = (index: number) => (index / Math.max(1, props.records.length - 1)) * WIDTH
@@ -81,7 +78,6 @@ const decades = computed(() =>
         <path class="area area--warm" :d="area" clip-path="url(#timeline-above)" />
         <path class="area area--cold" :d="area" clip-path="url(#timeline-below)" />
         <line class="zero" x1="0" :x2="WIDTH" :y1="y(0)" :y2="y(0)" />
-        <line class="threshold" x1="0" :x2="WIDTH" :y1="y(EXTRAORDINARY)" :y2="y(EXTRAORDINARY)" />
         <line
           v-if="level !== null"
           class="level"
@@ -91,12 +87,6 @@ const decades = computed(() =>
           :y2="y(level)"
         />
       </svg>
-      <span class="rule-label" :style="{ top: percent(y(EXTRAORDINARY), HEIGHT) }">{{
-        messages.story.timeline.extraordinary
-      }}</span>
-      <span class="rule-label" :style="{ top: percent(y(0), HEIGHT) }">{{
-        messages.story.timeline.normal
-      }}</span>
       <span
         v-for="mark in placedMarks"
         :key="mark.id"
@@ -150,25 +140,11 @@ line {
   stroke: var(--on-deep-muted);
   stroke-width: 1;
 }
-.threshold {
-  stroke-dasharray: 5 5;
-}
 .level {
   stroke: var(--on-deep);
   stroke-dasharray: 1 5;
   stroke-linecap: round;
   stroke-width: 2;
-}
-.rule-label {
-  position: absolute;
-  left: 0;
-  padding: 0 4px 2px 0;
-  transform: translateY(-100%);
-  border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--deep) 85%, transparent);
-  color: var(--on-deep-muted);
-  font-size: var(--text-label);
-  line-height: 1.2;
 }
 .mark {
   position: absolute;
@@ -191,9 +167,9 @@ line {
   border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--deep) 85%, transparent);
   color: var(--on-deep);
-  font-family: var(--font-hand);
-  font-size: var(--text-lead);
-  line-height: 1.05;
+  font-size: var(--text-meta);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25;
   text-align: center;
   white-space: pre;
 }
@@ -228,7 +204,7 @@ line {
 }
 @media (max-width: 520px) {
   .mark-label {
-    font-size: var(--text-body);
+    font-size: var(--text-label);
   }
   .decades span:nth-child(even) {
     display: none;

@@ -9,26 +9,9 @@ const homeLeadByCommunique: Record<string, string> = {
   '17-2026': claim('enfen-co17-coast-extraordinaria-jan2027'),
   '20-2026': claim('enfen-co20-coast-extraordinaria-feb2027'),
 }
-type ForecastPoint = { label: string; text: string }
-const forecastByCommunique: Record<string, { title: string; points: ForecastPoint[] }> = {
-  '17-2026': {
-    title: 'ENFEN prevé lluvias sobre lo normal en la costa norte y central',
-    points: [
-      { label: 'Lluvia y ríos, oct–dic', text: claim('enfen-co17-ond-rain-rivers') },
-      { label: 'Lluvia, verano 2027', text: claim('enfen-co17-summer2027-rain') },
-      { label: 'Calor', text: claim('enfen-co17-air-temperature-records') },
-    ],
-  },
-  '20-2026': {
-    title: 'ENFEN prevé lluvias sobre lo normal y ríos más altos en la costa hasta el verano',
-    points: [
-      { label: 'Lluvia, nov–ene', text: claim('enfen-co20-nov-jan-rain') },
-      { label: 'Lluvia, verano 2027', text: claim('enfen-co20-summer2027-rain') },
-      { label: 'Ríos', text: claim('enfen-co20-rivers') },
-      { label: 'Calor', text: claim('enfen-co20-air-temperature-records') },
-      { label: 'Oleajes', text: claim('enfen-co20-waves-dec-jan') },
-    ],
-  },
+const forecastByCommunique: Record<string, string> = {
+  '17-2026': 'ENFEN prevé lluvias sobre lo normal en la costa norte y central',
+  '20-2026': 'ENFEN prevé lluvias sobre lo normal y ríos más altos en la costa hasta el verano',
 }
 const actionByCommunique: Record<string, string> = {
   '20-2026': claim('enfen-co20-recommendation'),
@@ -110,46 +93,20 @@ export const messages = {
     seoTitle: 'El Niño Costero · WawaPacha',
     seoDescription: 'Estado oficial, evidencia y pronóstico para la costa del Perú',
     mainNav: 'Navegación principal',
-    communiqueMeta: (number: number, year: number) => `ENFEN · Comunicado ${number}-${year} ·`,
     homeLead: (number: number, year: number) =>
       homeLeadByCommunique[communiqueKey(number, year)] ??
       `ENFEN publicó el comunicado ${number}-${year}. Este sitio aún no resume su pronóstico; léelo en el enlace oficial.`,
-    homeNext: (date: string) => `Próximo comunicado previsto · ${date}`,
     forecastTitle: (number: number, year: number) =>
-      forecastByCommunique[communiqueKey(number, year)]?.title ??
+      forecastByCommunique[communiqueKey(number, year)] ??
       `ENFEN publicó el comunicado ${number}-${year}`,
-    forecastPoints: (number: number, year: number) =>
-      forecastByCommunique[communiqueKey(number, year)]?.points ?? [
-        {
-          label: 'Pronóstico',
-          text: 'Este sitio aún no resume ese comunicado. Su pronóstico está en el enlace oficial.',
-        },
-      ],
     forecastSource: (number: number, year: number, date: string) =>
       `Comunicado Oficial ENFEN N° ${number}-${year}, ${date}.`,
     forecastEmptyTitle: 'Sin comunicado oficial vigente',
-    impactTitle: 'En 2017 y 2023, las lluvias más extremas cayeron en la costa norte',
-    impactLead: claim('senamhi-69-2026-nino-costero-composite-coasts'),
-    impactLimits: claim('senamhi-69-2026-nino-costero-composite-limits'),
-    impactChartLead:
-      'El gráfico compara la lluvia mensual de 1982–83 y 1997–98 con la mediana de cada estación.',
-    impactCoverage: claim('senamhi-hydrometeorological-stations'),
     notShown:
       'Ningún gráfico de esta página dice dónde ni cuánto lloverá en tu localidad. Esos avisos los emiten SENAMHI y las autoridades locales.',
     actionTitle: 'Si vives en una zona expuesta, prepárate y sigue los avisos oficiales',
     actionLead: (number: number, year: number) =>
       actionByCommunique[communiqueKey(number, year)] ?? null,
-    localLead: 'Sigue la lluvia, los ríos y el archivo desde tu territorio.',
-    sourcesTitle: 'Cada cifra de esta página sale de una fuente pública',
-    sourcesLead:
-      'Cada gráfico muestra su fuente, unidad, periodo y antigüedad; «Cómo se mide» abre el detalle.',
-    officialStatus: 'Estado oficial de ENFEN',
-    localTerritoryLabel: 'Territorio',
-    localRiversLabel: 'Ríos',
-    localArchiveLabel: 'Archivo',
-    localTerritoryDescription: claim('chirps-rainfall-estimates'),
-    localRiversDescription: claim('glofas-river-discharge-forecast'),
-    localArchiveDescription: claim('historical-coastal-chronology'),
     reviewSource: 'Ver la fuente',
     chartLoading: 'Cargando el gráfico…',
     chartError: 'Error de gráfico',
@@ -159,7 +116,6 @@ export const messages = {
     tableAnomaly: 'Anomalía',
     tableThreshold: 'Respecto al umbral',
     emptyTitle: 'Sin datos del ONI',
-    emptyEnfenTitle: 'Sin comunicado oficial',
     newTab: ' (se abre en una pestaña nueva)',
     degreeC: '°C',
     degreeValue: (value: string, unit: string) => `${value} ${unit}`,
@@ -168,90 +124,41 @@ export const messages = {
     territoryLink: 'Territorio',
     learnLink: 'Aprende',
     methodologyLink: 'Metodología',
-    localTerritoryLink: 'Ver Territorio',
-    localHistoryLink: 'Ver estaciones históricas',
-    localRiversLink: 'Ver ríos',
     officialSources: 'Fuentes oficiales',
   },
   story: {
-    kicker: 'El Niño Costero, explicado con datos públicos',
-    railLabel: 'Las cinco preguntas de esta página',
-    questionNumber: (number: number, total: number) => `Pregunta ${number} de ${total}`,
-    doubt: 'Una duda razonable',
-    sourceCardLink: 'Ver el documento',
-    questions: {
-      calor: { short: '¿Qué tan caliente?', title: '¿Qué tan caliente está el mar?' },
-      metodo: { short: '¿Cómo lo saben?', title: '¿Cómo saben que es El Niño Costero?' },
-      historia: { short: '¿Como 1983?', title: '¿Es como 1983, 1998 o 2017?' },
-      lluvia: { short: '¿Lloverá?', title: '¿Va a llover donde vivo?' },
-      hacer: { short: '¿Qué hago?', title: '¿Qué hago ahora?' },
-    },
     hero: {
       question: '¿Qué tan caliente está el mar frente al Perú?',
-      answer: (rank: number, since: string) =>
-        rank === 1
-          ? `Más que nunca desde ${since}, según el índice oficial.`
-          : rank <= 10
-            ? `El índice oficial marca su ${rank}.º valor más alto desde ${since}.`
-            : 'Esto marca hoy el índice oficial.',
+      answer: (above: string[], since: string) =>
+        above.length === 0
+          ? `Más que nunca desde ${since}.`
+          : above.length <= 3
+            ? `Más que nunca desde ${since}, salvo en ${listFormat.format(above)}.`
+            : `Lo superaron ${above.length} episodios desde ${since}.`,
       empty: 'Sin datos del ICEN',
       detail: (month: string, value: string) =>
-        `El índice se llama ICEN. En ${month} marcó ${value} °C por encima de lo normal.`,
-      cue: 'Cinco preguntas, una por una',
-      chartSummary: (since: string, month: string) =>
-        `ICEN mensual de ${since} a ${month}. Sobre la línea, mar más caliente que lo normal; debajo, más frío.`,
+        `En ${month}, el índice oficial del Perú marcó ${value} °C sobre lo normal.`,
+      chartSummary: (since: string) =>
+        `Índice Costero El Niño (ICEN), mes a mes desde ${since}. Arriba de la línea, mar más caliente que lo normal.`,
     },
     timeline: {
-      extraordinary: 'extraordinario: más de +3,5 °C',
-      normal: 'normal',
       mark: (label: string, value: string) => `${label}\n${value} °C`,
       today: 'hoy',
     },
     map: {
-      box: 'región Niño 1+2',
       legend: '°C sobre lo normal',
       warmest: (value: string) => `${value} °C`,
-      summary: (day: string, value: string, place: string) =>
-        `Mapa del ${day}. El punto más caliente está ${value} °C por encima de lo normal, en ${place}.`,
+      summary: (day: string) => `Cuánto se aparta el mar de lo normal, ${day}.`,
     },
     calor: {
-      answer: (day: string, sst: string, normal: string) =>
-        `La semana del ${day}, el agua frente a la costa norte estuvo a ${sst} °C. Lo normal para esa fecha son unos ${normal} °C.`,
-      empty: 'Sin datos semanales',
-      anomaly: (value: string) =>
-        `Esa diferencia, ${value} °C, se llama anomalía. Todo lo que sigue se mide así: no cuánto calor hace, sino cuánto se aparta el mar de lo normal para la fecha.`,
-      mapTitle: (value: string) =>
-        `En el mapa, el agua más caliente llega a ${value} °C sobre lo normal`,
-      mapEmptyTitle: 'Sin mapa de temperatura del mar',
-      box: claim('nino-1-2-box'),
-      boxNote:
-        'Es la caja punteada del mapa. El índice oficial del Perú se calcula con el agua de esa caja.',
-      bridge: 'Un mapa muestra un día. Para decir «esto es El Niño Costero» hace falta una regla.',
-    },
-    metodo: {
-      answer: (months: number) =>
-        months >= 3
-          ? `Con una regla: tres meses seguidos de mar cálido. Ya van ${months}.`
-          : 'Con una regla: tres meses seguidos de mar cálido.',
-      steps: [
-        { label: 'El índice', text: claim('icen-plain-definition') },
-        { label: 'La escala', text: claim('icen-extraordinary-threshold') },
-        { label: 'La regla', text: claim('coastal-event-plain-criterion') },
-      ],
-      ruleSource: 'ENFEN · Nota Técnica 01-2024, p. 3',
-      doubt: (month: string) => `¿Por qué el índice va por ${month}?`,
-      lag: (month: string, day: string) =>
-        `Porque promedia tres meses y tiene que esperar a que terminen. El último ICEN es de ${month}; el último dato semanal, del ${day}.`,
-      revises: claim('icen-revises-plain'),
-      lagTitle: 'El dato semanal avisa primero; el ICEN confirma después',
-      weeklyLabel: (value: string) => `dato semanal\n${value} °C`,
-      monthlyLabel: (value: string) => `ICEN\n${value} °C`,
-      lagSummary: (months: number) =>
-        `Anomalía semanal de Niño 1+2 e ICEN mensual, últimos ${months} meses. La franja rayada es el tiempo que el ICEN todavía no cubre.`,
-      measuredBy: (weekly: string, monthly: string) =>
-        `El dato semanal lo publica ${weekly}. El ICEN lo publica ${monthly}.`,
+      question: '¿Dónde está ese calor?',
+      answer: (value: string) => `En su punto más caliente, ${value} °C sobre lo normal.`,
+      empty: 'Sin mapa de temperatura del mar',
+      week: (day: string, sst: string, normal: string) =>
+        `La semana del ${day}, el mar de la costa norte estuvo a ${sst} °C. Lo normal son unos ${normal} °C.`,
     },
     historia: {
+      question: '¿Es como 1983, 1998 o 2017?',
       answer: (above: string[], below: string[]) =>
         below.length === 0
           ? `En el índice, hoy supera los picos de ${listFormat.format(above)}`
@@ -264,31 +171,20 @@ export const messages = {
         '1997-98': '1997–98',
         '2017': '2017',
       },
-      peak: (event: string, value: string, month: string) =>
-        `En ${event}, el índice llegó a ${value} °C en ${month}.`,
+      peak: (value: string, month: string) => `El índice llegó a ${value} °C en ${month}.`,
       damage8298: claim('impact-8283-9798-caf-comparison'),
       low2017: 'En el gráfico casi no se ve. En tierra fue otra cosa.',
       todayStep: (value: string, month: string) =>
         `Hoy: ${value} °C en ${month}. La línea punteada lleva ese nivel hacia atrás.`,
-      impact: claim('impact-2017-plain'),
       people: claim('impact-2017-people'),
-      impactSource: 'ENFEN · Informe Técnico Extraordinario 001-2017, p. 1',
       punch: 'El índice mide el mar. No mide el daño.',
-      doubt: '¿Entonces va a ser peor que 1983?',
-      doubtAnswer:
-        'El índice no alcanza para saberlo. En 2017, con un índice mucho más bajo, las lluvias dejaron el daño que acabas de leer. Lo que sí se puede mirar es el pronóstico de lluvia.',
-      chartSummary:
-        'El mismo ICEN mensual, con los picos de 1982–83, 1997–98 y 2017 y el último valor marcados.',
+      chartSummary: 'El mismo índice, con los picos de 1982–83, 1997–98 y 2017.',
     },
     lluvia: {
-      doubt: '¿Qué tan seguro es ese pronóstico?',
-      uncertainty: claim('forecast-uncertainty-plain'),
-      uncertaintySource: 'ENFEN · Nota Técnica 02-2026, p. 2',
-      precedentKicker: 'Lo que pasó antes',
-      unknownTitle: 'Lo que nadie sabe todavía',
+      question: '¿Va a llover donde vivo?',
     },
     hacer: {
-      recapTitle: 'Las cinco respuestas',
+      question: '¿Qué hago ahora?',
     },
   },
   historico: {
