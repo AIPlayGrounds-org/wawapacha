@@ -239,7 +239,7 @@ describe('home page', () => {
     expect(icenEpisodesAbove(records, 3.38)).toEqual(['1983', '1997–98'])
     expect(messages.story.hero.answer([], '1950')).toBe('Más que nunca desde 1950.')
     expect(messages.story.hero.answer(['1983', '1997–98'], '1950')).toBe(
-      'Más que nunca desde 1950, salvo en 1983 y 1997–98.',
+      'Más que nunca desde 1950, salvo en 1983 y 1997–⁠98.',
     )
     expect(messages.story.hero.answer(['1', '2', '3', '4'], '1950')).toContain('4 episodios')
   })
