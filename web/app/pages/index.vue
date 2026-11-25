@@ -21,7 +21,9 @@ import {
 } from '~/utils/season'
 import { ENFEN_COMUNICADOS, SENAMHI_AVISOS } from '~/links'
 import { useSiteSeo } from '~/composables/useSiteSeo'
+import { paperCard } from '~/data/claims'
 import IcenTimeline, { type TimelineMark } from '~/components/IcenTimeline.vue'
+import PaperCard from '~/components/PaperCard.vue'
 import SeaMap from '~/components/SeaMap.vue'
 import SeasonChart, { type SeasonLine } from '~/components/SeasonChart.vue'
 
@@ -236,13 +238,26 @@ useSiteSeo({
     <div class="scene scene--green">
       <SiteHeader />
       <main id="main-content">
-        <section class="hero beat" aria-labelledby="home-title">
+        <section class="apertura beat" aria-labelledby="home-title">
+          <p class="lead">{{ story.apertura.words }}</p>
+          <div class="clippings">
+            <PaperCard featured :card="paperCard('panamericana-2026-09-16-devastador')" />
+            <PaperCard :card="paperCard('apoyo-2026-trajectory')" />
+            <PaperCard :card="paperCard('infobae-2026-11-17-tumbes')" />
+          </div>
+          <p class="lead">{{ story.apertura.headlines }}</p>
           <h1 id="home-title">
+            <span class="answer">{{ story.apertura.question }}</span>
+          </h1>
+          <p class="lead">{{ story.apertura.promise }}</p>
+        </section>
+        <section class="hero beat" aria-labelledby="hero-title">
+          <h2 id="hero-title">
             <span class="ask">{{ story.hero.question }}</span>
             <span class="answer"
               ><span class="strip">{{ heroAnswer }}</span></span
             >
-          </h1>
+          </h2>
           <p v-if="heroLead" class="lead">{{ heroLead }}</p>
           <p v-if="peakLine" class="lead">{{ peakLine }}</p>
           <div v-if="accentLine" class="figure">
@@ -306,7 +321,10 @@ useSiteSeo({
             />
           </ChartShell>
         </div>
-        <p class="lead">{{ story.porque.press1925 }} {{ story.porque.seaAbsent }}</p>
+        <div class="press1925">
+          <PaperCard :card="paperCard('elcomercio-1925-alisio')" />
+          <p class="lead">{{ story.porque.press1925 }} {{ story.porque.seaAbsent }}</p>
+        </div>
         <p class="lead">{{ story.porque.conditions }}</p>
         <p class="punch">
           <span class="strip">{{ story.porque.punch }}</span>
@@ -470,8 +488,49 @@ p {
   margin: 0 auto;
   padding: clamp(5rem, 4rem + 6vw, 10rem) var(--gutter);
 }
-.hero {
+.apertura {
   padding-top: clamp(3rem, 2rem + 6vw, 7rem);
+}
+.hero {
+  padding-top: 0;
+}
+
+/* Press clippings: the headline card on its own row, the others beside each other, each laid
+   down a little askew and a beat after the one before. */
+.clippings {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 26rem));
+  gap: var(--space-8) var(--space-12);
+  align-items: start;
+}
+.clippings > :first-child {
+  grid-column: 1 / -1;
+  --tilt: -1.2deg;
+}
+.clippings > :nth-child(2) {
+  --tilt: 0.8deg;
+  --drop-delay: 160ms;
+}
+.clippings > :nth-child(3) {
+  --tilt: -0.6deg;
+  --drop-delay: 320ms;
+  margin-top: var(--space-8);
+}
+.press1925 {
+  display: grid;
+  grid-template-columns: minmax(0, 24rem) minmax(0, 36rem);
+  gap: var(--space-12);
+  align-items: center;
+  --tilt: 1deg;
+}
+@media (max-width: 860px) {
+  .clippings,
+  .press1925 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .clippings > :nth-child(3) {
+    margin-top: 0;
+  }
 }
 .beat > * + *,
 .beat-text > * + * {
@@ -501,7 +560,8 @@ p {
   letter-spacing: -0.035em;
   line-height: 1;
 }
-h1 .answer {
+h1 .answer,
+.hero .answer {
   max-width: 15ch;
   font-size: clamp(2.75rem, 1.2rem + 6.4vw, 7rem);
   line-height: 1.04;

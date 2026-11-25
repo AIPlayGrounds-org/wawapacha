@@ -1,9 +1,10 @@
 # WawaPacha story
 
-The home page answers one question: how hot is the sea off Peru, and what does
-that mean for the coast. It tells that answer in six short beats. Each beat
-opens with the question a reader would ask and answers it in the heading. One
-chart or one line of evidence follows. The page does not show everything the
+The home page answers one question: how worried should the coast be about this
+Niño. It opens on what the press said, then answers in six short beats. Each
+beat opens with the question a reader would ask and answers it in the heading.
+One chart or one line of evidence follows. What the press and officials said
+sits on paper cards; what the measurements say sits on the scene's ground. The page does not show everything the
 project knows. Sources, chart method and limits belong to `/metodologia`,
 "Cómo lo sabemos".
 
@@ -21,7 +22,23 @@ from an ENFEN communiqué is keyed to that communiqué's number and year in
 sentence that points to the official link. The site never presents an older
 communiqué's forecast as the current one.
 
-## First screen: ¿Qué tan caliente está el mar?
+## Opening: ¿Qué tanto hay que preocuparse?
+
+The page opens on what the reader has already heard. One line recalls the word
+television used for each event:
+[tv-1983-film-devastador](../evidence/claims.toml),
+[tv-latina-1997-devastador](../evidence/claims.toml) and
+[tv-tvperu-2017-2400](../evidence/claims.toml). Three paper cards then fall in,
+one at a time: the Panamericana headline,
+[panamericana-2026-09-16-devastador](../evidence/claims.toml), set large; the
+APOYO trajectory, [apoyo-2026-trajectory](../evidence/claims.toml); and the
+Tumbes river past its orange threshold,
+[infobae-2026-11-17-tumbes](../evidence/claims.toml). The text names the
+channel as the author of the headline, not ENFEN: no 2026 ENFEN communiqué says
+"devastador". The page heading is the question, and the promise follows: the
+page looks at where those numbers come from. The beat has no chart.
+
+## ¿Qué tan caliente está el mar?
 
 The answer is the gap between the latest Niño 1+2 week and its weekly normal,
 such as "5,7 °C más que lo normal". The lead gives that week's temperature and
@@ -50,8 +67,8 @@ The answer is that the sea is cold. The lead quotes an IGP physicist:
 with the 26 °C line, and the normal brightens only where it reaches the line.
 Its summary names the months a normal year passes 26 °C and the month this
 season did. A 1925 press quote,
-[elcomercio-1925-alisio](../evidence/claims.toml), shows that the explanation
-of the time left the sea out. The beat ends on the three conditions and the
+[elcomercio-1925-alisio](../evidence/claims.toml), sits on its paper card and
+shows that the explanation of the time left the sea out. The beat ends on the three conditions and the
 punch line: in the summer of 1983 all three came together.
 
 ## ¿Es como 1983, 1998 o 2017?

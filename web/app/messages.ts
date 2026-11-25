@@ -101,7 +101,18 @@ export const messages = {
     methodologyLink: 'Cómo lo sabemos',
     officialSources: 'Fuentes oficiales',
   },
+  paperCard: {
+    read: (outlet: string) => `Leer en ${outlet}`,
+  },
   story: {
+    apertura: {
+      words:
+        'Cada vez que llega un Niño, la televisión usa las mismas palabras. «Devastador», en 1983. «Devastador», en 1997. «El más brutal», en 2017.',
+      headlines:
+        '«El Niño sería más devastador que el de 1997». Así lo tituló un canal de televisión en septiembre. Una consultora escribió que el mar «sigue una trayectoria muy similar a la del FEN 1997-1998». En noviembre, el río Tumbes pasó el umbral naranja.',
+      question: '¿Qué tanto hay que preocuparse?',
+      promise: 'Aquí miramos de dónde salen esos números.',
+    },
     hero: {
       question: '¿Qué tan caliente está el mar?',
       /** `gap` is the signed difference already formatted without its sign. */

@@ -1766,6 +1766,9 @@ date_checked = "2026-11-25"
 ref = "https://panamericana.pe/buenosdiasperu/nacionales/474433-enfen-alerta-nino-devastador-1997"
 locator = "Panamericana, \"Enfen alerta que 'El Niño' sería más devastador que el de 1997\" (web page, no page numbers), headline"
 quote = "Enfen alerta que \"El Niño\" sería más devastador que el de 1997"
+outlet = "Panamericana"
+published = "2026-09-16"
+lift = "más devastador que el de 1997"
 
 [[claim.source]]
 ref = "https://panamericana.pe/buenosdiasperu/nacionales/474433-enfen-alerta-nino-devastador-1997"
@@ -1782,6 +1785,9 @@ date_checked = "2026-11-25"
 ref = "https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf"
 locator = "APOYO Consultoría, \"Preparación ante el Fenómeno El Niño 2026–2027\", July 2026, PDF p. 3, Introducción, first paragraph"
 quote = "A inicios de julio, la temperatura del mar frente a la costa peruana alcanzó el umbral de un Niño extremo y sigue una trayectoria muy similar a la del FEN 1997-1998"
+outlet = "APOYO Consultoría"
+published = "2026-07"
+lift = "sigue una trayectoria muy similar a la del FEN 1997-1998"
 
 [[claim]]
 id = "infobae-2026-11-17-tumbes"
@@ -1793,6 +1799,9 @@ date_checked = "2026-11-25"
 ref = "https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/"
 locator = "Infobae, \"Lluvias por El Niño vuelven a poner en alerta el norte del Perú: el río Tumbes alcanzará el umbral rojo\" (web page, no page numbers), paragraph beginning \"Las lluvias que afectan el norte del Perú\""
 quote = "El Servicio Nacional de Meteorología e Hidrología del Perú (Senamhi) informó que el afluente llegó a 840,83 metros cúbicos por segundo a las 04:00 del 17 de noviembre, una cifra que superó el umbral naranja y que podría avanzar hacia el nivel rojo en las próximas horas."
+outlet = "Infobae"
+published = "2026-11-17"
+lift = "superó el umbral naranja"
 
 [[claim.source]]
 ref = "https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/"
@@ -1835,6 +1844,12 @@ quote = "algunas familias han tenido que improvisar zanjas para retirar el agua 
 ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=367"
 locator = "Fenómeno 'El Niño' de 1997 en Piura: Imágenes inéditas, Latina Noticias, YouTube, uploaded 2024-08-13, [06:07]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "el presidente fujimori estuvo tres veces en tumbes y pala en mano participó en trabajos para reabrir canales y drenes"
+
+[[claim]]
+id = "tv-latina-1997-devastador"
+claim_es = "En 1997, Latina dijo desde Piura que el fenómeno de El Niño ya se presentaba devastador."
+status = "verified"
+date_checked = "2026-11-25"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=11"
@@ -1905,6 +1920,9 @@ date_checked = "2026-11-25"
 ref = "https://elcomercio.pe/archivo-elcomercio/lluvias-en-lima-inundaciones-en-el-norte-huaicos-en-el-peru-fenomenos-naturales-hace-100-anos-peru-decada-del-20-nnsp-noticia/"
 locator = "El Comercio, \"Lluvias en Lima, inundaciones en el norte, huaicos en el Perú: fenómenos naturales hace 100 años\" (web page, no page numbers), paragraph beginning \"L a gran pregunta era entonces, ¿por qué\""
 quote = "La prensa de marzo de 1925 daba esta interesante explicación del fenómeno: si bien la razón última no se sabía (pero se podía entender desde una “meteorología general del mundo”), lo que sí era una certeza era que “hay ciertos años en que la abundancia de nubes que arrastra el alisio del sur es tal y la fuerza del viento tan grande, que muchas de ellas salvan el obstáculo de los Andes y llegan hasta nosotros para volcar sobre la zona de la costa su aguacero violento”. (EC, 12/03/1925)"
+outlet = "El Comercio"
+published = "1925-03-12"
+lift = "salvan el obstáculo de los Andes"
 
 [[claim]]
 id = "elperuano-2023-1983-cronica"

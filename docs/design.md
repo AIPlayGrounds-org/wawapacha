@@ -31,7 +31,7 @@ read those tokens; page styles do not add local colour or type scales.
 | Surfaces          | The paper, sea, sand and raised-surface roles separate evidence groups. Borders carry structure; shadows mark raised status only.                                                                                          |
 | Spacing           | The 4px steps from `--space-1` through `--space-24` group content before surface treatment.                                                                                                                                |
 | Targets and focus | Interactive targets are at least 44px high. `:focus-visible` uses the accent outline.                                                                                                                                      |
-| Motion            | Marks on the timeline fade and grow when their step is read. A season line below the fold draws itself once it scrolls into view, and its notes fade in after it. Reduced motion removes every transition. No content enters from scale zero. |
+| Motion            | Marks on the timeline fade and grow when their step is read. A season line below the fold draws itself once it scrolls into view, and its notes fade in after it. A paper card below the fold drops into place, a beat after the card before it. Reduced motion removes every transition. No content enters from scale zero. |
 | Data chrome       | `ChartShell` owns variable, unit, period, type, source and update age: one visible line plus a "Cómo se mide" disclosure. On the home page its `bare` mode keeps a one-line caption, the source link and the stale notice. |
 
 ## The home scenes
@@ -51,6 +51,7 @@ tones mark water above normal and blue marks water below it.
 | Annotation | A chart labels only the marks its beat talks about, on the chart where the value sits. No legend to consult.               |
 | Scrolly    | One chart stays on screen while its steps scroll past. Each step brings one mark forward and dims the rest.                |
 | Hand mark  | An arrow drawn as a loose curve, with a serif italic note, ties two points the sentence compares.                          |
+| Paper card | What the press printed, on newsprint in every scene and theme: outlet and date on top, one verbatim phrase set in bold serif, a link to the source. Laid down a little askew. Measurements never sit on a card. |
 
 ## Layout
 

@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import * as ts from 'typescript'
 import { parseClaims } from './claim-registry'
-import { renderClaims } from './generate-claims'
+import { generatedValues, renderClaims } from './generate-claims'
 
 export type ClaimCheckResult = {
   claimIds: string[]
@@ -11,6 +11,9 @@ export type ClaimCheckResult = {
 
 type AppSource = { fileName: string; source: string }
 
+/** The accessors of the generated module; each call names a claim the site shows. */
+const CLAIM_ACCESSORS = ['claim', 'paperCard']
+
 const claimCallIds = (source: string, fileName: string): string[] => {
   const file = ts.createSourceFile(fileName, source, ts.ScriptTarget.Latest, true)
   const ids: string[] = []
@@ -18,7 +21,7 @@ const claimCallIds = (source: string, fileName: string): string[] => {
     if (
       ts.isCallExpression(node) &&
       ts.isIdentifier(node.expression) &&
-      node.expression.text === 'claim' &&
+      CLAIM_ACCESSORS.includes(node.expression.text) &&
       node.arguments.length === 1 &&
       ts.isStringLiteral(node.arguments[0])
     ) {
@@ -32,7 +35,7 @@ const claimCallIds = (source: string, fileName: string): string[] => {
 
 const templateClaimIds = (source: string): string[] => {
   const ids: string[] = []
-  const callPattern = /\bclaim\(\s*(['"])([^'"]+)\1\s*\)/gu
+  const callPattern = /\b(?:claim|paperCard)\(\s*(['"])([^'"]+)\1\s*\)/gu
   for (const match of source.matchAll(callPattern)) ids.push(match[2])
   return ids
 }
@@ -69,48 +72,45 @@ const validateClaimIds = (registryText: string, claimIds: string[]): ClaimCheckR
   return { claimIds: uniqueIds, errors }
 }
 
-const generatedClaimMap = (source: string): Map<string, string> | null => {
+const UNREADABLE = Symbol('unreadable')
+
+/** The value of a literal of strings and nested objects, or UNREADABLE for anything else. */
+const literalValue = (node: ts.Expression): unknown => {
+  while (ts.isAsExpression(node) || ts.isSatisfiesExpression(node)) node = node.expression
+  if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return node.text
+  if (!ts.isObjectLiteralExpression(node)) return UNREADABLE
+  const entries: [string, unknown][] = []
+  for (const property of node.properties) {
+    if (!ts.isPropertyAssignment(property)) return UNREADABLE
+    const key = property.name
+    if (!(ts.isStringLiteral(key) || ts.isIdentifier(key) || ts.isNumericLiteral(key))) {
+      return UNREADABLE
+    }
+    const value = literalValue(property.initializer)
+    if (value === UNREADABLE) return UNREADABLE
+    entries.push([key.text, value])
+  }
+  return Object.fromEntries(entries)
+}
+
+const generatedConstants = (source: string): Record<string, unknown> => {
   const file = ts.createSourceFile('claims.ts', source, ts.ScriptTarget.Latest, true)
-  let result: Map<string, string> | null = null
+  const constants: Record<string, unknown> = {}
   const visit = (node: ts.Node) => {
-    if (
-      ts.isVariableDeclaration(node) &&
-      ts.isIdentifier(node.name) &&
-      node.name.text === 'verifiedClaims'
-    ) {
-      const initializer = node.initializer
-      const object =
-        initializer && ts.isAsExpression(initializer) ? initializer.expression : initializer
-      if (!object || !ts.isObjectLiteralExpression(object)) return
-      const claims = new Map<string, string>()
-      for (const property of object.properties) {
-        if (!ts.isPropertyAssignment(property)) return
-        const key = property.name
-        const id =
-          ts.isStringLiteral(key) || ts.isIdentifier(key) || ts.isNumericLiteral(key)
-            ? key.text
-            : null
-        const value = property.initializer
-        if (!id || !ts.isStringLiteral(value)) return
-        claims.set(id, value.text)
-      }
-      result = claims
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+      constants[node.name.text] = literalValue(node.initializer)
     }
     ts.forEachChild(node, visit)
   }
   visit(file)
-  return result
+  return constants
 }
 
 const generatedClaimsMatchRegistry = (registryText: string, generatedSource: string): boolean => {
-  const expected = new Map(
-    parseClaims(registryText)
-      .filter((claim) => claim.status === 'verified')
-      .map((claim) => [claim.id, claim.claimEs]),
+  const actual = generatedConstants(generatedSource)
+  return Object.entries(generatedValues(registryText)).every(
+    ([name, expected]) => JSON.stringify(actual[name]) === JSON.stringify(expected),
   )
-  const actual = generatedClaimMap(generatedSource)
-  if (!actual || actual.size !== expected.size) return false
-  return [...expected].every(([id, text]) => actual.get(id) === text)
 }
 
 export const checkClaims = (

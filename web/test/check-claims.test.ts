@@ -114,6 +114,75 @@ describe('claim check', () => {
     expect(result.errors).toEqual([])
   })
 
+  describe('paper cards', () => {
+    const cardRegistry = (card: string, extraSource = '') => `
+[[claim]]
+id = "press-id"
+claim_es = "Un diario lo tituló."
+status = "verified"
+
+[[claim.source]]
+ref = "https://example.org/nota"
+quote = "el mar sigue una trayectoria muy similar"
+${card}
+${extraSource}
+`
+    const fullCard = 'outlet = "Diario"\npublished = "2026-07"\nlift = "trayectoria muy similar"'
+
+    it('reads a card from its source and links it to the source', () => {
+      expect(parseClaims(cardRegistry(fullCard))[0]?.sources[0]?.card).toEqual({
+        outlet: 'Diario',
+        published: '2026-07',
+        lift: 'trayectoria muy similar',
+        href: 'https://example.org/nota',
+      })
+    })
+
+    it('rejects a lift that is not in the quote', () => {
+      expect(() => parseClaims(cardRegistry(fullCard.replace('muy similar', 'idéntica')))).toThrow(
+        'lifts "trayectoria idéntica", which is not in its quote',
+      )
+    })
+
+    it('rejects a card with only some of its fields', () => {
+      expect(() => parseClaims(cardRegistry('outlet = "Diario"'))).toThrow(
+        'must define all of outlet, published, lift as text, or none',
+      )
+    })
+
+    it('rejects a published value that is not a day or a month', () => {
+      expect(() => parseClaims(cardRegistry(fullCard.replace('2026-07', 'julio 2026')))).toThrow(
+        'use YYYY-MM-DD or YYYY-MM',
+      )
+    })
+
+    it('rejects a second card on one claim', () => {
+      const second = `[[claim.source]]\nref = "https://example.org/otra"\nquote = "trayectoria muy similar"\n${fullCard}`
+      expect(() => parseClaims(cardRegistry(fullCard, second))).toThrow(
+        'claim press-id has more than one paper card',
+      )
+    })
+
+    it('counts paperCard() as a claim use', async () => {
+      const result = await site(
+        "import { paperCard } from './claims'; paperCard('press-id')",
+        cardRegistry(fullCard),
+      )
+      expect(result).toEqual({ claimIds: ['press-id'], errors: [] })
+    })
+
+    it('rejects a generated module whose cards are stale', async () => {
+      const generated = renderClaims(cardRegistry(fullCard))
+      const result = await checkSiteClaims({
+        registry: cardRegistry(fullCard.replace('Diario', 'Otro diario')),
+        appSources: [{ fileName: 'messages.ts', source: '' }],
+        story: '',
+        generatedClaims: generated,
+      })
+      expect(result.errors).toEqual(['generated claims differ from registry'])
+    })
+  })
+
   it('checks claim ids linked from story.md', async () => {
     const result = await site(
       '',
