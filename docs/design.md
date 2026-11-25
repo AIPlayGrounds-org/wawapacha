@@ -31,13 +31,13 @@ read those tokens; page styles do not add local colour or type scales.
 | Surfaces          | The paper, sea, sand and raised-surface roles separate evidence groups. Borders carry structure; shadows mark raised status only.                                                                                          |
 | Spacing           | The 4px steps from `--space-1` through `--space-24` group content before surface treatment.                                                                                                                                |
 | Targets and focus | Interactive targets are at least 44px high. `:focus-visible` uses the accent outline.                                                                                                                                      |
-| Motion            | Marks on the timeline fade and grow when their step is read. Reduced motion removes every transition. No content enters from scale zero.                                                                                   |
+| Motion            | Marks on the timeline fade and grow when their step is read. A season line below the fold draws itself once it scrolls into view, and its notes fade in after it. Reduced motion removes every transition. No content enters from scale zero. |
 | Data chrome       | `ChartShell` owns variable, unit, period, type, source and update age: one visible line plus a "Cómo se mide" disclosure. On the home page its `bare` mode keeps a one-line caption, the source link and the stale notice. |
 
 ## The home scenes
 
-Each home beat is a full-bleed scene on its own ground: green for the opening
-and the rain beat, blue for the sea, ink for history and the footer, brick red
+Each home beat is a full-bleed scene on its own ground: green for the opening,
+the beat on why Lima stays dry and the rain beat, blue for the sea, ink for history and the footer, brick red
 for what to do. Every scene carries the same grain and a soft highlight, so the
 page reads as one printed piece. A `.scene` restates the shared tokens for its
 ground, so `ChartShell`, `SiteHeader` and the charts need no dark variant. Warm
@@ -50,6 +50,7 @@ tones mark water above normal and blue marks water below it.
 | Map        | Place names in spaced italic serif. A hand-drawn chalk ring marks the warmest point, with its value beside it.             |
 | Annotation | A chart labels only the marks its beat talks about, on the chart where the value sits. No legend to consult.               |
 | Scrolly    | One chart stays on screen while its steps scroll past. Each step brings one mark forward and dims the rest.                |
+| Hand mark  | An arrow drawn as a loose curve, with a serif italic note, ties two points the sentence compares.                          |
 
 ## Layout
 

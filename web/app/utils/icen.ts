@@ -15,25 +15,6 @@ export const icenCategory = (value: number): IcenCategory | null => {
   return null
 }
 
-/**
- * The episodes with a month above `value`, as year labels. Consecutive years
- * join into one episode: 1997 and 1998 read "1997–98".
- */
-export const icenEpisodesAbove = (records: IcenRecord[], value: number) => {
-  const years = [
-    ...new Set(records.filter((r) => r.icen > value).map((r) => Number(r.start.slice(0, 4)))),
-  ].sort((a, b) => a - b)
-  const episodes: [number, number][] = []
-  for (const year of years) {
-    const last = episodes.at(-1)
-    if (last && year === last[1] + 1) last[1] = year
-    else episodes.push([year, year])
-  }
-  return episodes.map(([first, last]) =>
-    first === last ? `${first}` : `${first}–${String(last).slice(-2)}`,
-  )
-}
-
 export const icenPeak = (records: IcenRecord[], start: string, end: string) =>
   records
     .filter((record) => record.start >= start && record.start <= end)

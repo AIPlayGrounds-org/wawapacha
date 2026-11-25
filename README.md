@@ -41,9 +41,10 @@ previous file stays in place.
 
 ## Features
 
-- `/` tells the story in five questions: how hot the sea is by the ICEN, where
-  the heat is on the OISST map, how it compares with 1983, 1998 and 2017, what
-  ENFEN forecasts and what to do now.
+- `/` tells the story in six questions: how hot the sea is this week against
+  its normal, where the heat is on the OISST map, why Lima does not get rain,
+  how it compares with 1983, 1998 and 2017, what ENFEN forecasts and what to do
+  now.
 - `/metodologia`, "Cómo lo sabemos", lists the sources the story shows with
   their last update, says how each chart is built and names the site's limits.
 - Observed, estimated, forecast and official data stay visibly distinct.

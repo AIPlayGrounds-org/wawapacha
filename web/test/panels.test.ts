@@ -4,7 +4,6 @@ import HomePage from '~/pages/index.vue'
 import { useDataset } from '~/composables/useDataset'
 import { messages } from '~/messages'
 import { formatDay, formatDegrees, formatMonth, formatValue } from '~/utils/format'
-import { icenEpisodesAbove } from '~/utils/icen'
 import { loadDataset } from '../server/utils/loadDataset'
 import { enfenFixture } from './fixtures/panels'
 
@@ -67,30 +66,22 @@ describe('home page', () => {
     expect(messages.page.actionLead(17, 2027)).toBeNull()
   })
 
-  it('answers the opening question from the rank of the latest ICEN', () => {
-    const records = [
-      { start: '1983-06', icen: 4.32 },
-      { start: '1997-11', icen: 4.08 },
-      { start: '1998-01', icen: 3.9 },
-      { start: '2017-03', icen: 1.31 },
-    ]
-
-    expect(icenEpisodesAbove(records, 3.38)).toEqual(['1983', '1997–98'])
-    expect(messages.story.hero.answer([], '1950')).toBe('Más que nunca desde 1950.')
-    expect(messages.story.hero.answer(['1983', '1997–98'], '1950')).toBe(
-      'Más que nunca desde 1950, salvo en 1983 y 1997–⁠98.',
-    )
-    expect(messages.story.hero.answer(['1', '2', '3', '4'], '1950')).toContain('4 episodios')
+  it('answers the opening question with the gap to the weekly normal', () => {
+    expect(messages.story.hero.answer('5,7', true)).toMatch(/^5,7\s°C más que lo normal$/)
+    expect(messages.story.hero.answer('0,8', false)).toMatch(/menos que lo normal$/)
+    expect(messages.story.hero.answer('0,1', null)).toBe('Como lo normal')
   })
 
   it('opens every chapter with its question and an answer from the data', async () => {
     const wrapper = await mountHome()
-    const icen = await loadDataset('enfen-icen')
-    const latest = icen.records.at(-1)!
+    const weekly = await loadDataset('noaa-cpc-nino-weekly')
+    const latest = weekly.records.filter((record) => record.nino_1_2_sst !== null).at(-1)!
 
     expect(wrapper.get('#home-title .ask').text()).toBe(messages.story.hero.question)
-    expect(wrapper.get('.hero .lead').text()).toContain(formatMonth(latest.start))
-    const chapters = ['calor', 'historia', 'lluvia', 'hacer'] as const
+    expect(wrapper.get('#home-title .answer').text()).not.toBe(messages.story.hero.empty)
+    expect(wrapper.get('.hero .lead').text()).toContain(formatDay(latest.start))
+    expect(wrapper.get('.hero .lead').text()).toContain(formatDegrees(latest.nino_1_2_sst!))
+    const chapters = ['calor', 'porque', 'historia', 'lluvia', 'hacer'] as const
     for (const id of chapters) {
       expect(wrapper.get(`#${id}-title .ask`).text()).toBe(messages.story[id].question)
       expect(wrapper.get(`#${id}-title .answer`).text()).not.toBe('')
@@ -100,7 +91,16 @@ describe('home page', () => {
     expect(wrapper.text()).not.toMatch(/NaN|undefined/)
   })
 
-  it('marks only today on the opening chart and every peak on the history chart', async () => {
+  it('draws this season on the opening chart and the 26 °C line on the porque chart', async () => {
+    const wrapper = await mountHome()
+
+    expect(wrapper.get('.hero').findAll('svg path.line')).not.toHaveLength(0)
+    expect(wrapper.get('.hero').find('.threshold').exists()).toBe(false)
+    expect(wrapper.get('#porque').find('.threshold').exists()).toBe(true)
+    expect(wrapper.get('#porque').text()).toContain(messages.story.porque.line)
+  })
+
+  it('marks every peak on the history chart', async () => {
     const wrapper = await mountHome()
     const labels = (selector: string) =>
       wrapper
@@ -108,7 +108,6 @@ describe('home page', () => {
         .findAll('.mark-label')
         .map((label) => label.text())
 
-    expect(labels('.hero')).toHaveLength(1)
     const history = labels('.scrolly-chart')
     expect(history).toHaveLength(4)
     expect(history[0]).toContain('1982–83')

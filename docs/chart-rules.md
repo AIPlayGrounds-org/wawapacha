@@ -47,6 +47,15 @@ ended 90 days ago or more.
 - Link alerts to the official source.
 - Link to the original dataset.
 
+## Reading a value
+
+A chart that plots a series a reader may want to read at any point has a scrub
+control: a slider over the plot. Pointer movement or the arrow keys move a rule
+along the axis, and the rule shows each series' value at that point. Its
+accessible value text names the point and every value, so a screen reader hears
+the same numbers. The chart also carries a visually hidden table with one row
+per point; the slider points to it with `aria-describedby`.
+
 ## Attribution
 
 A chart that shows an Open-Meteo dataset (ERA5 or GloFAS) prints the Open-Meteo

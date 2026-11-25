@@ -30,6 +30,21 @@ export const formatDischarge = (value: number) => dischargeFormat.format(value)
 /** «28 de septiembre de 2026», a partir de AAAA-MM-DD. */
 export const formatDay = (date: string) => dayFormat.format(new Date(`${date}T12:00:00Z`))
 
+const seasonDayFormat = new Intl.DateTimeFormat('es', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'UTC',
+})
+const monthNameFormat = new Intl.DateTimeFormat('es', { month: 'long', timeZone: 'UTC' })
+
+/** «18 nov», for a day counted from 1 July. The reference season has no 29 February. */
+export const formatSeasonDay = (day: number) =>
+  seasonDayFormat.format(new Date(Date.UTC(2025, 6, 1 + day))).replace('.', '')
+
+/** «marzo», for a month from 1 to 12. */
+export const formatMonthName = (month: number) =>
+  monthNameFormat.format(new Date(Date.UTC(2025, month - 1, 15)))
+
 /** «septiembre de 2026», a partir de AAAA-MM. */
 export const formatMonth = (date: string) => {
   const [year, month] = date.split('-').map(Number)
