@@ -9,7 +9,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from wawapacha_pipeline import registry
-from wawapacha_pipeline.contract import ValidationError, publish
+from wawapacha_pipeline.contract import ValidationError, download_error, publish
 
 VERSION = "0.1.0"
 ID = "noaa-ersst"
@@ -52,11 +52,11 @@ def fetch(url: str = URL, timeout: int = 60, retries: int = 3) -> str:
                     ) from None
         except ValidationError:
             raise
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as error:
+        except (urllib.error.URLError, TimeoutError) as error:
             last_error = error
 
-    raise ValidationError(
-        f"No se pudo descargar el índice de ERSSTv5 tras {retries} intentos: {last_error}"
+    raise download_error(
+        f"No se pudo descargar el índice de ERSSTv5 tras {retries} intentos", last_error
     )
 
 

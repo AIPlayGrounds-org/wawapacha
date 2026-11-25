@@ -15,7 +15,12 @@ from shapely.geometry import mapping, shape
 from shapely.validation import explain_validity
 
 from wawapacha_pipeline import registry
-from wawapacha_pipeline.contract import MAX_GZIP_BYTES, ValidationError, publish
+from wawapacha_pipeline.contract import (
+    MAX_GZIP_BYTES,
+    ValidationError,
+    download_error,
+    publish,
+)
 
 VERSION = "0.2.0"
 ID = "limites-inei-ign"
@@ -43,10 +48,8 @@ def fetch(url: str = URL, timeout: int = 60) -> bytes:
             return response.read()
     except ValidationError:
         raise
-    except (OSError, TimeoutError) as error:
-        raise ValidationError(
-            f"Could not download the boundary ZIP: {error}"
-        ) from error
+    except OSError as error:
+        raise download_error("Could not download the boundary ZIP", error) from error
 
 
 def run(ingestion_time: datetime | None = None) -> tuple[int, Path]:

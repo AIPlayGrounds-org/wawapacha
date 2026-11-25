@@ -1,4 +1,5 @@
-# Reports stale published data without blocking the deploy workflow.
+# Reports stale published data as one open issue per source, without blocking
+# the deploy workflow.
 name: Data freshness
 
 on:
@@ -8,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 env:
   UV_LOCKED: "1"
@@ -36,5 +38,48 @@ jobs:
 
       - uses: astral-sh/setup-uv@v10.2.0
 
+      # Exit 1 means stale data, which the issues report. Any other failure is
+      # the check's own and fails the job.
       - name: Check published dataset freshness
-        run: uv run wawapacha-pipeline freshness --data-dir "$WAWAPACHA_DATA_DIR"
+        run: |
+          status=0
+          uv run wawapacha-pipeline freshness --data-dir "$WAWAPACHA_DATA_DIR" \
+            --format tsv > "$RUNNER_TEMP/stale.tsv" || status=$?
+          if [ "$status" -gt 1 ]; then exit "$status"; fi
+          while IFS=$'\t' read -r id reason; do
+            echo "::warning title=stale data: $id::$reason"
+          done < "$RUNNER_TEMP/stale.tsv"
+
+      - name: Open, update or close one issue per stale source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LABEL: stale-data
+        run: |
+          gh label create "$LABEL" --color d93f0b --force \
+            --description "Published data older than its cadence allows"
+          open=$(gh issue list --label "$LABEL" --state open --limit 100 \
+            --json number,title --jq '.[] | "\(.number)\t\(.title)"')
+
+          declare -A stale
+          while IFS=$'\t' read -r id reason; do
+            stale[$id]=1
+            title="Stale data: $id"
+            body="\`$id\`: $reason. Checked $(date -u +%FT%RZ).
+
+          The source has not published within its cadence. The logs of the
+          Update data workflow show why. This issue closes when the source is fresh."
+            number=$(awk -F'\t' -v t="$title" '$2 == t { print $1; exit }' <<< "$open")
+            if [ -n "$number" ]; then
+              gh issue edit "$number" --body "$body"
+            else
+              gh issue create --title "$title" --label "$LABEL" --body "$body"
+            fi
+          done < "$RUNNER_TEMP/stale.tsv"
+
+          while IFS=$'\t' read -r number title; do
+            id=${title#Stale data: }
+            if [ -n "$number" ] && [ -z "${stale[$id]:-}" ]; then
+              gh issue close "$number" --comment "\`$id\` is within its cadence again."
+            fi
+          done <<< "$open"

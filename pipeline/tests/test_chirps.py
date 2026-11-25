@@ -9,7 +9,7 @@ import rasterio
 from rasterio.transform import from_origin
 
 from wawapacha_pipeline import contract
-from wawapacha_pipeline.contract import ValidationError, validate
+from wawapacha_pipeline.contract import UpstreamError, ValidationError, validate
 from wawapacha_pipeline.sources import chirps
 
 SAMPLES = Path(__file__).parent / "samples"
@@ -235,9 +235,96 @@ def test_fetch_stops_on_quota_error_without_retrying(monkeypatch):
 
     monkeypatch.setattr(chirps.urllib.request, "urlopen", quota_error)
 
-    with pytest.raises(ValidationError, match="429"):
+    with pytest.raises(UpstreamError, match="429"):
         chirps.fetch("https://example.test/2025.01.3.tif")
     assert len(calls) == 1
+
+
+def pentads(*months: tuple[int, int]) -> list[chirps.Pentad]:
+    return [
+        chirps.Pentad(
+            year, month, number, f"https://example.test/{year}.{month}.{number}.tif"
+        )
+        for year, month in months
+        for number in range(1, 7)
+    ]
+
+
+def test_to_download_refetches_the_newest_two_months_and_any_unpublished_pentad():
+    selected = pentads((2026, 8), (2026, 9), (2026, 10), (2026, 11))
+    published = {
+        p.start.isoformat(): [{"start": p.start.isoformat()}]
+        for p in selected
+        if p.start != date(2026, 8, 11)
+    }
+
+    needed = chirps.to_download(selected, published)
+
+    assert [p.start.isoformat() for p in needed] == ["2026-08-11"] + [
+        p.start.isoformat() for p in selected if p.month >= 10
+    ]
+
+
+def test_merge_prefers_fresh_records_and_keeps_the_window_order():
+    selected = pentads((2026, 10))[:3]
+    published = {
+        "2026-10-01": [{"start": "2026-10-01", "v": "old"}],
+        "2026-10-06": [{"start": "2026-10-06", "v": "old"}],
+    }
+    fresh = [
+        {"start": "2026-10-11", "v": "new"},
+        {"start": "2026-10-06", "v": "new"},
+    ]
+
+    records = chirps.merge(selected, published, fresh)
+
+    assert records == [
+        {"start": "2026-10-01", "v": "old"},
+        {"start": "2026-10-06", "v": "new"},
+        {"start": "2026-10-11", "v": "new"},
+    ]
+
+
+@pytest.mark.parametrize("version", ["0.1.0", None])
+def test_load_published_ignores_another_version_or_a_missing_file(tmp_path, version):
+    path = tmp_path / "chirps.json"
+    if version:
+        path.write_text(
+            json.dumps(
+                {"processing_version": version, "records": [{"start": "2026-10-01"}]}
+            ),
+            encoding="utf-8",
+        )
+
+    assert chirps.load_published(path) == {}
+
+
+def test_a_second_run_downloads_only_the_newest_months(tmp_path, monkeypatch):
+    index_url = "https://example.test/"
+    names = [f"chirps-v3.0.2025.{month:02d}.1.tif" for month in (1, 2, 3)]
+    index = "".join(f'<a href="{name}">x</a>' for name in names).encode()
+    raw = geotiff(np.ones((5, 5)))
+    downloaded = []
+
+    def fake_fetch(url, **_kwargs):
+        if url == index_url:
+            return index
+        downloaded.append(url.rsplit("/", 1)[-1])
+        return raw
+
+    monkeypatch.setattr(chirps, "INDEX_URL", index_url)
+    monkeypatch.setattr(chirps, "fetch", fake_fetch)
+    monkeypatch.setattr(chirps, "fetch_optional", fake_fetch)
+    monkeypatch.setattr(contract, "DATA_DIR", tmp_path)
+
+    chirps.run(datetime(2026, 10, 1, tzinfo=UTC))
+    first = json.loads((tmp_path / "chirps.json").read_text(encoding="utf-8"))
+    downloaded.clear()
+    chirps.run(datetime(2026, 10, 2, tzinfo=UTC))
+    second = json.loads((tmp_path / "chirps.json").read_text(encoding="utf-8"))
+
+    assert downloaded == names[1:]
+    assert second["records"] == first["records"]
 
 
 def test_run_publishes_when_a_listed_pentad_returns_404(tmp_path, monkeypatch, capsys):

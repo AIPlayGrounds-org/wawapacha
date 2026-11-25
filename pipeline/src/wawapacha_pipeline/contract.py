@@ -1,9 +1,11 @@
 """Lo que comparten todas las fuentes: el error de validación y la publicación del JSON."""
 
 import gzip
+import http.client
 import json
 import os
 import tempfile
+import urllib.error
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
@@ -24,6 +26,39 @@ MAX_GZIP_BYTES = 200 * 1024
 
 class ValidationError(Exception):
     """La descarga no cumple docs/data-contract.md y no debe publicarse."""
+
+
+class UpstreamError(Exception):
+    """The source has nothing usable now: it is down, throttling or not updated yet.
+
+    Nothing is published and the run exits 75, so CI warns instead of failing.
+    docs/freshness.md explains how a long outage still surfaces.
+    """
+
+
+# Statuses a server returns while busy. Any other 4xx means our request is wrong.
+TRANSIENT_STATUSES = frozenset({408, 425, 429})
+
+
+def is_transient(error: BaseException) -> bool:
+    """Whether a download error is the server's temporary state, not our defect."""
+    if isinstance(error, urllib.error.HTTPError):
+        return error.code in TRANSIENT_STATUSES or error.code >= 500
+    return isinstance(
+        error,
+        (
+            urllib.error.URLError,
+            TimeoutError,
+            ConnectionError,
+            http.client.HTTPException,
+        ),
+    )
+
+
+def download_error(message: str, error: BaseException) -> Exception:
+    """The exception for a failed download: UpstreamError if transient, else ValidationError."""
+    kind = UpstreamError if is_transient(error) else ValidationError
+    return kind(f"{message}: {error}")
 
 
 def validate(dataset: dict) -> None:

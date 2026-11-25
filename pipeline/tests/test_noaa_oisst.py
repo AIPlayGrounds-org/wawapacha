@@ -12,8 +12,13 @@ from urllib.parse import parse_qs, urlsplit
 import numpy as np
 import pytest
 
-from wawapacha_pipeline import registry
-from wawapacha_pipeline.contract import REPO_ROOT, ValidationError, publish
+from wawapacha_pipeline import contract, registry
+from wawapacha_pipeline.contract import (
+    REPO_ROOT,
+    UpstreamError,
+    ValidationError,
+    publish,
+)
 from wawapacha_pipeline.sources import noaa_oisst as oisst
 
 PIPELINE_DIR = Path(__file__).parents[1]
@@ -52,20 +57,43 @@ def climatology():
     return oisst.read_netcdf(CLIMATOLOGY)
 
 
+def description(end: str) -> str:
+    """The part of an NCSS dataset.xml that fetch reads, as PSL wrote it on 2026-11-25."""
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<gridDataset location="/thredds/ncss/grid/Datasets/noaa.oisst.v2.highres/sst.day.mean.2026.nc">'
+        f"<TimeSpan><begin>{end[:4]}-01-01T00:00:00Z</begin><end>{end}T00:00:00Z</end></TimeSpan>"
+        "</gridDataset>"
+    )
+
+
 class Upstream:
     """A local server that answers like PSL's NCSS, with the sample files, and keeps the requests it got."""
 
     def __init__(self):
         self.files = {"sst": SST, "climatology": CLIMATOLOGY}
+        # The last day of each year's SST file. A year not listed answers 404.
+        self.ends = {2026: "2026-10-01"}
+        self.status = 200
         self.requests = []
         upstream = self
 
         class Handler(BaseHTTPRequestHandler):
             def do_GET(self):
                 upstream.requests.append(self.path)
-                name = urlsplit(self.path).path.rsplit("/", 1)[-1]
-                kind = "climatology" if "ltm" in name else "sst"
-                body = upstream.files[kind]
+                path = urlsplit(self.path).path
+                if path.endswith("/dataset.xml"):
+                    year = int(path.split("sst.day.mean.")[1][:4])
+                    if year not in upstream.ends:
+                        self.send_error(404)
+                        return
+                    body = description(upstream.ends[year]).encode()
+                else:
+                    kind = "climatology" if "ltm" in path else "sst"
+                    body = upstream.files[kind]
+                if upstream.status != 200:
+                    self.send_error(upstream.status)
+                    return
                 self.send_response(200)
                 self.send_header("Content-Length", str(len(body)))
                 self.end_headers()
@@ -77,6 +105,12 @@ class Upstream:
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
         self.url = f"http://127.0.0.1:{self.server.server_port}/thredds/ncss/grid/Datasets/noaa.oisst.v2.highres"
         threading.Thread(target=self.server.serve_forever, daemon=True).start()
+
+    def names(self) -> list[str]:
+        return [
+            urlsplit(request).path.split("noaa.oisst.v2.highres/")[1]
+            for request in self.requests
+        ]
 
     def query(self, number: int) -> dict[str, str]:
         return {
@@ -398,19 +432,28 @@ def test_publish_rejects_a_grid_that_breaks_the_grid_schema(tmp_path, change, wh
     assert list(tmp_path.iterdir()) == []
 
 
-def test_fetch_asks_for_the_region_the_last_days_and_the_climatology_of_the_latest_day(
-    upstream,
-):
+@pytest.fixture
+def data_dir(tmp_path, monkeypatch):
+    """An empty published-data folder, so fetch finds no published day."""
+    monkeypatch.setattr(contract, "DATA_DIR", tmp_path)
+    return tmp_path
+
+
+def publish_day(data_dir: Path, day: str, version: str = oisst.VERSION) -> None:
+    dataset = {"processing_version": version, "records": [{"start": day}]}
+    (data_dir / "noaa-oisst.json").write_text(json.dumps(dataset), encoding="utf-8")
+
+
+def test_fetch_asks_for_the_servers_newest_day_and_its_climatology(upstream, data_dir):
     sst, climatology = oisst.fetch(NOW, upstream.url)
 
     assert (sst, climatology) == (SST, CLIMATOLOGY)
-    assert [
-        urlsplit(request).path.rsplit("/", 1)[-1] for request in upstream.requests
-    ] == [
+    assert upstream.names() == [
+        "sst.day.mean.2026.nc/dataset.xml",
         "sst.day.mean.2026.nc",
         "sst.day.mean.ltm.1991-2020.nc",
     ]
-    assert upstream.query(0) == {
+    assert upstream.query(1) == {
         "var": "sst",
         "north": "20.0",
         "south": "-25.0",
@@ -418,17 +461,71 @@ def test_fetch_asks_for_the_region_the_last_days_and_the_climatology_of_the_late
         "east": "300.0",
         "horizStride": "1",
         "accept": "netcdf",
-        "time_start": "2026-09-29T00:00:00Z",
-        "time_end": "2026-10-02T00:00:00Z",
+        "time": "2026-10-01T00:00:00Z",
     }
-    assert upstream.query(1)["time"] == "0001-10-01T00:00:00Z"
+    assert upstream.query(2)["time"] == "0001-10-01T00:00:00Z"
 
 
-def test_in_early_january_fetch_reads_the_previous_years_file(upstream):
+def test_fetch_never_asks_for_a_day_past_the_servers_last_one(upstream, data_dir):
+    """PSL lags by days. On 2026-11-25 the 2026 file ended on 2026-11-18."""
+    upstream.ends = {2026: "2026-11-18"}
+
+    oisst.fetch(datetime(2026, 11, 25, 12, tzinfo=UTC), upstream.url)
+
+    assert upstream.query(1)["time"] == "2026-11-18T00:00:00Z"
+    assert upstream.query(2)["time"] == "0001-11-18T00:00:00Z"
+
+
+def test_in_early_january_fetch_reads_the_previous_years_file(upstream, data_dir):
+    upstream.ends = {2026: "2026-12-28"}
+
     oisst.fetch(datetime(2027, 1, 2, tzinfo=UTC), upstream.url)
 
-    assert urlsplit(upstream.requests[0]).path.endswith("/sst.day.mean.2026.nc")
-    assert upstream.query(0)["time_start"] == "2026-12-30T00:00:00Z"
+    assert upstream.names()[:3] == [
+        "sst.day.mean.2027.nc/dataset.xml",
+        "sst.day.mean.2026.nc/dataset.xml",
+        "sst.day.mean.2026.nc",
+    ]
+    assert upstream.query(2)["time"] == "2026-12-28T00:00:00Z"
+
+
+def test_fetch_reports_no_new_day_without_downloading(upstream, data_dir):
+    publish_day(data_dir, "2026-10-01")
+
+    with pytest.raises(UpstreamError, match="no day after 2026-10-01"):
+        oisst.fetch(NOW, upstream.url)
+
+    assert upstream.names() == ["sst.day.mean.2026.nc/dataset.xml"]
+
+
+def test_fetch_downloads_the_same_day_again_when_the_version_changed(
+    upstream, data_dir
+):
+    publish_day(data_dir, "2026-10-01", version="0.2.0")
+
+    oisst.fetch(NOW, upstream.url)
+
+    assert len(upstream.requests) == 3
+
+
+def test_a_description_without_a_readable_end_fails_validation(upstream, data_dir):
+    upstream.ends = {2026: "soon"}
+
+    with pytest.raises(ValidationError, match="no TimeSpan end"):
+        oisst.fetch(NOW, upstream.url)
+
+
+@pytest.mark.parametrize(
+    ("status", "error"),
+    [(429, UpstreamError), (503, UpstreamError), (400, ValidationError)],
+)
+def test_a_busy_server_is_upstream_and_a_rejected_request_is_ours(
+    upstream, data_dir, status, error
+):
+    upstream.status = status
+
+    with pytest.raises(error):
+        oisst.fetch(NOW, upstream.url)
 
 
 def test_cli_publishes_the_json(upstream, tmp_path):
@@ -454,6 +551,27 @@ def test_cli_keeps_the_previous_json_when_validation_fails(upstream, tmp_path, b
     assert result.returncode == 1
     assert "not a complete NetCDF classic file" in result.stderr
     assert previous.read_text(encoding="utf-8") == '{"version": "previous"}'
+
+
+def test_cli_exits_75_and_keeps_the_json_when_there_is_no_new_day(upstream, tmp_path):
+    publish_day(tmp_path, "2026-10-01")
+    previous = (tmp_path / "noaa-oisst.json").read_text(encoding="utf-8")
+
+    result = run_cli(upstream, tmp_path)
+
+    assert result.returncode == 75
+    assert "upstream unavailable" in result.stderr
+    assert (tmp_path / "noaa-oisst.json").read_text(encoding="utf-8") == previous
+
+
+def test_cli_exits_75_when_the_server_throttles(upstream, tmp_path):
+    upstream.status = 429
+
+    result = run_cli(upstream, tmp_path)
+
+    assert result.returncode == 75, result.stderr
+    assert "429" in result.stderr
+    assert list(tmp_path.iterdir()) == []
 
 
 def test_the_published_json_is_the_registered_source_and_under_the_size_limit():

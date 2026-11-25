@@ -6,13 +6,12 @@ import json
 import math
 import os
 import re
-import urllib.error
 import urllib.request
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
 from wawapacha_pipeline import registry
-from wawapacha_pipeline.contract import ValidationError, publish
+from wawapacha_pipeline.contract import ValidationError, download_error, publish
 
 VERSION = "0.4.0"
 ID = "open-meteo-glofas"
@@ -128,12 +127,8 @@ def fetch(url: str = URL, timeout: int = 60) -> str:
             if status is not None and status != 200:
                 raise ValidationError(f"HTTP status inesperado: {status}.")
             return response.read().decode("utf-8")
-    except urllib.error.HTTPError as error:
-        raise ValidationError(f"HTTP status inesperado: {error.code}.") from error
-    except urllib.error.URLError as error:
-        raise ValidationError(
-            f"No se pudo descargar GloFAS: {error.reason}."
-        ) from error
+    except OSError as error:
+        raise download_error("No se pudo descargar GloFAS", error) from error
 
 
 def parse(text: str, as_of: date | None = None) -> list[dict]:

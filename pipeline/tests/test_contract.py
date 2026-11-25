@@ -1,17 +1,42 @@
 import json
 import os
+import urllib.error
 
 import pytest
 
 from wawapacha_pipeline.contract import (
     DATA_DIR,
     REPO_ROOT,
+    UpstreamError,
     ValidationError,
+    download_error,
     publish,
     validate,
 )
 
 PUBLISHED = sorted((REPO_ROOT / "data").glob("*.json"))
+
+
+def http_error(code: int) -> urllib.error.HTTPError:
+    return urllib.error.HTTPError("https://example.org", code, "", {}, None)
+
+
+@pytest.mark.parametrize(
+    ("error", "kind"),
+    [
+        (http_error(429), UpstreamError),
+        (http_error(408), UpstreamError),
+        (http_error(502), UpstreamError),
+        (urllib.error.URLError("timed out"), UpstreamError),
+        (TimeoutError(), UpstreamError),
+        (ConnectionResetError(), UpstreamError),
+        (http_error(400), ValidationError),
+        (http_error(404), ValidationError),
+        (FileNotFoundError(), ValidationError),
+    ],
+)
+def test_download_errors_split_the_servers_state_from_our_defects(error, kind):
+    assert type(download_error("download", error)) is kind
 
 
 def valid_dataset() -> dict:

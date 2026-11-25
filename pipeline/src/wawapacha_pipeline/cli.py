@@ -8,7 +8,13 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 
 from wawapacha_pipeline import catalog, registry, scaffold
-from wawapacha_pipeline.contract import DATA_DIR, ValidationError, relative_path
+from wawapacha_pipeline.contract import (
+    DATA_DIR,
+    UpstreamError,
+    ValidationError,
+    is_transient,
+    relative_path,
+)
 from wawapacha_pipeline.sources import enfen_communique, senamhi_estaciones
 
 SOURCES = registry.discover()
@@ -23,6 +29,8 @@ SNAPSHOTS = {
     for source_id in SNAPSHOT_IDS
 }
 CATALOG_SOURCES = tuple(SOURCES) + SNAPSHOT_IDS
+# EX_TEMPFAIL from sysexits.h: the source is unavailable, try again later.
+EXIT_UPSTREAM = 75
 
 
 def run(source_id: str) -> str:
@@ -72,13 +80,13 @@ def due_source_ids(
 
 def freshness_issues(
     now: datetime | None = None, data_dir: Path | None = None
-) -> list[str]:
-    """Return stale or missing published datasets using cadence tolerances."""
+) -> dict[str, str]:
+    """Map each stale or missing published dataset to the reason, using cadence tolerances."""
     now = now or datetime.now(UTC)
     now = now if now.tzinfo else now.replace(tzinfo=UTC)
     data_dir = data_dir or DATA_DIR
     sources = registry.load()
-    issues = []
+    issues = {}
     for source_id in SOURCES:
         update = sources[source_id]["update"]
         tolerance = registry.stale_after(update)
@@ -87,11 +95,11 @@ def freshness_issues(
         path = data_dir / f"{source_id}.json"
         last_update = _ingestion_time(path)
         if last_update is None:
-            issues.append(f"{source_id}: missing or invalid ingestion/update timestamp")
+            issues[source_id] = "missing or invalid ingestion/update timestamp"
             continue
         if now - last_update > tolerance:
-            issues.append(
-                f"{source_id}: last update {last_update.isoformat()} is "
+            issues[source_id] = (
+                f"last update {last_update.isoformat()} is "
                 f"{now - last_update} old; {update} freshness tolerance is {tolerance}"
             )
     return issues
@@ -128,6 +136,12 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         default=DATA_DIR,
         help="directory containing published source JSON",
+    )
+    freshness_parser.add_argument(
+        "--format",
+        choices=("annotations", "tsv"),
+        default="annotations",
+        help="annotations: GitHub ::error lines on stderr; tsv: id<TAB>reason lines on stdout",
     )
     new_source_parser = commands.add_parser(
         "new-source", help="create the module and test for a new automatable source"
@@ -232,17 +246,29 @@ def main(argv: list[str] | None = None) -> int:
         except (ValueError, registry.RegistryError) as error:
             print(f"cannot check data freshness. {error}", file=sys.stderr)
             return 1
+        for source_id, reason in issues.items():
+            if args.format == "tsv":
+                print(f"{source_id}\t{reason}")
+            else:
+                print(
+                    f"::error title=data freshness::{source_id}: {reason}",
+                    file=sys.stderr,
+                )
         if issues:
-            for issue in issues:
-                print(f"::error title=data freshness::{issue}", file=sys.stderr)
             return 1
-        print("Published datasets are within their registry cadence.")
+        if args.format == "annotations":
+            print("Published datasets are within their registry cadence.")
         return 0
 
+    # Nothing is published on any error: the previous JSON stays in data/.
     try:
         print(run(args.source))
     except ValidationError as error:
-        # Nothing is published: the previous JSON stays in data/.
         print(f"{args.source}: fails validation. {error}", file=sys.stderr)
         return 1
+    except Exception as error:
+        if not (isinstance(error, UpstreamError) or is_transient(error)):
+            raise
+        print(f"{args.source}: upstream unavailable. {error}", file=sys.stderr)
+        return EXIT_UPSTREAM
     return 0
