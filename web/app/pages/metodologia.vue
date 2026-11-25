@@ -1,24 +1,13 @@
 <script setup lang="ts">
-import DatasetAttribution from '~/components/DatasetAttribution.vue'
 import { useSourceCatalog } from '~/composables/useSourceCatalog'
 import { dataTypeLabel, messages } from '~/messages'
 import { formatDay } from '~/utils/format'
-import { sourceGroupId } from '~/utils/sourceCatalog'
 import { useSiteSeo } from '~/composables/useSiteSeo'
+import type { Dataset } from '~/types/dataset'
 
 const methodology = messages.metodologia
-const catalog = await useSourceCatalog()
-const sourceNamesByDataType = (dataType: string) =>
-  [
-    ...new Set(
-      catalog.groups
-        .flatMap((group) => group.sources)
-        .filter((source) => source.dataType === dataType)
-        .map((source) => source.name),
-    ),
-  ].join(', ')
-const estimatedSources = sourceNamesByDataType('estimated')
-const forecastSources = sourceNamesByDataType('forecast')
+const sources = await useSourceCatalog()
+const dataTypes: Dataset['data_type'][] = ['observed', 'estimated', 'forecast', 'official']
 
 useSiteSeo({ title: methodology.seoTitle, description: methodology.seoDescription })
 </script>
@@ -29,22 +18,23 @@ useSiteSeo({ title: methodology.seoTitle, description: methodology.seoDescriptio
 
     <main id="main-content">
       <section class="intro" aria-labelledby="methodology-title">
-        <p class="eyebrow">{{ methodology.sectionLabel }}</p>
         <h1 id="methodology-title">{{ methodology.title }}</h1>
         <p>{{ methodology.lead }}</p>
       </section>
 
-      <section
-        v-for="group in catalog.groups"
-        :key="group.page"
-        class="source-group"
-        :aria-labelledby="`${sourceGroupId(group.page)}-title`"
-      >
-        <h2 :id="`${sourceGroupId(group.page)}-title`">
-          {{ group.label }}
-        </h2>
+      <section class="note-section" aria-labelledby="methodology-charts-title">
+        <h2 id="methodology-charts-title">{{ methodology.chartsTitle }}</h2>
+        <div v-for="(chart, key) in methodology.charts" :key="key" class="chart-note">
+          <h3>{{ chart.title }}</h3>
+          <p>{{ chart.body }}</p>
+          <p class="where">{{ chart.where }}</p>
+        </div>
+      </section>
+
+      <section class="sources" aria-labelledby="methodology-sources-title">
+        <h2 id="methodology-sources-title">{{ methodology.sourcesTitle }}</h2>
         <div class="source-list">
-          <article v-for="source in group.sources" :key="source.id" class="source-card">
+          <article v-for="source in sources" :key="source.id" class="source-card">
             <h3>{{ source.name }}</h3>
             <p class="provider">
               {{ methodology.provider }}:
@@ -91,37 +81,18 @@ useSiteSeo({ title: methodology.seoTitle, description: methodology.seoDescriptio
                 {{ methodology.dataLink }}<span class="sr-only">{{ messages.page.newTab }}</span>
               </a>
             </p>
-            <DatasetAttribution :dataset="source" />
           </article>
         </div>
       </section>
 
       <section class="note-section" aria-labelledby="methodology-types-title">
         <h2 id="methodology-types-title">{{ methodology.dataTypeTitle }}</h2>
-        <p>{{ methodology.dataTypeLead }}</p>
         <ul>
-          <li>
-            <strong>{{ dataTypeLabel('observed') }}.</strong>
-            {{ methodology.dataTypeDescription('observed') }}
-          </li>
-          <li>
-            <strong>{{ dataTypeLabel('estimated') }}.</strong>
-            {{ methodology.dataTypeDescription('estimated') }}
-          </li>
-          <li>
-            <strong>{{ dataTypeLabel('forecast') }}.</strong>
-            {{ methodology.dataTypeDescription('forecast') }}
-          </li>
-          <li>
-            <strong>{{ dataTypeLabel('official') }}.</strong>
-            {{ methodology.dataTypeDescription('official') }}
+          <li v-for="type in dataTypes" :key="type">
+            <strong>{{ dataTypeLabel(type) }}.</strong>
+            {{ methodology.dataTypeDescription(type) }}
           </li>
         </ul>
-      </section>
-
-      <section class="note-section" aria-labelledby="methodology-models-title">
-        <h2 id="methodology-models-title">{{ methodology.modelTitle }}</h2>
-        <p>{{ methodology.modelBody(estimatedSources, forecastSources) }}</p>
       </section>
 
       <section class="note-section" aria-labelledby="methodology-limits-title">
@@ -147,14 +118,6 @@ main {
   max-width: 44rem;
   margin-bottom: 54px;
 }
-.eyebrow {
-  margin: 0 0 8px;
-  color: var(--accent);
-  font-size: var(--text-label);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
 h1 {
   max-width: 15ch;
   margin: 0;
@@ -170,13 +133,27 @@ h1 {
   color: var(--muted);
   font-size: var(--text-body);
 }
-.source-group {
-  margin-top: 48px;
+.sources {
+  margin-top: 64px;
 }
 h2 {
   margin: 0 0 18px;
   font-size: var(--text-title-sm);
   line-height: 1.1;
+}
+.chart-note + .chart-note {
+  margin-top: 24px;
+}
+.chart-note h3 {
+  margin: 0 0 6px;
+  font-size: var(--text-body);
+}
+.chart-note p {
+  margin: 0;
+}
+.chart-note .where {
+  margin-top: 4px;
+  font-size: var(--text-meta);
 }
 .source-list {
   display: grid;
@@ -234,7 +211,6 @@ h2 {
   border-top: 1px solid var(--border);
 }
 .note-section p {
-  margin-top: 0;
   color: var(--muted);
 }
 .note-section ul {

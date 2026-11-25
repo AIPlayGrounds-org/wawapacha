@@ -20,7 +20,7 @@ public source
 
 | Path                                                          | Owns                                                                                                           |
 | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [`sources.toml`](../sources.toml)                             | The source registry: identity, provenance, update class, source notes and site-page ownership.                 |
+| [`sources.toml`](../sources.toml)                             | The source registry: identity, provenance, update class, source notes and whether the site shows it.           |
 | [`schema/dataset.schema.json`](../schema/dataset.schema.json) | The published JSON contract. The pipeline validates against it and the web generates TypeScript types from it. |
 | [`pipeline/`](../pipeline/)                                   | The uv package that reads or downloads inputs, validates them and publishes JSON.                              |
 | [`notebooks/`](../notebooks/)                                 | marimo notebooks that walk through a source's steps. They import the pipeline and publish nothing.             |
@@ -65,7 +65,7 @@ describe what runs them.
 | [`server/utils/loadDataset.ts`](../web/server/utils/loadDataset.ts)             | Loads the datasets listed in the source catalog, validates them against the schema.                                                                                                        |
 | [`composables/useDataset.ts`](../web/app/composables/useDataset.ts)             | The page-facing loader. `useDataset(id, shape?)` hydrates from the Nuxt payload. `shape` runs on the server before serialization.                                                          |
 | [`composables/useSourceCatalog.ts`](../web/app/composables/useSourceCatalog.ts) | Reads the generated source catalog and gets each source's `ingestion_time` through the dataset loader.                                                                                     |
-| [`data/source-catalog.json`](../web/app/data/source-catalog.json)               | Generated registry facts, labelled page ownership and each source's stale limit.                                                                                                           |
+| [`data/source-catalog.json`](../web/app/data/source-catalog.json)               | Generated registry facts, the `on_site` flag and each source's stale limit.                                                                                                                |
 | [`utils/sourceCatalog.ts`](../web/app/utils/sourceCatalog.ts)                   | Validates and shapes the generated source catalog.                                                                                                                                         |
 | [`components/ChartShell.vue`](../web/app/components/ChartShell.vue)             | The shared chart frame. See [`chart-rules.md`](chart-rules.md).                                                                                                                            |
 | [`composables/useChartTheme.ts`](../web/app/composables/useChartTheme.ts)       | Reads chart colors and font from CSS variables and refreshes them when the system color scheme changes.                                                                                    |
@@ -89,15 +89,13 @@ const oni = await useDataset("noaa-cpc-oni");
 const oisst = await useDataset("noaa-oisst", cropOisst);
 ```
 
-The shaped value is what Nuxt serializes into `_payload.json`. These routes
-shape their datasets:
+The shaped value is what Nuxt serializes into `_payload.json`. The home page
+crops the OISST grid to the map window. `/metodologia` reads only the update
+time of each source it lists.
 
-| Route         | Server-side shaping                                                                                                                             |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`           | Crops the OISST grid to the map window. The ONI, weekly indices, communiqué and outlook use the records their panels read.                      |
-| `/territorio` | Keeps department geometry, the latest CHIRPS record per department, and ERA5 department totals plus the first and last source records.          |
-| `/historico`  | Keeps tagged ERSST event records and the current year, matching ONI windows, the two SENAMHI rain event windows and each station's latest year. |
-| `/rios`       | Keeps the river fields used by the chart and orders records by point and date.                                                                  |
+The site has two pages: `/` and `/metodologia`. The old routes `/historico`,
+`/aprende`, `/territorio` and `/rios` are prerendered as redirects to a chapter
+of the home page (`routeRules` in `web/nuxt.config.ts`).
 
 [`performance.md`](performance.md) covers the route size budget. It is separate
 from the 200 KiB gzip limit (`MAX_GZIP_BYTES` in
@@ -112,9 +110,7 @@ pass to `publish` for their published JSON.
 - **Pipeline and web meet at published JSON and the schema.** Neither imports
   the other. Deploy overlays the `data` branch before `nuxt generate`.
 - **The registry holds source facts.** Source modules read them through
-  `registry.get()` and add only source-specific parsing and validation. The
-  `[routes]` table in `sources.toml` holds the label of each site route that
-  `site_pages` uses.
+  `registry.get()` and add only source-specific parsing and validation.
 - **Notebooks hold no pipeline logic.**
   [`test_notebooks.py`](../pipeline/tests/test_notebooks.py) rejects functions
   and classes outside marimo cells and requires a test that runs each notebook

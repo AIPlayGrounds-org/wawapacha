@@ -1,6 +1,5 @@
 import type { Dataset } from '~/types/dataset'
 import { claim } from '~/data/claims'
-import { formatDay } from '~/utils/format'
 
 // Communiqué copy is keyed by `${number}-${year}`. A newer communiqué falls back
 // to a line that points to the official text, so an old forecast never reads
@@ -23,13 +22,13 @@ const listFormat = {
   format: (years: string[]) => conjunction.format(years.map((year) => year.replace('–', '–⁠'))),
 }
 /** A value in degrees. The no-break space keeps "4,5 °C" on one line. */
-const degrees = (value: string) => `${value} °C`
+const degrees = (value: string) => `${value} °C`
 
 const dataTypeDescriptions = {
-  observed: 'Observación',
-  estimated: 'Valor calculado',
-  forecast: 'Fecha futura',
-  official: 'Estado institucional',
+  observed: 'Un instrumento lo midió: boya, satélite o estación.',
+  estimated: 'Un cálculo lo obtiene a partir de mediciones.',
+  forecast: 'Un modelo lo proyecta hacia una fecha futura.',
+  official: 'Una institución lo declara, como el estado de alerta de ENFEN.',
 } satisfies Record<Dataset['data_type'], string>
 
 export const messages = {
@@ -44,31 +43,12 @@ export const messages = {
     forecast: 'Pronóstico',
     official: 'Oficial',
   } satisfies Record<Dataset['data_type'], string>,
-  chart: {
-    period: 'Periodo del gráfico',
-    rangeYears: '10 años',
-    rangeDecades: '30 años',
-    rangeAll: 'Todo',
-    anomaly: 'Anomalía',
-    seaTemperature: 'Temperatura del mar',
-    thresholdNote: 'Umbrales NOAA',
-    value: (label: string, value: string, unit: string) => `${label} · ${value} ${unit}`,
-  },
   oisst: {
     summary: (date: string, value: string, unit: string, location: string) =>
       `Máxima ${value} ${unit} · ${location}`,
-    emptyPeriod: 'este periodo',
     empty: (date: string) => `Sin datos para ${date}`,
-    tableSummary: 'Ver resumen por franjas de latitud',
-    tableCaption: (date: string) => `Franjas de latitud ${date}`,
-    latitudeBand: 'Franja de latitud',
-    mean: 'Media',
-    maximum: 'Máxima anomalía',
     coordinate: (value: string, direction: string) => `${value}° ${direction}`,
     band: (start: string, end: string) => `${start}–${end}`,
-    tooltip: (value: string, unit: string, latitude: string, longitude: string) =>
-      `${value} ${unit}<br/>${latitude}, ${longitude}`,
-    value: (value: string, unit: string) => `${value} ${unit}`,
     directions: {
       north: 'N',
       south: 'S',
@@ -108,28 +88,17 @@ export const messages = {
     forecastSource: (number: number, year: number, date: string) =>
       `Comunicado Oficial ENFEN N° ${number}-${year}, ${date}.`,
     forecastEmptyTitle: 'Sin comunicado oficial vigente',
+    nextDueStale: (date: string) => `Próximo comunicado · ${date}`,
     notShown:
       'Ningún gráfico de esta página dice dónde ni cuánto lloverá en tu localidad. Esos avisos los emiten SENAMHI y las autoridades locales.',
     actionTitle: 'Si vives en una zona expuesta, prepárate y sigue los avisos oficiales',
     actionLead: (number: number, year: number) =>
       actionByCommunique[communiqueKey(number, year)] ?? null,
     reviewSource: 'Ver la fuente',
-    chartLoading: 'Cargando el gráfico…',
-    chartError: 'Error de gráfico',
-    tableMonths: 'Meses',
-    tableCode: 'Código',
-    tableSeaTemperature: 'Temperatura del mar',
-    tableAnomaly: 'Anomalía',
-    tableThreshold: 'Respecto al umbral',
-    emptyTitle: 'Sin datos del ONI',
     newTab: ' (se abre en una pestaña nueva)',
-    degreeC: '°C',
-    degreeValue: (value: string, unit: string) => `${value} ${unit}`,
     enfenLink: 'Comunicados oficiales de ENFEN',
     senamhiLink: 'Avisos meteorológicos de SENAMHI',
-    territoryLink: 'Territorio',
-    learnLink: 'Aprende',
-    methodologyLink: 'Metodología',
+    methodologyLink: 'Cómo lo sabemos',
     officialSources: 'Fuentes oficiales',
   },
   story: {
@@ -193,97 +162,25 @@ export const messages = {
       question: '¿Qué hago ahora?',
     },
   },
-  historico: {
-    historyNav: 'Histórico',
-    seoTitle: 'Histórico del mar · WawaPacha',
-    seoDescription: 'Anomalías mensuales del mar',
-    title: 'Los eventos, mes a mes',
-    lead: claim('historical-coastal-chronology'),
-    comparisonTitle: 'Escala común desde el inicio',
-    ersstTitle: 'ERSSTv5 mensual',
-    oniTitle: 'ONI oficial',
-    oniNote: claim('oni-definition-and-threshold'),
-    icenTooltip: (value: string) => `ICEN ${value} °C`,
-    icenTitle: 'ICEN oficial',
-    icenNote: claim('coastal-event-criterion'),
-    icenSummary: claim('icen-definition'),
-    icenTableSummary: 'Ver la tabla del ICEN',
-    icenTableCaption: 'Valores mensuales del ICEN',
-    icenMonth: 'Mes',
-    icenValue: 'ICEN (°C)',
-    degreeC: '°C',
-    coastalNote: 'Costa · Niño 1+2 · ONI · Niño 3.4',
-    regionLabel: 'Región',
-    regions: {
-      nino34: 'Niño 3.4',
-      nino12: 'Niño 1+2 (costa)',
-    },
-    eventsLabel: 'Eventos que se muestran',
-    events: {
-      '1982-83': '1982–83',
-      '1997-98': '1997–98',
-      '2017': '2017 · El Niño Costero',
-    },
-    currentYear: (year: number) => `${year} · año en curso`,
-    peak: (value: string, month: string) => `pico ${value} °C en ${month}`,
-    noPeak: 'sin datos',
-    summary: (peaks: string) => `Picos por región · ${peaks || 'sin datos'}`,
-    oniSummary: (peaks: string) => `Picos del ONI · ${peaks || 'sin datos'}`,
-    anomaly: 'Anomalía',
-    months: 'Meses desde el inicio',
-    monthFromStart: (month: number) => `Mes ${month} desde el inicio`,
-    value: (value: string, unit: string) => `${value} ${unit}`,
-    missing: 'Sin dato',
-    tableSummary: 'Ver la tabla de datos',
-    tableCaption: 'Valores por mes desde el inicio',
-    oniTableSummary: 'Ver la tabla del ONI',
-    oniTableCaption: 'Valores mensuales ONI',
-    empty: 'Sin datos históricos',
-    stations: {
-      title: 'Lluvia observada en estaciones',
-      lead: claim('senamhi-hydrometeorological-stations'),
-      stationLabel: 'Estación',
-      stationNote: (name: string, department: string, _lat: number, _lon: number) =>
-        `${name} · ${department}`,
-      events: {
-        '1982-83': '1982–83',
-        '1997-98': '1997–98',
-      },
-      climatology: 'Mediana mensual',
-      months: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-      monthsAxis: 'Mes',
-      monthTooltip: (offset: number) => `<b>Mes ${offset}</b>`,
-      millimeters: '(mm)',
-      month: 'Mes desde enero',
-      seriesLabel: 'Series de lluvia observada',
-      chartDescription: 'Lluvia mensual observada',
-      chartError: 'Error de gráfico',
-      tableSummary: 'Tabla de lluvia',
-      tableCaption: 'Precipitación y mediana mensual',
-      missing: 'Sin dato',
-      summary: (name: string, department: string) => `${name} · ${department}`,
-      empty: 'Sin datos de estaciones',
-      provenance: (snapshotDate: string, year: number) => `Histórico ${snapshotDate} · ${year}`,
-      license: 'Licencia no confirmada',
-      refresh: 'Actualización manual',
-      point: 'Punto de estación',
-      crossCheck: 'Consulta CHIRPS y ERA5 en Territorio',
-    },
-  },
-  attribution: {
-    openMeteoLabel: 'Datos meteorológicos',
-    openMeteoUrl: 'https://open-meteo.com/',
-    credits: {
-      'open-meteo-era5': 'Datos ERA5',
-      'open-meteo-glofas': 'Datos GloFAS',
-    } as Record<string, string>,
-  },
   metodologia: {
-    seoTitle: 'Cómo lo hicimos · WawaPacha',
-    seoDescription: 'Fuentes y tipos de datos',
-    sectionLabel: 'Metodología',
-    title: 'Cómo lo hicimos',
-    lead: 'Fichas de datos del sitio',
+    seoTitle: 'Cómo lo sabemos · WawaPacha',
+    seoDescription: 'De dónde sale cada dato del sitio y cómo se construye cada gráfico',
+    title: 'Cómo lo sabemos',
+    lead: 'Cada número del sitio viene de una fuente pública. Aquí están las fuentes, cómo se dibuja cada gráfico y lo que este sitio no hace.',
+    chartsTitle: 'Cómo se construye cada gráfico',
+    charts: {
+      icen: {
+        title: 'La línea del índice',
+        body: claim('icen-definition'),
+        where: 'Aparece al inicio y en la comparación con 1983, 1998 y 2017.',
+      },
+      sea: {
+        title: 'El mapa del mar',
+        body: 'Cada celda de 0,5° es la temperatura del mar del último día de NOAA OISST menos su promedio de 1991–2020 para ese mismo día del año.',
+        where: 'Aparece en «¿Dónde está ese calor?».',
+      },
+    },
+    sourcesTitle: 'Las fuentes',
     provider: 'Proveedor',
     variable: 'Variable',
     unit: 'Unidad',
@@ -297,198 +194,13 @@ export const messages = {
     lastUpdate: 'Última actualización del archivo',
     dataLink: 'Archivo o servicio consultado',
     dataTypeTitle: 'Qué significa cada tipo de dato',
-    dataTypeLead: 'Tipos de datos del registro',
     dataTypeDescription: (type: Dataset['data_type']) => dataTypeDescriptions[type],
-    modelTitle: 'Observado y estimado',
-    modelBody: (estimatedSources: string, forecastSources: string) =>
-      `Estimadas ${estimatedSources || 'ninguna'} · Pronóstico ${forecastSources || 'ninguna'}`,
     limitsTitle: 'Lo que este sitio no hace',
-    limits: ['Sin pronóstico propio', 'Sin alertas derivadas', 'Sin impactos atribuidos'],
-    sourceHeading: 'Fuente',
-  },
-  aprende: {
-    seoTitle: 'Aprende sobre El Niño · WawaPacha',
-    seoDescription: 'Guía del océano y la costa',
-    sectionLabel: 'Aprende',
-    title: 'El Niño y el mar',
-    lead: 'Guía de índices oceánicos',
-    phenomenonTitle: 'El Niño y La Niña',
-    phenomenonBody: claim('enso-is-ocean-atmosphere-pattern'),
-    regionsTitle: 'Las regiones Niño',
-    regionsLead: claim('nino-region-definitions'),
-    regions: [
-      ['Niño 1+2', '0–10°S, 90–80°O'],
-      ['Niño 3', '5°N–5°S, 150–90°O'],
-      ['Niño 3.4', '5°N–5°S, 170–120°O'],
-      ['Niño 4', '5°N–5°S, 160°E–150°O'],
+    limits: [
+      'No hace pronósticos propios: el pronóstico es el de ENFEN.',
+      'No emite alertas: los avisos son de SENAMHI y las autoridades locales.',
+      'No atribuye daños a un evento sin una fuente que lo diga.',
     ],
-    oniTitle: 'El ONI',
-    oniBody: claim('oni-definition-and-threshold'),
-    coastTitle: 'Importancia de la costa',
-    coastBody: claim('global-and-coastal-can-differ'),
-    sourcesTitle: 'Fuentes para seguir leyendo',
-    noaaIndices: 'Regiones e índices de NOAA',
-    noaaOni: 'Definición del ONI de NOAA',
-    noaaExplainer: 'Explicación de ENSO de NOAA',
-    enfenDefinitions: 'Notas técnicas de ENFEN',
-    sourceNote: 'Definiciones enlazadas',
-    explorerTitle: 'Explora la serie del ONI',
-    explorerLead:
-      'La serie histórica de NOAA queda aquí para consulta, no como respuesta principal de la portada.',
-    explorerTable: 'Tabla de los últimos trimestres',
-  },
-  territory: {
-    seoTitle: 'Lluvia por departamento · WawaPacha',
-    seoDescription: 'Lluvia y anomalía por departamento',
-    sectionLabel: 'Territorio',
-    title: 'Lluvia por departamento',
-    lead: claim('chirps-rainfall-estimates'),
-    leadDetails: `${claim('chirps-pentad-latency')} ${claim('chirps-preliminary-provisional')}`,
-    metricGroup: 'Métrica del mapa',
-    precipitation: 'Precipitación',
-    anomaly: 'Anomalía',
-    precipitationUnit: 'mm',
-    anomalyUnit: 'mm',
-    mapAria: (metric: string) => `Mapa departamental ${metric}`,
-    mapHeading: 'Mapa de precipitación',
-    mapSummary: (metric: string, date: string) => `Mapa ${metric.toLowerCase()} ${formatDay(date)}`,
-    boundaryProvenance: 'Límites departamentales',
-    boundaryLicense: 'Licencia de los límites',
-    mapTooltip: (region: string, metric: string, precipitation: string, anomaly: string) =>
-      `<strong>${region}</strong> · ${metric} · ${precipitation} · ${anomaly}`,
-    chirpsSummary: (metric: string, date: string, count: number) =>
-      `${metric.toLowerCase()} · ${count} departamentos · ${formatDay(date)}`,
-    chirpsCaption: (date: string) => `Último registro · ${formatDay(date)}`,
-    tableSection: 'Tablas de datos por departamento',
-    tableSummary: 'Ver la tabla de CHIRPS',
-    department: 'Departamento',
-    code: 'Código',
-    noData: 'Sin dato',
-    loading: 'Cargando el mapa…',
-    chartError: 'Error de mapa',
-    crossCheckTitle: 'Comprobación con ERA5',
-    crossCheckClaim: claim('era5-historical-reanalysis'),
-    crossCheckLimits: claim('era5-latency-and-limitations'),
-    crossCheckLead: (days: number, start: string, end: string) =>
-      `ERA5 · ${days} días · ${formatDay(start)}–${formatDay(end)}`,
-    crossCheckCaption: 'Celda ERA5',
-    chirpsValue: 'CHIRPS más reciente',
-    era5Sum: 'ERA5 · suma del periodo',
-    era5Unit: 'mm',
-    era5Missing: (availableDays: number, missingDays: number) =>
-      `Disponibles ${availableDays} · faltan ${missingDays}`,
-    sampleType: 'Tipo de muestra',
-    pointSample: 'Celda ERA5',
-    era5Summary: (days: number, start: string, end: string, count: number) =>
-      `ERA5 · ${days} días · ${formatDay(start)}–${formatDay(end)} · ${count} puntos`,
-    mapEmpty: 'Sin datos de precipitación',
-    tableEmpty: 'Sin registros CHIRPS',
-    era5Empty: 'Sin datos ERA5',
-    value: (value: string, unit: string) => `${value} ${unit}`,
-  },
-  rios: {
-    seoTitle: 'Caudal de ríos · WawaPacha',
-    seoDescription: 'Caudal estimado y pronosticado',
-    sectionLabel: 'Ríos',
-    title: 'Caudal de ríos',
-    lead: claim('glofas-river-discharge-forecast'),
-    modelNote: claim('glofas-ensemble-percentiles'),
-    limitsNote: claim('glofas-river-point-limits'),
-    pointLabel: 'Punto de cuenca',
-    estimatedSeries: 'Estimación del modelo',
-    forecastSeries: 'Pronóstico del modelo',
-    rangeSeries: 'Rango p25–p75 del pronóstico',
-    chartDescription: 'Caudal diario',
-    chartAria: (point: string) => `Caudal ${point}`,
-    chartLoading: 'Cargando el gráfico…',
-    chartError: 'Error de gráfico',
-    summary: (
-      point: string,
-      date: string,
-      value: string,
-      unit: string,
-      _forecastDate: string | null,
-    ) => `${point} · ${value} ${unit} · ${date}`,
-    emptySummary: (point: string) => `Sin valores ${point}`,
-    value: (value: string, unit: string) => `${value} ${unit}`,
-    tableSummary: 'Ver la tabla de datos',
-    tableCaption: (point: string) => `Caudal diario ${point}`,
-    date: 'Fecha',
-    dataType: 'Tipo de dato',
-    discharge: 'Caudal',
-    forecastRange: 'Rango del pronóstico (p25–p75)',
-    notApplicable: 'No aplica',
-    noData: 'Sin dato',
-    estimated: 'Estimado',
-    forecast: 'Pronóstico',
-    alertsTitle: 'Fuentes oficiales de alertas',
-    alertsLead: 'Comunicados y avisos oficiales',
-    enfenLink: 'Comunicados oficiales de ENFEN',
-    senamhiLink: 'Avisos meteorológicos de SENAMHI',
-  },
-  panels: {
-    weekly: {
-      title: 'Mar frente al Perú',
-      summary: (date: string, nino12: string, nino34: string) =>
-        `Último dato · ${date} · ${nino12} · ${nino34}`,
-      latest: 'Último dato',
-      latestValues: 'Últimos valores',
-      date: 'Semana del',
-      nino12: 'Niño 1+2',
-      nino34: 'Niño 3.4',
-      chartAxis: 'Anomalía (°C)',
-      chartDescription: claim('weekly-nino-anomalies'),
-      chartAria: 'Anomalías semanales',
-      tableSummary: 'Tabla semanal',
-      tableCaption: 'Anomalías por región',
-      empty: 'Sin datos semanales',
-      value: (value: string, unit: string) => `${value} ${unit}`,
-    },
-    enfen: {
-      status: 'Estado oficial',
-      latestStatus: 'Último estado oficial',
-      nextDueStale: (date: string) => `Próximo comunicado · ${date}`,
-      detail: 'Ver el comunicado oficial',
-    },
-    outlook: {
-      title: 'Probabilidades de intensidad',
-      sourceLabel: 'Producto NOAA CPC',
-      sourceClaim: claim('noaa-enso-strength-probabilities'),
-      probabilityMeaning: claim('noaa-enso-probability-meaning'),
-      summary: (seasons: number, issueDate: string) =>
-        `Probabilidades · ${seasons} temporadas · ${issueDate}`,
-      issueDate: 'Emisión',
-      season: 'Temporada',
-      probability: 'Probabilidad',
-      chartDescription: 'Probabilidades por categoría',
-      chartAria: 'Probabilidades del pronóstico',
-      tableSummary: 'Tabla de probabilidades',
-      tableCaption: (issueDate: string) => `Probabilidades · ${issueDate}`,
-      empty: 'Sin probabilidades',
-      categoryLabels: {
-        '..-2': 'Índice ≤ −2,0 °C',
-        '-2..-1.5': '−2,0 °C < índice ≤ −1,5 °C',
-        '-1.5..-1': '−1,5 °C < índice ≤ −1,0 °C',
-        '-1..-0.5': '−1,0 °C < índice ≤ −0,5 °C',
-        '-0.5..0.5': '−0,5 °C < índice < 0,5 °C',
-        '0.5..1': '0,5 °C ≤ índice < 1,0 °C',
-        '1..1.5': '1,0 °C ≤ índice < 1,5 °C',
-        '1.5..2': '1,5 °C ≤ índice < 2,0 °C',
-        '2..': 'Índice ≥ 2,0 °C',
-      } as Record<string, string>,
-      percent: (value: number) => `${value} %`,
-    },
-  },
-  oni: {
-    summary: (first: string, last: string, current: string, status: string) =>
-      `ONI ${first}–${last} · ${current} · ${status}`,
-    rangeLabel: (phase: 'warm' | 'neutral' | 'cold') =>
-      ({
-        warm: 'Sobre +0,5 °C',
-        neutral: 'Rango neutral',
-        cold: 'Bajo −0,5 °C',
-      })[phase],
-    chartAxis: 'Anomalía (°C)',
   },
 }
 
@@ -509,15 +221,3 @@ export const ageLabel = (date: string, now = new Date()) => {
   if (months < 12) return messages.provenance.ageMonth(months)
   return messages.provenance.ageYear(Math.floor(months / 12))
 }
-
-type OutlookBounds = {
-  category: string
-  lower_bound: number | null
-  upper_bound: number | null
-}
-
-export const outlookCategoryKey = (category: OutlookBounds) =>
-  `${category.lower_bound ?? ''}..${category.upper_bound ?? ''}`
-
-export const outlookCategoryLabel = (category: OutlookBounds) =>
-  messages.panels.outlook.categoryLabels[outlookCategoryKey(category)] ?? category.category

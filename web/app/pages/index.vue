@@ -247,7 +247,7 @@ useSiteSeo({
             </a>
           </p>
           <p v-if="enfenRecord.stale" class="source" role="status">
-            {{ messages.panels.enfen.nextDueStale(formatDay(enfenRecord.end)) }}
+            {{ messages.page.nextDueStale(formatDay(enfenRecord.end)) }}
           </p>
         </template>
       </div>
