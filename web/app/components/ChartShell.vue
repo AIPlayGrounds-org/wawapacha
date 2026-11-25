@@ -7,6 +7,8 @@ import type { DatasetLike } from '~/types/datasets'
 const props = defineProps<{
   dataset: DatasetLike
   summary: string
+  /** Shows the chart with a one-line caption. The stale notice still applies. */
+  bare?: boolean
 }>()
 
 const firstRecord = props.dataset.records[0]
@@ -56,7 +58,28 @@ const periodDetails = [
 </script>
 
 <template>
-  <div class="chart-shell" role="group" :aria-label="`${dataset.variable} · ${dataset.unit}`">
+  <figure v-if="bare" class="chart-bare">
+    <slot />
+    <figcaption>
+      {{ summary }}
+      <a :href="dataset.source.url" target="_blank" rel="noopener">
+        {{ dataset.source.institution }}<span class="sr-only">{{ messages.page.newTab }}</span>
+      </a>
+    </figcaption>
+    <p v-if="staleNotice" class="stale-notice" role="status">
+      {{ messages.provenance.staleSource }}
+      <a :href="dataset.source.url" target="_blank" rel="noopener">
+        {{ messages.page.reviewSource }}
+        <span class="sr-only">{{ messages.page.newTab }}</span>
+      </a>
+    </p>
+  </figure>
+  <div
+    v-else
+    class="chart-shell"
+    role="group"
+    :aria-label="`${dataset.variable} · ${dataset.unit}`"
+  >
     <div class="chart-region">
       <slot />
     </div>
@@ -121,6 +144,23 @@ const periodDetails = [
 </template>
 
 <style scoped>
+.chart-bare {
+  min-width: 0;
+  margin: 0;
+}
+.chart-bare figcaption {
+  max-width: var(--reading-width);
+  margin-top: var(--space-3);
+  color: var(--muted);
+  font-size: var(--text-meta);
+  line-height: 1.45;
+}
+.chart-bare figcaption a {
+  color: inherit;
+}
+.chart-bare .stale-notice {
+  margin: var(--space-2) 0 0;
+}
 .chart-shell {
   min-width: 0;
   border: 1px solid var(--border);

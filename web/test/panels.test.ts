@@ -10,19 +10,12 @@ import HomePage from '~/pages/index.vue'
 import { useDataset } from '~/composables/useDataset'
 import { messages, outlookCategoryLabel } from '~/messages'
 import { formatDay, formatDegrees, formatMonth, formatValue } from '~/utils/format'
-import { pickClaimSources } from '../server/utils/loadClaimSources'
+import { icenEpisodesAbove } from '~/utils/icen'
 import { loadDataset } from '../server/utils/loadDataset'
 import { enfenFixture, outlookFixture } from './fixtures/panels'
 
 vi.mock('~/composables/useDataset', () => ({ useDataset: vi.fn() }))
 vi.mock('~/composables/useSiteSeo', () => ({ useSiteSeo: vi.fn() }))
-// Read the registry once: a file read inside setup outlasts flushPromises.
-const claimSources = vi.hoisted(() => ({ load: (_ids: readonly string[]) => ({}) }))
-vi.mock('~/composables/useClaimSources', () => ({
-  useClaimSources: async (ids: readonly string[]) => claimSources.load(ids),
-}))
-const registryText = readFileSync(join(process.cwd(), '..', 'evidence', 'claims.toml'), 'utf8')
-claimSources.load = (ids) => pickClaimSources(registryText, ids)
 
 const passthrough = { template: '<div><slot /></div>' }
 
@@ -56,7 +49,7 @@ const emptyRecords = <T extends { records: unknown[] }>(dataset: T) =>
   }) as unknown as T
 
 const mountHome = async (enfen = enfenFixture) => {
-  const ids = ['noaa-oisst', 'noaa-cpc-nino-weekly', 'enfen-icen', 'senamhi-estaciones'] as const
+  const ids = ['noaa-oisst', 'noaa-cpc-nino-weekly', 'enfen-icen'] as const
   const datasets = new Map(
     await Promise.all(ids.map(async (id) => [id, await loadDataset(id)] as const)),
   )
@@ -74,9 +67,8 @@ const mountHome = async (enfen = enfenFixture) => {
       global: {
         stubs: {
           NuxtLink: { props: ['to'], template: '<a :href="to"><slot /></a>' },
-          ChartShell: { props: ['dataset', 'summary'], template: '<div><slot /></div>' },
+          ChartShell: { props: ['dataset', 'summary', 'bare'], template: '<div><slot /></div>' },
           SiteHeader: passthrough,
-          SenamhiRainChart: passthrough,
         },
       },
     },
@@ -222,7 +214,7 @@ describe('outlookCategoryLabel', () => {
   })
 })
 
-describe('home ENFEN status card', () => {
+describe('home page', () => {
   it('uses the verified lead only for its matching communiqué', () => {
     expect(messages.page.homeLead(17, 2026)).toContain('magnitud extraordinaria')
     expect(messages.page.homeLead(20, 2026)).toContain('febrero de 2027')
@@ -230,20 +222,26 @@ describe('home ENFEN status card', () => {
     expect(messages.page.homeLead(17, 2027)).toContain('aún no resume su pronóstico')
   })
 
-  it('keys the forecast points and the action to their communiqué', () => {
-    expect(messages.page.forecastPoints(20, 2026)).toHaveLength(5)
-    expect(messages.page.forecastPoints(17, 2027)).toHaveLength(1)
-    expect(messages.page.forecastPoints(17, 2027)[0]!.text).toContain('aún no resume')
+  it('keys the forecast title and the action to their communiqué', () => {
+    expect(messages.page.forecastTitle(17, 2027)).toBe('ENFEN publicó el comunicado 17-2027')
     expect(messages.page.actionLead(20, 2026)).not.toBeNull()
     expect(messages.page.actionLead(17, 2027)).toBeNull()
   })
 
   it('answers the opening question from the rank of the latest ICEN', () => {
-    expect(messages.story.hero.answer(1, '1950')).toBe(
-      'Más que nunca desde 1950, según el índice oficial.',
+    const records = [
+      { start: '1983-06', icen: 4.32 },
+      { start: '1997-11', icen: 4.08 },
+      { start: '1998-01', icen: 3.9 },
+      { start: '2017-03', icen: 1.31 },
+    ]
+
+    expect(icenEpisodesAbove(records, 3.38)).toEqual(['1983', '1997–98'])
+    expect(messages.story.hero.answer([], '1950')).toBe('Más que nunca desde 1950.')
+    expect(messages.story.hero.answer(['1983', '1997–98'], '1950')).toBe(
+      'Más que nunca desde 1950, salvo en 1983 y 1997–98.',
     )
-    expect(messages.story.hero.answer(4, '1950')).toContain('4.º')
-    expect(messages.story.hero.answer(40, '1950')).not.toContain('1950')
+    expect(messages.story.hero.answer(['1', '2', '3', '4'], '1950')).toContain('4 episodios')
   })
 
   it('opens every chapter with its question and an answer from the data', async () => {
@@ -252,89 +250,62 @@ describe('home ENFEN status card', () => {
     const latest = icen.records.at(-1)!
 
     expect(wrapper.get('#home-title .ask').text()).toBe(messages.story.hero.question)
-    expect(wrapper.get('.hero-detail').text()).toContain(formatMonth(latest.start))
-    const chapters = ['calor', 'metodo', 'historia', 'lluvia', 'hacer'] as const
+    expect(wrapper.get('.hero .lead').text()).toContain(formatMonth(latest.start))
+    const chapters = ['calor', 'historia', 'lluvia', 'hacer'] as const
     for (const id of chapters) {
-      expect(wrapper.get(`#${id}-title .ask`).text()).toBe(messages.story.questions[id].title)
+      expect(wrapper.get(`#${id}-title .ask`).text()).toBe(messages.story[id].question)
       expect(wrapper.get(`#${id}-title .answer`).text()).not.toBe('')
     }
+    expect(wrapper.get('#calor-title .answer').text()).not.toBe(messages.story.calor.empty)
     expect(wrapper.get('#lluvia-title .answer').text()).toBe(messages.page.forecastTitle(17, 2026))
-    expect(wrapper.get('#map-title').text()).not.toBe(messages.story.calor.mapEmptyTitle)
     expect(wrapper.text()).not.toMatch(/NaN|undefined/)
   })
 
-  it('repeats each question with its answer in the closing recap', async () => {
+  it('marks only today on the opening chart and every peak on the history chart', async () => {
     const wrapper = await mountHome()
-    const recap = wrapper.findAll('.recap li')
+    const labels = (selector: string) =>
+      wrapper
+        .get(selector)
+        .findAll('.mark-label')
+        .map((label) => label.text())
 
-    expect(recap.map((item) => item.get('.recap-ask').attributes('href'))).toEqual([
-      '#calor',
-      '#metodo',
-      '#historia',
-      '#lluvia',
-      '#hacer',
-    ])
-    expect(recap[0]!.get('.recap-answer').text()).toBe(wrapper.get('#calor-title .answer').text())
-  })
-
-  it('prints the quoted passage of each source card with a link to its document', async () => {
-    const wrapper = await mountHome()
-    const sources = pickClaimSources(registryText, ['coastal-event-plain-criterion'])
-    const cards = wrapper.findAll('.source-card')
-
-    expect(cards).toHaveLength(3)
-    expect(cards[0]!.text()).toContain(sources['coastal-event-plain-criterion']![0]!.quote)
-    for (const card of cards) expect(card.get('a').attributes('href')).toMatch(/^https:\/\//)
-  })
-
-  it('marks the three past peaks and the latest month on the timeline', async () => {
-    const wrapper = await mountHome()
-    const labels = wrapper
-      .get('.scrolly-chart')
-      .findAll('.mark-label')
-      .map((label) => label.text())
-
-    expect(labels).toHaveLength(4)
-    expect(labels[0]).toContain('1982–83')
-    expect(labels[3]).toContain(messages.story.timeline.today)
-  })
-
-  it('shows the official status, dates and detail link of a current communique', async () => {
-    const wrapper = await mountHome()
-
-    expect(wrapper.get('.status-kicker').text()).toBe('Estado oficial')
-    expect(wrapper.get('.status-card strong').text()).toBe('Alerta de El Niño Costero')
-    expect(wrapper.text()).toContain('28 de septiembre de 2026')
-    expect(wrapper.text()).toContain('Próximo comunicado previsto · 15 de octubre de 2026')
-    expect(wrapper.find('.stale-status').exists()).toBe(false)
-    expect(wrapper.get('.status-card a').attributes('href')).toBe(
-      'https://example.com/comunicado-17-2026',
-    )
+    expect(labels('.hero')).toHaveLength(1)
+    const history = labels('.scrolly-chart')
+    expect(history).toHaveLength(4)
+    expect(history[0]).toContain('1982–83')
+    expect(history[3]).toContain(messages.story.timeline.today)
     const steps = wrapper.findAll('.scrolly-step .step-lead').map((step) => step.text())
     expect(steps[0]).toContain('junio de 1983')
     expect(steps[1]).toContain('noviembre de 1997')
     expect(steps[2]).toContain('marzo de 2017')
   })
 
-  it('shows the last official status and next communiqué when the record is stale', async () => {
+  it('names the official status and links the communiqué in force', async () => {
+    const wrapper = await mountHome()
+    const source = wrapper.get('#lluvia .source')
+
+    expect(source.get('.status').text()).toBe('Alerta de El Niño Costero.')
+    expect(source.text()).toContain('28 de septiembre de 2026')
+    expect(source.get('a').attributes('href')).toBe('https://example.com/comunicado-17-2026')
+    expect(wrapper.find('#lluvia [role="status"]').exists()).toBe(false)
+  })
+
+  it('says when the next communiqué is overdue', async () => {
     const wrapper = await mountHome({
       ...enfenFixture,
       records: [{ ...enfenFixture.records[0]!, stale: true }],
     })
 
-    expect(wrapper.get('.status-kicker').text()).toBe('Último estado oficial')
-    expect(wrapper.get('.stale-status').text()).toBe('Próximo comunicado · 15 de octubre de 2026')
-    expect(wrapper.get('.status-card strong').text()).toBe('Alerta de El Niño Costero')
+    expect(wrapper.get('#lluvia [role="status"]').text()).toBe(
+      'Próximo comunicado · 15 de octubre de 2026',
+    )
   })
 
   it('uses an ENFEN empty state without dereferencing a missing communique', async () => {
     const wrapper = await mountHome(emptyRecords(enfenFixture))
 
-    expect(wrapper.get('.status-empty').text()).toBe(messages.page.emptyEnfenTitle)
     expect(wrapper.get('#lluvia-title .answer').text()).toBe(messages.page.forecastEmptyTitle)
-    expect(wrapper.find('.status-card').exists()).toBe(false)
-    expect(wrapper.find('.forecast-points').exists()).toBe(false)
-    expect(wrapper.text()).not.toContain('Sin datos del ONI')
+    expect(wrapper.find('#lluvia .source').exists()).toBe(false)
     expect(wrapper.text()).not.toMatch(/NaN|undefined/)
   })
 })

@@ -10,8 +10,6 @@ const props = defineProps<{
   warmest: { lat: number; lon: number; label: string } | null
 }>()
 
-/** The Niño 1+2 region (claim nino-1-2-box), in °N and °E. */
-const NINO_1_2 = { west: -90, east: -80, south: -10, north: 0 }
 const PLACES = [
   { name: 'Tumbes', lon: -80.45, lat: -3.57 },
   { name: 'Piura', lon: -80.63, lat: -5.19 },
@@ -19,11 +17,6 @@ const PLACES = [
   { name: 'Trujillo', lon: -79.03, lat: -8.11 },
   { name: 'Lima', lon: -77.04, lat: -12.05 },
 ]
-const COUNTRIES = [
-  { name: 'ECUADOR', lon: -75.2, lat: -1.2 },
-  { name: 'PERÚ', lon: -74.2, lat: -8.6 },
-]
-
 /** Degrees around the warmest point kept free of place names, so its ring stays legible. */
 const WARMEST_CLEARANCE = 1.2
 const places = computed(() =>
@@ -35,16 +28,6 @@ const places = computed(() =>
 )
 const grid = computed(() => buildSeaGrid(props.record))
 const at = (lon: number, lat: number) => seaPosition(grid.value, lon, lat)
-const box = computed(() => {
-  const g = grid.value
-  const west = Math.max(NINO_1_2.west, g.west)
-  const topLeft = seaPosition(g, west, NINO_1_2.north)
-  return {
-    ...topLeft,
-    width: `${((NINO_1_2.east - west) / (g.east - g.west)) * 100}%`,
-    height: `${((NINO_1_2.north - NINO_1_2.south) / (g.north - g.south)) * 100}%`,
-  }
-})
 const legend = computed(() => {
   const present = grid.value.paths.map((path) => path.step)
   const first = Math.max(1, Math.min(...present))
@@ -73,17 +56,6 @@ const legend = computed(() => {
           :class="`step-${path.step}`"
         />
       </svg>
-      <div class="nino-box" :style="box" aria-hidden="true">
-        <span>{{ messages.story.map.box }}</span>
-      </div>
-      <span
-        v-for="country in COUNTRIES"
-        :key="country.name"
-        class="country"
-        :style="at(country.lon, country.lat)"
-        aria-hidden="true"
-        >{{ country.name }}</span
-      >
       <span
         v-for="place in places"
         :key="place.name"
@@ -174,38 +146,10 @@ const legend = computed(() => {
   fill: var(--step-9);
   background: var(--step-9);
 }
-.nino-box {
-  position: absolute;
-  border: 2px dashed var(--on-deep);
-  border-left: 0;
-  pointer-events: none;
-}
-.nino-box span {
-  position: absolute;
-  left: var(--space-2);
-  bottom: var(--space-2);
-  padding: 2px 6px;
-  background: color-mix(in srgb, var(--deep) 82%, transparent);
-  color: var(--on-deep);
-  font-family: var(--font-hand);
-  font-size: var(--text-body);
-  line-height: 1.2;
-}
-.country,
 .place {
   position: absolute;
-  color: var(--on-deep-muted);
   line-height: 1;
   white-space: nowrap;
-}
-.country {
-  transform: translate(-50%, -50%);
-  font-size: var(--text-label);
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  opacity: 0.7;
-}
-.place {
   padding-left: 10px;
   transform: translateY(-50%);
   color: var(--on-deep);
@@ -242,8 +186,9 @@ const legend = computed(() => {
   transform: translateY(-50%);
   background: color-mix(in srgb, var(--deep) 82%, transparent);
   color: var(--on-deep);
-  font-family: var(--font-hand);
-  font-size: var(--text-body);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
   line-height: 1.2;
   white-space: nowrap;
 }
@@ -281,9 +226,6 @@ const legend = computed(() => {
 @media (max-width: 520px) {
   .place {
     font-size: 0.6875rem;
-  }
-  .nino-box span {
-    font-size: var(--text-meta);
   }
 }
 </style>

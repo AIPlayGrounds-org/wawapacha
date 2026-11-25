@@ -23,6 +23,9 @@ Below the chart, one visible line gives the source link, unit, period and update
 age. The full block sits in a "Cómo se mide" disclosure. It stays in the static
 HTML, so it remains readable without JavaScript.
 
+The home story uses `bare` mode instead: one caption line with the summary and
+the source link. The full block stays on the secondary routes.
+
 `ChartShell` also prints the accessible summary and the age of the data. It
 shows a stale-source notice when `ingestion_time` is older than the source's
 limit from the [freshness check](freshness.md#on-the-site) or the newest record
