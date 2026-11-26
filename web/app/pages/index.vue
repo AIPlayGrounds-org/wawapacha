@@ -35,11 +35,12 @@ import { STEPS_2017, STEPS_2026, tollMarks, wordMarks, type PressStep } from '~/
 import { ENFEN_COMUNICADOS, SENAMHI_AVISOS } from '~/links'
 import { useSiteSeo } from '~/composables/useSiteSeo'
 import { paperCard } from '~/data/claims'
-import { CLIPS, REELS, STILLS } from '~/utils/reels'
+import { CLIPS, DRAIN_COLUMN, REELS, STILLS } from '~/utils/reels'
 import { regionMarks, seaMark, summerMark, type MarkState } from '~/utils/score'
 import IcenOverlay, { type OverlaySeries } from '~/components/IcenOverlay.vue'
 import IcenTimeline, { type TimelineMark } from '~/components/IcenTimeline.vue'
 import ClipCard from '~/components/ClipCard.vue'
+import DrainColumn from '~/components/DrainColumn.vue'
 import NewsReel from '~/components/NewsReel.vue'
 import PaperCard from '~/components/PaperCard.vue'
 import PressTimeline from '~/components/PressTimeline.vue'
@@ -503,7 +504,7 @@ useSiteSeo({
               />
             </ChartShell>
           </div>
-          <p class="lead">{{ story.hero.handoff }}</p>
+          <p class="handoff">{{ story.hero.handoff }}</p>
         </section>
       </main>
     </div>
@@ -520,7 +521,7 @@ useSiteSeo({
             <SeaMap :panels="seaPanels" />
           </ChartShell>
         </div>
-        <p class="lead">{{ story.calor.handoff }}</p>
+        <p class="handoff">{{ story.calor.handoff }}</p>
       </div>
     </section>
 
@@ -661,6 +662,7 @@ useSiteSeo({
                 <p>{{ story.historia.low2017 }}</p>
                 <p>{{ story.historia.people }}</p>
                 <ClipCard :card="CLIPS.drenaje2017" />
+                <DrainColumn :rows="DRAIN_COLUMN.slice(0, 3)" />
               </template>
               <p v-if="step.id === '1997-98'">
                 {{ story.historia.mobilised }} {{ story.historia.thirdHalf }}
@@ -674,6 +676,9 @@ useSiteSeo({
                 :states="stepScores[step.id]!.states"
                 :notes="stepScores[step.id]!.notes"
               />
+              <p v-if="story.historia.handoffs[step.id]" class="handoff">
+                {{ story.historia.handoffs[step.id] }}
+              </p>
             </li>
           </ol>
         </div>
@@ -823,6 +828,7 @@ useSiteSeo({
             {{ messages.page.nextDueStale(formatDay(enfenRecord.end)) }}
           </p>
         </template>
+        <p class="handoff">{{ story.lluvia.handoff }}</p>
       </div>
     </section>
 
@@ -834,6 +840,7 @@ useSiteSeo({
         </h2>
         <NewsReel :cards="REELS.drain" :label="reelLabels.drain" />
         <ClipCard small :card="CLIPS.nuncaAprendemos" />
+        <DrainColumn :rows="DRAIN_COLUMN" />
         <NewsReel :cards="REELS.machines" :label="reelLabels.machines" />
         <p class="lead">{{ story.listos.rebuilt }}</p>
         <PaperCard :card="paperCard('caretas-1998-13-puentes')" />
@@ -1214,6 +1221,17 @@ h2 .answer {
 }
 .beat > .punch {
   margin-top: var(--space-24);
+}
+/* The sentence that ends a block or a step, set alone in the question's voice: it asks what comes next. */
+.handoff {
+  max-width: 30ch;
+  margin-top: var(--space-16);
+  color: var(--on-scene);
+  font-family: var(--font);
+  font-size: clamp(1.375rem, 1rem + 1.5vw, 2.25rem);
+  font-weight: 300;
+  line-height: 1.2;
+  text-wrap: balance;
 }
 /* The turn to 2026 opens the second chart, so it is a heading line, not a strip. */
 .punch--turn {

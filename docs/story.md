@@ -42,6 +42,26 @@ scores them wherever the page judges an event:
 
 Each mark is also said in words, so the row reads without its drawing.
 
+## Threads and hand-offs
+
+Seven threads run through the page, so the beats read as one story and not as
+chapters: «Nadie lo esperaba», the river against the wall, the drain that never
+comes, «Envíen motobombas», on the roof, «Devastador» and «Otra vez». A thread
+is marked on a clip card, as its glyph and name, the first time it appears in a
+beat. `marked()` in `web/app/utils/reels.ts` attaches each mark; paper cards
+and the closing stills carry none.
+
+The drain thread also collects. After TV Perú's 2017 card the 1983, 1997 and
+2017 drain words stack into a column. After the drain reel in the readiness beat
+the full column runs from 1983 to 2026. Each row is the year of a drain card and
+words lifted verbatim from that card's lift.
+
+A beat ends on a hand-off: one sentence, set alone, that opens the next
+question. The opening, the sea, the rain beat and the first two history steps
+end in the question's light serif. The beats that end on a punch line keep it
+as their hand-off. The 2017 step needs none, because today's step follows it.
+The region beat and what to do end the page and hand off to nothing.
+
 ## Opening: ¿Qué tanto hay que preocuparse?
 
 The page opens on what the reader has already heard: a newscast reel cuts

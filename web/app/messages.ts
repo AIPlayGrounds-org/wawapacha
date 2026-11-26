@@ -106,6 +106,20 @@ export const messages = {
   clipCard: {
     watch: (time: string) => `Ver en YouTube, ${time}`,
   },
+  threads: {
+    /** Read before the thread's name, so a screen reader hears what the mark is. */
+    mark: 'Hilo: ',
+    names: {
+      nadie: '«Nadie lo esperaba»',
+      rio: 'El río contra el muro',
+      dren: 'El dren que no llega',
+      motobombas: '«Envíen motobombas»',
+      techo: 'En el techo',
+      devastador: '«Devastador»',
+      otraVez: '«Otra vez»',
+    },
+    column: (from: string, to: string) => `El dren que no llega, de ${from} a ${to}`,
+  },
   newsReel: {
     roledescription: 'noticiero',
     previous: 'Anterior',
@@ -328,6 +342,14 @@ export const messages = {
           ? `${degrees(value)}: menos de un tercio de los ${degrees(value1983)} de 1983.`
           : `${degrees(value)}, frente a ${degrees(value1983)} en 1983.`,
       low2017: 'En el gráfico casi no se ve. En tierra fue otra cosa.',
+      /**
+       * The sentence that ends a step and opens the next one. The years are the gaps between the
+       * events; tv-america-1998-03-12-historia and tv-panorama-2017-inesperadamente say the rest.
+       */
+      handoffs: {
+        '1982-83': 'Quince años después, el mismo río volvió a crecer.',
+        '1997-98': 'Diecinueve años después, llegó uno que nadie esperaba.',
+      } as Record<string, string>,
       todayStep: (value: string, month: string) =>
         `Hoy: ${degrees(value)} en ${month}. La línea punteada lleva ese nivel hacia atrás.`,
       people: claim('impact-2017-people'),
@@ -389,6 +411,7 @@ export const messages = {
     },
     lluvia: {
       question: '¿Va a llover donde vivo?',
+      handoff: 'Queda la tercera condición: ¿nos encuentra preparados?',
     },
     listos: {
       question: '¿Se arregló lo que se rompió en 2017?',

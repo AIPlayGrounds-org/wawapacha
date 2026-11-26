@@ -31,7 +31,7 @@ read those tokens; page styles do not add local colour or type scales.
 | Surfaces          | The paper, sea, sand and raised-surface roles separate evidence groups. Borders carry structure; shadows mark raised status only.                                                                                          |
 | Spacing           | The 4px steps from `--space-1` through `--space-24` group content before surface treatment.                                                                                                                                |
 | Targets and focus | Interactive targets are at least 44px high. `:focus-visible` uses the accent outline.                                                                                                                                      |
-| Motion            | Marks on the timeline fade and grow when their step is read. A season line below the fold draws itself once it scrolls into view, and its notes fade in after it. A paper card below the fold drops into place, a beat after the card before it. A reel cuts between its cards in view and holds on the last; the year stamp jumps on each cut. Reduced motion removes every transition and shows a reel as a column. No content enters from scale zero. |
+| Motion            | Marks on the timeline fade and grow when their step is read. A season line below the fold draws itself once it scrolls into view, and its notes fade in after it. A paper card below the fold drops into place, a beat after the card before it. A reel cuts between its cards in view and holds on the last; the year stamp jumps on each cut. The rows of a drain column below the fold slide in from the left, one after another. Reduced motion removes every transition and shows a reel as a column. No content enters from scale zero. |
 | Data chrome       | `ChartShell` owns variable, unit, period, type, source and update age: one visible line plus a "Cómo se mide" disclosure. On the home page its `bare` mode keeps a one-line caption, the source link and the stale notice. |
 
 ## The home scenes
@@ -61,6 +61,9 @@ tones mark water above normal and blue marks water below it.
 | Clip card  | What television said, on a dark screen in every scene and theme: the year stamped top left, the lifted words in bold serif, a red tag with the outlet over a light chyron with the transcript line in capitals, and a link to the cited second. The date joins the tag only when the source gives a day or a month. No video plays on the page: the footage is not ours, so the link opens it on YouTube. A still is small, with no chyron line. |
 | Reel       | Cards of one beat in one frame that keeps the tallest card's height. Below it: back, play or pause or replay, and next as round 44px buttons, and one tick per card that fills while the card is on. Arrow keys step. A slow reel holds lines meant to be read; a fast one is a chorus of one week. A row of stills never plays. |
 | Score row  | Three square marks, one per condition, each with its label and its state in words. Filled is the accent, half fills the left half, pending is a dashed box, unknown holds a "?". The frame shows the boxes without states. |
+| Thread mark | A thread's line glyph in the accent and its name in serif italic, set above a clip card's frame. |
+| Drain column | One row per drain card: the drain glyph, the year in Inter Tight and the lifted words in serif italic, stacked as a list named for its years. |
+| Hand-off   | The sentence that ends a beat or a step, set alone after a wide gap in the question's light serif. |
 | Checklist  | One line per part of a system: a check or a dash, the part, and "funciona" or "falta" in bold. |
 
 ## Layout
