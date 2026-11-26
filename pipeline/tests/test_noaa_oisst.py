@@ -637,7 +637,12 @@ def test_the_published_json_is_the_registered_source_and_under_the_size_limit():
     published = json.loads(path.read_text(encoding="utf-8"))
 
     assert_matches_registry(published)
-    assert len(published["records"]) == 2
+    # The file written before v0.4.0 holds one day; the next refresh adds the year-earlier day.
+    records = published["records"]
+    assert 1 <= len(records) <= 2
+    if len(records) == 2:
+        newest = date.fromisoformat(records[0]["start"])
+        assert records[1]["start"] == oisst.a_year_before(newest).isoformat()
     assert len(gzip.compress(path.read_bytes())) < LIMIT
 
 
