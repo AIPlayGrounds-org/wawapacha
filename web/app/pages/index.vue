@@ -460,7 +460,7 @@ useSiteSeo({
 
 <template>
   <div class="home">
-    <div class="scene scene--green">
+    <div class="scene scene--a">
       <SiteHeader />
       <main id="main-content">
         <section class="apertura beat" aria-labelledby="home-title">
@@ -476,6 +476,7 @@ useSiteSeo({
           <p class="lead">{{ story.apertura.promise }}</p>
         </section>
         <section class="hero beat" aria-labelledby="hero-title">
+          <p class="kicker">01 / 10 · {{ story.kickers[0] }}</p>
           <h2 id="hero-title">
             <span class="ask">{{ story.hero.question }}</span>
             <span class="answer"
@@ -509,11 +510,14 @@ useSiteSeo({
       </main>
     </div>
 
-    <section id="calor" class="scene scene--blue" aria-labelledby="calor-title">
+    <section id="calor" class="scene scene--sea" aria-labelledby="calor-title">
       <div class="beat">
+        <p class="kicker">02 / 10 · {{ story.kickers[1] }}</p>
         <h2 id="calor-title">
           <span class="ask">{{ story.calor.question }}</span>
-          <span class="answer">{{ calorAnswer }}</span>
+          <span class="answer"
+            ><span class="strip">{{ calorAnswer }}</span></span
+          >
         </h2>
         <p v-if="calorLead" class="lead">{{ calorLead }}</p>
         <div class="figure figure--map">
@@ -525,8 +529,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="porque" class="scene scene--green" aria-labelledby="porque-title">
+    <section id="porque" class="scene scene--a" aria-labelledby="porque-title">
       <div class="beat">
+        <p class="kicker">03 / 10 · {{ story.kickers[2] }}</p>
         <h2 id="porque-title">
           <span class="ask">{{ story.porque.question }}</span>
           <span class="answer">{{ story.porque.answer }}</span>
@@ -561,8 +566,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="historia" class="scene scene--ink" aria-labelledby="historia-title">
+    <section id="historia" class="scene scene--b" aria-labelledby="historia-title">
       <div class="beat">
+        <p class="kicker">04 / 10 · {{ story.kickers[3] }}</p>
         <h2 id="historia-title">
           <span class="ask">{{ story.historia.question }}</span>
           <span class="answer">{{ historiaAnswer }}</span>
@@ -688,8 +694,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="palabra" class="scene scene--blue" aria-labelledby="palabra-title">
+    <section id="palabra" class="scene scene--a" aria-labelledby="palabra-title">
       <div class="beat">
+        <p class="kicker">05 / 10 · {{ story.kickers[4] }}</p>
         <h2 id="palabra-title">
           <span class="ask">{{ story.palabra.question }}</span>
           <span class="answer">{{ story.palabra.answer }}</span>
@@ -802,8 +809,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="lluvia" class="scene scene--green" aria-labelledby="lluvia-title">
+    <section id="lluvia" class="scene scene--b" aria-labelledby="lluvia-title">
       <div class="beat">
+        <p class="kicker">06 / 10 · {{ story.kickers[5] }}</p>
         <h2 id="lluvia-title">
           <span class="ask">{{ story.lluvia.question }}</span>
           <span class="answer">{{ forecastTitle }}</span>
@@ -813,7 +821,9 @@ useSiteSeo({
             {{ messages.page.homeLead(enfenRecord.number, enfenRecord.year) }}
           </p>
           <p class="source">
-            <strong class="status strip">{{ enfenRecord.status }}.</strong>{{ ' ' }}
+            <strong class="status"
+              ><i class="dot" aria-hidden="true" />{{ enfenRecord.status }}.</strong
+            >{{ ' ' }}
             <a :href="enfenRecord.url" target="_blank" rel="noopener">
               {{
                 messages.page.forecastSource(
@@ -832,8 +842,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="listos" class="scene scene--ink" aria-labelledby="listos-title">
+    <section id="listos" class="scene scene--a" aria-labelledby="listos-title">
       <div class="beat">
+        <p class="kicker">07 / 10 · {{ story.kickers[6] }}</p>
         <h2 id="listos-title">
           <span class="ask">{{ story.listos.question }}</span>
           <span class="answer">{{ story.listos.answer }}</span>
@@ -888,8 +899,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="region" class="scene scene--blue" aria-labelledby="region-title">
+    <section id="region" class="scene scene--sea" aria-labelledby="region-title">
       <div class="beat">
+        <p class="kicker">08 / 10 · {{ story.kickers[7] }}</p>
         <h2 id="region-title">
           <span class="ask">{{ story.region.question }}</span>
           <span class="answer">{{ regionAnswer }}</span>
@@ -951,8 +963,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="cierre" class="scene scene--green" aria-labelledby="cierre-title">
+    <section id="cierre" class="scene scene--b" aria-labelledby="cierre-title">
       <div class="beat">
+        <p class="kicker">09 / 10 · {{ story.kickers[8] }}</p>
         <h2 id="cierre-title">
           <span class="ask">{{ story.cierre.question }}</span>
           <span class="answer">{{ story.cierre.answer }}</span>
@@ -976,8 +989,9 @@ useSiteSeo({
       </div>
     </section>
 
-    <section id="hacer" class="scene scene--red" aria-labelledby="hacer-title">
+    <section id="hacer" class="scene scene--deep" aria-labelledby="hacer-title">
       <div class="beat">
+        <p class="kicker">10 / 10 · {{ story.kickers[9] }}</p>
         <h2 id="hacer-title">
           <span class="ask">{{ story.hacer.question }}</span>
           <span class="answer">{{ messages.page.actionTitle }}</span>
@@ -995,7 +1009,7 @@ useSiteSeo({
       </div>
     </section>
 
-    <footer class="scene scene--ink">
+    <footer class="scene scene--b">
       <div class="site-footer">
         <NuxtLink class="brand" to="/">{{ messages.page.brand }}</NuxtLink>
         <span>{{ messages.page.officialSources }}</span>
@@ -1018,14 +1032,15 @@ useSiteSeo({
   --border: color-mix(in srgb, var(--on-scene) 18%, transparent);
   --surface: transparent;
   --band: color-mix(in srgb, var(--on-scene) 8%, transparent);
-  --accent: var(--warm-on-deep);
+  --accent: var(--scene-accent);
+  --warm-on-deep: var(--data-warm);
+  --scene-cold-data: var(--data-cold);
+  --strip-kind: var(--strip-hot);
   --link: var(--on-scene);
   --focus: var(--on-scene);
   position: relative;
   isolation: isolate;
-  background:
-    radial-gradient(120% 80% at 20% 0%, color-mix(in srgb, white 7%, transparent), transparent 60%),
-    var(--ground);
+  background: var(--ground);
   color: var(--on-scene);
 }
 .scene::before {
@@ -1035,25 +1050,35 @@ useSiteSeo({
   inset: 0;
   background: var(--grain);
   mix-blend-mode: overlay;
-  opacity: 0.22;
+  opacity: 0.12;
   pointer-events: none;
 }
-.scene--green {
-  --ground: var(--scene-green);
+.scene--a {
+  --ground: var(--scene-a);
 }
-.scene--blue {
-  --ground: var(--scene-blue);
+.scene--b {
+  --ground: var(--scene-b);
 }
-.scene--ink {
-  --ground: var(--scene-ink);
+.scene + .scene {
+  border-top: 1px solid var(--border);
 }
-.scene--red {
-  --ground: var(--scene-red);
-  --on-deep-muted: var(--on-red-muted);
-  --muted: var(--on-red-muted);
+/* The sea scenes speak in cold: a teal strip and accent. */
+.scene--sea {
+  --ground: var(--scene-sea);
+  --scene-accent: var(--scene-cold);
+  --strip-kind: var(--strip-cold);
+}
+/* The last scene is the call to act: deep teal with an amber accent. */
+.scene--deep {
+  --ground: var(--scene-deep);
+  --on-scene: var(--on-deep-scene);
+  --on-scene-muted: var(--on-deep-scene-muted);
+  --scene-accent: #ffd27a;
 }
 a {
   color: var(--on-scene);
+  text-decoration-color: var(--scene-accent);
+  text-decoration-thickness: 2px;
 }
 h1,
 h2,
@@ -1147,11 +1172,29 @@ h1 .answer,
 h2 .answer {
   font-size: clamp(2.25rem, 1.2rem + 4vw, 4.5rem);
 }
+.kicker {
+  margin-bottom: var(--space-4);
+  color: var(--on-scene-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.dot {
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  margin-right: 0.5em;
+  border-radius: 50%;
+  background: var(--scene-accent);
+}
 /* A torn paper strip under the key words; each line gets its own piece. */
 .strip {
+  color: var(--on-strip);
   padding: 0.04em 0.16em 0.1em;
   margin-left: -0.16em;
-  background: var(--strip) center / 100% 100% no-repeat;
+  background: var(--strip-kind) center / 100% 100% no-repeat;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
@@ -1381,11 +1424,11 @@ h2 .answer {
 }
 .actions a:first-child {
   background: var(--on-scene);
-  color: var(--scene-red);
+  color: var(--ground);
 }
-.actions a:hover {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
+.actions a:hover,
+.actions a:focus-visible {
+  border-color: var(--scene-accent);
 }
 .site-footer {
   display: flex;

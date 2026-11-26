@@ -127,7 +127,7 @@ const decades = computed(() =>
 
 <style scoped>
 .timeline {
-  --cold-on-deep: #6fa8dc;
+  --cold-on-deep: var(--scene-cold-data, #6fa8dc);
   min-width: 0;
 }
 .plot {

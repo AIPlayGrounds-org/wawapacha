@@ -149,6 +149,9 @@ const legend = computed(() => {
   --step-8: #fcd062;
   --step-9: #fff3b8;
   --land-on-deep: #17241e;
+  --map-on: #f6f7f4;
+  --map-muted: #aacac5;
+  --map-ring: #ff9a5a;
   --globe-sea: var(--step-1);
   --globe-land: var(--land-on-deep);
   display: grid;
@@ -202,7 +205,7 @@ const legend = computed(() => {
 }
 .coast {
   fill: none;
-  stroke: color-mix(in srgb, var(--on-deep) 70%, transparent);
+  stroke: color-mix(in srgb, var(--map-on) 70%, transparent);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
@@ -262,10 +265,10 @@ const legend = computed(() => {
   white-space: pre-line;
 }
 .area--land {
-  color: var(--on-deep-muted);
+  color: var(--map-muted);
 }
 .area--sea {
-  color: var(--on-deep);
+  color: var(--map-on);
   font-style: italic;
   text-shadow:
     0 0 4px var(--step-1),
@@ -277,7 +280,7 @@ const legend = computed(() => {
   white-space: nowrap;
   padding-left: 10px;
   transform: translateY(-50%);
-  color: var(--on-deep);
+  color: var(--map-on);
   font-size: var(--text-meta);
   font-style: italic;
   letter-spacing: 0.16em;
@@ -293,7 +296,7 @@ const legend = computed(() => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--on-deep);
+  background: var(--map-on);
   transform: translateY(-50%);
 }
 .ring {
@@ -310,7 +313,7 @@ const legend = computed(() => {
 }
 .chalk path {
   fill: none;
-  stroke: var(--on-deep);
+  stroke: var(--map-ring);
   stroke-linecap: round;
   stroke-width: 2.5;
 }
@@ -319,7 +322,7 @@ const legend = computed(() => {
   right: calc(100% + 4px);
   top: 50%;
   transform: translateY(-50%);
-  color: var(--on-deep);
+  color: var(--map-on);
   font-family: var(--font-display);
   font-size: var(--text-title-sm);
   font-weight: 800;
@@ -332,11 +335,11 @@ const legend = computed(() => {
     0 0 2px var(--land-on-deep);
 }
 .ring--muted .chalk path {
-  stroke: var(--on-deep-muted);
+  stroke: var(--map-muted);
   stroke-dasharray: 4 6;
 }
 .ring--muted .ring-label {
-  color: var(--on-deep-muted);
+  color: var(--map-muted);
   font-weight: 700;
 }
 .locator {
