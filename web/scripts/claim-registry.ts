@@ -2,16 +2,42 @@ import { parse } from 'smol-toml'
 
 const CLAIM_STATUSES = ['verified', 'held']
 const CARD_FIELDS = ['outlet', 'published', 'lift'] as const
-const PUBLISHED_PATTERN = /^\d{4}-\d{2}(-\d{2})?$/u
+const PUBLISHED_PATTERN = /^\d{4}(-\d{2}(-\d{2})?)?$/u
+const VIDEO_HOSTS = ['www.youtube.com', 'youtube.com', 'm.youtube.com']
+
+/** The moment of a broadcast a clip card links to; the card prints the whole spoken line. */
+export type SourceClip = {
+  quote: string
+  video: string
+  /** The second the quote starts at, from the source's `t` parameter. */
+  start: number
+}
 
 /** What a paper card prints for a press source: its outlet, date and one lifted phrase. */
 export type PaperCard = {
   outlet: string
-  /** `YYYY-MM-DD`, or `YYYY-MM` for a document dated by month. */
+  /** `YYYY-MM-DD`, `YYYY-MM`, or `YYYY` for a broadcast that shows only its year. */
   published: string
   /** A phrase copied from the source's quote, so the card prints only verbatim words. */
   lift: string
   href: string
+  /** Set when the source is a broadcast on YouTube; the card is then a clip card. */
+  clip?: SourceClip
+}
+
+/** The video and start second of a YouTube watch link, or undefined for any other link. */
+export const videoMoment = (ref: string): Omit<SourceClip, 'quote'> | undefined => {
+  let url: URL
+  try {
+    url = new URL(ref)
+  } catch {
+    return undefined
+  }
+  const video = url.searchParams.get('v')
+  if (!VIDEO_HOSTS.includes(url.hostname) || url.pathname !== '/watch' || !video) return undefined
+  const start = url.searchParams.get('t') ?? '0'
+  if (!/^\d+s?$/u.test(start)) throw new Error(`video link ${ref} has t="${start}"; use seconds`)
+  return { video, start: Number.parseInt(start, 10) }
 }
 
 export type ClaimSource = {
@@ -52,10 +78,12 @@ const parseCard = (
     throw new Error(`${label} must define all of ${CARD_FIELDS.join(', ')} as text, or none`)
   }
   if (!PUBLISHED_PATTERN.test(published)) {
-    throw new Error(`${label} has published "${published}"; use YYYY-MM-DD or YYYY-MM`)
+    throw new Error(`${label} has published "${published}"; use YYYY-MM-DD, YYYY-MM or YYYY`)
   }
   if (!quote.includes(lift)) throw new Error(`${label} lifts "${lift}", which is not in its quote`)
-  return { outlet, published, lift, href: ref }
+  const moment = videoMoment(ref)
+  const card = { outlet, published, lift, href: ref }
+  return moment ? { ...card, clip: { quote, ...moment } } : card
 }
 
 const parseSources = (id: string, value: unknown): ClaimSource[] => {

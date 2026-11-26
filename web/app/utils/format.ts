@@ -59,3 +59,15 @@ export const formatMonth = (date: string) => {
   const [year, month] = date.split('-').map(Number)
   return monthFormat.format(new Date(Date.UTC(year!, month! - 1, 1, 12)))
 }
+
+/** «6:52» or «1:02:05»: a moment in a video, written as YouTube writes it. */
+export const formatClipTime = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600)
+  const minutes = Math.floor((seconds % 3600) / 60)
+  const rest = String(seconds % 60).padStart(2, '0')
+  return hours > 0 ? `${hours}:${String(minutes).padStart(2, '0')}:${rest}` : `${minutes}:${rest}`
+}
+
+/** A source's date at the precision it was given: a day, a month or a year. */
+export const formatPublished = (date: string) =>
+  date.length === 4 ? date : date.length === 7 ? formatMonth(date) : formatDay(date)

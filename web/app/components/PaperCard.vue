@@ -2,7 +2,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import type { PaperCard } from '~/data/claims'
 import { messages } from '~/messages'
-import { formatDay, formatMonth } from '~/utils/format'
+import { formatPublished } from '~/utils/format'
 
 const props = defineProps<{
   card: PaperCard
@@ -15,12 +15,11 @@ const props = defineProps<{
   translation?: string
   /** The BCP 47 tag of a translated lift. */
   lang?: string
+  /** Skips the drop: a reel cuts to the card instead. */
+  settled?: boolean
 }>()
 
-const date =
-  props.card.published.length === 7
-    ? formatMonth(props.card.published)
-    : formatDay(props.card.published)
+const date = formatPublished(props.card.published)
 
 // The card starts in place, so the server HTML, a reader without JavaScript and a reader who
 // asked for less motion all see it. Only a card still below the fold waits to drop.
@@ -31,7 +30,7 @@ onMounted(() => {
   const element = root.value
   if (!element) return
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (still || element.getBoundingClientRect().top < window.innerHeight) return
+  if (still || props.settled || element.getBoundingClientRect().top < window.innerHeight) return
   placed.value = false
   reveal = new IntersectionObserver(
     ([entry]) => {

@@ -35,9 +35,12 @@ import { STEPS_2017, STEPS_2026, tollMarks, wordMarks, type PressStep } from '~/
 import { ENFEN_COMUNICADOS, SENAMHI_AVISOS } from '~/links'
 import { useSiteSeo } from '~/composables/useSiteSeo'
 import { paperCard } from '~/data/claims'
+import { CLIPS, REELS, STILLS } from '~/utils/reels'
 import { regionMarks, seaMark, summerMark, type MarkState } from '~/utils/score'
 import IcenOverlay, { type OverlaySeries } from '~/components/IcenOverlay.vue'
 import IcenTimeline, { type TimelineMark } from '~/components/IcenTimeline.vue'
+import ClipCard from '~/components/ClipCard.vue'
+import NewsReel from '~/components/NewsReel.vue'
 import PaperCard from '~/components/PaperCard.vue'
 import PressTimeline from '~/components/PressTimeline.vue'
 import ScaleBars from '~/components/ScaleBars.vue'
@@ -47,6 +50,7 @@ import SeasonChart, { type SeasonLine } from '~/components/SeasonChart.vue'
 import UnitGrid from '~/components/UnitGrid.vue'
 
 const story = messages.story
+const reelLabels = messages.newsReel.labels
 
 const oisst = await useDataset('noaa-oisst', cropOisst)
 const weekly = await useDataset('noaa-cpc-nino-weekly', shapeSeasons([2016]))
@@ -459,9 +463,8 @@ useSiteSeo({
       <SiteHeader />
       <main id="main-content">
         <section class="apertura beat" aria-labelledby="home-title">
-          <p class="lead">{{ story.apertura.words }}</p>
+          <NewsReel :cards="REELS.apertura" :label="reelLabels.apertura" />
           <div class="clippings">
-            <PaperCard featured :card="paperCard('panamericana-2026-09-16-devastador')" />
             <PaperCard :card="paperCard('apoyo-2026-trajectory')" />
             <PaperCard :card="paperCard('infobae-2026-11-17-tumbes')" />
           </div>
@@ -585,6 +588,7 @@ useSiteSeo({
             >
               <p class="step-lead">{{ step.lead }}</p>
               <template v-if="step.id === '1982-83'">
+                <NewsReel :cards="REELS.historia1983" :label="reelLabels.historia1983" />
                 <figure class="units-figure">
                   <ScaleBars
                     :bars="story.historia.rain1983.bars"
@@ -607,6 +611,8 @@ useSiteSeo({
                 </figure>
               </template>
               <template v-if="step.id === '1997-98'">
+                <NewsReel :cards="REELS.tumbes1997" :label="reelLabels.tumbes1997" />
+                <ClipCard :card="CLIPS.techos1998" />
                 <p>{{ story.historia.woodman }}</p>
                 <PaperCard :card="paperCard('igp-woodman-1997-lejos')" />
                 <figure class="units-figure">
@@ -626,6 +632,7 @@ useSiteSeo({
                 </figure>
                 <p v-if="before1983">{{ before1983 }}</p>
                 <p>{{ story.historia.damage8298 }}</p>
+                <NewsReel :cards="REELS.piura1998" :label="reelLabels.piura1998" />
                 <figure class="units-figure">
                   <ScaleBars
                     :bars="story.historia.river.bars"
@@ -638,6 +645,8 @@ useSiteSeo({
                 </figure>
               </template>
               <template v-if="step.id === '2017'">
+                <NewsReel fast :cards="REELS.panorama2017" :label="reelLabels.panorama2017" />
+                <ClipCard :card="CLIPS.terceraVez2017" />
                 <figure class="units-figure">
                   <IcenOverlay
                     :records="icen.records"
@@ -651,10 +660,12 @@ useSiteSeo({
                 <p v-if="third2017">{{ third2017 }}</p>
                 <p>{{ story.historia.low2017 }}</p>
                 <p>{{ story.historia.people }}</p>
+                <ClipCard :card="CLIPS.drenaje2017" />
               </template>
               <p v-if="step.id === '1997-98'">
                 {{ story.historia.mobilised }} {{ story.historia.thirdHalf }}
               </p>
+              <ClipCard v-if="step.id === 'hoy'" :card="CLIPS.preparado2026" />
               <p v-if="step.id === 'hoy'">{{ story.historia.thirdBelow }}</p>
               <ScoreRow
                 v-if="stepScores[step.id]"
@@ -770,6 +781,11 @@ useSiteSeo({
                 <PaperCard v-else-if="step.card" :card="step.card" />
                 <p v-if="step.lead" class="step-lead">{{ step.lead }}</p>
                 <p v-for="text in step.texts" :key="text">{{ text }}</p>
+                <NewsReel
+                  v-if="step.id === 'alerta'"
+                  :cards="REELS.alerta2026"
+                  :label="reelLabels.alerta2026"
+                />
                 <p v-if="step.report">{{ step.report.text }}</p>
               </li>
             </ol>
@@ -816,6 +832,9 @@ useSiteSeo({
           <span class="ask">{{ story.listos.question }}</span>
           <span class="answer">{{ story.listos.answer }}</span>
         </h2>
+        <NewsReel :cards="REELS.drain" :label="reelLabels.drain" />
+        <ClipCard small :card="CLIPS.nuncaAprendemos" />
+        <NewsReel :cards="REELS.machines" :label="reelLabels.machines" />
         <p class="lead">{{ story.listos.rebuilt }}</p>
         <PaperCard :card="paperCard('caretas-1998-13-puentes')" />
         <figure class="units-figure units-figure--narrow">
@@ -851,10 +870,7 @@ useSiteSeo({
         <p class="lead">{{ story.listos.sat }}</p>
         <p class="lead">{{ story.listos.readiness }} {{ story.listos.thirdHalf }}</p>
         <ScoreRow :title="story.score.today" :labels="conditions" :states="scoredMarks" />
-        <div class="press-pair">
-          <PaperCard :card="paperCard('elcomercio-2023-04-14-chilcal')" />
-          <PaperCard :card="paperCard('apoyo-2026-piura-works')" />
-        </div>
+        <PaperCard :card="paperCard('apoyo-2026-piura-works')" />
         <p class="lead">{{ story.listos.piura }} {{ story.listos.drain }}</p>
         <p class="punch">
           <span class="strip">{{ story.listos.punch }}</span>
@@ -931,6 +947,7 @@ useSiteSeo({
           <span class="ask">{{ story.cierre.question }}</span>
           <span class="answer">{{ story.cierre.answer }}</span>
         </h2>
+        <NewsReel slow :cards="REELS.lessons" :label="reelLabels.lessons" />
         <p class="lead">{{ story.cierre.belaunde }}</p>
         <p class="lead">{{ story.cierre.vecina }}</p>
         <p class="lead">{{ story.cierre.neither }}</p>
@@ -945,6 +962,7 @@ useSiteSeo({
         <p class="punch">
           <span class="strip">{{ story.cierre.last }}</span>
         </p>
+        <NewsReel still :cards="STILLS" :label="reelLabels.stills" />
       </div>
     </section>
 

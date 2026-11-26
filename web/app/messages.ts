@@ -103,10 +103,34 @@ export const messages = {
     read: (outlet: string) => `Leer en ${outlet}`,
     translated: 'Traducción nuestra. El original, en inglés:',
   },
+  clipCard: {
+    watch: (time: string) => `Ver en YouTube, ${time}`,
+    play: (outlet: string, date: string) => `Ver aquí el fragmento de ${outlet}, ${date}`,
+    player: (outlet: string, date: string) => `${outlet}, ${date}, en YouTube`,
+  },
+  newsReel: {
+    roledescription: 'noticiero',
+    previous: 'Anterior',
+    next: 'Siguiente',
+    pause: 'Pausa',
+    play: 'Seguir',
+    replay: 'Repetir',
+    position: (current: number, total: number) => `${current} de ${total}`,
+    labels: {
+      apertura: 'Lo que dijo la televisión, de 1983 a 2026',
+      historia1983: 'La televisión en 1983',
+      tumbes1997: 'Tumbes, diciembre de 1997',
+      piura1998: 'Piura, marzo de 1998',
+      panorama2017: 'Panorama, marzo de 2017',
+      alerta2026: 'La televisión en febrero de 2026',
+      drain: 'El drenaje, de 1983 a 2026',
+      machines: 'Las máquinas, de 1997 a 2026',
+      lessons: 'Dos lecciones',
+      stills: 'Lo que dijo la televisión, otra vez',
+    },
+  },
   story: {
     apertura: {
-      words:
-        'Cada vez que llega un Niño, la televisión usa las mismas palabras. «Devastador», en 1983. «Devastador», en 1997. «El más brutal», en 2017.',
       headlines:
         '«El Niño sería más devastador que el de 1997». Así lo tituló un canal de televisión en septiembre. Una consultora escribió que el mar «sigue una trayectoria muy similar a la del FEN 1997-1998». En noviembre, el río Tumbes pasó el umbral naranja.',
       question: '¿Qué tanto hay que preocuparse?',

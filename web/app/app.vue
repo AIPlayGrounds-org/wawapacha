@@ -85,6 +85,14 @@ import '@fontsource-variable/inter-tight/wght.css'
   --on-clipping-muted: #5a5449;
   --clipping-rule: #c9bfa8;
   --shadow-clipping: 0 1px 0 rgb(0 0 0 / 0.08), 0 0.75rem 1.75rem rgb(0 0 0 / 0.35);
+  /* A clip card is a television frame on every ground and in both themes: it is what TV aired. */
+  --screen: #0b0e0f;
+  --on-screen: #f4f2ea;
+  --on-screen-muted: #b5b9b3;
+  --chyron: #f4f2ea;
+  --on-chyron: #141414;
+  --chyron-tag: #b3442d;
+  --on-chyron-tag: #ffffff;
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --strip: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpolygon fill='%23b3442d' points='0 0 6 2.2 12 1.6 18 0.2 24 4.3 30 2 36 2.6 42 2.3 48 2.4 54 1.4 60 1.1 66 3.6 72 0.7 78 1.9 84 2.9 90 4.1 96 1.9 102 0.4 108 1.1 114 3.7 120 3 126 2.8 132 2.4 138 1.2 144 1.5 150 4 156 0.1 162 1 168 2.9 174 3.6 180 0.1 186 1.9 192 4.4 198 2.6 204 0.5 210 3.1 216 4.8 222 1.6 228 4.5 234 0.1 240 3.6 246 4 252 4.7 258 1.4 264 0.8 270 4 276 4.7 282 3.7 288 5 294 4 300 2.2 306 1.3 312 3.1 318 0.1 324 4.8 330 4.2 336 1.8 342 4.4 348 0 354 3.3 360 4.8 366 2.7 372 3.4 378 2.5 384 4.3 390 2.2 396 4.6 397 14 399.5 27 400 40 394 37.1 388 39.1 382 37.5 376 36.1 370 35.2 364 35.3 358 39.1 352 35.5 346 36.8 340 37.8 334 36.9 328 37.4 322 35.5 316 36.9 310 35.9 304 37.9 298 37.8 292 39.6 286 35.5 280 39.9 274 40 268 38.9 262 37.8 256 36.8 250 39.3 244 38.2 238 37.5 232 36.5 226 37.7 220 36.3 214 39.8 208 37.8 202 39.6 196 35.7 190 35.8 184 39.8 178 38.5 172 36.4 166 39.1 160 36.8 154 39.4 148 37.4 142 37.5 136 36.2 130 35.5 124 39 118 39.4 112 36.3 106 38.8 100 36.7 94 39.3 88 37.2 82 35 76 35.1 70 35.2 64 37.8 58 36.5 52 39 46 36.6 40 38.2 34 39.9 28 37.5 22 38.8 16 35.9 10 38.3 4 37.5 2.5 24 0.5 11'/%3E%3C/svg%3E");
   color-scheme: light dark;

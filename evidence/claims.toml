@@ -1830,6 +1830,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=44kmFwnJUz0&t=412"
 locator = "Primera Dama Violeta Correa de Belaunde - Fenómeno de El Niño 1983, Perú Tv Blanco y Negro, YouTube, uploaded 2018-01-13, [06:52]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "presa de los efectos del devastador fenómeno de 'el niño'"
+outlet = "Documental del Gobierno"
+published = "1983"
+lift = "devastador"
 
 [[claim]]
 id = "tv-latina-1997-drenes"
@@ -1846,11 +1849,17 @@ quote = "al igual que en 1983 el barrio San José fue el más afectado"
 ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=105"
 locator = "Fenómeno 'El Niño' de 1997 en Piura: Imágenes inéditas, Latina Noticias, YouTube, uploaded 2024-08-13, [01:45]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "los drenes no funcionaron algunos están inconclusos y otros han sido tapados irresponsablemente con arena y desperdicios"
+outlet = "Latina"
+published = "1997"
+lift = "los drenes no funcionaron"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=306"
 locator = "Fenómeno 'El Niño' de 1997 en Piura: Imágenes inéditas, Latina Noticias, YouTube, uploaded 2024-08-13, [05:06]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "algunas familias han tenido que improvisar zanjas para retirar el agua pero es insuficiente defensa civil no les ha brindado motobombas"
+outlet = "Latina"
+published = "1997"
+lift = "defensa civil no les ha brindado motobombas"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=367"
@@ -1867,10 +1876,13 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=kE22pgRvCXo&t=11"
 locator = "Fenómeno 'El Niño' de 1997 en Piura: Imágenes inéditas, Latina Noticias, YouTube, uploaded 2024-08-13, [00:11]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "tan solo es el inicio pero ya se presenta devastador el fenómeno del niño"
+outlet = "Latina"
+published = "1997"
+lift = "ya se presenta devastador"
 
 [[claim]]
 id = "tv-tvperu-2017-2400"
-claim_es = "En 2018, TV Perú recordó que la cuenca del río Piura estaba preparada para 2 400 m³/s y que la costa, Lima incluida, no tiene alcantarillado ni drenaje para lluvias intensas; llamó a 2017 «el más brutal»."
+claim_es = "En su balance de 2017, TV Perú recordó que la cuenca del río Piura estaba preparada para 2 400 m³/s y que la costa, Lima incluida, no tiene alcantarillado ni drenaje para lluvias intensas; llamó a 2017 «el más brutal»."
 status = "verified"
 date_checked = "2026-11-25"
 
@@ -1883,11 +1895,17 @@ quote = "la cuenca del río piura estaba preparada para soportar 2400 metros cú
 ref = "https://www.youtube.com/watch?v=IPblSP_dUTQ&t=338"
 locator = "El Niño Costero que dejó miles de damnificados en el 2017, TVPerú Noticias, YouTube, uploaded 2018-01-02, [05:38]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "la zona costera de nuestro país incluido lima no poseemos un sistema de alcantarillado y de drenaje adecuado para soportar esas lluvias intensas"
+outlet = "TV Perú"
+published = "2017"
+lift = "no poseemos un sistema de alcantarillado y de drenaje adecuado"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=IPblSP_dUTQ&t=25"
-locator = "El Niño Costero que dejó miles de damnificados en el 2017, TVPerú Noticias, YouTube, uploaded 2018-01-02, [00:25]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
+locator = "El Niño Costero que dejó miles de damnificados en el 2017, TVPerú Noticias, YouTube, uploaded 2018-01-02, [00:25]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper); aired in 2017: at [08:47] it calls 2018 'el próximo año'"
 quote = "el del 83 el del 97 y ahora el del 2017 y este ha sido el más brutal"
+outlet = "TV Perú"
+published = "2017"
+lift = "este ha sido el más brutal"
 
 [[claim]]
 id = "igp-woodman-2014-stable"
@@ -2053,6 +2071,9 @@ quote = "lo que al comienzo se pensó sería una fuerte temporada de lluvias se 
 ref = "https://www.youtube.com/watch?v=44kmFwnJUz0&t=349"
 locator = "Primera Dama Violeta Correa de Belaunde - Fenómeno de El Niño 1983, Perú Tv Blanco y Negro, YouTube, uploaded 2018-01-13, [05:49]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "la lluvia día y noche casi hasta mediados de año contra todo pronóstico siguió cayendo en forma incesante"
+outlet = "Documental del Gobierno"
+published = "1983"
+lift = "contra todo pronóstico"
 
 [[claim]]
 id = "tv-1983-film-alcantarillado"
@@ -2064,6 +2085,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=44kmFwnJUz0&t=477"
 locator = "Primera Dama Violeta Correa de Belaunde - Fenómeno de El Niño 1983, Perú Tv Blanco y Negro, YouTube, uploaded 2018-01-13, [07:57]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "las redes de agua potable y alcantarillado resultaron insuficientes para soportar la presión de estos enormes volúmenes de agua las calles pistas y avenidas se convirtieron en ríos intransitables"
+outlet = "Documental del Gobierno"
+published = "1983"
+lift = "resultaron insuficientes"
 
 [[claim]]
 id = "tv-1984-belaunde-muros"
@@ -2080,6 +2104,9 @@ quote = "buenas noches hoy voy a hablar de algo sumamente grato para el país"
 ref = "https://www.youtube.com/watch?v=0oT-y-vRdTM&t=581"
 locator = "Reconstrucción del Norte Peruano - 1984, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2022-04-24, [09:41]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "la magna obra de defensa del río piura 60 kilómetros de muros de defensa de piedra es decir una obra realmente meritoria infortunadamente una obra sumamente costosa"
+outlet = "Mensaje de Belaunde"
+published = "1984"
+lift = "60 kilómetros de muros de defensa de piedra"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=0oT-y-vRdTM&t=425"
@@ -2270,6 +2297,9 @@ quote = "el niño se ha iniciado ya aquí en el departamento de tumbes con inusi
 ref = "https://www.youtube.com/watch?v=6o-dJBASsWA&t=89"
 locator = "PERU: TUMBES: PRESIDENT FUJIMORI VISITS FLOOD DAMAGE AREAS, AP Archive, YouTube, uploaded 2015-07-21, [01:29]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "el sistema de drenaje está funcionando bien las aguas que se acumulan en los campos están siendo evacuados y Esperamos que en 18 horas no quede Campos inundados"
+outlet = "AP"
+published = "1997"
+lift = "el sistema de drenaje está funcionando bien"
 
 [[claim]]
 id = "tv-america-1998-lima-techos"
@@ -2281,6 +2311,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=eyfosKwEObQ&t=165"
 locator = "Fenómeno de El Niño en Lima - 1998, Perú Tv Blanco y Negro, YouTube, uploaded 2017-11-17, [02:45]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "Los pobladores de las primeras cinco cuadras de la avenida Santa Rosa se vieron obligados a refugiarse en los techos de sus casas."
+outlet = "América Televisión"
+published = "1998"
+lift = "refugiarse en los techos de sus casas"
 
 [[claim]]
 id = "tv-america-1998-03-12-historia"
@@ -2292,6 +2325,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=wGb7Z4qDmEE"
 locator = "Caida del Puente Viejo de Piura - 12 /marzo /1998, Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-11-09, [00:00]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "río piura alcanzó el mayor nivel de su historia destruido puente"
+outlet = "América Noticias"
+published = "1998-03-12"
+lift = "el mayor nivel de su historia"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=wGb7Z4qDmEE&t=130"
@@ -2313,6 +2349,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=0t5f-Di-jpo&t=6"
 locator = "Piura - Caída del Puente Bolognesi - 16/03/1998 ( 1/2 ), Piura Nostalgia - Jorge Flores Gandelman, YouTube, uploaded 2017-12-30, [00:06]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "Puente Bolognesi en Piura se cayó hoy con decenas de personas y vehículos que lo cruzaban."
+outlet = "América Noticias"
+published = "1998-03-16"
+lift = "Puente Bolognesi en Piura se cayó hoy"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=0t5f-Di-jpo&t=158"
@@ -2458,6 +2497,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=638"
 locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [10:38]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "la capital también se ha visto amenazada por este niño costero que llegó inesperadamente para instalarse sembrando el caos pero sobre todo el desconcierto"
+outlet = "Panorama"
+published = "2017"
+lift = "llegó inesperadamente"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1465"
@@ -2479,6 +2521,9 @@ quote = "Vengo por ayuda presidente mi pueblo está bajo el agua tres días ya e
 ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1360"
 locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [22:40]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper); the captions read 'tien el río'; faster-whisper large-v3 hears 'tiene el río'"
 quote = "solamente cinco volquetes y dos excavadoras para cerrar ese corte que tiene el río"
+outlet = "Panorama"
+published = "2017"
+lift = "solamente cinco volquetes y dos excavadoras"
 
 [[claim]]
 id = "tv-panorama-2017-motobombas"
@@ -2490,6 +2535,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1173"
 locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [19:33]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "estamos inundados por favor envíen motobombas ya nos hemos inundado y hemos perdido todo que jamás nunca ha pasado"
+outlet = "Panorama"
+published = "2017"
+lift = "envíen motobombas"
 
 [[claim]]
 id = "tv-panorama-2017-techos"
@@ -2501,6 +2549,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=910"
 locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [15:10]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "ante la emergencia la policía rescató a todos los que se quedaron atrapados en los techos y en sus viviendas"
+outlet = "Panorama"
+published = "2017"
+lift = "atrapados en los techos"
 
 [[claim]]
 id = "tv-latina-2017-tercera-vez"
@@ -2512,6 +2563,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=ChmmggWR3Y4&t=721"
 locator = "Evangelina Chamorro, milagro y esperanza en medio del desastre, Latina Noticias, YouTube, uploaded 2017-03-19, [12:01]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "ya es la tercera vez en este año"
+outlet = "Latina"
+published = "2017"
+lift = "ya es la tercera vez en este año"
 
 [[claim]]
 id = "enfen-co01-2017-probabilities"
@@ -2626,6 +2680,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=_tw3lE7mQac&t=61"
 locator = "Enfen: El Niño costero se iniciaría en marzo y se prolongaría hasta noviembre, TVPerú Noticias, YouTube, uploaded 2026-02-16, [01:01]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "nos indican que e la la eh es casi inminente la la presencia de un niño a partir del mes de marzo, ¿no? Que puede estar durando hasta noviembre."
+outlet = "TV Perú"
+published = "2026-02-16"
+lift = "casi inminente"
 
 [[claim]]
 id = "tv-rpp-2026-02-24-alerta"
@@ -2647,6 +2704,9 @@ quote = "por temas precautorios, no podemos esperar a que transcurran 3 meses"
 ref = "https://www.youtube.com/watch?v=jdppRLOp14g&t=156"
 locator = "Fenómeno Niño Costero ya inició en Perú: ¿cuáles serán sus efectos? #CONEXIONRPP, RPP Noticias, YouTube, uploaded 2026-02-24, [02:36]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "Los sistemas de alerta no funcionan así."
+outlet = "RPP"
+published = "2026-02-24"
+lift = "Los sistemas de alerta no funcionan así"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=jdppRLOp14g&t=156"
@@ -2883,6 +2943,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=0gwvtwwT9i4&t=383"
 locator = "Los 3 Fenómenos del Niño más mortales y destructivos de la historia de Perú | El Comercio, Diario El Comercio, YouTube, uploaded 2026-11-21, [06:23]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "la gran interrogante no es solamente qué tan fuerte será el Niño de 2026 a 2027, sino qué tan preparado está el país para enfrentarlo."
+outlet = "El Comercio"
+published = "2026-11-21"
+lift = "qué tan preparado está el país para enfrentarlo"
 
 [[claim]]
 id = "elbuho-2024-reconstruction"
@@ -2960,11 +3023,17 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=bvdnUF8USL4&t=127"
 locator = "EL DILUVIO QUE INUNDÓ LIMA EN 1976: UNA HISTORIA QUE RESUENA EN 2026 | Cuenta la Historia | EP. 8, Diario El Comercio, YouTube, uploaded 2023-10-17, [02:07]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "hasta hoy es una ciudad sin drenaje para la lluvia"
+outlet = "El Comercio"
+published = "2023"
+lift = "una ciudad sin drenaje para la lluvia"
 
 [[claim.source]]
 ref = "https://www.youtube.com/watch?v=bvdnUF8USL4&t=284"
 locator = "EL DILUVIO QUE INUNDÓ LIMA EN 1976: UNA HISTORIA QUE RESUENA EN 2026 | Cuenta la Historia | EP. 8, Diario El Comercio, YouTube, uploaded 2023-10-17, [04:44]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "Y es que al parecer nunca aprendemos"
+outlet = "El Comercio"
+published = "2023"
+lift = "nunca aprendemos"
 
 [[claim]]
 id = "tv-bdp-2026-sin-drenaje"
@@ -2976,6 +3045,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=KV6zaHYQjU8&t=124"
 locator = "¿Cómo golpeó el fenómeno “El Niño” de 1983 el PBI del país?, Buenos Días Perú, YouTube, uploaded 2026-08-19, [02:04]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "El Perú creció, pero también creció el riesgo. Hoy hay más casas en las riberas, más gente expuesta y las mismas obras sin drenaje."
+outlet = "Buenos Días Perú"
+published = "2026"
+lift = "las mismas obras sin drenaje"
 
 [[claim]]
 id = "tv-rpp-2023-yaku-maquinaria"
@@ -2987,6 +3059,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=2Rb5aactsgw&t=185"
 locator = "Fenómeno de ‘El Niño’: ¿Cuáles sería su impacto en la economía?, RPP Noticias, YouTube, uploaded 2023-06-06, [03:05]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "Recordemos lo que nos ha pasado ahora con Yaku que no había maquinaria para Piura, para Tumbes, para eh La Libertad."
+outlet = "RPP"
+published = "2023"
+lift = "no había maquinaria para Piura, para Tumbes"
 
 [[claim]]
 id = "tv-rpp-2026-clamado"
@@ -2998,6 +3073,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=jdppRLOp14g"
 locator = "Fenómeno Niño Costero ya inició en Perú: ¿cuáles serán sus efectos? #CONEXIONRPP, RPP Noticias, YouTube, uploaded 2026-02-24, [00:00]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "Las autoridades locales han clamado a viva voz de que no tienen lo que necesitan para poder atender la emergencia."
+outlet = "RPP"
+published = "2026-02-24"
+lift = "han clamado a viva voz"
 
 [[claim]]
 id = "caretas-1998-13-puentes"
@@ -3023,6 +3101,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=Ok_vgh7YktE&t=1680"
 locator = "Reconstrucción del Norte - Conferencia del Presidente Belaunde 1985, Perú Archivo de TV, YouTube, uploaded 2022-04-24, [28:00]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "esas constituyen dos desgracias que han sido un obstáculo tremendo en el desenvolvimiento del gobierno que me honro en presidir pero hay que sacar de estas duras experiencias una lección la lección de que el pueblo peruano reacciona victoriosamente frente a la adversidad"
+outlet = "Conferencia de Belaunde"
+published = "1985"
+lift = "reacciona victoriosamente frente a la adversidad"
 
 [[claim]]
 id = "tv-panorama-2017-ley-naturaleza"
@@ -3034,6 +3115,9 @@ date_checked = "2026-11-25"
 ref = "https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1562"
 locator = "Dolor y tragedia: el feroz azote de El Niño costero, Panorama, YouTube, uploaded 2017-03-20, [26:02]; quote from YouTube's automatic Spanish captions, compared with a second speech recognizer (faster-whisper)"
 quote = "es la ley de la naturaleza no podemos hacer nada contra ella"
+outlet = "Panorama"
+published = "2017"
+lift = "no podemos hacer nada contra ella"
 
 [[claim]]
 id = "glantz-2000-peru-lesson"

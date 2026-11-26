@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseClaims } from '../scripts/claim-registry'
+import { parseClaims, videoMoment } from '../scripts/claim-registry'
 import { checkSiteClaims } from '../scripts/check-claims'
 import { generatedValues, renderClaims } from '../scripts/generate-claims'
 
@@ -150,9 +150,45 @@ ${extraSource}
       )
     })
 
-    it('rejects a published value that is not a day or a month', () => {
+    it('rejects a published value that is not a day, a month or a year', () => {
       expect(() => parseClaims(cardRegistry(fullCard.replace('2026-07', 'julio 2026')))).toThrow(
-        'use YYYY-MM-DD or YYYY-MM',
+        'use YYYY-MM-DD, YYYY-MM or YYYY',
+      )
+    })
+
+    it('accepts a source dated only by its year', () => {
+      const source = parseClaims(cardRegistry(fullCard.replace('2026-07', '1983')))[0]?.sources[0]
+      expect(source?.card?.published).toBe('1983')
+    })
+
+    it('reads a YouTube source as a clip that starts at its cited second', () => {
+      const clip = parseClaims(
+        cardRegistry(fullCard).replace(
+          'https://example.org/nota',
+          'https://www.youtube.com/watch?v=44kmFwnJUz0&t=412',
+        ),
+      )[0]?.sources[0]?.card?.clip
+      expect(clip).toEqual({
+        quote: 'el mar sigue una trayectoria muy similar',
+        video: '44kmFwnJUz0',
+        start: 412,
+      })
+    })
+
+    it('reads a clip only from a YouTube watch link', () => {
+      expect(videoMoment('https://example.org/nota')).toBeUndefined()
+      expect(videoMoment('https://www.youtube.com/@canal')).toBeUndefined()
+      expect(videoMoment('https://youtu.be/44kmFwnJUz0')).toBeUndefined()
+      expect(videoMoment('https://www.youtube.com/watch?v=abc')).toEqual({ video: 'abc', start: 0 })
+      expect(videoMoment('https://m.youtube.com/watch?v=abc&t=90s')).toEqual({
+        video: 'abc',
+        start: 90,
+      })
+    })
+
+    it('rejects a video moment that is not in seconds', () => {
+      expect(() => videoMoment('https://www.youtube.com/watch?v=abc&t=1m30s')).toThrow(
+        'use seconds',
       )
     })
 
@@ -165,6 +201,14 @@ ${extraSource}
     it('counts paperCard() and paperCards() as claim uses', async () => {
       const result = await site(
         "import { paperCard, paperCards } from './claims'; paperCard('press-id'); paperCards('press-id')",
+        cardRegistry(fullCard),
+      )
+      expect(result).toEqual({ claimIds: ['press-id'], errors: [] })
+    })
+
+    it('counts clipCard() and clipCards() as claim uses', async () => {
+      const result = await site(
+        "import { clipCard, clipCards } from './claims'; clipCard('press-id'); clipCards('press-id')",
         cardRegistry(fullCard),
       )
       expect(result).toEqual({ claimIds: ['press-id'], errors: [] })
