@@ -43,19 +43,6 @@ export const messages = {
     forecast: 'Pronóstico',
     official: 'Oficial',
   } satisfies Record<Dataset['data_type'], string>,
-  oisst: {
-    summary: (date: string, value: string, unit: string, location: string) =>
-      `Máxima ${value} ${unit} · ${location}`,
-    empty: (date: string) => `Sin datos para ${date}`,
-    coordinate: (value: string, direction: string) => `${value}° ${direction}`,
-    band: (start: string, end: string) => `${start}–${end}`,
-    directions: {
-      north: 'N',
-      south: 'S',
-      east: 'E',
-      west: 'O',
-    },
-  },
   provenance: {
     variable: 'Variable',
     unit: 'Unidad',
@@ -176,12 +163,32 @@ export const messages = {
     },
     map: {
       legend: '°C sobre lo normal',
-      warmest: degrees,
-      summary: (day: string) => `Cuánto se aparta el mar de lo normal, ${day}.`,
+      normal: 'lo normal',
+      today: 'hoy',
+      yearBefore: 'hace un año',
+      ecuador: 'ECUADOR',
+      peru: 'PERÚ',
+      ocean: 'OCÉANO\nPACÍFICO',
+      ring: degrees,
+      summary: (today: string, before: string | null) =>
+        before
+          ? `Cuánto se aparta el mar de lo normal el ${today} y el mismo día un año antes, el ${before}.`
+          : `Cuánto se aparta el mar de lo normal el ${today}.`,
     },
     calor: {
       question: '¿Dónde está ese calor?',
-      answer: (value: string) => `En su punto más caliente, ${degrees(value)} sobre lo normal.`,
+      /** `to` is null when the heat reaches the south end of the coast the map draws. */
+      answer: (from: string, to: string | null) =>
+        from === to
+          ? `Está solo frente a ${from}.`
+          : `No está en un punto: cubre el mar desde ${from} hasta ${to ?? 'el sur del Perú'}.`,
+      unreached: 'Junto a la costa del Perú, no pasa de 2 °C sobre lo normal.',
+      warmest: (value: string) => `El punto más caliente está a ${degrees(value)} sobre lo normal.`,
+      yearBefore: (value: string, relation: 'above' | 'normal' | 'below') =>
+        relation === 'normal'
+          ? 'Hace un año, ese mismo punto estaba en lo normal.'
+          : `Hace un año, ese mismo punto estaba a ${degrees(value)} ${relation === 'above' ? 'sobre' : 'bajo'} lo normal.`,
+      handoff: 'Un mar caliente no hace daño por sí solo. El daño llega con la lluvia.',
       empty: 'Sin mapa de temperatura del mar',
     },
     historia: {

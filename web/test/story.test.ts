@@ -42,25 +42,49 @@ describe('seaGrid', () => {
     expect([grid.west, grid.east, grid.south, grid.north]).toEqual([-85, -79, -11, -7])
     expect(seaPosition(grid, -82, -7)).toEqual({ left: '50%', top: '0%' })
   })
+
+  it('traces the coast where sea meets land, not along the frame', () => {
+    expect(buildSeaGrid(record).coast).toBe('M2 1h1M2 0v1')
+  })
 })
 
 describe('SeaMap', () => {
-  const warmest = { lat: -6.75, lon: -79.75, label: '8,5 °C' }
+  const ring = { lat: -5.25, lon: -80.75, label: '+8,1 °C' }
+  const panels = [
+    { title: 'hoy', record, ring, locator: true },
+    { title: 'hace un año', record, ring: { ...ring, label: '+0,0 °C', muted: true } },
+  ]
 
-  it('labels the warmest point and drops the place name under it', () => {
-    const wrapper = mount(SeaMap, { props: { record, warmest } })
-    const places = wrapper.findAll('.place').map((place) => place.text())
+  it('draws both days with one legend, and keeps names off the ring', () => {
+    const wrapper = mount(SeaMap, { props: { panels } })
+    const [today, before] = wrapper.findAll('.sea-panel')
+    const places = today!.findAll('.place').map((place) => place.text())
 
-    expect(wrapper.get('.warmest').text()).toBe('8,5 °C')
-    expect(places).toContain('Piura')
-    expect(places).not.toContain('Chiclayo')
+    expect(wrapper.findAll('.legend')).toHaveLength(1)
+    expect(today!.get('.ring-label').text()).toBe('+8,1 °C')
+    expect(before!.get('.ring').classes()).toContain('ring--muted')
+    expect(places).toEqual(['Tumbes', 'Lima'])
+    expect(today!.find('.locator').exists()).toBe(true)
+    expect(before!.find('.locator').exists()).toBe(false)
   })
 
-  it('shows every place and no ring without a warmest point', () => {
-    const wrapper = mount(SeaMap, { props: { record, warmest: null } })
+  it('names only the three labelled places without a ring', () => {
+    const wrapper = mount(SeaMap, { props: { panels: [{ title: 'hoy', record, ring: null }] } })
 
-    expect(wrapper.findAll('.place')).toHaveLength(5)
-    expect(wrapper.find('.warmest').exists()).toBe(false)
+    expect(wrapper.findAll('.place').map((place) => place.text())).toEqual([
+      'Tumbes',
+      'Piura',
+      'Lima',
+    ])
+  })
+
+  it('spans the legend from the coldest step drawn and marks the normal one', () => {
+    const wrapper = mount(SeaMap, { props: { panels } })
+    const steps = wrapper.findAll('.legend li')
+
+    expect(steps).toHaveLength(10)
+    expect(steps[1]!.text()).toBe('lo normal')
+    expect(steps[3]!.text()).toBe('+1')
   })
 })
 

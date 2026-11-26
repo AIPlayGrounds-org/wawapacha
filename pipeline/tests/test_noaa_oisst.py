@@ -26,13 +26,15 @@ PIPELINE_DIR = Path(__file__).parents[1]
 NOTEBOOK = REPO_ROOT / "notebooks" / "noaa_oisst.py"
 SAMPLES = Path(__file__).parent / "samples"
 # Real copies of what PSL returned on 2026-10-02: SST for 2026-09-30 and 2026-10-01, and the
-# climatology for 1 October.
+# climatology for 1 October. The SST for 2025-10-01 is what PSL returned on 2026-11-25.
 SST = (SAMPLES / "oisst.sst.day.mean.2026.nc").read_bytes()
+SST_2025 = (SAMPLES / "oisst.sst.day.mean.2025.nc").read_bytes()
 CLIMATOLOGY = (SAMPLES / "oisst.sst.day.mean.ltm.1991-2020.nc").read_bytes()
 NOW = datetime(2026, 10, 2, 12, tzinfo=UTC)
 
 OCEAN = (0.125, 260.125)  # a cell in the open Pacific, in the source's own axes
-LIMIT = 20 * 1024
+# Two days of grid. The page loads only its cropped window, so this is a size budget, not a load limit.
+LIMIT = 40 * 1024
 
 
 def cell(nc, day: int, lat: float, lon: float) -> tuple[int, int, int]:
@@ -45,7 +47,7 @@ def cell(nc, day: int, lat: float, lon: float) -> tuple[int, int, int]:
 
 
 def anomaly_record(sst, climatology) -> dict:
-    return oisst.anomaly_record(sst, climatology)[0]
+    return oisst.anomaly_record(sst, climatology)
 
 
 @pytest.fixture
@@ -72,7 +74,8 @@ class Upstream:
     """A local server that answers like PSL's NCSS, with the sample files, and keeps the requests it got."""
 
     def __init__(self):
-        self.files = {"sst": SST, "climatology": CLIMATOLOGY}
+        # A 2025 SST file answers with the 2025 sample; any other year, with the 2026 one.
+        self.files = {"sst.2026": SST, "sst.2025": SST_2025, "climatology": CLIMATOLOGY}
         # The last day of each year's SST file. A year not listed answers 404.
         self.ends = {2026: "2026-10-01"}
         self.status = 200
@@ -90,7 +93,10 @@ class Upstream:
                         return
                     body = description(upstream.ends[year]).encode()
                 else:
-                    kind = "climatology" if "ltm" in path else "sst"
+                    if "ltm" in path:
+                        kind = "climatology"
+                    else:
+                        kind = "sst.2025" if ".2025." in path else "sst.2026"
                     body = upstream.files[kind]
                 if upstream.status != 200:
                     self.send_error(upstream.status)
@@ -386,17 +392,58 @@ def assert_matches_registry(dataset: dict) -> None:
 
 
 def test_build_adds_provenance_metadata():
-    dataset = oisst.build(oisst.parse(SST, CLIMATOLOGY), NOW)
+    dataset = oisst.build(oisst.parse(SST, SST_2025, CLIMATOLOGY), NOW)
 
     assert dataset["id"] == "noaa-oisst"
     assert dataset["ingestion_time"] == "2026-10-02T12:00:00+00:00"
     assert dataset["processing_version"] == oisst.VERSION
-    assert len(dataset["records"]) == 1
+    assert [record["start"] for record in dataset["records"]] == [
+        "2026-10-01",
+        "2025-10-01",
+    ]
     assert_matches_registry(dataset)
 
 
+def test_the_day_a_year_before_reads_its_own_file_against_the_same_climatology(
+    climatology,
+):
+    """An independent read of one open-ocean block of 2025-10-01: its SST minus the climatology."""
+    earlier = oisst.read_netcdf(SST_2025)
+    record = oisst.parse(SST, SST_2025, CLIMATOLOGY)[1]
+    row = record["lat"].index(0.25)
+    column = record["lon"].index(-99.75)
+    block = [
+        earlier.variables["sst"][cell(earlier, 0, a, b)]
+        - climatology.variables["sst"][cell(climatology, 0, a, b)]
+        for a in (0.125, 0.375)
+        for b in (260.125, 260.375)
+    ]
+
+    assert record["start"] == record["end"] == "2025-10-01"
+    assert record["anomaly"][row][column] == round(float(np.mean(block)), 2)
+
+
+def test_rejects_a_year_before_that_is_another_day():
+    with pytest.raises(
+        ValidationError, match="a year before 2026-10-01 is for 2026-10-01"
+    ):
+        oisst.parse(SST, SST, CLIMATOLOGY)
+
+
+@pytest.mark.parametrize(
+    ("day", "earlier"),
+    [
+        (date(2026, 10, 1), date(2025, 10, 1)),
+        (date(2028, 2, 29), date(2027, 2, 28)),
+        (date(2027, 3, 1), date(2026, 3, 1)),
+    ],
+)
+def test_a_year_before_keeps_the_day_and_turns_29_february_into_28(day, earlier):
+    assert oisst.a_year_before(day) == earlier
+
+
 def test_publish_writes_the_json_under_the_size_limit(tmp_path):
-    dataset = oisst.build(oisst.parse(SST, CLIMATOLOGY), NOW)
+    dataset = oisst.build(oisst.parse(SST, SST_2025, CLIMATOLOGY), NOW)
 
     path = publish(dataset, tmp_path)
 
@@ -424,7 +471,7 @@ def test_publish_writes_the_json_under_the_size_limit(tmp_path):
     ],
 )
 def test_publish_rejects_a_grid_that_breaks_the_grid_schema(tmp_path, change, where):
-    dataset = oisst.build(oisst.parse(SST, CLIMATOLOGY), NOW)
+    dataset = oisst.build(oisst.parse(SST, SST_2025, CLIMATOLOGY), NOW)
     change(dataset["records"][0])
 
     with pytest.raises(ValidationError, match=where):
@@ -445,13 +492,16 @@ def publish_day(data_dir: Path, day: str, version: str = oisst.VERSION) -> None:
     (data_dir / "noaa-oisst.json").write_text(json.dumps(dataset), encoding="utf-8")
 
 
-def test_fetch_asks_for_the_servers_newest_day_and_its_climatology(upstream, data_dir):
-    sst, climatology = oisst.fetch(NOW, upstream.url)
+def test_fetch_asks_for_the_newest_day_the_day_a_year_before_and_their_climatology(
+    upstream, data_dir
+):
+    files = oisst.fetch(NOW, upstream.url)
 
-    assert (sst, climatology) == (SST, CLIMATOLOGY)
+    assert files == (SST, SST_2025, CLIMATOLOGY)
     assert upstream.names() == [
         "sst.day.mean.2026.nc/dataset.xml",
         "sst.day.mean.2026.nc",
+        "sst.day.mean.2025.nc",
         "sst.day.mean.ltm.1991-2020.nc",
     ]
     assert upstream.query(1) == {
@@ -464,7 +514,8 @@ def test_fetch_asks_for_the_servers_newest_day_and_its_climatology(upstream, dat
         "accept": "netcdf",
         "time": "2026-10-01T00:00:00Z",
     }
-    assert upstream.query(2)["time"] == "0001-10-01T00:00:00Z"
+    assert upstream.query(2)["time"] == "2025-10-01T00:00:00Z"
+    assert upstream.query(3)["time"] == "0001-10-01T00:00:00Z"
 
 
 def test_fetch_never_asks_for_a_day_past_the_servers_last_one(upstream, data_dir):
@@ -474,7 +525,8 @@ def test_fetch_never_asks_for_a_day_past_the_servers_last_one(upstream, data_dir
     oisst.fetch(datetime(2026, 11, 25, 12, tzinfo=UTC), upstream.url)
 
     assert upstream.query(1)["time"] == "2026-11-18T00:00:00Z"
-    assert upstream.query(2)["time"] == "0001-11-18T00:00:00Z"
+    assert upstream.query(2)["time"] == "2025-11-18T00:00:00Z"
+    assert upstream.query(3)["time"] == "0001-11-18T00:00:00Z"
 
 
 def test_in_early_january_fetch_reads_the_previous_years_file(upstream, data_dir):
@@ -482,12 +534,14 @@ def test_in_early_january_fetch_reads_the_previous_years_file(upstream, data_dir
 
     oisst.fetch(datetime(2027, 1, 2, tzinfo=UTC), upstream.url)
 
-    assert upstream.names()[:3] == [
+    assert upstream.names()[:4] == [
         "sst.day.mean.2027.nc/dataset.xml",
         "sst.day.mean.2026.nc/dataset.xml",
         "sst.day.mean.2026.nc",
+        "sst.day.mean.2025.nc",
     ]
     assert upstream.query(2)["time"] == "2026-12-28T00:00:00Z"
+    assert upstream.query(3)["time"] == "2025-12-28T00:00:00Z"
 
 
 def test_fetch_reports_no_new_day_without_downloading(upstream, data_dir):
@@ -506,7 +560,7 @@ def test_fetch_downloads_the_same_day_again_when_the_version_changed(
 
     oisst.fetch(NOW, upstream.url)
 
-    assert len(upstream.requests) == 3
+    assert len(upstream.requests) == 4
 
 
 def test_a_description_without_a_readable_end_fails_validation(upstream, data_dir):
@@ -533,7 +587,7 @@ def test_cli_publishes_the_json(upstream, tmp_path):
     result = run_cli(upstream, tmp_path)
 
     assert result.returncode == 0, result.stderr
-    assert result.stdout.startswith("Published noaa-oisst: 1 records in ")
+    assert result.stdout.startswith("Published noaa-oisst: 2 records in ")
     published = json.loads((tmp_path / "noaa-oisst.json").read_text(encoding="utf-8"))
     assert published["records"][0]["start"] == "2026-10-01"
     assert published["records"][0]["anomaly"][45][60] == 5.47
@@ -541,7 +595,7 @@ def test_cli_publishes_the_json(upstream, tmp_path):
     assert len(gzip.compress((tmp_path / "noaa-oisst.json").read_bytes())) < LIMIT
 
 
-@pytest.mark.parametrize("broken", ["sst", "climatology"])
+@pytest.mark.parametrize("broken", ["sst.2026", "sst.2025", "climatology"])
 def test_cli_keeps_the_previous_json_when_validation_fails(upstream, tmp_path, broken):
     upstream.files[broken] = b"<html>Service unavailable</html>"
     previous = tmp_path / "noaa-oisst.json"
@@ -583,7 +637,12 @@ def test_the_published_json_is_the_registered_source_and_under_the_size_limit():
     published = json.loads(path.read_text(encoding="utf-8"))
 
     assert_matches_registry(published)
-    assert len(published["records"]) == 1
+    # The file written before v0.4.0 holds one day; the next refresh adds the year-earlier day.
+    records = published["records"]
+    assert 1 <= len(records) <= 2
+    if len(records) == 2:
+        newest = date.fromisoformat(records[0]["start"])
+        assert records[1]["start"] == oisst.a_year_before(newest).isoformat()
     assert len(gzip.compress(path.read_bytes())) < LIMIT
 
 

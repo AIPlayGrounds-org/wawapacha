@@ -145,17 +145,17 @@ unit = "°C"
 data_type = "estimated"
 spatial_resolution = "Malla de 0,5° × 0,5° entre 20°N–25°S y 120°W–60°W"
 temporal_resolution = "Diaria"
-history = "From 1981-09-01. The published file holds only the latest day."
+history = "From 1981-09-01. The published file holds the latest day and the same day a year earlier."
 cadence = "Daily, with preliminary data. On 2026-10-02 PSL held up to 2026-10-01. NCEI's final version arrives about two weeks later."
 license = "The ERDDAP metadata allow free use and redistribution, with a disclaimer. They do not name a formal license."
 reference_period = "1991–2020"
 notes = [
   "A level 4 product: it merges satellite (AVHRR and VIIRS) and in situ observations, interpolated onto a complete grid.",
-  "Computed here: the daily SST of the latest day minus the PSL daily climatology (`sst.day.mean.ltm.1991-2020.nc`) for the same month and day, on the 0.25° grid. The product's own `anom` variable is not used: it is based on 1971–2000.",
+  "Computed here: the daily SST of the latest day, and of the same day a year earlier, minus the PSL daily climatology (`sst.day.mean.ltm.1991-2020.nc`) for that month and day, on the 0.25° grid. The latest day is the first record. A year before 29 February is 28 February, so both days always share one climatology day. The product's own `anom` variable is not used: it is based on 1971–2000.",
   "The published grid is the mean of each 2 × 2 block of 0.25° cells, ignoring missing cells, rounded to 2 decimals. A block with no value is `null`. The axes are the block centers, with longitude in °E, negative to the west (-119.75 to -60.25).",
   "Baseline checked on 2026-10-02. The climatology file's global metadata says 1971–2000, but its time axis says 1991/01/01–2020/12/31. Over the 38 CPC weeks of 2026 up to 23SEP2026, the mean of this anomaly over the Niño 3.4 box (5°N–5°S, 170°W–120°W) differs from `wksst9120.for` by -0.005 °C on average and by 0.10 °C at most. PSL's own 1971–2000 `anom` differs by +0.07 °C on average and by 0.23 °C at most. The baseline is 1991–2020, the same as CPC's weekly indices. The 1971–2000 text is inherited metadata.",
   "The climatology has 365 days, numbered in the Julian calendar, with no 29 February. 29 February uses 28 February. The pipeline places the day from the first day of the file, because Python decodes the dates two days early.",
-  "PSL keeps one SST file per year (`sst.day.mean.<year>.nc`). The pipeline reads the server's last day from the file's NCSS `dataset.xml` (`TimeSpan/end`) and asks for that day only. PSL often lags a few days. When the current year's file does not exist yet (HTTP 404), it reads the previous year's. When the server has no day after the published one, the run downloads nothing, publishes nothing and exits 0.",
+  "PSL keeps one SST file per year (`sst.day.mean.<year>.nc`). The pipeline reads the server's last day from the file's NCSS `dataset.xml` (`TimeSpan/end`) and asks for that day, then for the same day a year earlier from that year's file. PSL often lags a few days. When the current year's file does not exist yet (HTTP 404), it reads the previous year's. When the server has no day after the published one, the run downloads nothing, publishes nothing and exits 0.",
   "PSL answers HTTP 429 when it is busy. The run then exits 75 and the previous JSON stays.",
   "NCSS returns the cells just outside the box too (one row and one column). The pipeline keeps the 180 × 240 cells inside it. Land arrives as `NaN`.",
   "Data less than 15 days old is preliminary and can change.",

@@ -16,8 +16,8 @@ with app.setup:
     from wawapacha_pipeline.contract import ValidationError, publish
     from wawapacha_pipeline.sources import noaa_oisst as source
 
-    # El límite de docs/data-contract.md: 20 KB comprimido con gzip.
-    LIMIT = 20 * 1024
+    # El mismo presupuesto que los tests de la fuente: 40 KB comprimido con gzip para dos días.
+    LIMIT = 40 * 1024
 
 
 @app.cell(hide_code=True)
@@ -45,19 +45,21 @@ def _():
     NOAA PSL guarda un archivo de temperatura por año y otro con la climatología diaria 1991–2020.
     El servicio NCSS recorta la región en el servidor, así que solo se bajan unos cientos de kilobytes:
 
-    1. la temperatura de los últimos días (se queda con el más reciente);
-    2. la climatología de ese mismo día del año.
+    1. la temperatura del día más reciente;
+    2. la temperatura del mismo día un año antes (el 29 de febrero usa el 28);
+    3. la climatología de ese día del año, que sirve para los dos.
     """)
     return
 
 
 @app.cell
 def _():
-    sst_file, climatology_file = source.fetch()
+    sst_file, sst_a_year_before_file, climatology_file = source.fetch()
 
-    _days = source.days(source.read_netcdf(sst_file))
-    mo.md(f"Descargados **{len(sst_file):,} bytes** de temperatura (días {_days[0]} a {_days[-1]}) y **{len(climatology_file):,} bytes** de climatología, de `{source.URL}`.")
-    return climatology_file, sst_file
+    _day = source.days(source.read_netcdf(sst_file))[-1]
+    _earlier = source.days(source.read_netcdf(sst_a_year_before_file))[-1]
+    mo.md(f"Descargados **{len(sst_file):,} bytes** de temperatura del {_day}, **{len(sst_a_year_before_file):,}** del {_earlier} y **{len(climatology_file):,} bytes** de climatología, de `{source.URL}`.")
+    return climatology_file, sst_a_year_before_file, sst_file
 
 
 @app.cell(hide_code=True)
@@ -65,12 +67,12 @@ def _():
     mo.md(r"""
     ## Paso 2 · Leer y validar
 
-    `source.parse()` lee los dos archivos NetCDF, resta la climatología al día más reciente y promedia
+    `source.parse()` lee los tres archivos NetCDF, resta la climatología a cada uno de los dos días y promedia
     cada bloque de 2 × 2 celdas de 0,25° en una celda de 0,5°. Comprueba lo que exige el protocolo:
 
     - los archivos son NetCDF clásico, con `lat`, `lon`, `time` y `sst` en °C;
     - los ejes son exactamente la malla de 180 × 240 celdas de la región (el servidor añade una fila y una columna fuera de ella; se descartan);
-    - los días van en orden, sin huecos ni repetidos, y la climatología es la del mismo día del año (el 29 de febrero usa el 28);
+    - los días van en orden, sin huecos ni repetidos, el segundo día es el mismo día un año antes y la climatología es la de ese día del año (el 29 de febrero usa el 28);
     - la temperatura (5–35 °C) y la anomalía (±10 °C) están en rangos posibles;
     - al menos la mitad de las celdas tiene valor. El resto son tierra y quedan en `null`.
     """)
@@ -78,9 +80,9 @@ def _():
 
 
 @app.cell
-def _(climatology_file, sst_file):
+def _(climatology_file, sst_a_year_before_file, sst_file):
     try:
-        records = source.parse(sst_file, climatology_file)
+        records = source.parse(sst_file, sst_a_year_before_file, climatology_file)
         validation_error = None
     except ValidationError as error:
         records = None
@@ -94,7 +96,7 @@ def _(climatology_file, sst_file):
     else:
         _grid = records[0]["anomaly"]
         _valid = sum(value is not None for row in _grid for value in row)
-        _out = mo.callout(mo.md(f"**Validación correcta:** {records[0]['start']}, malla de {len(_grid)} × {len(_grid[0])} celdas, {_valid:,} con valor y {len(_grid) * len(_grid[0]) - _valid:,} nulas."), kind="success")
+        _out = mo.callout(mo.md(f"**Validación correcta:** {records[0]['start']} y {records[1]['start']}, malla de {len(_grid)} × {len(_grid[0])} celdas, {_valid:,} con valor y {len(_grid) * len(_grid[0]) - _valid:,} nulas."), kind="success")
     _out
     return (records,)
 
@@ -185,7 +187,7 @@ def _():
     mo.md(r"""
     ## Paso 4 · Armar el JSON
 
-    `source.build()` añade a la malla la procedencia que declara [`sources.toml`](../sources.toml), según el [esquema](../schema/dataset.schema.json). `publish()` valida el JSON contra el esquema; aquí lo escribe en una carpeta temporal, solo para medir los bytes reales. Nada llega a `data/`. El límite es de 20 KB comprimido con gzip.
+    `source.build()` añade a la malla la procedencia que declara [`sources.toml`](../sources.toml), según el [esquema](../schema/dataset.schema.json). `publish()` valida el JSON contra el esquema; aquí lo escribe en una carpeta temporal, solo para medir los bytes reales. Nada llega a `data/`. El presupuesto es de 40 KB comprimido con gzip para los dos días.
     """)
     return
 
@@ -196,7 +198,6 @@ def _(records):
 
     dataset = source.build(records, datetime.now(timezone.utc))
 
-    _record = dataset["records"][0]
     _preview = {k: v for k, v in dataset.items() if k != "records"}
     _preview["records"] = [{
         "start": _record["start"],
@@ -204,7 +205,7 @@ def _(records):
         "lat": f"{len(_record['lat'])} valores, de {_record['lat'][0]} a {_record['lat'][-1]}",
         "lon": f"{len(_record['lon'])} valores, de {_record['lon'][0]} a {_record['lon'][-1]}",
         "anomaly": f"{len(_record['anomaly'])} filas de {len(_record['anomaly'][0])} valores",
-    }]
+    } for _record in dataset["records"]]
     # El mismo `publish` que usa la producción, en una carpeta temporal: valida contra el esquema y da los bytes reales.
     with tempfile.TemporaryDirectory() as _folder:
         _published = publish(dataset, Path(_folder)).read_bytes()

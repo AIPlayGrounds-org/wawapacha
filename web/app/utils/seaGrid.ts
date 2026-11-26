@@ -15,6 +15,36 @@ export type SeaGrid = {
   north: number
   /** One SVG path per step, in cell units with the north row at y = 0. */
   paths: { step: number; d: string }[]
+  /** The cell edges between sea and land, in the same units. */
+  coast: string
+}
+
+const isSea = (record: GridRecord, row: number, column: number) => {
+  const value = record.anomaly[row]?.[column]
+  return value !== null && value !== undefined
+}
+
+/**
+ * The coastline traced along the grid, so it follows the cells exactly. An edge
+ * is drawn where a sea cell meets a land cell; the frame's border is not a coast.
+ */
+const traceCoast = (record: GridRecord) => {
+  const rows = record.lat.length
+  const columns = record.lon.length
+  const land = (row: number, column: number) =>
+    row >= 0 && row < rows && column >= 0 && column < columns && !isSea(record, row, column)
+  const edges: string[] = []
+  for (let row = 0; row < rows; row += 1) {
+    const y = rows - 1 - row
+    for (let column = 0; column < columns; column += 1) {
+      if (!isSea(record, row, column)) continue
+      if (land(row + 1, column)) edges.push(`M${column} ${y}h1`)
+      if (land(row - 1, column)) edges.push(`M${column} ${y + 1}h1`)
+      if (land(row, column - 1)) edges.push(`M${column} ${y}v1`)
+      if (land(row, column + 1)) edges.push(`M${column + 1} ${y}v1`)
+    }
+  }
+  return edges.join('')
 }
 
 /**
@@ -62,6 +92,7 @@ export const buildSeaGrid = (record: GridRecord): SeaGrid => {
     paths: [...segments.entries()]
       .sort(([a], [b]) => a - b)
       .map(([step, parts]) => ({ step, d: parts.join('') })),
+    coast: traceCoast(record),
   }
 }
 

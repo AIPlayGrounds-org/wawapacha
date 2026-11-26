@@ -2,13 +2,13 @@
   "margin": 0.15,
   "routes": {
     "/": {
-      "payloadBytes": 67844,
-      "entryJsBytes": 289094,
+      "payloadBytes": 78824,
+      "entryJsBytes": 327462,
       "cssBytes": 1163
     },
     "/metodologia": {
       "payloadBytes": 2771,
-      "entryJsBytes": 272589,
+      "entryJsBytes": 280200,
       "cssBytes": 1163
     }
   }
