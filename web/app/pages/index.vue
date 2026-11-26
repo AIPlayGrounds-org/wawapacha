@@ -870,7 +870,10 @@ useSiteSeo({
         <p class="lead">{{ story.listos.sat }}</p>
         <p class="lead">{{ story.listos.readiness }} {{ story.listos.thirdHalf }}</p>
         <ScoreRow :title="story.score.today" :labels="conditions" :states="scoredMarks" />
-        <PaperCard :card="paperCard('apoyo-2026-piura-works')" />
+        <div class="press-pair">
+          <PaperCard :card="paperCard('elcomercio-2023-04-14-chilcal')" />
+          <PaperCard :card="paperCard('apoyo-2026-piura-works')" />
+        </div>
         <p class="lead">{{ story.listos.piura }} {{ story.listos.drain }}</p>
         <p class="punch">
           <span class="strip">{{ story.listos.punch }}</span>

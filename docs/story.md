@@ -198,7 +198,9 @@ APOYO's review of the Piura river's early warning comes next as a checklist:
 the radar works; the sirens, the activation thresholds and the evacuation plans
 are missing, [apoyo-2026-sat](../evidence/claims.toml). APOYO's readiness
 finding, [apoyo-2026-readiness](../evidence/claims.toml), sets today's third
-mark at half. A card then shows Piura's drainage works near zero in 2026,
+mark at half. The drain thread ties off on two cards: Piura's 40-year wait for
+a storm drain, [elcomercio-2023-04-14-chilcal](../evidence/claims.toml), beside
+its drainage works near zero in 2026,
 [apoyo-2026-piura-works](../evidence/claims.toml). The
 punch line hands off to the region beat: a Niño reaches a river, a street, a
 roof, not the country in general.
