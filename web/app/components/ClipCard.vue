@@ -2,9 +2,11 @@
 import type { ClipCard } from '~/data/claims'
 import { messages } from '~/messages'
 import { formatClipTime, formatPublished } from '~/utils/format'
+import type { Threaded } from '~/utils/threads'
+import ThreadMark from '~/components/ThreadMark.vue'
 
 const props = defineProps<{
-  card: ClipCard
+  card: Threaded<ClipCard>
   /** A smaller frame for a row of stills: the year and the lift, no chyron. */
   small?: boolean
 }>()
@@ -18,6 +20,7 @@ const time = formatClipTime(props.card.clip.start)
 
 <template>
   <figure class="clip-card" :class="{ 'clip-card--small': small }">
+    <ThreadMark v-if="card.thread" :thread="card.thread" />
     <div class="frame">
       <span class="stamp">{{ year }}</span>
       <p class="lift" aria-hidden="true">«{{ card.lift }}»</p>

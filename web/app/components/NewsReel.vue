@@ -2,9 +2,10 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { isClipCard, type PaperCard as Card } from '~/data/claims'
 import { messages } from '~/messages'
+import type { Threaded } from '~/utils/threads'
 
 const props = defineProps<{
-  cards: readonly Card[]
+  cards: readonly Threaded<Card>[]
   /** Names the reel for a screen reader. */
   label: string
   /** Holds each card longer, for lines meant to be read rather than heard as a chorus. */

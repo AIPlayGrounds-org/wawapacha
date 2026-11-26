@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { ref } from 'vue'
+import { useReveal } from '~/composables/useReveal'
 import type { PaperCard } from '~/data/claims'
 import { messages } from '~/messages'
 import { formatPublished } from '~/utils/format'
@@ -21,28 +22,8 @@ const props = defineProps<{
 
 const date = formatPublished(props.card.published)
 
-// The card starts in place, so the server HTML, a reader without JavaScript and a reader who
-// asked for less motion all see it. Only a card still below the fold waits to drop.
 const root = ref<HTMLElement | null>(null)
-const placed = ref(true)
-let reveal: IntersectionObserver | undefined
-onMounted(() => {
-  const element = root.value
-  if (!element) return
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (still || props.settled || element.getBoundingClientRect().top < window.innerHeight) return
-  placed.value = false
-  reveal = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry?.isIntersecting) return
-      placed.value = true
-      reveal?.disconnect()
-    },
-    { rootMargin: '0px 0px -15% 0px' },
-  )
-  reveal.observe(element)
-})
-onBeforeUnmount(() => reveal?.disconnect())
+const placed = useReveal(root, props.settled)
 </script>
 
 <template>
