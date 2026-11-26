@@ -1,7 +1,7 @@
 # WawaPacha story
 
 The home page answers one question: how worried should the coast be about this
-Niño. It opens on what the press said, then answers in six short beats. Each
+Niño. It opens on what the press said, then answers in short beats. Each
 beat opens with the question a reader would ask and answers it in the heading.
 One chart or one line of evidence follows. What the press and officials said
 sits on paper cards; what the measurements say sits on the scene's ground. The page does not show everything the
@@ -21,6 +21,26 @@ from an ENFEN communiqué is keyed to that communiqué's number and year in
 `web/app/messages.ts`. A newer communiqué without a summary shows a fallback
 sentence that points to the official link. The site never presents an older
 communiqué's forecast as the current one.
+
+## The score
+
+Three conditions frame the story: the sea passes 26 °C, it does so in summer,
+and it meets a country that is not ready. A row of three marks, `ScoreRow`,
+scores them wherever the page judges an event:
+
+- The frame, in the beat on why Lima stays dry, with no state.
+- Each history step. 1982-83 and 2017 fill all three. 1997-98 fills the sea and
+  the summer and half the third, because the country mobilised,
+  [glantz-2000-peru-mobilised](../evidence/claims.toml).
+- Today, built from the data. The sea mark fills above 26 °C. The summer mark
+  waits, dashed, until a week from December to March passes 26 °C, and turns
+  empty in April if none did. The third mark is "?" in history, where the
+  page says the readiness beat answers it, and half there and in the closing.
+- Each region, against its own rows: the sea anomaly above 2 °C, the river
+  above its lowest official threshold, and the rain above normal. A region with
+  no threshold to cite gets "?" and says why.
+
+Each mark is also said in words, so the row reads without its drawing.
 
 ## Opening: ¿Qué tanto hay que preocuparse?
 
@@ -76,14 +96,15 @@ with the 26 °C line, and the normal brightens only where it reaches the line.
 Its summary names the months a normal year passes 26 °C and the month this
 season did. A 1925 press quote,
 [elcomercio-1925-alisio](../evidence/claims.toml), sits on its paper card and
-shows that the explanation of the time left the sea out. The beat ends on the three conditions and the
-punch line: in the summer of 1983 all three came together.
+shows that the explanation of the time left the sea out. The beat ends on the
+three conditions, their unscored marks, and the punch line: in the summer of
+1983 all three came together.
 
 ## ¿Es como 1983, 1998 o 2017?
 
 The timeline stays on screen while four steps scroll past it: 1982-83, 1997-98,
 2017 and the latest month. Each step brings its mark forward and says what the
-index does not: what happened on land.
+index does not: what happened on land. Each step ends on its score.
 
 The 1982-83 step draws the rain of 1983 in Piura beside a normal year on one
 scale, 2 400 mm against 60,
@@ -104,7 +125,10 @@ river's peak flow in each, 3 200 and 4 424 m³/s,
 [uni-sanchez-piura-1983](../evidence/claims.toml) and
 [uni-sanchez-piura-1998](../evidence/claims.toml), against the 2 300 m³/s at
 which the bridges closed,
-[tv-america-1998-03-16-2300](../evidence/claims.toml). The 2017 step draws
+[tv-america-1998-03-16-2300](../evidence/claims.toml). A UN agencies' report
+says the country mobilised before the peak,
+[glantz-2000-peru-mobilised](../evidence/claims.toml), so the third condition
+was met only by half. The 2017 step draws
 2016-17 over 1982-83 the same way and says the share: 2017's peak was under a
 third of 1983's. The page says "menos de un tercio" only while the data makes it
 true. It then shows that the low index came with heavy damage:
@@ -160,6 +184,25 @@ it; for N°20-2026 that is
 names the official status and links the communiqué. A stale communiqué adds
 when the next one was due.
 
+## ¿Se arregló lo que se rompió en 2017?
+
+This beat answers the third condition. The answer is that more than one work in
+four was not finished. Rebuilt works do not always hold: a Caretas card,
+[caretas-1998-13-puentes](../evidence/claims.toml), and a grid of 68 squares
+show that 13 bridges lost in 1998 were built after 1983. A second grid of 100
+squares shows the 73 % of the Reconstrucción con Cambios works finished when it
+closed in 2023, [elbuho-2024-reconstruction](../evidence/claims.toml).
+
+APOYO's review of the Piura river's early warning comes next as a checklist:
+the radar works; the sirens, the activation thresholds and the evacuation plans
+are missing, [apoyo-2026-sat](../evidence/claims.toml). APOYO's readiness
+finding, [apoyo-2026-readiness](../evidence/claims.toml), sets today's third
+mark at half. Two cards then pair Piura's 40-year wait for a storm drain,
+[elcomercio-2023-04-14-chilcal](../evidence/claims.toml), with its drainage
+works near zero in 2026, [apoyo-2026-piura-works](../evidence/claims.toml). The
+punch line hands off to the region beat: a Niño reaches a river, a street, a
+roof, not the country in general.
+
 ## ¿Y en mi región?
 
 The answer names the coastal regions where the last month's rain passed its
@@ -181,6 +224,18 @@ region shows. Each region has three rows:
 
 Callao is left out: its CHIRPS area would repeat Lima's sea and add no rain of
 its own. Modelled GloFAS flows stay off the beat: they have no threshold to cite.
+Each panel ends on the region's score.
+
+## ¿Qué aprendimos?
+
+The closing sets two lessons people drew after a Niño side by side: Belaúnde's
+in 1985, [tv-1985-belaunde-leccion](../evidence/claims.toml), and a neighbour's
+in 2017, [tv-panorama-2017-ley-naturaleza](../evidence/claims.toml). One says
+the country endured; the other, that nothing can be done. Neither speaks of what
+is done before. The UN agencies' lesson for Peru,
+[glantz-2000-peru-lesson](../evidence/claims.toml), follows on a card in our
+Spanish, with the English original under it. The beat restates today's score
+and ends on the last line: what returns can be expected.
 
 ## ¿Qué hago ahora?
 

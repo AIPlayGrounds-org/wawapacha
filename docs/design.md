@@ -1,7 +1,7 @@
 # Design
 
 WawaPacha explains El Niño Costero to someone who lives on the Peruvian coast.
-The home page is a short story: it asks five questions in order and answers
+The home page is a short story: it asks its questions in order and answers
 each with one chart or one sentence from an official source.
 [`story.md`](story.md) holds the reading path. `/metodologia`, "Cómo lo sabemos",
 uses the same header.
@@ -37,7 +37,8 @@ read those tokens; page styles do not add local colour or type scales.
 ## The home scenes
 
 Each home beat is a full-bleed scene on its own ground: green for the opening,
-the beat on why Lima stays dry and the rain beat, blue for the sea, ink for history and the footer, brick red
+the beat on why Lima stays dry, the rain beat and the closing, blue for the sea
+and the regions, ink for history, readiness and the footer, brick red
 for what to do. Every scene carries the same grain and a soft highlight, so the
 page reads as one printed piece. A `.scene` restates the shared tokens for its
 ground, so `ChartShell`, `SiteHeader` and the charts need no dark variant. Warm
@@ -56,7 +57,9 @@ tones mark water above normal and blue marks water below it.
 | Region     | A native select picks one region; each panel heads its sea, river and rain rows in Inter Tight over a plain sentence or a scale-bar chart. |
 | Overlay    | Two events on one month axis inside a scrolly step: the step's event in the accent, drawn on scroll; the past event muted. Each peak is labelled with its event and value in Inter Tight; a pin is a ring with a serif italic note. The neutral band sits behind both lines. |
 | Hand mark  | An arrow drawn as a loose curve, with a serif italic note, ties two points the sentence compares.                          |
-| Paper card | What the press printed, on newsprint in every scene and theme: outlet and date on top, one verbatim phrase set in bold serif, a link to the source. Laid down a little askew. Measurements never sit on a card. |
+| Paper card | What the press printed, on newsprint in every scene and theme: outlet and date on top, one verbatim phrase set in bold serif, a link to the source. Laid down a little askew. Measurements never sit on a card. A source in another language shows our translation large, tagged as ours, with the verbatim original small under it in its own `lang`. |
+| Score row  | Three square marks, one per condition, each with its label and its state in words. Filled is the accent, half fills the left half, pending is a dashed box, unknown holds a "?". The frame shows the boxes without states. |
+| Checklist  | One line per part of a system: a check or a dash, the part, and "funciona" or "falta" in bold. |
 
 ## Layout
 

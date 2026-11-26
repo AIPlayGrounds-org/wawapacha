@@ -35,11 +35,13 @@ import { STEPS_2017, STEPS_2026, tollMarks, wordMarks, type PressStep } from '~/
 import { ENFEN_COMUNICADOS, SENAMHI_AVISOS } from '~/links'
 import { useSiteSeo } from '~/composables/useSiteSeo'
 import { paperCard } from '~/data/claims'
+import { regionMarks, seaMark, summerMark, type MarkState } from '~/utils/score'
 import IcenOverlay, { type OverlaySeries } from '~/components/IcenOverlay.vue'
 import IcenTimeline, { type TimelineMark } from '~/components/IcenTimeline.vue'
 import PaperCard from '~/components/PaperCard.vue'
 import PressTimeline from '~/components/PressTimeline.vue'
 import ScaleBars from '~/components/ScaleBars.vue'
+import ScoreRow from '~/components/ScoreRow.vue'
 import SeaMap, { type SeaPanel, type SeaRing } from '~/components/SeaMap.vue'
 import SeasonChart, { type SeasonLine } from '~/components/SeasonChart.vue'
 import UnitGrid from '~/components/UnitGrid.vue'
@@ -185,13 +187,29 @@ const calorLead = [
 const ringAt = (record: GridRecord, muted: boolean): SeaRing | null => {
   const value = warmest ? valueAt(record, warmest.lat, warmest.lon) : null
   return warmest && value !== null
-    ? { lat: warmest.lat, lon: warmest.lon, label: story.map.ring(formatValue(value)), muted }
+    ? {
+        lat: warmest.lat,
+        lon: warmest.lon,
+        label: story.map.ring(formatValue(value)),
+        muted,
+      }
     : null
 }
 const seaPanels: SeaPanel[] = [
-  { title: story.map.today, record: seaRecord, ring: ringAt(seaRecord, false), locator: true },
+  {
+    title: story.map.today,
+    record: seaRecord,
+    ring: ringAt(seaRecord, false),
+    locator: true,
+  },
   ...(seaYearBefore
-    ? [{ title: story.map.yearBefore, record: seaYearBefore, ring: ringAt(seaYearBefore, true) }]
+    ? [
+        {
+          title: story.map.yearBefore,
+          record: seaYearBefore,
+          ring: ringAt(seaYearBefore, true),
+        },
+      ]
     : []),
 ]
 const seaSummary = story.map.summary(
@@ -212,8 +230,16 @@ const pastEvents = (
   peak: icenPeak(icen.records, start, end),
 }))
 // Each overlay lines events up by calendar month, from April of the first year.
-const overlayFrom = { '1982-83': '1982-04', '1997-98': '1997-04', '2017': '2016-04' } as const
-const overlayLabel = { '1982-83': '1982–83', '1997-98': '1997–98', '2017': '2016–17' } as const
+const overlayFrom = {
+  '1982-83': '1982-04',
+  '1997-98': '1997-04',
+  '2017': '2016-04',
+} as const
+const overlayLabel = {
+  '1982-83': '1982–83',
+  '1997-98': '1997–98',
+  '2017': '2016–17',
+} as const
 const overlaySeries = (past: keyof typeof overlayFrom, accent: keyof typeof overlayFrom) =>
   ([past, accent] as const).map((id): OverlaySeries => ({
     id,
@@ -290,6 +316,38 @@ const activeStep = useActiveId(
 )
 const focus = computed(() => (activeStep.value ? activeStep.value.slice(stepId('').length) : null))
 
+// The three conditions, scored for each event and for this season.
+const conditions = story.score.conditions
+const todayMarks: MarkState[] = [
+  seaMark(week?.sst ?? null),
+  summerMark(accentLine?.points ?? [], week?.start ?? null),
+  'unknown',
+]
+const stepScores: Record<
+  string,
+  { title: string; states: MarkState[]; notes?: (string | null)[] }
+> = {
+  '1982-83': {
+    title: story.score.event('1982–83'),
+    states: ['filled', 'filled', 'filled'],
+  },
+  '1997-98': {
+    title: story.score.event('1997–98'),
+    states: ['filled', 'filled', 'half'],
+  },
+  '2017': {
+    title: story.score.event('2017'),
+    states: ['filled', 'filled', 'filled'],
+  },
+  hoy: {
+    title: story.score.today,
+    states: todayMarks,
+    notes: [null, null, story.score.below],
+  },
+}
+// Further down the page the country's readiness has been read, so the third mark is half.
+const scoredMarks: MarkState[] = [todayMarks[0]!, todayMarks[1]!, 'half']
+
 // The word and the water: each step names the sea of its week beside the word.
 const palabra = (prefix: string, steps: readonly PressStep[], from: string, to: string) => {
   const weeks = weeksBetween(weekly.records, from, to)
@@ -333,6 +391,13 @@ const actionLead = enfenRecord
   ? messages.page.actionLead(enfenRecord.number, enfenRecord.year)
   : null
 
+// Only Tumbes has a river reading and official thresholds the page can cite.
+const riverOver = (code: string) => {
+  if (code !== 'PE24') return null
+  const lowest = Math.min(...story.region.tumbes.lines.map((line) => line.value))
+  return story.region.tumbes.bars[0]!.value > lowest
+}
+
 // Each coastal region: the sea off its coast, its rivers and its rain of the last month.
 const regions = REGIONS.map((region) => {
   const sea = regionSea(seaRecord, region)
@@ -355,6 +420,12 @@ const regions = REGIONS.map((region) => {
       ? story.region.rivers(enfenRecord.number, enfenRecord.year, region.code)
       : null,
     rain,
+    marks: regionMarks(sea?.value ?? null, riverOver(region.code), rain?.relation ?? null),
+    markNotes: [
+      sea ? null : story.score.noData,
+      riverOver(region.code) === null ? story.score.noThreshold : null,
+      rain ? null : story.score.noData,
+    ],
     rainBars: rain
       ? [
           {
@@ -418,7 +489,10 @@ useSiteSeo({
                 :gap="
                   gap === null
                     ? undefined
-                    : { lineId: accentLine.id, label: story.hero.gap(formatValue(gap)) }
+                    : {
+                        lineId: accentLine.id,
+                        label: story.hero.gap(formatValue(gap)),
+                      }
                 "
                 :arrow="heroArrow"
                 :scrub-label="story.hero.scrub"
@@ -454,7 +528,8 @@ useSiteSeo({
           <span class="answer">{{ story.porque.answer }}</span>
         </h2>
         <p class="lead">
-          {{ story.porque.physicist }} {{ story.porque.stable }} {{ story.porque.threshold }}
+          {{ story.porque.physicist }} {{ story.porque.stable }}
+          {{ story.porque.threshold }}
           {{ story.porque.season }}
         </p>
         <div v-if="accentLine" class="figure">
@@ -475,6 +550,7 @@ useSiteSeo({
           <p class="lead">{{ story.porque.press1925 }} {{ story.porque.seaAbsent }}</p>
         </div>
         <p class="lead">{{ story.porque.conditions }}</p>
+        <ScoreRow :title="story.score.frame" :labels="conditions" />
         <p class="punch">
           <span class="strip">{{ story.porque.punch }}</span>
         </p>
@@ -514,7 +590,9 @@ useSiteSeo({
                     :bars="story.historia.rain1983.bars"
                     :unit="story.historia.rain1983.unit"
                   />
-                  <figcaption>{{ story.historia.rain1983.texts.join(' ') }}</figcaption>
+                  <figcaption>
+                    {{ story.historia.rain1983.texts.join(' ') }}
+                  </figcaption>
                 </figure>
                 <p>{{ story.historia.dead1983.question }}</p>
                 <figure class="units-figure">
@@ -554,7 +632,9 @@ useSiteSeo({
                     :unit="story.historia.river.unit"
                     :lines="[story.historia.river.line]"
                   />
-                  <figcaption>{{ story.historia.river.texts.join(' ') }}</figcaption>
+                  <figcaption>
+                    {{ story.historia.river.texts.join(' ') }}
+                  </figcaption>
                 </figure>
               </template>
               <template v-if="step.id === '2017'">
@@ -572,6 +652,17 @@ useSiteSeo({
                 <p>{{ story.historia.low2017 }}</p>
                 <p>{{ story.historia.people }}</p>
               </template>
+              <p v-if="step.id === '1997-98'">
+                {{ story.historia.mobilised }} {{ story.historia.thirdHalf }}
+              </p>
+              <p v-if="step.id === 'hoy'">{{ story.historia.thirdBelow }}</p>
+              <ScoreRow
+                v-if="stepScores[step.id]"
+                :title="stepScores[step.id]!.title"
+                :labels="conditions"
+                :states="stepScores[step.id]!.states"
+                :notes="stepScores[step.id]!.notes"
+              />
             </li>
           </ol>
         </div>
@@ -618,11 +709,17 @@ useSiteSeo({
                 :id="step.domId"
                 :key="step.id"
                 class="scrolly-step"
-                :class="{ 'is-active': palabra2017.active.value === step.domId }"
+                :class="{
+                  'is-active': palabra2017.active.value === step.domId,
+                }"
               >
                 <PaperCard v-if="step.card" :card="step.card" />
-                <p v-if="step.toll" class="step-lead">{{ story.palabra.toll(step.toll) }}</p>
-                <p v-if="step.lead" :class="step.toll ? null : 'step-lead'">{{ step.lead }}</p>
+                <p v-if="step.toll" class="step-lead">
+                  {{ story.palabra.toll(step.toll) }}
+                </p>
+                <p v-if="step.lead" :class="step.toll ? null : 'step-lead'">
+                  {{ step.lead }}
+                </p>
                 <p v-for="text in step.texts" :key="text">{{ text }}</p>
               </li>
             </ol>
@@ -662,7 +759,9 @@ useSiteSeo({
                 :id="step.domId"
                 :key="step.id"
                 class="scrolly-step"
-                :class="{ 'is-active': palabra2026.active.value === step.domId }"
+                :class="{
+                  'is-active': palabra2026.active.value === step.domId,
+                }"
               >
                 <div v-if="step.report" class="press-pair">
                   <PaperCard v-if="step.card" :card="step.card" />
@@ -689,7 +788,9 @@ useSiteSeo({
           <span class="answer">{{ forecastTitle }}</span>
         </h2>
         <template v-if="enfenRecord">
-          <p class="lead">{{ messages.page.homeLead(enfenRecord.number, enfenRecord.year) }}</p>
+          <p class="lead">
+            {{ messages.page.homeLead(enfenRecord.number, enfenRecord.year) }}
+          </p>
           <p class="source">
             <strong class="status strip">{{ enfenRecord.status }}.</strong>{{ ' ' }}
             <a :href="enfenRecord.url" target="_blank" rel="noopener">
@@ -706,6 +807,58 @@ useSiteSeo({
             {{ messages.page.nextDueStale(formatDay(enfenRecord.end)) }}
           </p>
         </template>
+      </div>
+    </section>
+
+    <section id="listos" class="scene scene--ink" aria-labelledby="listos-title">
+      <div class="beat">
+        <h2 id="listos-title">
+          <span class="ask">{{ story.listos.question }}</span>
+          <span class="answer">{{ story.listos.answer }}</span>
+        </h2>
+        <p class="lead">{{ story.listos.rebuilt }}</p>
+        <PaperCard :card="paperCard('caretas-1998-13-puentes')" />
+        <figure class="units-figure units-figure--narrow">
+          <UnitGrid
+            shape="square"
+            :rows="story.listos.bridges.rows"
+            :unit="story.listos.bridges.unit"
+            :cols="17"
+          />
+          <figcaption>{{ story.listos.after1983 }}</figcaption>
+        </figure>
+        <figure class="units-figure units-figure--narrow">
+          <UnitGrid
+            shape="square"
+            :rows="story.listos.works.rows"
+            :unit="story.listos.works.unit"
+            :cols="20"
+          />
+          <figcaption>{{ story.listos.reconstruction }}</figcaption>
+        </figure>
+        <p class="lead">{{ story.listos.alertIntro }}</p>
+        <ul class="checklist">
+          <li
+            v-for="part in story.listos.alert"
+            :key="part.id"
+            :class="part.ready ? 'is-ready' : 'is-missing'"
+          >
+            <span aria-hidden="true">{{ part.ready ? '✓' : '—' }}</span>
+            {{ part.label }}:
+            <strong>{{ part.ready ? story.listos.ready : story.listos.missing }}</strong>
+          </li>
+        </ul>
+        <p class="lead">{{ story.listos.sat }}</p>
+        <p class="lead">{{ story.listos.readiness }} {{ story.listos.thirdHalf }}</p>
+        <ScoreRow :title="story.score.today" :labels="conditions" :states="scoredMarks" />
+        <div class="press-pair">
+          <PaperCard :card="paperCard('elcomercio-2023-04-14-chilcal')" />
+          <PaperCard :card="paperCard('apoyo-2026-piura-works')" />
+        </div>
+        <p class="lead">{{ story.listos.piura }} {{ story.listos.drain }}</p>
+        <p class="punch">
+          <span class="strip">{{ story.listos.punch }}</span>
+        </p>
       </div>
     </section>
 
@@ -733,7 +886,9 @@ useSiteSeo({
           :aria-labelledby="`region-${region.code}`"
         >
           <!-- Once the picker shows, it names the region; the heading stays for screen readers. -->
-          <h3 :id="`region-${region.code}`" :class="{ 'sr-only': mounted }">{{ region.name }}</h3>
+          <h3 :id="`region-${region.code}`" :class="{ 'sr-only': mounted }">
+            {{ region.name }}
+          </h3>
           <h4>{{ story.region.sea }}</h4>
           <p>{{ region.sea }}</p>
           <h4>{{ story.region.river }}</h4>
@@ -760,7 +915,36 @@ useSiteSeo({
             <p>{{ story.region.rainValue(region.rain.relation) }}</p>
           </template>
           <p v-else>{{ story.region.rainEmpty }}</p>
+          <ScoreRow
+            :title="story.score.regionTitle(region.name)"
+            :labels="story.score.region"
+            :states="region.marks"
+            :notes="region.markNotes"
+          />
         </article>
+      </div>
+    </section>
+
+    <section id="cierre" class="scene scene--green" aria-labelledby="cierre-title">
+      <div class="beat">
+        <h2 id="cierre-title">
+          <span class="ask">{{ story.cierre.question }}</span>
+          <span class="answer">{{ story.cierre.answer }}</span>
+        </h2>
+        <p class="lead">{{ story.cierre.belaunde }}</p>
+        <p class="lead">{{ story.cierre.vecina }}</p>
+        <p class="lead">{{ story.cierre.neither }}</p>
+        <p class="lead">{{ story.cierre.un }}</p>
+        <PaperCard
+          :card="paperCard('glantz-2000-peru-lesson')"
+          :translation="story.cierre.lesson"
+          lang="en"
+        />
+        <p class="lead">{{ story.cierre.sea(scoredMarks[0] === 'filled') }}</p>
+        <ScoreRow :title="story.score.today" :labels="conditions" :states="scoredMarks" />
+        <p class="punch">
+          <span class="strip">{{ story.cierre.last }}</span>
+        </p>
       </div>
     </section>
 
@@ -1026,6 +1210,32 @@ h2 .answer {
   color: var(--on-scene-muted);
   font-size: var(--text-meta);
   line-height: 1.45;
+}
+/* A grid of under a hundred squares reads as a count, not a field, at about a phone's width. */
+.units-figure--narrow {
+  max-width: 20rem;
+}
+
+/* What the early-warning system has and lacks, one part per line. */
+.checklist {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-display);
+  font-size: var(--text-body);
+}
+.checklist span {
+  display: inline-block;
+  width: 1.5em;
+  font-weight: 800;
+}
+.checklist .is-ready span {
+  color: var(--accent);
+}
+.checklist .is-missing {
+  color: var(--on-scene-muted);
 }
 
 /* The headline over what the forecaster wrote that fortnight. */

@@ -8,6 +8,13 @@ const props = defineProps<{
   card: PaperCard
   /** Sets the lifted phrase as the beat's headline. */
   featured?: boolean
+  /**
+   * Our Spanish for a lift in another language. It takes the large type, and the verbatim lift
+   * sits under it, small, tagged as the original.
+   */
+  translation?: string
+  /** The BCP 47 tag of a translated lift. */
+  lang?: string
 }>()
 
 const date =
@@ -49,7 +56,14 @@ onBeforeUnmount(() => reveal?.disconnect())
       <span class="outlet">{{ card.outlet }}</span>
       <time :datetime="card.published">{{ date }}</time>
     </figcaption>
-    <blockquote :cite="card.href">
+    <template v-if="translation">
+      <p class="translation">«{{ translation }}»</p>
+      <p class="original-tag">{{ messages.paperCard.translated }}</p>
+      <blockquote class="original" :cite="card.href" :lang="lang">
+        <p>“{{ card.lift }}”</p>
+      </blockquote>
+    </template>
+    <blockquote v-else :cite="card.href">
       <p>«{{ card.lift }}»</p>
     </blockquote>
     <a :href="card.href" target="_blank" rel="noopener"
@@ -109,6 +123,27 @@ blockquote p {
 }
 .paper-card--featured {
   max-width: 40rem;
+}
+.translation {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font);
+  font-size: var(--text-title-sm);
+  font-weight: 700;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.original-tag {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-label);
+  font-style: italic;
+}
+blockquote.original {
+  margin-top: var(--space-1);
+}
+blockquote.original p {
+  font-size: var(--text-meta);
+  font-weight: 400;
+  line-height: 1.4;
 }
 .paper-card--featured blockquote p {
   font-size: clamp(2rem, 1.2rem + 3.4vw, 3.75rem);

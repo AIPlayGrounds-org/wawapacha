@@ -493,6 +493,38 @@ const claimCards = {
       href: 'https://repositorio.igp.gob.pe/bitstreams/703b4703-54b3-460e-b38c-fecf4938c5da/download',
     },
   ],
+  'apoyo-2026-piura-works': [
+    {
+      outlet: 'APOYO Consultoría',
+      published: '2026-07',
+      lift: 'con avance físico cercano a cero en ambos componentes',
+      href: 'https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf',
+    },
+  ],
+  'elcomercio-2023-04-14-chilcal': [
+    {
+      outlet: 'El Comercio',
+      published: '2023-04-14',
+      lift: 'Desde el 83, la ciudad de Piura pide a gritos un dren pluvial',
+      href: 'https://elcomercio.pe/peru/historia-de-un-meganino-40-anos-de-lecciones-no-aprendidas-cuanto-le-afecto-al-peru-lluvias-inundaciones-en-la-costa-politica-de-prevencion-tumbes-piura-noticia/',
+    },
+  ],
+  'caretas-1998-13-puentes': [
+    {
+      outlet: 'Caretas',
+      published: '1998-03',
+      lift: 'Trece de los 68 puentes afectados en todo el país no tienen más de 14 años de antigüedad',
+      href: 'https://web.archive.org/web/20021215031044/http://www.caretas.com.pe/1998/1508/puentes/puentes.htm',
+    },
+  ],
+  'glantz-2000-peru-lesson': [
+    {
+      outlet: 'PNUMA',
+      published: '2000-10',
+      lift: 'The ENSO cycle must be considered by policy makers as a recurrent event in national planning',
+      href: 'https://sigrid.cenepred.gob.pe/sigridv3/documento/1128/descargar',
+    },
+  ],
 } as const satisfies Record<string, readonly PaperCard[]>
 
 export type PaperCardId = keyof typeof claimCards
