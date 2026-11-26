@@ -11,73 +11,11 @@
   "spatial_resolution": "Un valor por categoría de intensidad y temporada",
   "temporal_resolution": "Nueve temporadas móviles de tres meses",
   "reference_period": "1991–2020 (RONI)",
-  "ingestion_time": "2026-10-30T19:20:06+00:00",
+  "ingestion_time": "2026-11-26T22:58:18+00:00",
   "processing_version": "0.1.0",
   "records": [
     {
-      "issue_date": "2026-10",
-      "season": "SON",
-      "start": "2026-09",
-      "end": "2026-11",
-      "categories": [
-        {
-          "category": "Index ≤ -2.0°C",
-          "lower_bound": null,
-          "upper_bound": -2.0,
-          "probability": 0
-        },
-        {
-          "category": "-1.5°C ≥ Index > -2.0°C",
-          "lower_bound": -2.0,
-          "upper_bound": -1.5,
-          "probability": 0
-        },
-        {
-          "category": "-1.0°C ≥ Index > -1.5°C",
-          "lower_bound": -1.5,
-          "upper_bound": -1.0,
-          "probability": 0
-        },
-        {
-          "category": "-0.5°C ≥ Index > -1.0°C",
-          "lower_bound": -1.0,
-          "upper_bound": -0.5,
-          "probability": 0
-        },
-        {
-          "category": "−0.5°C < Index < 0.5°C",
-          "lower_bound": -0.5,
-          "upper_bound": 0.5,
-          "probability": 0
-        },
-        {
-          "category": "0.5°C ≤ Index < 1.0°C",
-          "lower_bound": 0.5,
-          "upper_bound": 1.0,
-          "probability": 0
-        },
-        {
-          "category": "1.0°C ≤ Index < 1.5°C",
-          "lower_bound": 1.0,
-          "upper_bound": 1.5,
-          "probability": 0
-        },
-        {
-          "category": "1.5°C ≤ Index < 2.0°C",
-          "lower_bound": 1.5,
-          "upper_bound": 2.0,
-          "probability": 0
-        },
-        {
-          "category": "Index ≥ 2.0°C",
-          "lower_bound": 2.0,
-          "upper_bound": null,
-          "probability": 100
-        }
-      ]
-    },
-    {
-      "issue_date": "2026-10",
+      "issue_date": "2026-11",
       "season": "OND",
       "start": "2026-10",
       "end": "2026-12",
@@ -139,7 +77,7 @@
       ]
     },
     {
-      "issue_date": "2026-10",
+      "issue_date": "2026-11",
       "season": "NDJ",
       "start": "2026-11",
       "end": "2027-01",
@@ -201,7 +139,7 @@
       ]
     },
     {
-      "issue_date": "2026-10",
+      "issue_date": "2026-11",
       "season": "DJF",
       "start": "2026-12",
       "end": "2027-02",
@@ -246,24 +184,24 @@
           "category": "1.0°C ≤ Index < 1.5°C",
           "lower_bound": 1.0,
           "upper_bound": 1.5,
-          "probability": 3
+          "probability": 2
         },
         {
           "category": "1.5°C ≤ Index < 2.0°C",
           "lower_bound": 1.5,
           "upper_bound": 2.0,
-          "probability": 16
+          "probability": 19
         },
         {
           "category": "Index ≥ 2.0°C",
           "lower_bound": 2.0,
           "upper_bound": null,
-          "probability": 81
+          "probability": 79
         }
       ]
     },
     {
-      "issue_date": "2026-10",
+      "issue_date": "2026-11",
       "season": "JFM",
       "start": "2027-01",
       "end": "2027-03",
@@ -302,30 +240,30 @@
           "category": "0.5°C ≤ Index < 1.0°C",
           "lower_bound": 0.5,
           "upper_bound": 1.0,
-          "probability": 2
+          "probability": 3
         },
         {
           "category": "1.0°C ≤ Index < 1.5°C",
           "lower_bound": 1.0,
           "upper_bound": 1.5,
-          "probability": 15
+          "probability": 18
         },
         {
           "category": "1.5°C ≤ Index < 2.0°C",
           "lower_bound": 1.5,
           "upper_bound": 2.0,
-          "probability": 37
+          "probability": 44
         },
         {
           "category": "Index ≥ 2.0°C",
           "lower_bound": 2.0,
           "upper_bound": null,
-          "probability": 46
+          "probability": 35
         }
       ]
     },
     {
-      "issue_date": "2026-10",
+      "issue_date": "2026-11",
       "season": "FMA",
       "start": "2027-02",
       "end": "2027-04",
@@ -364,30 +302,30 @@
           "category": "0.5°C ≤ Index < 1.0°C",
           "lower_bound": 0.5,
           "upper_bound": 1.0,
-          "probability": 16
+          "probability": 21
         },
         {
           "category": "1.0°C ≤ Index < 1.5°C",
           "lower_bound": 1.0,
           "upper_bound": 1.5,
-          "probability": 44
+          "probability": 49
         },
         {
           "category": "1.5°C ≤ Index < 2.0°C",
           "lower_bound": 1.5,
           "upper_bound": 2.0,
-          "probability": 32
+          "probability": 25
         },
         {
           "category": "Index ≥ 2.0°C",
           "lower_bound": 2.0,
           "upper_bound": null,
-          "probability": 6
+          "probability": 3
         }
       ]
     },
     {
-      "issue_date": "2026-10",
+      "issue_date": "2026-11",
       "season": "MAM",
       "start": "2027-03",
       "end": "2027-05",
@@ -420,25 +358,25 @@
           "category": "−0.5°C < Index < 0.5°C",
           "lower_bound": -0.5,
           "upper_bound": 0.5,
-          "probability": 15
+          "probability": 20
         },
         {
           "category": "0.5°C ≤ Index < 1.0°C",
           "lower_bound": 0.5,
           "upper_bound": 1.0,
-          "probability": 48
+          "probability": 53
         },
         {
           "category": "1.0°C ≤ Index < 1.5°C",
           "lower_bound": 1.0,
           "upper_bound": 1.5,
-          "probability": 32
+          "probability": 25
         },
         {
           "category": "1.5°C ≤ Index < 2.0°C",
           "lower_bound": 1.5,
           "upper_bound": 2.0,
-          "probability": 5
+          "probability": 2
         },
         {
           "category": "Index ≥ 2.0°C",
@@ -449,7 +387,7 @@
       ]
     },
     {
-      "issue_date": "2026-10",
+      "issue_date": "2026-11",
       "season": "AMJ",
       "start": "2027-04",
       "end": "2027-06",
@@ -482,19 +420,19 @@
           "category": "−0.5°C < Index < 0.5°C",
           "lower_bound": -0.5,
           "upper_bound": 0.5,
-          "probability": 54
+          "probability": 61
         },
         {
           "category": "0.5°C ≤ Index < 1.0°C",
           "lower_bound": 0.5,
           "upper_bound": 1.0,
-          "probability": 38
+          "probability": 34
         },
         {
           "category": "1.0°C ≤ Index < 1.5°C",
           "lower_bound": 1.0,
           "upper_bound": 1.5,
-          "probability": 7
+          "probability": 4
         },
         {
           "category": "1.5°C ≤ Index < 2.0°C",
@@ -511,7 +449,7 @@
       ]
     },
     {
-      "issue_date": "2026-10",
+      "issue_date": "2026-11",
       "season": "MJJ",
       "start": "2027-05",
       "end": "2027-07",
@@ -544,19 +482,81 @@
           "category": "−0.5°C < Index < 0.5°C",
           "lower_bound": -0.5,
           "upper_bound": 0.5,
-          "probability": 70
+          "probability": 75
         },
         {
           "category": "0.5°C ≤ Index < 1.0°C",
           "lower_bound": 0.5,
           "upper_bound": 1.0,
-          "probability": 15
+          "probability": 11
         },
         {
           "category": "1.0°C ≤ Index < 1.5°C",
           "lower_bound": 1.0,
           "upper_bound": 1.5,
-          "probability": 2
+          "probability": 1
+        },
+        {
+          "category": "1.5°C ≤ Index < 2.0°C",
+          "lower_bound": 1.5,
+          "upper_bound": 2.0,
+          "probability": 0
+        },
+        {
+          "category": "Index ≥ 2.0°C",
+          "lower_bound": 2.0,
+          "upper_bound": null,
+          "probability": 0
+        }
+      ]
+    },
+    {
+      "issue_date": "2026-11",
+      "season": "JJA",
+      "start": "2027-06",
+      "end": "2027-08",
+      "categories": [
+        {
+          "category": "Index ≤ -2.0°C",
+          "lower_bound": null,
+          "upper_bound": -2.0,
+          "probability": 0
+        },
+        {
+          "category": "-1.5°C ≥ Index > -2.0°C",
+          "lower_bound": -2.0,
+          "upper_bound": -1.5,
+          "probability": 0
+        },
+        {
+          "category": "-1.0°C ≥ Index > -1.5°C",
+          "lower_bound": -1.5,
+          "upper_bound": -1.0,
+          "probability": 6
+        },
+        {
+          "category": "-0.5°C ≥ Index > -1.0°C",
+          "lower_bound": -1.0,
+          "upper_bound": -0.5,
+          "probability": 27
+        },
+        {
+          "category": "−0.5°C < Index < 0.5°C",
+          "lower_bound": -0.5,
+          "upper_bound": 0.5,
+          "probability": 61
+        },
+        {
+          "category": "0.5°C ≤ Index < 1.0°C",
+          "lower_bound": 0.5,
+          "upper_bound": 1.0,
+          "probability": 6
+        },
+        {
+          "category": "1.0°C ≤ Index < 1.5°C",
+          "lower_bound": 1.0,
+          "upper_bound": 1.5,
+          "probability": 0
         },
         {
           "category": "1.5°C ≤ Index < 2.0°C",
