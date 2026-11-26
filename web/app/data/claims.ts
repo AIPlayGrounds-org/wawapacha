@@ -218,7 +218,7 @@ const verifiedClaims = {
   'tv-latina-1997-devastador':
     'En 1997, Latina dijo desde Piura que el fenómeno de El Niño ya se presentaba devastador.',
   'tv-tvperu-2017-2400':
-    'En 2018, TV Perú recordó que la cuenca del río Piura estaba preparada para 2 400 m³/s y que la costa, Lima incluida, no tiene alcantarillado ni drenaje para lluvias intensas; llamó a 2017 «el más brutal».',
+    'En su balance de 2017, TV Perú recordó que la cuenca del río Piura estaba preparada para 2 400 m³/s y que la costa, Lima incluida, no tiene alcantarillado ni drenaje para lluvias intensas; llamó a 2017 «el más brutal».',
   'igp-woodman-2014-stable':
     'En la costa no llueve porque la atmósfera es muy estable, por el mar frío y la subsidencia; para que llueva fuerte tiene que volverse inestable.',
   'igp-woodman-2014-threshold':
@@ -384,13 +384,28 @@ export const claim = (id: ClaimId): (typeof verifiedClaims)[ClaimId] => {
   return text
 }
 
-/** A press source's outlet, date (`YYYY-MM-DD` or `YYYY-MM`), verbatim lifted phrase and link. */
+/** A broadcast's whole spoken line, its YouTube video id and the second the line starts at. */
+export type SourceClip = {
+  readonly quote: string
+  readonly video: string
+  readonly start: number
+}
+
+/**
+ * A press source's outlet, date (`YYYY-MM-DD`, `YYYY-MM` or `YYYY`), verbatim lifted phrase
+ * and link. A broadcast's card also carries its clip.
+ */
 export type PaperCard = {
   readonly outlet: string
   readonly published: string
   readonly lift: string
   readonly href: string
+  readonly clip?: SourceClip
 }
+
+export type ClipCard = PaperCard & { readonly clip: SourceClip }
+
+export const isClipCard = (card: PaperCard): card is ClipCard => card.clip !== undefined
 
 const claimCards = {
   'enfen-it17-ai-model-e-index': [
@@ -445,6 +460,83 @@ const claimCards = {
       href: 'https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/',
     },
   ],
+  'tv-1983-film-devastador': [
+    {
+      outlet: 'Documental del Gobierno',
+      published: '1983',
+      lift: 'devastador',
+      href: 'https://www.youtube.com/watch?v=44kmFwnJUz0&t=412',
+      clip: {
+        quote: "presa de los efectos del devastador fenómeno de 'el niño'",
+        video: '44kmFwnJUz0',
+        start: 412,
+      },
+    },
+  ],
+  'tv-latina-1997-drenes': [
+    {
+      outlet: 'Latina',
+      published: '1997',
+      lift: 'los drenes no funcionaron',
+      href: 'https://www.youtube.com/watch?v=kE22pgRvCXo&t=105',
+      clip: {
+        quote:
+          'los drenes no funcionaron algunos están inconclusos y otros han sido tapados irresponsablemente con arena y desperdicios',
+        video: 'kE22pgRvCXo',
+        start: 105,
+      },
+    },
+    {
+      outlet: 'Latina',
+      published: '1997',
+      lift: 'defensa civil no les ha brindado motobombas',
+      href: 'https://www.youtube.com/watch?v=kE22pgRvCXo&t=306',
+      clip: {
+        quote:
+          'algunas familias han tenido que improvisar zanjas para retirar el agua pero es insuficiente defensa civil no les ha brindado motobombas',
+        video: 'kE22pgRvCXo',
+        start: 306,
+      },
+    },
+  ],
+  'tv-latina-1997-devastador': [
+    {
+      outlet: 'Latina',
+      published: '1997',
+      lift: 'ya se presenta devastador',
+      href: 'https://www.youtube.com/watch?v=kE22pgRvCXo&t=11',
+      clip: {
+        quote: 'tan solo es el inicio pero ya se presenta devastador el fenómeno del niño',
+        video: 'kE22pgRvCXo',
+        start: 11,
+      },
+    },
+  ],
+  'tv-tvperu-2017-2400': [
+    {
+      outlet: 'TV Perú',
+      published: '2017',
+      lift: 'no poseemos un sistema de alcantarillado y de drenaje adecuado',
+      href: 'https://www.youtube.com/watch?v=IPblSP_dUTQ&t=338',
+      clip: {
+        quote:
+          'la zona costera de nuestro país incluido lima no poseemos un sistema de alcantarillado y de drenaje adecuado para soportar esas lluvias intensas',
+        video: 'IPblSP_dUTQ',
+        start: 338,
+      },
+    },
+    {
+      outlet: 'TV Perú',
+      published: '2017',
+      lift: 'este ha sido el más brutal',
+      href: 'https://www.youtube.com/watch?v=IPblSP_dUTQ&t=25',
+      clip: {
+        quote: 'el del 83 el del 97 y ahora el del 2017 y este ha sido el más brutal',
+        video: 'IPblSP_dUTQ',
+        start: 25,
+      },
+    },
+  ],
   'elcomercio-1925-alisio': [
     {
       outlet: 'El Comercio',
@@ -453,12 +545,173 @@ const claimCards = {
       href: 'https://elcomercio.pe/archivo-elcomercio/lluvias-en-lima-inundaciones-en-el-norte-huaicos-en-el-peru-fenomenos-naturales-hace-100-anos-peru-decada-del-20-nnsp-noticia/',
     },
   ],
+  'tv-1983-film-pronostico': [
+    {
+      outlet: 'Documental del Gobierno',
+      published: '1983',
+      lift: 'contra todo pronóstico',
+      href: 'https://www.youtube.com/watch?v=44kmFwnJUz0&t=349',
+      clip: {
+        quote:
+          'la lluvia día y noche casi hasta mediados de año contra todo pronóstico siguió cayendo en forma incesante',
+        video: '44kmFwnJUz0',
+        start: 349,
+      },
+    },
+  ],
+  'tv-1983-film-alcantarillado': [
+    {
+      outlet: 'Documental del Gobierno',
+      published: '1983',
+      lift: 'resultaron insuficientes',
+      href: 'https://www.youtube.com/watch?v=44kmFwnJUz0&t=477',
+      clip: {
+        quote:
+          'las redes de agua potable y alcantarillado resultaron insuficientes para soportar la presión de estos enormes volúmenes de agua las calles pistas y avenidas se convirtieron en ríos intransitables',
+        video: '44kmFwnJUz0',
+        start: 477,
+      },
+    },
+  ],
+  'tv-1984-belaunde-muros': [
+    {
+      outlet: 'Mensaje de Belaunde',
+      published: '1984',
+      lift: '60 kilómetros de muros de defensa de piedra',
+      href: 'https://www.youtube.com/watch?v=0oT-y-vRdTM&t=581',
+      clip: {
+        quote:
+          'la magna obra de defensa del río piura 60 kilómetros de muros de defensa de piedra es decir una obra realmente meritoria infortunadamente una obra sumamente costosa',
+        video: '0oT-y-vRdTM',
+        start: 581,
+      },
+    },
+  ],
   'igp-woodman-1997-lejos': [
     {
       outlet: 'IGP',
       published: '1997-07-05',
       lift: 'lejos de tener los niveles desastrosos que se presentaron en 1983',
       href: 'https://repositorio.igp.gob.pe/bitstreams/0f44f604-6777-4978-9d0a-d97a42f45d53/download',
+    },
+  ],
+  'tv-ap-1997-fujimori-drenaje': [
+    {
+      outlet: 'AP',
+      published: '1997',
+      lift: 'el sistema de drenaje está funcionando bien',
+      href: 'https://www.youtube.com/watch?v=6o-dJBASsWA&t=89',
+      clip: {
+        quote:
+          'el sistema de drenaje está funcionando bien las aguas que se acumulan en los campos están siendo evacuados y Esperamos que en 18 horas no quede Campos inundados',
+        video: '6o-dJBASsWA',
+        start: 89,
+      },
+    },
+  ],
+  'tv-america-1998-lima-techos': [
+    {
+      outlet: 'América Televisión',
+      published: '1998',
+      lift: 'refugiarse en los techos de sus casas',
+      href: 'https://www.youtube.com/watch?v=eyfosKwEObQ&t=165',
+      clip: {
+        quote:
+          'Los pobladores de las primeras cinco cuadras de la avenida Santa Rosa se vieron obligados a refugiarse en los techos de sus casas.',
+        video: 'eyfosKwEObQ',
+        start: 165,
+      },
+    },
+  ],
+  'tv-america-1998-03-12-historia': [
+    {
+      outlet: 'América Noticias',
+      published: '1998-03-12',
+      lift: 'el mayor nivel de su historia',
+      href: 'https://www.youtube.com/watch?v=wGb7Z4qDmEE',
+      clip: {
+        quote: 'río piura alcanzó el mayor nivel de su historia destruido puente',
+        video: 'wGb7Z4qDmEE',
+        start: 0,
+      },
+    },
+  ],
+  'tv-america-1998-03-16-bolognesi': [
+    {
+      outlet: 'América Noticias',
+      published: '1998-03-16',
+      lift: 'Puente Bolognesi en Piura se cayó hoy',
+      href: 'https://www.youtube.com/watch?v=0t5f-Di-jpo&t=6',
+      clip: {
+        quote:
+          'Puente Bolognesi en Piura se cayó hoy con decenas de personas y vehículos que lo cruzaban.',
+        video: '0t5f-Di-jpo',
+        start: 6,
+      },
+    },
+  ],
+  'tv-panorama-2017-inesperadamente': [
+    {
+      outlet: 'Panorama',
+      published: '2017',
+      lift: 'llegó inesperadamente',
+      href: 'https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=638',
+      clip: {
+        quote:
+          'la capital también se ha visto amenazada por este niño costero que llegó inesperadamente para instalarse sembrando el caos pero sobre todo el desconcierto',
+        video: '_nIYMe0-ZOA',
+        start: 638,
+      },
+    },
+  ],
+  'tv-panorama-2017-huarmey': [
+    {
+      outlet: 'Panorama',
+      published: '2017',
+      lift: 'solamente cinco volquetes y dos excavadoras',
+      href: 'https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1360',
+      clip: {
+        quote: 'solamente cinco volquetes y dos excavadoras para cerrar ese corte que tiene el río',
+        video: '_nIYMe0-ZOA',
+        start: 1360,
+      },
+    },
+  ],
+  'tv-panorama-2017-motobombas': [
+    {
+      outlet: 'Panorama',
+      published: '2017',
+      lift: 'envíen motobombas',
+      href: 'https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1173',
+      clip: {
+        quote:
+          'estamos inundados por favor envíen motobombas ya nos hemos inundado y hemos perdido todo que jamás nunca ha pasado',
+        video: '_nIYMe0-ZOA',
+        start: 1173,
+      },
+    },
+  ],
+  'tv-panorama-2017-techos': [
+    {
+      outlet: 'Panorama',
+      published: '2017',
+      lift: 'atrapados en los techos',
+      href: 'https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=910',
+      clip: {
+        quote:
+          'ante la emergencia la policía rescató a todos los que se quedaron atrapados en los techos y en sus viviendas',
+        video: '_nIYMe0-ZOA',
+        start: 910,
+      },
+    },
+  ],
+  'tv-latina-2017-tercera-vez': [
+    {
+      outlet: 'Latina',
+      published: '2017',
+      lift: 'ya es la tercera vez en este año',
+      href: 'https://www.youtube.com/watch?v=ChmmggWR3Y4&t=721',
+      clip: { quote: 'ya es la tercera vez en este año', video: 'ChmmggWR3Y4', start: 721 },
     },
   ],
   'enfen-co01-2017-probabilities': [
@@ -493,6 +746,43 @@ const claimCards = {
       href: 'https://repositorio.igp.gob.pe/bitstreams/703b4703-54b3-460e-b38c-fecf4938c5da/download',
     },
   ],
+  'tv-tvperu-2026-02-16-inminente': [
+    {
+      outlet: 'TV Perú',
+      published: '2026-02-16',
+      lift: 'casi inminente',
+      href: 'https://www.youtube.com/watch?v=_tw3lE7mQac&t=61',
+      clip: {
+        quote:
+          'nos indican que e la la eh es casi inminente la la presencia de un niño a partir del mes de marzo, ¿no? Que puede estar durando hasta noviembre.',
+        video: '_tw3lE7mQac',
+        start: 61,
+      },
+    },
+  ],
+  'tv-rpp-2026-02-24-alerta': [
+    {
+      outlet: 'RPP',
+      published: '2026-02-24',
+      lift: 'Los sistemas de alerta no funcionan así',
+      href: 'https://www.youtube.com/watch?v=jdppRLOp14g&t=156',
+      clip: { quote: 'Los sistemas de alerta no funcionan así.', video: 'jdppRLOp14g', start: 156 },
+    },
+  ],
+  'tv-elcomercio-2026-11-21-preparado': [
+    {
+      outlet: 'El Comercio',
+      published: '2026-11-21',
+      lift: 'qué tan preparado está el país para enfrentarlo',
+      href: 'https://www.youtube.com/watch?v=0gwvtwwT9i4&t=383',
+      clip: {
+        quote:
+          'la gran interrogante no es solamente qué tan fuerte será el Niño de 2026 a 2027, sino qué tan preparado está el país para enfrentarlo.',
+        video: '0gwvtwwT9i4',
+        start: 383,
+      },
+    },
+  ],
   'apoyo-2026-piura-works': [
     {
       outlet: 'APOYO Consultoría',
@@ -509,12 +799,101 @@ const claimCards = {
       href: 'https://elcomercio.pe/peru/historia-de-un-meganino-40-anos-de-lecciones-no-aprendidas-cuanto-le-afecto-al-peru-lluvias-inundaciones-en-la-costa-politica-de-prevencion-tumbes-piura-noticia/',
     },
   ],
+  'tv-elcomercio-2023-lima-drenaje': [
+    {
+      outlet: 'El Comercio',
+      published: '2023',
+      lift: 'una ciudad sin drenaje para la lluvia',
+      href: 'https://www.youtube.com/watch?v=bvdnUF8USL4&t=127',
+      clip: {
+        quote: 'hasta hoy es una ciudad sin drenaje para la lluvia',
+        video: 'bvdnUF8USL4',
+        start: 127,
+      },
+    },
+    {
+      outlet: 'El Comercio',
+      published: '2023',
+      lift: 'nunca aprendemos',
+      href: 'https://www.youtube.com/watch?v=bvdnUF8USL4&t=284',
+      clip: { quote: 'Y es que al parecer nunca aprendemos', video: 'bvdnUF8USL4', start: 284 },
+    },
+  ],
+  'tv-bdp-2026-sin-drenaje': [
+    {
+      outlet: 'Buenos Días Perú',
+      published: '2026',
+      lift: 'las mismas obras sin drenaje',
+      href: 'https://www.youtube.com/watch?v=KV6zaHYQjU8&t=124',
+      clip: {
+        quote:
+          'El Perú creció, pero también creció el riesgo. Hoy hay más casas en las riberas, más gente expuesta y las mismas obras sin drenaje.',
+        video: 'KV6zaHYQjU8',
+        start: 124,
+      },
+    },
+  ],
+  'tv-rpp-2023-yaku-maquinaria': [
+    {
+      outlet: 'RPP',
+      published: '2023',
+      lift: 'no había maquinaria para Piura, para Tumbes',
+      href: 'https://www.youtube.com/watch?v=2Rb5aactsgw&t=185',
+      clip: {
+        quote:
+          'Recordemos lo que nos ha pasado ahora con Yaku que no había maquinaria para Piura, para Tumbes, para eh La Libertad.',
+        video: '2Rb5aactsgw',
+        start: 185,
+      },
+    },
+  ],
+  'tv-rpp-2026-clamado': [
+    {
+      outlet: 'RPP',
+      published: '2026-02-24',
+      lift: 'han clamado a viva voz',
+      href: 'https://www.youtube.com/watch?v=jdppRLOp14g',
+      clip: {
+        quote:
+          'Las autoridades locales han clamado a viva voz de que no tienen lo que necesitan para poder atender la emergencia.',
+        video: 'jdppRLOp14g',
+        start: 0,
+      },
+    },
+  ],
   'caretas-1998-13-puentes': [
     {
       outlet: 'Caretas',
       published: '1998-03',
       lift: 'Trece de los 68 puentes afectados en todo el país no tienen más de 14 años de antigüedad',
       href: 'https://web.archive.org/web/20021215031044/http://www.caretas.com.pe/1998/1508/puentes/puentes.htm',
+    },
+  ],
+  'tv-1985-belaunde-leccion': [
+    {
+      outlet: 'Conferencia de Belaunde',
+      published: '1985',
+      lift: 'reacciona victoriosamente frente a la adversidad',
+      href: 'https://www.youtube.com/watch?v=Ok_vgh7YktE&t=1680',
+      clip: {
+        quote:
+          'esas constituyen dos desgracias que han sido un obstáculo tremendo en el desenvolvimiento del gobierno que me honro en presidir pero hay que sacar de estas duras experiencias una lección la lección de que el pueblo peruano reacciona victoriosamente frente a la adversidad',
+        video: 'Ok_vgh7YktE',
+        start: 1680,
+      },
+    },
+  ],
+  'tv-panorama-2017-ley-naturaleza': [
+    {
+      outlet: 'Panorama',
+      published: '2017',
+      lift: 'no podemos hacer nada contra ella',
+      href: 'https://www.youtube.com/watch?v=_nIYMe0-ZOA&t=1562',
+      clip: {
+        quote: 'es la ley de la naturaleza no podemos hacer nada contra ella',
+        video: '_nIYMe0-ZOA',
+        start: 1562,
+      },
     },
   ],
   'glantz-2000-peru-lesson': [
@@ -544,4 +923,21 @@ export const paperCard = (id: PaperCardId): PaperCard => {
     throw new Error(`claim ${id} has ${cards.length} paper cards; use paperCards`)
   }
   return card
+}
+
+/** The clip cards of a claim, in registry order. */
+export const clipCards = (id: PaperCardId): readonly ClipCard[] => {
+  const clips = paperCards(id).filter(isClipCard)
+  if (clips.length === 0) throw new Error(`no clip card for claim id: ${id}`)
+  return clips
+}
+
+/** The clip card of a claim that has exactly one. */
+export const clipCard = (id: PaperCardId): ClipCard => {
+  const clips = clipCards(id)
+  const [clip] = clips
+  if (!clip || clips.length > 1) {
+    throw new Error(`claim ${id} has ${clips.length} clip cards; use clipCards`)
+  }
+  return clip
 }

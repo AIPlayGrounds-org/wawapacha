@@ -39,13 +39,28 @@ export const claim = (id: ClaimId): (typeof verifiedClaims)[ClaimId] => {
   return text
 }
 
-/** A press source's outlet, date (\`YYYY-MM-DD\` or \`YYYY-MM\`), verbatim lifted phrase and link. */
+/** A broadcast's whole spoken line, its YouTube video id and the second the line starts at. */
+export type SourceClip = {
+  readonly quote: string
+  readonly video: string
+  readonly start: number
+}
+
+/**
+ * A press source's outlet, date (\`YYYY-MM-DD\`, \`YYYY-MM\` or \`YYYY\`), verbatim lifted phrase
+ * and link. A broadcast's card also carries its clip.
+ */
 export type PaperCard = {
   readonly outlet: string
   readonly published: string
   readonly lift: string
   readonly href: string
+  readonly clip?: SourceClip
 }
+
+export type ClipCard = PaperCard & { readonly clip: SourceClip }
+
+export const isClipCard = (card: PaperCard): card is ClipCard => card.clip !== undefined
 
 const claimCards = {
 ${cardEntries}
@@ -68,6 +83,23 @@ export const paperCard = (id: PaperCardId): PaperCard => {
     throw new Error(\`claim \${id} has \${cards.length} paper cards; use paperCards\`)
   }
   return card
+}
+
+/** The clip cards of a claim, in registry order. */
+export const clipCards = (id: PaperCardId): readonly ClipCard[] => {
+  const clips = paperCards(id).filter(isClipCard)
+  if (clips.length === 0) throw new Error(\`no clip card for claim id: \${id}\`)
+  return clips
+}
+
+/** The clip card of a claim that has exactly one. */
+export const clipCard = (id: PaperCardId): ClipCard => {
+  const clips = clipCards(id)
+  const [clip] = clips
+  if (!clip || clips.length > 1) {
+    throw new Error(\`claim \${id} has \${clips.length} clip cards; use clipCards\`)
+  }
+  return clip
 }
 `
 }
@@ -94,6 +126,6 @@ if (import.meta.main) {
   const { verifiedClaims, claimCards } = generatedValues(registry)
   const cardCount = Object.values(claimCards).flat().length
   console.log(
-    `generated ${outputPath} with ${Object.keys(verifiedClaims).length} verified claims and ${cardCount} paper cards`,
+    `generated ${outputPath} with ${Object.keys(verifiedClaims).length} verified claims and ${cardCount} cards`,
   )
 }

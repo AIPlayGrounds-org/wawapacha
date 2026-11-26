@@ -44,16 +44,17 @@ Each mark is also said in words, so the row reads without its drawing.
 
 ## Opening: ¿Qué tanto hay que preocuparse?
 
-The page opens on what the reader has already heard. One line recalls the word
-television used for each event:
-[tv-1983-film-devastador](../evidence/claims.toml),
-[tv-latina-1997-devastador](../evidence/claims.toml) and
-[tv-tvperu-2017-2400](../evidence/claims.toml). Three paper cards then fall in,
-one at a time: the Panamericana headline,
-[panamericana-2026-09-16-devastador](../evidence/claims.toml), set large; the
-APOYO trajectory, [apoyo-2026-trajectory](../evidence/claims.toml); and the
-Tumbes river past its orange threshold,
-[infobae-2026-11-17-tumbes](../evidence/claims.toml). The text names the
+The page opens on what the reader has already heard: a newscast reel cuts
+through the word television used for each event, «devastador» in 1983,
+[tv-1983-film-devastador](../evidence/claims.toml), and 1997,
+[tv-latina-1997-devastador](../evidence/claims.toml), the river's highest level
+in 1998, [tv-america-1998-03-12-historia](../evidence/claims.toml), and «el más
+brutal» in 2017, [tv-tvperu-2017-2400](../evidence/claims.toml). It holds on the
+Panamericana headline,
+[panamericana-2026-09-16-devastador](../evidence/claims.toml). Two paper cards
+then fall in: the APOYO trajectory,
+[apoyo-2026-trajectory](../evidence/claims.toml), and the Tumbes river past its
+orange threshold, [infobae-2026-11-17-tumbes](../evidence/claims.toml). The text names the
 channel as the author of the headline, not ENFEN: no 2026 ENFEN communiqué says
 "devastador". The page heading is the question, and the promise follows: the
 page looks at where those numbers come from. The beat has no chart.
@@ -197,9 +198,10 @@ APOYO's review of the Piura river's early warning comes next as a checklist:
 the radar works; the sirens, the activation thresholds and the evacuation plans
 are missing, [apoyo-2026-sat](../evidence/claims.toml). APOYO's readiness
 finding, [apoyo-2026-readiness](../evidence/claims.toml), sets today's third
-mark at half. Two cards then pair Piura's 40-year wait for a storm drain,
-[elcomercio-2023-04-14-chilcal](../evidence/claims.toml), with its drainage
-works near zero in 2026, [apoyo-2026-piura-works](../evidence/claims.toml). The
+mark at half. The drain thread ties off on two cards: Piura's 40-year wait for
+a storm drain, [elcomercio-2023-04-14-chilcal](../evidence/claims.toml), beside
+its drainage works near zero in 2026,
+[apoyo-2026-piura-works](../evidence/claims.toml). The
 punch line hands off to the region beat: a Niño reaches a river, a street, a
 roof, not the country in general.
 
@@ -235,7 +237,49 @@ the country endured; the other, that nothing can be done. Neither speaks of what
 is done before. The UN agencies' lesson for Peru,
 [glantz-2000-peru-lesson](../evidence/claims.toml), follows on a card in our
 Spanish, with the English original under it. The beat restates today's score
-and ends on the last line: what returns can be expected.
+and ends on the last line: what returns can be expected. The opening's clips
+come back under it as a row of stills that does not play.
+
+## Television
+
+Television says the same thing each time, so the page lets it repeat. A clip
+card is a dark frame with the year, the lifted words, a chyron with the outlet
+and the transcript line, and a link to the cited second on YouTube. A reel cuts
+through several cards and holds on the last. `web/app/utils/reels.ts` holds
+every reel and lone clip in page order:
+
+- 1982–83: the forecast, the sewers that failed and Belaúnde's walls,
+  [tv-1983-film-pronostico](../evidence/claims.toml),
+  [tv-1983-film-alcantarillado](../evidence/claims.toml) and
+  [tv-1984-belaunde-muros](../evidence/claims.toml).
+- 1997–98: Tumbes and the drains in 1997,
+  [tv-ap-1997-fujimori-drenaje](../evidence/claims.toml) and
+  [tv-latina-1997-drenes](../evidence/claims.toml); Lima's roofs alone,
+  [tv-america-1998-lima-techos](../evidence/claims.toml); then Piura's river and
+  bridge, with the 1984 walls flashing once between them,
+  [tv-america-1998-03-16-bolognesi](../evidence/claims.toml).
+- 2017: a fast Panorama reel of the same week,
+  [tv-panorama-2017-inesperadamente](../evidence/claims.toml),
+  [tv-panorama-2017-huarmey](../evidence/claims.toml),
+  [tv-panorama-2017-motobombas](../evidence/claims.toml) and
+  [tv-panorama-2017-techos](../evidence/claims.toml); the third time in Latina,
+  [tv-latina-2017-tercera-vez](../evidence/claims.toml); and TV Perú on the
+  missing drainage.
+- Today: whether the country is ready,
+  [tv-elcomercio-2026-11-21-preparado](../evidence/claims.toml).
+- ¿Estamos listos?: the longest reel, the same drains from 1983 to 2026, with
+  Piura's 40-year wait for a storm drain,
+  [elcomercio-2023-04-14-chilcal](../evidence/claims.toml), Lima,
+  [tv-elcomercio-2023-lima-drenaje](../evidence/claims.toml), and 2026,
+  [tv-bdp-2026-sin-drenaje](../evidence/claims.toml); then the machines that
+  arrive late, [tv-rpp-2023-yaku-maquinaria](../evidence/claims.toml) and
+  [tv-rpp-2026-clamado](../evidence/claims.toml).
+- ¿Qué aprendimos?: the two lessons, in a slow reel.
+
+A reel starts when it scrolls into view, stops when it leaves, and stops for
+good when the reader steps or pauses. Without JavaScript, or with reduced
+motion, every card shows in a column. No video plays on the page: the footage
+rights are not ours, so each card links to its second on YouTube.
 
 ## ¿Qué hago ahora?
 
