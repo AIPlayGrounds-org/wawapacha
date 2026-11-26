@@ -84,7 +84,16 @@ describe('home page', () => {
     expect(wrapper.get('#hero-title .answer').text()).not.toBe(messages.story.hero.empty)
     expect(wrapper.get('.hero .lead').text()).toContain(formatDay(latest.start))
     expect(wrapper.get('.hero .lead').text()).toContain(formatDegrees(latest.nino_1_2_sst!))
-    const chapters = ['calor', 'porque', 'historia', 'lluvia', 'region', 'hacer'] as const
+    const chapters = [
+      'calor',
+      'porque',
+      'historia',
+      'lluvia',
+      'listos',
+      'region',
+      'cierre',
+      'hacer',
+    ] as const
     for (const id of chapters) {
       expect(wrapper.get(`#${id}-title .ask`).text()).toBe(messages.story[id].question)
       expect(wrapper.get(`#${id}-title .answer`).text()).not.toBe('')
@@ -179,6 +188,32 @@ describe('format helpers', () => {
   it('formats degrees without a plus sign', () => {
     expect(formatDegrees(27.5)).toBe('27,5')
     expect(formatDegrees(-0.54)).toBe('−0,5')
+  })
+
+  it('scores the frame, each event, today and every region', async () => {
+    const wrapper = await mountHome()
+    const marks = (score: { findAll: (selector: string) => { classes: () => string[] }[] }) =>
+      score.findAll('li').map((item) => item.classes()[0])
+
+    expect(wrapper.get('#porque').find('.score .state').exists()).toBe(false)
+    expect(marks(wrapper.get('#historia-1997-98 .score'))).toEqual([
+      'mark--filled',
+      'mark--filled',
+      'mark--half',
+    ])
+    // The seed's last week is 25,4 °C in September, so the sea is under 26 °C and summer waits.
+    const today = wrapper.get('#historia-hoy .score')
+    expect(marks(today)).toEqual(['mark--empty', 'mark--pending', 'mark--unknown'])
+    expect(today.text()).toContain(messages.story.score.below)
+    expect(marks(wrapper.get('#listos .score'))).toEqual([
+      'mark--empty',
+      'mark--pending',
+      'mark--half',
+    ])
+    expect(wrapper.get('#cierre').text()).toContain(messages.story.cierre.sea(false))
+    expect(wrapper.findAll('.region-panel .score')).toHaveLength(REGIONS.length)
+    const tumbes = wrapper.get('[aria-labelledby="region-PE24"] .score')
+    expect(marks(tumbes)[1]).toBe('mark--filled')
   })
 
   it('writes days and months in standard Spanish', () => {

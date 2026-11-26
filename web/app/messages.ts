@@ -101,6 +101,7 @@ export const messages = {
   },
   paperCard: {
     read: (outlet: string) => `Leer en ${outlet}`,
+    translated: 'Traducción nuestra. El original, en inglés:',
   },
   story: {
     apertura: {
@@ -168,6 +169,30 @@ export const messages = {
       punch: 'En el verano de 1983 se juntaron las tres.',
       table: 'Temperatura del mar en Niño 1+2 por semana, con la línea de 26 °C.',
     },
+    /** The frame every event is scored against, in the order of its three marks. */
+    score: {
+      frame: 'Las tres condiciones',
+      conditions: ['El mar pasa de 26 °C', 'Pasa en verano', 'Encuentra al país sin preparar'],
+      states: {
+        filled: 'sí',
+        half: 'a medias',
+        empty: 'no',
+        pending: 'todavía no',
+        unknown: 'por ver',
+      },
+      event: (name: string) => `Las tres condiciones en ${name}`,
+      today: 'Las tres condiciones en 2026, hasta hoy',
+      below: 'más abajo',
+      /** A region has no absolute sea temperature, so its first row reads the map's anomaly. */
+      region: [
+        'El mar, a más de 2 °C sobre lo normal',
+        'El río, sobre su umbral oficial',
+        'La lluvia, sobre lo normal',
+      ],
+      regionTitle: (name: string) => `${name}, hoy`,
+      noData: 'sin dato',
+      noThreshold: 'sin umbral que citar',
+    },
     timeline: {
       mark: (label: string, value: string) => `${label}\n${degrees(value)}`,
       today: 'hoy',
@@ -221,7 +246,11 @@ export const messages = {
       rain1983: {
         unit: 'mm',
         bars: [
-          { id: 'normal', label: 'Lluvia de un año normal en Piura', value: 60 },
+          {
+            id: 'normal',
+            label: 'Lluvia de un año normal en Piura',
+            value: 60,
+          },
           { id: '1983', label: 'Lluvia de 1983', value: 2400 },
         ],
         texts: [claim('igp-woodman-2014-piura-1983')],
@@ -259,6 +288,9 @@ export const messages = {
         ],
       },
       damage8298: claim('impact-8283-9798-caf-comparison'),
+      mobilised: `Un informe de agencias de la ONU sobre ese Niño lo vio así: ${claim('glantz-2000-peru-mobilised')}`,
+      thirdHalf: 'Por eso la tercera condición se cumplió solo a medias.',
+      thirdBelow: 'La tercera, si el país está preparado, la vemos más abajo.',
       woodman: claim('igp-woodman-1997-4c'),
       overlay: {
         band: 'normal',
@@ -290,7 +322,11 @@ export const messages = {
       steps2017: {
         enero: { word: '1%', text: claim('enfen-co01-2017-probabilities') },
         febrero: { word: 'débil', text: claim('enfen-co03-2017-debil') },
-        marzo: { word: 'débil', toll: '26', text: claim('elcomercio-2017-03-04-debil') },
+        marzo: {
+          word: 'débil',
+          toll: '26',
+          text: claim('elcomercio-2017-03-04-debil'),
+        },
         moderada: { word: 'moderada', text: claim('enfen-co06-2017-moderada') },
         mayo: { toll: '143', text: claim('impact-2017-paho-sinpad-may') },
         junio: { toll: '159', text: claim('impact-2017-people') },
@@ -332,6 +368,56 @@ export const messages = {
     lluvia: {
       question: '¿Va a llover donde vivo?',
     },
+    listos: {
+      question: '¿Se arregló lo que se rompió en 2017?',
+      answer: 'Más de una de cada cuatro obras no se terminó',
+      rebuilt: 'Lo que se reconstruye tampoco aguanta siempre.',
+      /** 13 and 68 are the numbers in caretas-1998-13-puentes. */
+      bridges: {
+        unit: 'Cada cuadrado, un puente.',
+        rows: [
+          {
+            id: 'nuevos',
+            count: 13,
+            total: 68,
+            label: 'de 68 puentes dañados en 1998 tenían 14 años o menos',
+            rest: 'más antiguos',
+          },
+        ],
+      },
+      after1983: 'Eran obras hechas después de 1983.',
+      reconstruction: claim('elbuho-2024-reconstruction'),
+      /** 73 is the 73,2 % of elbuho-2024-reconstruction, rounded down to whole squares. */
+      works: {
+        unit: 'Cada cuadrado, 1 % de las obras.',
+        rows: [
+          {
+            id: 'terminadas',
+            count: 73,
+            total: 100,
+            label: 'de cada 100 obras, terminadas al cerrar 2023',
+            rest: 'sin terminar',
+          },
+        ],
+      },
+      piura: claim('apoyo-2026-piura-works'),
+      alertIntro: 'Para el río Piura, APOYO revisó qué tiene su alerta temprana:',
+      /** The four parts apoyo-2026-sat names, and whether it says each one works. */
+      alert: [
+        { id: 'radar', label: 'Radar', ready: true },
+        { id: 'sirenas', label: 'Sirenas', ready: false },
+        { id: 'umbrales', label: 'Umbrales de activación', ready: false },
+        { id: 'planes', label: 'Planes de evacuación', ready: false },
+      ],
+      ready: 'funciona',
+      missing: 'falta',
+      sat: claim('apoyo-2026-sat'),
+      readiness: claim('apoyo-2026-readiness'),
+      thirdHalf: 'Hoy, la tercera condición está a medias.',
+      drain:
+        'Lo que Piura pide desde el 83 es un dren. En 2026, sus obras de drenaje van casi en cero.',
+      punch: 'Pero un Niño no llega al país en general. Llega a un río, a una calle, a un techo.',
+    },
     region: {
       question: '¿Y en mi región?',
       /** `above` names the regions where this month's rain passes its normal. */
@@ -361,7 +447,11 @@ export const messages = {
       tumbes: {
         unit: 'm³/s',
         bars: [
-          { id: '2026-11-17', label: 'El Tigre, 17 de noviembre de 2026', value: 840.83 },
+          {
+            id: '2026-11-17',
+            label: 'El Tigre, 17 de noviembre de 2026',
+            value: 840.83,
+          },
           { id: '2026-02-19', label: '19 de febrero de 2026', value: 1181.35 },
         ],
         lines: [
@@ -383,6 +473,23 @@ export const messages = {
       rainEmpty: 'Sin datos de lluvia para esta región.',
       rainSummary:
         'Lluvia estimada por satélite y estaciones (CHIRPS v3, CC BY 4.0), en todo el departamento, sierra incluida, frente a su promedio de 1991–2020.',
+    },
+    cierre: {
+      question: '¿Qué aprendimos?',
+      answer: 'Después de cada Niño, alguien saca una lección.',
+      belaunde: claim('tv-1985-belaunde-leccion'),
+      vecina: claim('tv-panorama-2017-ley-naturaleza'),
+      neither:
+        'Una dice que aguantamos. La otra, que no hay nada que hacer. Ninguna habla de lo que se hace antes.',
+      un: 'Un informe de agencias de la ONU sobre 1997–98 dejó otra lección para el Perú:',
+      /** Our Spanish for the lift of glantz-2000-peru-lesson. */
+      lesson:
+        'Quienes hacen políticas deben considerar el ciclo de El Niño como un hecho recurrente en la planificación nacional',
+      sea: (met: boolean) =>
+        met
+          ? 'El mar ya cumplió su parte. Lo que falta decidir es el verano, y lo que se haga antes.'
+          : 'El mar todavía no pasa de 26 °C. Lo que falta decidir es el verano, y lo que se haga antes.',
+      last: 'Lo que vuelve se puede esperar. Esta vez, ya lo escuchaste.',
     },
     hacer: {
       question: '¿Qué hago ahora?',

@@ -23,6 +23,18 @@ describe('PaperCard', () => {
     expect(wrapper.get('time').text()).toBe('julio de 2026')
   })
 
+  it('sets our translation large and keeps the verbatim original under it, tagged', () => {
+    const card = paperCard('glantz-2000-peru-lesson')
+    const wrapper = mount(PaperCard, {
+      props: { card, translation: 'Un hecho recurrente', lang: 'en' },
+    })
+
+    expect(wrapper.get('.translation').text()).toBe('«Un hecho recurrente»')
+    expect(wrapper.get('.original-tag').text()).toBe('Traducción nuestra. El original, en inglés:')
+    expect(wrapper.get('blockquote').attributes('lang')).toBe('en')
+    expect(wrapper.get('blockquote').text()).toBe(`“${card.lift}”`)
+  })
+
   it('starts in place, so the server HTML shows the card', () => {
     const wrapper = mount(PaperCard, { props: { card: paperCard('elcomercio-1925-alisio') } })
     expect(wrapper.classes()).toContain('is-placed')
