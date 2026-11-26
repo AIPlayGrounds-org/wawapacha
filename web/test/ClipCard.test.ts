@@ -26,25 +26,17 @@ describe('ClipCard', () => {
     expect(day.get('time').text()).toBe('12 de marzo de 1998')
   })
 
-  it('loads nothing from YouTube until the reader plays the clip', async () => {
-    const card = clipCard('tv-1983-film-devastador')
-    const wrapper = mount(ClipCard, { props: { card } })
-    expect(wrapper.find('iframe').exists()).toBe(false)
-
+  it('plays no video on the page: the footage stays on YouTube', async () => {
+    const wrapper = mount(ClipCard, { props: { card: clipCard('tv-1983-film-devastador') } })
     await wrapper.vm.$nextTick()
-    await wrapper.get('button.play').trigger('click')
-    const src = wrapper.get('iframe').attributes('src')
-    expect(src).toBe(
-      'https://www.youtube-nocookie.com/embed/44kmFwnJUz0?start=412&autoplay=1&rel=0',
-    )
-    expect(wrapper.emitted('play')).toHaveLength(1)
+    expect(wrapper.find('iframe').exists()).toBe(false)
+    expect(wrapper.find('button').exists()).toBe(false)
   })
 
-  it('has no play button in a row of stills', () => {
-    const wrapper = mount(ClipCard, {
-      props: { card: clipCard('tv-1983-film-devastador'), small: true },
-    })
-    expect(wrapper.find('button.play').exists()).toBe(false)
+  it('keeps the transcript line for a screen reader in a row of stills', () => {
+    const card = clipCard('tv-1983-film-devastador')
+    const wrapper = mount(ClipCard, { props: { card, small: true } })
     expect(wrapper.find('.quote').exists()).toBe(false)
+    expect(wrapper.get('blockquote .sr-only:not(time)').text()).toBe(card.clip.quote)
   })
 })

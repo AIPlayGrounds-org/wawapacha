@@ -275,9 +275,9 @@ every reel and lone clip in page order:
 - ¿Qué aprendimos?: the two lessons, in a slow reel.
 
 A reel starts when it scrolls into view, stops when it leaves, and stops for
-good when the reader steps, pauses or plays a clip. Without JavaScript, or with
-reduced motion, every card shows in a column. Nothing loads from YouTube until
-the reader presses play.
+good when the reader steps or pauses. Without JavaScript, or with reduced
+motion, every card shows in a column. No video plays on the page: the footage
+rights are not ours, so each card links to its second on YouTube.
 
 ## ¿Qué hago ahora?
 

@@ -132,7 +132,7 @@ const toggleLabel = computed(() =>
         :class="{ 'is-current': reel && position === index }"
         @focusin="onFocus(position)"
       >
-        <ClipCard v-if="isClipCard(card)" :card="card" :small="still" @play="hold" />
+        <ClipCard v-if="isClipCard(card)" :card="card" :small="still" />
         <PaperCard v-else :card="card" settled />
       </li>
     </ol>

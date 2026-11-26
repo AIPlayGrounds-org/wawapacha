@@ -105,8 +105,6 @@ export const messages = {
   },
   clipCard: {
     watch: (time: string) => `Ver en YouTube, ${time}`,
-    play: (outlet: string, date: string) => `Ver aquí el fragmento de ${outlet}, ${date}`,
-    player: (outlet: string, date: string) => `${outlet}, ${date}, en YouTube`,
   },
   newsReel: {
     roledescription: 'noticiero',
