@@ -58,6 +58,7 @@ describe('generated source catalog', () => {
     const shown = document.sources.filter((source) => source.on_site)
 
     expect(shown.map((source) => source.id).sort()).toEqual([
+      'chirps',
       'enfen-communique',
       'enfen-icen',
       'noaa-cpc-nino-weekly',

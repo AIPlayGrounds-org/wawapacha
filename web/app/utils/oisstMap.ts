@@ -84,6 +84,10 @@ const nearestSea = (cells: SeaCell[], point: { lon: number; lat: number }) =>
     return distance < Math.hypot(current.lon - point.lon, current.lat - point.lat) ? cell : current
   }, null)
 
+/** The sea cell of a record closest to a point on land. */
+export const seaNear = (record: GridRecord, point: { lon: number; lat: number }) =>
+  nearestSea(seaCells(record), point)
+
 export type Reach = { from: CoastPoint; to: CoastPoint; toEnd: boolean }
 
 /**

@@ -41,6 +41,15 @@ const monthNameFormat = new Intl.DateTimeFormat('es', { month: 'long', timeZone:
 export const formatSeasonDay = (day: number) =>
   seasonDayFormat.format(new Date(Date.UTC(2025, 6, 1 + day))).replace('.', '')
 
+const dayMonthFormat = new Intl.DateTimeFormat('es', {
+  day: 'numeric',
+  month: 'long',
+  timeZone: 'UTC',
+})
+
+/** «21 de octubre», a partir de AAAA-MM-DD, when the sentence already gives the year. */
+export const formatDayMonth = (date: string) => dayMonthFormat.format(new Date(`${date}T12:00:00Z`))
+
 /** «marzo», for a month from 1 to 12. */
 export const formatMonthName = (month: number) =>
   monthNameFormat.format(new Date(Date.UTC(2025, month - 1, 15)))

@@ -4,6 +4,7 @@ import HomePage from '~/pages/index.vue'
 import { useDataset } from '~/composables/useDataset'
 import { messages } from '~/messages'
 import { formatDay, formatDegrees, formatMonth, formatValue } from '~/utils/format'
+import { REGIONS } from '~/utils/region'
 import { loadDataset } from '../server/utils/loadDataset'
 import { enfenFixture } from './fixtures/panels'
 
@@ -19,7 +20,7 @@ const emptyRecords = <T extends { records: unknown[] }>(dataset: T) =>
   }) as unknown as T
 
 const mountHome = async (enfen = enfenFixture) => {
-  const ids = ['noaa-oisst', 'noaa-cpc-nino-weekly', 'enfen-icen'] as const
+  const ids = ['noaa-oisst', 'noaa-cpc-nino-weekly', 'enfen-icen', 'chirps'] as const
   const datasets = new Map(
     await Promise.all(ids.map(async (id) => [id, await loadDataset(id)] as const)),
   )
@@ -83,7 +84,7 @@ describe('home page', () => {
     expect(wrapper.get('#hero-title .answer').text()).not.toBe(messages.story.hero.empty)
     expect(wrapper.get('.hero .lead').text()).toContain(formatDay(latest.start))
     expect(wrapper.get('.hero .lead').text()).toContain(formatDegrees(latest.nino_1_2_sst!))
-    const chapters = ['calor', 'porque', 'historia', 'lluvia', 'hacer'] as const
+    const chapters = ['calor', 'porque', 'historia', 'lluvia', 'region', 'hacer'] as const
     for (const id of chapters) {
       expect(wrapper.get(`#${id}-title .ask`).text()).toBe(messages.story[id].question)
       expect(wrapper.get(`#${id}-title .answer`).text()).not.toBe('')
@@ -128,6 +129,24 @@ describe('home page', () => {
     expect(source.text()).toContain('28 de septiembre de 2026')
     expect(source.get('a').attributes('href')).toBe('https://example.com/comunicado-17-2026')
     expect(wrapper.find('#lluvia [role="status"]').exists()).toBe(false)
+  })
+
+  it('renders every coastal region and shows the picked one after mount', async () => {
+    const wrapper = await mountHome()
+    const panels = () => wrapper.findAll('#region .region-panel')
+    // v-show hides with an inline style; the mount is not in a document, so no layout.
+    const shown = () =>
+      panels().filter((panel) => !panel.attributes('style')?.includes('display: none'))
+
+    expect(panels().map((panel) => panel.get('h3').text())).toEqual(
+      REGIONS.map((region) => region.name),
+    )
+    expect(shown().map((panel) => panel.get('h3').text())).toEqual(['Tumbes'])
+    expect(panels()[0]!.findAll('.level')).toHaveLength(2 * 3)
+
+    await wrapper.get('#region select').setValue('PE15')
+    expect(shown().map((panel) => panel.get('h3').text())).toEqual(['Lima'])
+    expect(shown()[0]!.text()).toContain(messages.story.region.noThreshold)
   })
 
   it('says when the next communiqué is overdue', async () => {

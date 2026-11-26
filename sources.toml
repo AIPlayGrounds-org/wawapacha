@@ -341,6 +341,7 @@ auth = "none"
 id = "chirps"
 institution = "Climate Hazards Center (CHC), University of California Santa Barbara"
 product = "CHIRPS v3 (CHC Infrared Precipitation with Stations)"
+on_site = true
 block = "Precipitation"
 verdict = "automatable"
 update = "weekly"

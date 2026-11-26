@@ -1,6 +1,12 @@
 /** «2 400»: digits grouped by three with a no-break space, as the claims write them. */
 export const formatCount = (value: number) => String(value).replace(/\B(?=(\d{3})+(?!\d))/gu, ' ')
 
+/** «1 181,35» or «600»: a flow as the claims write it, with two decimals only when it has them. */
+export const formatFlow = (value: number) => {
+  const [whole, cents] = value.toFixed(2).split('.')
+  return cents === '00' ? formatCount(Number(whole)) : `${formatCount(Number(whole))},${cents}`
+}
+
 export type Run = { x: number; y: number; width: number; height: number }
 
 /**

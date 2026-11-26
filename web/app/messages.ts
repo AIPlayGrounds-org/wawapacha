@@ -15,6 +15,17 @@ const forecastByCommunique: Record<string, string> = {
 const actionByCommunique: Record<string, string> = {
   '20-2026': claim('enfen-co20-recommendation'),
 }
+/** What each communiqué says of a region's rivers, by CHIRPS department code. */
+const riversByCommunique: Record<string, Record<string, string>> = {
+  '20-2026': {
+    PE24: 'ENFEN prevé caudales muy superiores a lo normal en el Tumbes.',
+    PE20: 'ENFEN prevé caudales superiores a lo normal en el Chira y muy superiores en el Piura.',
+    PE14: 'ENFEN prevé caudales superiores a lo normal en La Leche.',
+    PE13: 'ENFEN prevé caudales superiores a lo normal en el Jequetepeque.',
+    PE15: 'ENFEN prevé caudales superiores a lo normal en el Chillón, el Rímac y el Lurín desde enero de 2027.',
+    PE11: 'ENFEN prevé caudales superiores a lo normal en el Pisco y el Ica desde enero de 2027.',
+  },
+}
 const communiqueKey = (number: number, year: number) => `${number}-${year}`
 const conjunction = new Intl.ListFormat('es', { type: 'conjunction' })
 /** Lists year labels. A word joiner keeps a span such as "1982–83" on one line. */
@@ -77,7 +88,7 @@ export const messages = {
     forecastEmptyTitle: 'Sin comunicado oficial vigente',
     nextDueStale: (date: string) => `Próximo comunicado · ${date}`,
     notShown:
-      'Ningún gráfico de esta página dice dónde ni cuánto lloverá en tu localidad. Esos avisos los emiten SENAMHI y las autoridades locales.',
+      'La lluvia por región de esta página es una estimación para todo el departamento: no dice cuánto lloverá en tu localidad. Esos avisos los emiten SENAMHI y las autoridades locales.',
     actionTitle: 'Si vives en una zona expuesta, prepárate y sigue los avisos oficiales',
     actionLead: (number: number, year: number) =>
       actionByCommunique[communiqueKey(number, year)] ?? null,
@@ -321,6 +332,58 @@ export const messages = {
     lluvia: {
       question: '¿Va a llover donde vivo?',
     },
+    region: {
+      question: '¿Y en mi región?',
+      /** `above` names the regions where this month's rain passes its normal. */
+      answer: (above: string[]) =>
+        above.length === 0
+          ? 'En el último mes no llovió más que lo normal en ninguna región de la costa'
+          : `En el último mes llovió más que lo normal en ${conjunction.format(above)}`,
+      empty: 'Sin datos de lluvia por región',
+      lead: 'Elige tu región: el mar frente a su costa, sus ríos y su lluvia.',
+      pick: 'Tu región',
+      sea: 'El mar',
+      river: 'El río',
+      rain: 'La lluvia',
+      seaValue: (
+        day: string,
+        place: string,
+        value: string,
+        relation: 'above' | 'normal' | 'below',
+      ) =>
+        relation === 'normal'
+          ? `El ${day}, el mar frente a ${place} estaba en lo normal.`
+          : `El ${day}, el mar frente a ${place} estaba a ${degrees(value)} ${relation === 'above' ? 'sobre' : 'bajo'} lo normal.`,
+      seaEmpty: 'Sin dato del mar frente a su costa.',
+      rivers: (number: number, year: number, code: string) =>
+        riversByCommunique[communiqueKey(number, year)]?.[code] ?? null,
+      noThreshold: 'No hay un umbral oficial de sus ríos que podamos citar aquí.',
+      tumbes: {
+        unit: 'm³/s',
+        bars: [
+          { id: '2026-11-17', label: 'El Tigre, 17 de noviembre de 2026', value: 840.83 },
+          { id: '2026-02-19', label: '19 de febrero de 2026', value: 1181.35 },
+        ],
+        lines: [
+          { value: 600, label: 'umbral amarillo' },
+          { value: 800, label: 'umbral naranja' },
+          { value: 1000, label: 'umbral rojo' },
+        ],
+        texts: [claim('infobae-2026-11-17-tumbes'), claim('andina-2026-02-19-tumbes-rojo')],
+      },
+      rainUnit: 'mm',
+      rainSpan: (from: string, to: string) => `Del ${from} al ${to}`,
+      rainNormal: 'Lo normal',
+      rainValue: (relation: 'above' | 'normal' | 'below') =>
+        relation === 'above'
+          ? 'Llovió más que lo normal.'
+          : relation === 'below'
+            ? 'Llovió menos que lo normal.'
+            : 'Llovió cerca de lo normal.',
+      rainEmpty: 'Sin datos de lluvia para esta región.',
+      rainSummary:
+        'Lluvia estimada por satélite y estaciones (CHIRPS v3, CC BY 4.0), en todo el departamento, sierra incluida, frente a su promedio de 1991–2020.',
+    },
     hacer: {
       question: '¿Qué hago ahora?',
     },
@@ -351,6 +414,11 @@ export const messages = {
         title: 'El mapa del mar',
         body: 'Cada celda de 0,5° es la temperatura del mar del último día de NOAA OISST menos su promedio de 1991–2020 para ese mismo día del año.',
         where: 'Aparece en «¿Dónde está ese calor?».',
+      },
+      region: {
+        title: 'Tu región',
+        body: 'El mar es la celda de NOAA OISST más cercana a un punto de su costa, el último día. La lluvia es la suma de las últimas seis péntadas de CHIRPS v3 en todo el departamento, frente a la suma de su promedio de 1991–2020. Cuenta como más o menos que lo normal cuando se aleja al menos 5 mm y al menos la mitad de lo normal.',
+        where: 'Aparece en «¿Y en mi región?».',
       },
     },
     sourcesTitle: 'Las fuentes',

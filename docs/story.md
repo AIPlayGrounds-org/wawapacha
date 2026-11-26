@@ -160,6 +160,28 @@ it; for N°20-2026 that is
 names the official status and links the communiqué. A stale communiqué adds
 when the next one was due.
 
+## ¿Y en mi región?
+
+The answer names the coastal regions where the last month's rain passed its
+normal. A picker narrows the beat to one region; without JavaScript every
+region shows. Each region has three rows:
+
+- The sea: the latest OISST anomaly at the sea cell nearest a point on its
+  coast.
+- The rivers: what the current communiqué says of them, worded from
+  [enfen-co20-rivers](../evidence/claims.toml) for N°20-2026. Tumbes also draws
+  its two cited flows against its three official thresholds, from
+  [infobae-2026-11-17-tumbes](../evidence/claims.toml) and
+  [andina-2026-02-19-tumbes-rojo](../evidence/claims.toml). Other regions say
+  that no official threshold can be cited.
+- The rain: the last six CHIRPS pentads summed for the whole department, against
+  the same pentads' 1991–2020 normal. It counts as above or below normal at a gap
+  of 5 mm and half the normal, so a dry month's few millimetres do not read as a
+  change.
+
+Callao is left out: its CHIRPS area would repeat Lima's sea and add no rain of
+its own. Modelled GloFAS flows stay off the beat: they have no threshold to cite.
+
 ## ¿Qué hago ahora?
 
 The lead quotes the current communiqué's recommendation; for N°20-2026 that is
