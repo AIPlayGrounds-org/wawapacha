@@ -6,7 +6,16 @@ import { useActiveId } from '~/composables/useActiveId'
 import { coastalReach, cropOisst, recordAYearBefore, valueAt, warmestCell } from '~/utils/oisstMap'
 import type { GridRecord } from '~/types/dataset'
 import { formatAnomaly } from '~/utils/enso'
-import { formatDay, formatDegrees, formatMonth, formatMonthName, formatValue } from '~/utils/format'
+import {
+  formatDay,
+  formatDayMonth,
+  formatDegrees,
+  formatMonth,
+  formatMonthName,
+  formatValue,
+} from '~/utils/format'
+import { REGIONS, regionRain, regionSea, shapeCoastalRain } from '~/utils/region'
+import { formatCount, formatFlow } from '~/utils/units'
 import { icenPeak } from '~/utils/icen'
 import {
   RAIN_THRESHOLD,
@@ -41,6 +50,7 @@ const oisst = await useDataset('noaa-oisst', cropOisst)
 const weekly = await useDataset('noaa-cpc-nino-weekly', shapeSeasons([2016]))
 const icen = await useDataset('enfen-icen')
 const enfen = await useDataset('enfen-communique')
+const rain6 = await useDataset('chirps', shapeCoastalRain)
 
 // How hot: this week against its normal, a year earlier and the warmest month of a normal year.
 const week = weekly.records.at(-1) ?? null
@@ -323,6 +333,48 @@ const actionLead = enfenRecord
   ? messages.page.actionLead(enfenRecord.number, enfenRecord.year)
   : null
 
+// Each coastal region: the sea off its coast, its rivers and its rain of the last month.
+const regions = REGIONS.map((region) => {
+  const sea = regionSea(seaRecord, region)
+  const rain = regionRain(rain6.records, region.code)
+  return {
+    ...region,
+    sea: sea
+      ? story.region.seaValue(
+          formatDay(seaRecord.end),
+          region.coast.name,
+          formatDegrees(Math.abs(sea.value)),
+          formatDegrees(sea.value) === formatDegrees(0)
+            ? 'normal'
+            : sea.value > 0
+              ? 'above'
+              : 'below',
+        )
+      : story.region.seaEmpty,
+    rivers: enfenRecord
+      ? story.region.rivers(enfenRecord.number, enfenRecord.year, region.code)
+      : null,
+    rain,
+    rainBars: rain
+      ? [
+          {
+            id: 'total',
+            label: story.region.rainSpan(formatDayMonth(rain.start), formatDayMonth(rain.end)),
+            value: rain.total,
+          },
+          { id: 'normal', label: story.region.rainNormal, value: rain.normal },
+        ]
+      : [],
+  }
+})
+const regionAnswer = regions.some((region) => region.rain)
+  ? story.region.answer(
+      regions.filter((region) => region.rain?.relation === 'above').map((region) => region.name),
+    )
+  : story.region.empty
+const picked = ref(REGIONS[0]!.code)
+const formatRain = (value: number) => formatCount(Math.round(value))
+
 useSiteSeo({
   title: messages.page.seoTitle,
   description: messages.page.seoDescription,
@@ -500,7 +552,7 @@ useSiteSeo({
                   <ScaleBars
                     :bars="story.historia.river.bars"
                     :unit="story.historia.river.unit"
-                    :line="story.historia.river.line"
+                    :lines="[story.historia.river.line]"
                   />
                   <figcaption>{{ story.historia.river.texts.join(' ') }}</figcaption>
                 </figure>
@@ -654,6 +706,61 @@ useSiteSeo({
             {{ messages.page.nextDueStale(formatDay(enfenRecord.end)) }}
           </p>
         </template>
+      </div>
+    </section>
+
+    <section id="region" class="scene scene--blue" aria-labelledby="region-title">
+      <div class="beat">
+        <h2 id="region-title">
+          <span class="ask">{{ story.region.question }}</span>
+          <span class="answer">{{ regionAnswer }}</span>
+        </h2>
+        <p class="lead">{{ story.region.lead }}</p>
+        <!-- Without JavaScript every region shows; the picker only narrows it to one. -->
+        <label v-if="mounted" class="region-pick">
+          <span>{{ story.region.pick }}</span>
+          <select v-model="picked">
+            <option v-for="region in regions" :key="region.code" :value="region.code">
+              {{ region.name }}
+            </option>
+          </select>
+        </label>
+        <article
+          v-for="region in regions"
+          v-show="!mounted || picked === region.code"
+          :key="region.code"
+          class="region-panel"
+          :aria-labelledby="`region-${region.code}`"
+        >
+          <!-- Once the picker shows, it names the region; the heading stays for screen readers. -->
+          <h3 :id="`region-${region.code}`" :class="{ 'sr-only': mounted }">{{ region.name }}</h3>
+          <h4>{{ story.region.sea }}</h4>
+          <p>{{ region.sea }}</p>
+          <h4>{{ story.region.river }}</h4>
+          <figure v-if="region.code === 'PE24'" class="units-figure">
+            <ScaleBars
+              :bars="story.region.tumbes.bars"
+              :unit="story.region.tumbes.unit"
+              :lines="story.region.tumbes.lines"
+              :format="formatFlow"
+            />
+            <figcaption>{{ story.region.tumbes.texts.join(' ') }}</figcaption>
+          </figure>
+          <p v-else>{{ story.region.noThreshold }}</p>
+          <p v-if="region.rivers">{{ region.rivers }}</p>
+          <h4>{{ story.region.rain }}</h4>
+          <template v-if="region.rain">
+            <ChartShell bare :dataset="rain6" :summary="story.region.rainSummary">
+              <ScaleBars
+                :bars="region.rainBars"
+                :unit="story.region.rainUnit"
+                :format="formatRain"
+              />
+            </ChartShell>
+            <p>{{ story.region.rainValue(region.rain.relation) }}</p>
+          </template>
+          <p v-else>{{ story.region.rainEmpty }}</p>
+        </article>
       </div>
     </section>
 
@@ -945,6 +1052,56 @@ h2 .answer {
   color: inherit;
 }
 .status {
+  color: var(--on-scene);
+  font-family: var(--font-display);
+  font-size: var(--text-lead);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Region: one panel at a time, each row a short head over its sentence or chart. */
+.region-pick {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 24rem;
+  font-size: var(--text-meta);
+  color: var(--on-scene-muted);
+}
+.region-pick select {
+  min-height: 52px;
+  padding: 0 var(--space-4);
+  border: 2px solid var(--on-scene);
+  border-radius: 0;
+  background: var(--ground);
+  color: var(--on-scene);
+  font-family: var(--font-display);
+  font-size: var(--text-lead);
+  font-weight: 700;
+}
+.region-panel {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 40rem;
+  color: var(--on-scene-muted);
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+.beat > .region-panel {
+  margin-top: var(--space-8);
+}
+.region-panel > * {
+  margin: 0;
+}
+.region-panel h3 {
+  color: var(--on-scene);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+.region-panel > h4 {
+  margin-top: var(--space-8);
   color: var(--on-scene);
   font-family: var(--font-display);
   font-size: var(--text-lead);

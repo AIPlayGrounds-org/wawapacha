@@ -2,36 +2,58 @@
 import { formatCount } from '~/utils/units'
 
 export type ScaleBar = { id: string; label: string; value: number }
+export type ScaleLine = { value: number; label: string }
 
-const props = defineProps<{
-  /** Drawn on one scale from zero, so a small value stays a sliver beside a big one. */
-  bars: readonly ScaleBar[]
-  unit: string
-  /** A level the bars are read against, such as the flow that closes the bridges. */
-  line?: { value: number; label: string }
-}>()
+const props = withDefaults(
+  defineProps<{
+    /** Drawn on one scale from zero, so a small value stays a sliver beside a big one. */
+    bars: readonly ScaleBar[]
+    unit: string
+    /** Levels the bars are read against, such as the flow that closes the bridges. */
+    lines?: readonly ScaleLine[]
+    format?: (value: number) => string
+  }>(),
+  { lines: () => [], format: formatCount },
+)
 
-const max = Math.max(...props.bars.map((bar) => bar.value), props.line?.value ?? 0)
+const max = Math.max(
+  ...props.bars.map((bar) => bar.value),
+  ...props.lines.map((line) => line.value),
+)
 const share = (value: number) => `${((value / max) * 100).toFixed(2)}%`
-const at = props.line ? share(props.line.value) : null
-// Past the middle the label ends at the line, so it stays inside the column.
-const lineEnds = props.line ? props.line.value / max > 0.5 : false
+// Each level's label sits on its own row, highest first, so near levels never collide.
+// Past the middle a label ends at its line, so it stays inside the column.
+const levels = [...props.lines]
+  .sort((a, b) => b.value - a.value)
+  .map((line) => ({ ...line, at: share(line.value), ends: line.value / max > 0.5 }))
 </script>
 
 <template>
-  <div class="scale" :style="at ? { '--at': at } : undefined">
-    <p v-if="line" class="line-label" :class="{ 'is-end': lineEnds }">
-      <strong>{{ formatCount(line.value) }} {{ unit }}</strong>
-      <span>{{ line.label }}</span>
+  <div class="scale">
+    <p
+      v-for="level in levels"
+      :key="level.value"
+      class="line-label"
+      :class="{ 'is-end': level.ends, 'is-row': levels.length > 1 }"
+      :style="{ '--at': level.at }"
+    >
+      <strong>{{ format(level.value) }} {{ unit }}</strong>
+      <span>{{ level.label }}</span>
     </p>
     <ul class="bars">
       <li v-for="bar in bars" :key="bar.id" class="bar">
         <p class="label">
           {{ bar.label }}
-          <strong>{{ formatCount(bar.value) }} {{ unit }}</strong>
+          <strong>{{ format(bar.value) }} {{ unit }}</strong>
         </p>
-        <span class="track" :class="{ 'has-line': line }" aria-hidden="true">
+        <span class="track" aria-hidden="true">
           <span class="fill" :style="{ width: share(bar.value) }" />
+          <span
+            v-for="level in levels"
+            :key="level.value"
+            class="level"
+            :style="{ left: level.at }"
+          />
         </span>
       </li>
     </ul>
@@ -82,13 +104,11 @@ const lineEnds = props.line ? props.line.value / max > 0.5 : false
   border-radius: 0 2px 2px 0;
   background: var(--accent);
 }
-.track.has-line::after {
+.level {
   position: absolute;
   top: -0.25rem;
   bottom: -0.25rem;
-  left: var(--at);
   border-left: 2px dotted var(--on-deep);
-  content: '';
 }
 /* Two short lines, so the label fits beside the line on a phone. */
 .line-label {
@@ -102,6 +122,13 @@ const lineEnds = props.line ? props.line.value / max > 0.5 : false
   color: var(--on-deep);
   font-family: var(--font-display);
   white-space: nowrap;
+}
+/* Several levels stack one row each, so each label keeps to one short line. */
+.line-label.is-row {
+  display: block;
+}
+.line-label.is-row span {
+  margin-left: 0.4em;
 }
 .line-label.is-end {
   padding-right: calc(100% - var(--at));

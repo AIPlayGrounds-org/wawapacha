@@ -90,11 +90,35 @@ describe('UnitGrid', () => {
 describe('ScaleBars', () => {
   it('sizes every bar on one scale and marks the line', () => {
     const wrapper = mount(ScaleBars, {
-      props: { bars: historia.river.bars, unit: historia.river.unit, line: historia.river.line },
+      props: { bars: historia.river.bars, unit: historia.river.unit, lines: [historia.river.line] },
     })
     const fills = wrapper.findAll('.fill').map((fill) => fill.attributes('style'))
     expect(fills).toEqual(['width: 72.33%;', 'width: 100.00%;'])
     expect(wrapper.get('.line-label').classes()).toContain('is-end')
+    expect(wrapper.get('.line-label').classes()).not.toContain('is-row')
     expect(wrapper.get('.bar strong').text()).toBe('3 200 m³/s')
+  })
+
+  it('stacks several levels highest first and draws each through every track', () => {
+    const wrapper = mount(ScaleBars, {
+      props: {
+        bars: [{ id: 'peak', label: 'pico', value: 1000 }],
+        unit: 'u',
+        lines: [
+          { value: 200, label: 'bajo' },
+          { value: 800, label: 'alto' },
+        ],
+        format: (value: number) => `#${value}`,
+      },
+    })
+    const labels = wrapper.findAll('.line-label')
+    expect(labels.map((label) => label.get('span').text())).toEqual(['alto', 'bajo'])
+    expect(labels[0]!.get('strong').text()).toContain('#800')
+    expect(labels.map((label) => label.classes('is-end'))).toEqual([true, false])
+    expect(labels.every((label) => label.classes('is-row'))).toBe(true)
+    expect(wrapper.findAll('.level').map((level) => level.attributes('style'))).toEqual([
+      'left: 80.00%;',
+      'left: 20.00%;',
+    ])
   })
 })

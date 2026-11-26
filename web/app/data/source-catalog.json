@@ -100,7 +100,7 @@
       "temporal_resolution": "Pentadal (P = 1–6; P6 va del día 26 al fin de mes)",
       "provider_url": "https://chc.ucsb.edu/data/chirps3",
       "data_url": "https://data.chc.ucsb.edu/products/CHIRPS/v3.0/prelim/pentads/latam/tifs/",
-      "on_site": false,
+      "on_site": true,
       "reference_period": "1991–2020",
       "license": "CC BY 4.0. Attribution: CHIRPS v3, Climate Hazards Center, UC Santa Barbara, in collaboration with FEWS NET and USGS EROS; CC BY 4.0.",
       "stale_after_hours": 360
