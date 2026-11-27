@@ -130,7 +130,10 @@ const toggleLabel = computed(() =>
       <li
         v-for="(card, position) in cards"
         :key="card.href + card.lift"
-        :class="{ 'is-current': reel && position === index }"
+        :class="{
+          'is-current': reel && position === index,
+          'is-previous': reel && position === index - 1,
+        }"
         @focusin="onFocus(position)"
       >
         <ClipCard v-if="isClipCard(card)" :card="card" :small="still" />
@@ -196,15 +199,36 @@ const toggleLabel = computed(() =>
 }
 /* Every card shares one cell, so the reel keeps the height of its tallest card and the page
    under it never moves. A hidden card stays in the accessibility tree: the list is read whole. */
+/* A stack of tapes: the next card drops onto the pile, and the one before stays under it, dimmed,
+   so the years read as piling up. */
 .is-reel .cards > li {
   grid-area: 1 / 1;
   align-content: center;
   opacity: 0;
   pointer-events: none;
+  transform: translateY(1.25rem) rotate(1.5deg) scale(0.98);
+  transition:
+    opacity 180ms ease-out,
+    transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 420ms ease-out;
 }
 .is-reel .cards > li.is-current {
+  z-index: 2;
   opacity: 1;
   pointer-events: auto;
+  transform: none;
+}
+.is-reel .cards > li.is-previous {
+  z-index: 1;
+  opacity: 1;
+  transform: translateX(-2%) rotate(-1.5deg) scale(0.96);
+  filter: brightness(0.55);
+}
+/* Only the frame of the card underneath shows; its link and thread mark would read twice. */
+.is-reel .cards > li.is-previous :deep(.clip-card > figcaption),
+.is-reel .cards > li.is-previous :deep(.thread-mark),
+.is-reel .cards > li.is-previous :deep(.paper-card > a) {
+  visibility: hidden;
 }
 .is-reel .is-current :deep(.stamp) {
   animation: stamp-jump 180ms cubic-bezier(0.2, 0.9, 0.3, 1.2);

@@ -4,6 +4,7 @@ import { messages } from '~/messages'
 import { formatClipTime, formatPublished } from '~/utils/format'
 import type { Threaded } from '~/utils/threads'
 import ThreadMark from '~/components/ThreadMark.vue'
+import { stills } from '~/data/press'
 
 const props = defineProps<{
   card: Threaded<ClipCard>
@@ -16,12 +17,18 @@ const date = formatPublished(props.card.published)
 // The year stamp already says the year; the chyron adds the day only when the source gives one.
 const chyronDate = props.card.published.length > 4 ? date : null
 const time = formatClipTime(props.card.clip.start)
+// A still of the broadcast behind the words, darkened so they stay legible.
+const still = stills[props.card.clip.video]
 </script>
 
 <template>
   <figure class="clip-card" :class="{ 'clip-card--small': small }">
     <ThreadMark v-if="card.thread" :thread="card.thread" />
-    <div class="frame">
+    <div
+      class="frame"
+      :class="{ 'frame--still': still }"
+      :style="still ? { '--still': `url(${still.src})` } : undefined"
+    >
       <span class="stamp">{{ year }}</span>
       <p class="lift" aria-hidden="true">«{{ card.lift }}»</p>
       <blockquote class="chyron" :cite="card.href">
@@ -61,6 +68,34 @@ const time = formatClipTime(props.card.clip.start)
   background-blend-mode: soft-light, normal, normal;
   box-shadow: var(--shadow-clipping);
   color: var(--on-screen);
+}
+.frame--still {
+  position: relative;
+  isolation: isolate;
+}
+.frame--still::before,
+.frame--still::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+}
+.frame--still::before {
+  background: var(--still) center / cover;
+  filter: grayscale(0.2) contrast(1.05);
+}
+.frame--still::after {
+  background: linear-gradient(
+    180deg,
+    rgb(11 14 15 / 0.45),
+    rgb(11 14 15 / 0.3) 40%,
+    rgb(11 14 15 / 0.85)
+  );
+}
+.frame--still .lift,
+.frame--still .stamp {
+  text-shadow: 0 2px 14px rgb(0 0 0 / 0.65);
 }
 .stamp {
   justify-self: start;
