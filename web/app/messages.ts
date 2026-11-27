@@ -596,6 +596,13 @@ export const messages = {
     dataLink: 'Archivo o servicio consultado',
     dataTypeTitle: 'Qué significa cada tipo de dato',
     dataTypeDescription: (type: Dataset['data_type']) => dataTypeDescriptions[type],
+    pressTitle: 'Los recortes de prensa',
+    press: [
+      'Cada recorte es una cita breve de una nota o documento que el sitio cita: muestra solo el pasaje citado, con su medio, su fecha y un enlace al original, donde está la obra completa.',
+      'El sitio no tiene publicidad ni fines comerciales, y los recortes se sirven desde aquí: una visita no carga nada de los medios. Los videos de televisión no se muestran: solo se enlazan.',
+    ],
+    takedown: 'Si un recorte es tuyo y quieres que lo retiremos, escríbenos en',
+    takedownLink: 'GitHub',
     limitsTitle: 'Lo que este sitio no hace',
     limits: [
       'No hace pronósticos propios: el pronóstico es el de ENFEN.',

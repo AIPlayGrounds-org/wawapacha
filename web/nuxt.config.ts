@@ -35,6 +35,12 @@ export default defineNuxtConfig({
       { redirect: { to: `${basePath}${to}`, statusCode: 301 } },
     ]),
   ),
+  vite: {
+    build: {
+      // Press clippings and stills stay files: inlined, they would weigh down the page's JS.
+      assetsInlineLimit: (file: string) => (file.includes('/assets/press/') ? false : undefined),
+    },
+  },
   nitro: {
     prerender: {
       routes: ['/sitemap.xml', '/robots.txt', ...Object.keys(retiredRoutes)],
