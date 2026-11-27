@@ -160,7 +160,7 @@ export const messages = {
       headlines:
         '«El Niño sería más devastador que el de 1997». Así lo tituló un canal de televisión en septiembre. Una consultora escribió que el mar «sigue una trayectoria muy similar a la del FEN 1997-1998». En noviembre, el río Tumbes pasó el umbral naranja.',
       question: '¿Qué tanto hay que preocuparse?',
-      promise: 'Aquí miramos de dónde salen esos números.',
+      updated: (date: string) => `Con los datos y comunicados publicados hasta el ${date}.`,
     },
     hero: {
       question: '¿Qué tan caliente está el mar?',
@@ -186,10 +186,9 @@ export const messages = {
           }[relation]
         }.`,
       warmerThanPeak: (gap: string, month: string, peakMonth: string, peak: string) =>
-        `¿${degrees(gap)} más es mucho? Hoy, en ${month}, el mar está más caliente que en un ${peakMonth} normal, y ${peakMonth} es el mes más caliente del año (${degrees(peak)}).`,
+        `Con ${degrees(gap)} de más, el mar de ${month} ya está más caliente que el de un ${peakMonth} normal, el mes más caliente del año (${degrees(peak)}).`,
       peak: (peakMonth: string, peak: string) =>
         `En un año normal, el mes más caliente es ${peakMonth}, con ${degrees(peak)}.`,
-      handoff: 'Pero esa es una sola línea, medida en un solo lugar. ¿Hasta dónde llega el calor?',
       normal: 'lo normal',
       gap: (value: string) => degrees(value),
       arrow: (peakMonth: string) => `más que un ${peakMonth} normal`,
@@ -215,7 +214,7 @@ export const messages = {
       press1925: claim('elcomercio-1925-alisio'),
       seaAbsent: 'En esa explicación, el mar no aparece.',
       conditions:
-        'Ahí están las dos primeras condiciones. La tercera no es del mar: es si el país está preparado.',
+        'Son dos de las condiciones: un mar sobre 26 °C y que pase en verano. La tercera es si el país está preparado.',
       punch: 'En el verano de 1983 se juntaron las tres.',
       table: 'Temperatura del mar en Niño 1+2 por semana, con la línea de 26 °C.',
     },
@@ -274,7 +273,6 @@ export const messages = {
         relation === 'normal'
           ? 'Hace un año, ese mismo punto estaba en lo normal.'
           : `Hace un año, ese mismo punto estaba a ${degrees(value)} ${relation === 'above' ? 'sobre' : 'bajo'} lo normal.`,
-      handoff: 'Un mar caliente no hace daño por sí solo. El daño llega con la lluvia.',
       empty: 'Sin mapa de temperatura del mar',
     },
     historia: {
@@ -355,7 +353,7 @@ export const messages = {
         underThird
           ? `${degrees(value)}: menos de un tercio de los ${degrees(value1983)} de 1983.`
           : `${degrees(value)}, frente a ${degrees(value1983)} en 1983.`,
-      low2017: 'En el gráfico casi no se ve. En tierra fue otra cosa.',
+      low2017: 'En el gráfico casi no se ve.',
       /**
        * The sentence that ends a step and opens the next one. The years are the gaps between the
        * events; tv-america-1998-03-12-historia and tv-panorama-2017-inesperadamente say the rest.
@@ -367,7 +365,7 @@ export const messages = {
       todayStep: (value: string, month: string) =>
         `Hoy: ${degrees(value)} en ${month}. La línea punteada lleva ese nivel hacia atrás.`,
       people: claim('impact-2017-people'),
-      punch: 'El índice mide el mar. No mide el daño.',
+      punch: 'El pico más bajo de los tres, el de 2017, dejó 159 muertos.',
       chartSummary: 'El mismo índice, con los picos de 1982–83, 1997–98 y 2017.',
     },
     palabra: {
@@ -390,13 +388,12 @@ export const messages = {
         junio: { toll: '159', text: claim('impact-2017-people') },
       },
       toll: (count: string) => `${count} fallecidos`,
-      scale: 'Débil y moderada miden el calor del mar. No miden el daño.',
+      scale: 'En la escala del ENFEN, «débil» y «moderada» describen cuánto se calienta el mar.',
       punch: 'La palabra llegó después que el agua.',
       ranking: claim('impact-2017-plain'),
-      before: 'Hubo una razón más para no creer.',
       prevention: claim('bausate-2017-2015-prevention'),
       credibility: claim('ramirez-2017-credibility'),
-      open2026: 'En 2026, la palabra no esperó al agua.',
+      open2026: 'En 2026, las palabras llegaron antes que el agua.',
       steps2026: {
         debil: { word: 'débil' },
         alerta: {
@@ -414,7 +411,6 @@ export const messages = {
           report: claim('enfen-it17-ai-model-e-index'),
         },
       },
-      handoff: 'La palabra del ENFEN es una. La que llega a la casa la pone la prensa.',
       sst: 'el mar',
       chart2017:
         'La temperatura del mar en Niño 1+2 por semana, de enero a junio de 2017, con las palabras de la prensa y del ENFEN en sus fechas.',
@@ -425,12 +421,11 @@ export const messages = {
     },
     lluvia: {
       question: '¿Va a llover donde vivo?',
-      handoff: 'Queda la tercera condición: ¿nos encuentra preparados?',
     },
     listos: {
       question: '¿Se arregló lo que se rompió en 2017?',
       answer: 'Más de una de cada cuatro obras no se terminó',
-      rebuilt: 'Lo que se reconstruye tampoco aguanta siempre.',
+      rebuilt: 'En 1998 también se cayeron puentes nuevos.',
       /** 13 and 68 are the numbers in caretas-1998-13-puentes. */
       bridges: {
         unit: 'Cada cuadrado, un puente.',
@@ -475,7 +470,6 @@ export const messages = {
       thirdHalf: 'Hoy, la tercera condición está a medias.',
       drain:
         'Lo que Piura pide desde el 83 es un dren. En 2026, sus obras de drenaje van casi en cero.',
-      punch: 'Pero un Niño no llega al país en general. Llega a un río, a una calle, a un techo.',
     },
     region: {
       question: '¿Y en mi región?',
@@ -539,16 +533,16 @@ export const messages = {
       belaunde: claim('tv-1985-belaunde-leccion'),
       vecina: claim('tv-panorama-2017-ley-naturaleza'),
       neither:
-        'Una dice que aguantamos. La otra, que no hay nada que hacer. Ninguna habla de lo que se hace antes.',
+        'Belaunde concluyó que el pueblo reacciona ante la adversidad. La vecina de Trujillo, que no se puede hacer nada. Ninguno habló de prepararse antes.',
       un: 'Un informe de agencias de la ONU sobre 1997–98 dejó otra lección para el Perú:',
       /** Our Spanish for the lift of glantz-2000-peru-lesson. */
       lesson:
         'Quienes hacen políticas deben considerar el ciclo de El Niño como un hecho recurrente en la planificación nacional',
       sea: (met: boolean) =>
         met
-          ? 'El mar ya cumplió su parte. Lo que falta decidir es el verano, y lo que se haga antes.'
-          : 'El mar todavía no pasa de 26 °C. Lo que falta decidir es el verano, y lo que se haga antes.',
-      last: 'Lo que vuelve se puede esperar. Esta vez, ya lo escuchaste.',
+          ? 'El mar ya pasó de 26 °C. Faltan el verano y lo que se prepare antes.'
+          : 'El mar todavía no pasa de 26 °C. Faltan el verano y lo que se prepare antes.',
+      last: 'Pregúntale a tu municipalidad cuál es su plan.',
     },
     hacer: {
       question: '¿Qué hago ahora?',

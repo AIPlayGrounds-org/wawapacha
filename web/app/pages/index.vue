@@ -389,6 +389,12 @@ const palabra2026 = palabra('palabra26', STEPS_2026, '2026-01-01', '2026-09-30')
 
 // Rain and what to do, from the communiqué in force.
 const enfenRecord = enfen.records[0]
+// The newest date behind the story, said once under the opening question.
+const updatedSource = [weekly.records.at(-1)?.end, enfenRecord?.start]
+  .filter((day): day is string => Boolean(day))
+  .sort()
+  .at(-1)
+const updatedOn = updatedSource ? formatDay(updatedSource) : null
 const forecastTitle = enfenRecord
   ? messages.page.forecastTitle(enfenRecord.number, enfenRecord.year)
   : messages.page.forecastEmptyTitle
@@ -473,10 +479,10 @@ useSiteSeo({
           <h1 id="home-title">
             <span class="answer">{{ story.apertura.question }}</span>
           </h1>
-          <p class="lead">{{ story.apertura.promise }}</p>
+          <p v-if="updatedOn" class="updated">{{ story.apertura.updated(updatedOn) }}</p>
         </section>
         <section class="hero beat" aria-labelledby="hero-title">
-          <p class="kicker">01 / 10 · {{ story.kickers[0] }}</p>
+          <p class="kicker">{{ story.kickers[0] }}</p>
           <h2 id="hero-title">
             <span class="ask">{{ story.hero.question }}</span>
             <span class="answer"
@@ -505,14 +511,13 @@ useSiteSeo({
               />
             </ChartShell>
           </div>
-          <p class="handoff">{{ story.hero.handoff }}</p>
         </section>
       </main>
     </div>
 
     <section id="calor" class="scene scene--blue" aria-labelledby="calor-title">
       <div class="beat">
-        <p class="kicker">02 / 10 · {{ story.kickers[1] }}</p>
+        <p class="kicker">{{ story.kickers[1] }}</p>
         <h2 id="calor-title">
           <span class="ask">{{ story.calor.question }}</span>
           <span class="answer"
@@ -525,13 +530,12 @@ useSiteSeo({
             <SeaMap :panels="seaPanels" />
           </ChartShell>
         </div>
-        <p class="handoff">{{ story.calor.handoff }}</p>
       </div>
     </section>
 
     <section id="porque" class="scene scene--green" aria-labelledby="porque-title">
       <div class="beat">
-        <p class="kicker">03 / 10 · {{ story.kickers[2] }}</p>
+        <p class="kicker">{{ story.kickers[2] }}</p>
         <h2 id="porque-title">
           <span class="ask">{{ story.porque.question }}</span>
           <span class="answer">{{ story.porque.answer }}</span>
@@ -568,7 +572,7 @@ useSiteSeo({
 
     <section id="historia" class="scene scene--ink" aria-labelledby="historia-title">
       <div class="beat">
-        <p class="kicker">04 / 10 · {{ story.kickers[3] }}</p>
+        <p class="kicker">{{ story.kickers[3] }}</p>
         <h2 id="historia-title">
           <span class="ask">{{ story.historia.question }}</span>
           <span class="answer">{{ historiaAnswer }}</span>
@@ -696,7 +700,7 @@ useSiteSeo({
 
     <section id="palabra" class="scene scene--blue" aria-labelledby="palabra-title">
       <div class="beat">
-        <p class="kicker">05 / 10 · {{ story.kickers[4] }}</p>
+        <p class="kicker">{{ story.kickers[4] }}</p>
         <h2 id="palabra-title">
           <span class="ask">{{ story.palabra.question }}</span>
           <span class="answer">{{ story.palabra.answer }}</span>
@@ -753,7 +757,6 @@ useSiteSeo({
           <span class="strip">{{ story.palabra.punch }}</span>
         </p>
         <p class="lead">{{ story.palabra.ranking }}</p>
-        <p class="lead">{{ story.palabra.before }}</p>
         <p class="lead">{{ story.palabra.prevention }} {{ story.palabra.credibility }}</p>
         <p class="punch punch--turn">{{ story.palabra.open2026 }}</p>
         <ChartShell
@@ -803,15 +806,12 @@ useSiteSeo({
             </ol>
           </div>
         </ChartShell>
-        <p class="punch">
-          <span class="strip">{{ story.palabra.handoff }}</span>
-        </p>
       </div>
     </section>
 
     <section id="lluvia" class="scene scene--green" aria-labelledby="lluvia-title">
       <div class="beat">
-        <p class="kicker">06 / 10 · {{ story.kickers[5] }}</p>
+        <p class="kicker">{{ story.kickers[5] }}</p>
         <h2 id="lluvia-title">
           <span class="ask">{{ story.lluvia.question }}</span>
           <span class="answer">{{ forecastTitle }}</span>
@@ -838,13 +838,12 @@ useSiteSeo({
             {{ messages.page.nextDueStale(formatDay(enfenRecord.end)) }}
           </p>
         </template>
-        <p class="handoff">{{ story.lluvia.handoff }}</p>
       </div>
     </section>
 
     <section id="listos" class="scene scene--ink" aria-labelledby="listos-title">
       <div class="beat">
-        <p class="kicker">07 / 10 · {{ story.kickers[6] }}</p>
+        <p class="kicker">{{ story.kickers[6] }}</p>
         <h2 id="listos-title">
           <span class="ask">{{ story.listos.question }}</span>
           <span class="answer">{{ story.listos.answer }}</span>
@@ -893,15 +892,12 @@ useSiteSeo({
           <PaperCard :card="paperCard('apoyo-2026-piura-works')" />
         </div>
         <p class="lead">{{ story.listos.piura }} {{ story.listos.drain }}</p>
-        <p class="punch">
-          <span class="strip">{{ story.listos.punch }}</span>
-        </p>
       </div>
     </section>
 
     <section id="region" class="scene scene--blue" aria-labelledby="region-title">
       <div class="beat">
-        <p class="kicker">08 / 10 · {{ story.kickers[7] }}</p>
+        <p class="kicker">{{ story.kickers[7] }}</p>
         <h2 id="region-title">
           <span class="ask">{{ story.region.question }}</span>
           <span class="answer">{{ regionAnswer }}</span>
@@ -965,7 +961,7 @@ useSiteSeo({
 
     <section id="cierre" class="scene scene--green" aria-labelledby="cierre-title">
       <div class="beat">
-        <p class="kicker">09 / 10 · {{ story.kickers[8] }}</p>
+        <p class="kicker">{{ story.kickers[8] }}</p>
         <h2 id="cierre-title">
           <span class="ask">{{ story.cierre.question }}</span>
           <span class="answer">{{ story.cierre.answer }}</span>
@@ -991,7 +987,7 @@ useSiteSeo({
 
     <section id="hacer" class="scene scene--red" aria-labelledby="hacer-title">
       <div class="beat">
-        <p class="kicker">10 / 10 · {{ story.kickers[9] }}</p>
+        <p class="kicker">{{ story.kickers[9] }}</p>
         <h2 id="hacer-title">
           <span class="ask">{{ story.hacer.question }}</span>
           <span class="answer">{{ messages.page.actionTitle }}</span>
@@ -1191,6 +1187,10 @@ h2 .answer {
   margin-right: 0.5em;
   border-radius: 50%;
   background: var(--scene-accent);
+}
+.updated {
+  color: var(--on-scene-muted);
+  font-size: var(--text-meta);
 }
 /* A torn paper strip under the key words; each line gets its own piece. */
 .strip {
