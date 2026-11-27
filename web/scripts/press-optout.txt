@@ -1,0 +1,1 @@
+# Sources whose images we took down at their owner's request: one link per line.

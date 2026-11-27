@@ -4,6 +4,7 @@ import { useReveal } from '~/composables/useReveal'
 import type { PaperCard } from '~/data/claims'
 import { messages } from '~/messages'
 import { formatPublished } from '~/utils/format'
+import { clippings } from '~/data/press'
 
 const props = defineProps<{
   card: PaperCard
@@ -21,6 +22,8 @@ const props = defineProps<{
 }>()
 
 const date = formatPublished(props.card.published)
+// The passage as it was printed, with the lift marked; a translated card keeps its type.
+const clipping = props.translation ? undefined : clippings[`${props.card.href}#${props.card.lift}`]
 
 const root = ref<HTMLElement | null>(null)
 const placed = useReveal(root, props.settled)
@@ -43,8 +46,19 @@ const placed = useReveal(root, props.settled)
         <p>“{{ card.lift }}”</p>
       </blockquote>
     </template>
-    <blockquote v-else :cite="card.href">
-      <p>«{{ card.lift }}»</p>
+    <blockquote v-else :cite="card.href" :class="{ 'has-clipping': clipping }">
+      <p :class="{ 'sr-only': clipping }">«{{ card.lift }}»</p>
+      <img
+        v-if="clipping"
+        class="clipping"
+        :src="clipping.src"
+        :width="clipping.width"
+        :height="clipping.height"
+        :style="{ maxWidth: `${Math.round(clipping.width / (featured ? 1.6 : 2))}px` }"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
     </blockquote>
     <a :href="card.href" target="_blank" rel="noopener"
       >{{ messages.paperCard.read(card.outlet)
@@ -103,6 +117,44 @@ blockquote p {
 }
 .paper-card--featured {
   max-width: 40rem;
+}
+/* The real passage, torn from its page, with the lifted words under a highlighter. */
+.clipping {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  clip-path: polygon(
+    0 6%,
+    5% 0,
+    11% 4%,
+    18% 1%,
+    26% 5%,
+    34% 0,
+    43% 4%,
+    52% 1%,
+    61% 5%,
+    70% 0,
+    79% 4%,
+    88% 1%,
+    95% 5%,
+    100% 2%,
+    99% 50%,
+    100% 95%,
+    94% 100%,
+    86% 96%,
+    77% 100%,
+    68% 95%,
+    59% 100%,
+    50% 96%,
+    41% 100%,
+    32% 95%,
+    23% 100%,
+    14% 96%,
+    6% 100%,
+    0 95%,
+    1% 50%
+  );
 }
 .translation {
   margin: var(--space-4) 0 0;

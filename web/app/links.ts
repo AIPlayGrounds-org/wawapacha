@@ -4,3 +4,6 @@ export const NOAA_ONI = 'https://www.cpc.ncep.noaa.gov/products/analysis_monitor
 export const NOAA_NINO_INDICES = 'https://www.cpc.ncep.noaa.gov/data/indices/'
 export const NOAA_ENSO_EXPLAINER = 'https://www.noaa.gov/jetstream/tropical/enso'
 export const ENFEN_NOTAS_TECNICAS = 'https://enfen.imarpe.gob.pe/notas-tecnicas/'
+
+/** Where a rights holder asks us to take an image down. */
+export const ISSUES = 'https://github.com/AIPlayGrounds-org/wawapacha/issues'
