@@ -1053,7 +1053,9 @@ useSiteSeo({
   opacity: var(--scene-grain);
   pointer-events: none;
 }
-.scene + .scene {
+/* Only the two paper tones sit close enough to need a rule; the other grounds already differ. */
+.scene--green + .scene--ink,
+.scene--ink + .scene--green {
   border-top: 1px solid var(--scene-rule);
 }
 .scene--green {
