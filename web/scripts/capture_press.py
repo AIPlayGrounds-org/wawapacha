@@ -13,6 +13,7 @@ import hashlib
 import io
 import json
 import re
+import subprocess
 import sys
 import unicodedata
 import urllib.request
@@ -226,6 +227,8 @@ def main(cards_path: str) -> None:
         '',
     ]
     MANIFEST.write_text(chr(10).join(out), encoding='utf-8')
+    # The manifest is generated, but CI checks formatting, so leave it formatted.
+    subprocess.run(['bunx', 'oxfmt', str(MANIFEST)], cwd=ROOT, check=True, shell=sys.platform == 'win32')
     print(f'{len(clippings)} clippings')
     for line in missed:
         print('  kept typed:', line)
