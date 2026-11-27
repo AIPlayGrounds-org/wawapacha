@@ -42,6 +42,25 @@ scores them wherever the page judges an event:
 
 Each mark is also said in words, so the row reads without its drawing.
 
+## Voice
+
+The page reads as reporting, not as a script. These patterns read as generated,
+so the copy avoids them:
+
+- The "X measures A. It does not measure B." antithesis and other "no X, sino
+  Y" hinges. Say the fact that makes the point: the lowest of the three peaks,
+  2017's, left 159 dead.
+- Sentences that announce or tease: "aquí miramos…", "la vemos más abajo",
+  "hubo una razón más…". Show the next thing instead.
+- Rhetorical questions inside the prose. The beat's question is the only one.
+- Lists of three for rhythm ("a un río, a una calle, a un techo").
+- A sentence that repeats what the card or claim right below it says.
+
+Names, places and dates beat abstractions: "una vecina de Trujillo", not "una
+de las voces". The opening says when the data was last updated, so the reader
+knows how fresh the story is. The kicker above each question names the beat
+and carries no count.
+
 ## Threads and hand-offs
 
 Seven threads run through the page, so the beats read as one story and not as
@@ -56,11 +75,10 @@ The drain thread also collects. After TV Perú's 2017 card the 1983, 1997 and
 the full column runs from 1983 to 2026. Each row is the year of a drain card and
 words lifted verbatim from that card's lift.
 
-A beat ends on a hand-off: one sentence, set alone, that opens the next
-question. The opening, the sea, the rain beat and the first two history steps
-end in the question's light serif. The beats that end on a punch line keep it
-as their hand-off. The 2017 step needs none, because today's step follows it.
-The region beat and what to do end the page and hand off to nothing.
+A beat ends on its evidence, not on a sentence that announces the next one: the
+next question opens itself. Only the history steps keep a hand-off, because
+they carry the years between events ("Quince años después…"). Punch lines are
+facts with a number or a name, not aphorisms.
 
 ## Opening: ¿Qué tanto hay que preocuparse?
 
@@ -76,8 +94,8 @@ then fall in: the APOYO trajectory,
 [apoyo-2026-trajectory](../evidence/claims.toml), and the Tumbes river past its
 orange threshold, [infobae-2026-11-17-tumbes](../evidence/claims.toml). The text names the
 channel as the author of the headline, not ENFEN: no 2026 ENFEN communiqué says
-"devastador". The page heading is the question, and the promise follows: the
-page looks at where those numbers come from. The beat has no chart.
+"devastador". The page heading is the question, and under it a line says the date of
+the newest data and communiqué behind the story. The beat has no chart.
 
 ## ¿Qué tan caliente está el mar?
 
@@ -153,8 +171,8 @@ was met only by half. The 2017 step draws
 2016-17 over 1982-83 the same way and says the share: 2017's peak was under a
 third of 1983's. The page says "menos de un tercio" only while the data makes it
 true. It then shows that the low index came with heavy damage:
-[impact-2017-people](../evidence/claims.toml). The beat ends on the sentence
-the reader should keep: the index measures the sea, not the damage.
+[impact-2017-people](../evidence/claims.toml). The beat ends on the number
+the reader should keep: the lowest of the three peaks, 2017's, left 159 dead.
 
 ## Si los Niños se pronostican, ¿por qué siempre nos sorprenden?
 
@@ -176,13 +194,13 @@ above the line, or a death count at its cut date, below it:
    [impact-2017-people](../evidence/claims.toml).
 
 Each step leads with the sea and its normal that week. The beat then says that
-débil and moderada measure the sea, not the damage, and lands the punch line:
-the word came after the water. The ranking,
+in ENFEN's scale débil and moderada describe how warm the sea gets, and lands
+the punch line: the word came after the water. The ranking,
 [impact-2017-plain](../evidence/claims.toml), and the reason not to believe,
 [bausate-2017-2015-prevention](../evidence/claims.toml) and
 [ramirez-2017-credibility](../evidence/claims.toml), follow.
 
-A turn line opens 2026: the word did not wait for the water. A second chart
+A turn line opens 2026: the words came before the water. A second chart
 runs January to September 2026. ENFEN's words climb from débil to fuerte and
 extraordinaria, from one claim with three cards,
 [enfen-2026-coast-magnitude-wording](../evidence/claims.toml). Between them,
@@ -221,9 +239,8 @@ finding, [apoyo-2026-readiness](../evidence/claims.toml), sets today's third
 mark at half. The drain thread ties off on two cards: Piura's 40-year wait for
 a storm drain, [elcomercio-2023-04-14-chilcal](../evidence/claims.toml), beside
 its drainage works near zero in 2026,
-[apoyo-2026-piura-works](../evidence/claims.toml). The
-punch line hands off to the region beat: a Niño reaches a river, a street, a
-roof, not the country in general.
+[apoyo-2026-piura-works](../evidence/claims.toml). The beat ends
+on today's score; the region beat follows without a hand-off.
 
 ## ¿Y en mi región?
 
@@ -252,12 +269,12 @@ Each panel ends on the region's score.
 
 The closing sets two lessons people drew after a Niño side by side: Belaúnde's
 in 1985, [tv-1985-belaunde-leccion](../evidence/claims.toml), and a neighbour's
-in 2017, [tv-panorama-2017-ley-naturaleza](../evidence/claims.toml). One says
-the country endured; the other, that nothing can be done. Neither speaks of what
-is done before. The UN agencies' lesson for Peru,
+in 2017, [tv-panorama-2017-ley-naturaleza](../evidence/claims.toml). Belaúnde
+concluded that the people react to adversity; the neighbour from Trujillo, that
+nothing can be done. Neither spoke of preparing before. The UN agencies' lesson for Peru,
 [glantz-2000-peru-lesson](../evidence/claims.toml), follows on a card in our
 Spanish, with the English original under it. The beat restates today's score
-and ends on the last line: what returns can be expected. The opening's clips
+and ends on something the reader can do: ask their municipality for its plan. The opening's clips
 come back under it as a row of stills that does not play.
 
 ## Television

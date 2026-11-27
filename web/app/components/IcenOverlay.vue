@@ -438,26 +438,28 @@ const tableId = `overlay-table-${useId()}`
       @keydown="onKey"
       @blur="onLeave"
     />
-    <table :id="tableId" class="sr-only">
-      <caption>
-        {{
-          tableCaption
-        }}
-      </caption>
-      <thead>
-        <tr>
-          <th v-for="line in aligned" :key="line.id" scope="col">{{ line.label }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in rows" :key="row.index">
-          <td v-for="(month, index) in row.values" :key="aligned[index]!.id">
-            {{ formatMonth(month.start) }}:
-            {{ month.icen === null ? '—' : `${formatAnomaly(month.icen)} °C` }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="sr-only">
+      <table :id="tableId">
+        <caption>
+          {{
+            tableCaption
+          }}
+        </caption>
+        <thead>
+          <tr>
+            <th v-for="line in aligned" :key="line.id" scope="col">{{ line.label }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in rows" :key="row.index">
+            <td v-for="(month, index) in row.values" :key="aligned[index]!.id">
+              {{ formatMonth(month.start) }}:
+              {{ month.icen === null ? '—' : `${formatAnomaly(month.icen)} °C` }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
