@@ -411,27 +411,29 @@ const tableId = `season-table-${useId()}`
       @keydown="onKey"
       @blur="onLeave"
     />
-    <table :id="tableId" class="sr-only">
-      <caption>
-        {{
-          tableCaption
-        }}
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col">Semana</th>
-          <th v-for="line in series" :key="line.id" scope="col">{{ line.label }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="row in rows" :key="row.day">
-          <th scope="row">{{ row.label }}</th>
-          <td v-for="(value, index) in row.values" :key="series[index]!.id">
-            {{ value === null ? '—' : `${formatDegrees(value)} °C` }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="sr-only">
+      <table :id="tableId">
+        <caption>
+          {{
+            tableCaption
+          }}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Semana</th>
+            <th v-for="line in series" :key="line.id" scope="col">{{ line.label }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in rows" :key="row.day">
+            <th scope="row">{{ row.label }}</th>
+            <td v-for="(value, index) in row.values" :key="series[index]!.id">
+              {{ value === null ? '—' : `${formatDegrees(value)} °C` }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 

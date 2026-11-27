@@ -229,27 +229,29 @@ const chalkId = `press-chalk-${id}`
       </g>
     </svg>
 
-    <table class="sr-only">
-      <caption>
-        {{
-          tableCaption
-        }}
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col">Semana</th>
-          <th scope="col">{{ sstLabel }}</th>
-          <th scope="col">{{ normalLabel }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="week in weeks" :key="week.start">
-          <th scope="row">{{ formatDay(week.start) }}</th>
-          <td>{{ formatDegrees(week.sst) }} °C</td>
-          <td>{{ formatDegrees(week.normal) }} °C</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="sr-only">
+      <table>
+        <caption>
+          {{
+            tableCaption
+          }}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Semana</th>
+            <th scope="col">{{ sstLabel }}</th>
+            <th scope="col">{{ normalLabel }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="week in weeks" :key="week.start">
+            <th scope="row">{{ formatDay(week.start) }}</th>
+            <td>{{ formatDegrees(week.sst) }} °C</td>
+            <td>{{ formatDegrees(week.normal) }} °C</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
