@@ -74,6 +74,7 @@ export const messages = {
   page: {
     brand: 'WawaPacha',
     skipLink: 'Saltar al contenido principal',
+    themeLight: 'Tema claro',
     seoTitle: 'El Niño Costero · WawaPacha',
     seoDescription: 'Estado oficial, evidencia y pronóstico para la costa del Perú',
     mainNav: 'Navegación principal',

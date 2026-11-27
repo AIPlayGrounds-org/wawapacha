@@ -36,24 +36,31 @@ read those tokens; page styles do not add local colour or type scales.
 
 ## The home scenes
 
-Each home beat is a full-bleed scene on near-white paper and ink, so the data
-carries the colour. The opening, the beat on why Lima stays dry, the readiness
-beat and the rain beat alternate between two paper tones, the sea and the
-regions sit on a pale sea tint, and what to do is deep teal. With a dark system
-theme the paper becomes charcoal and the ink ivory. Every scene carries the same
-faint grain. A `.scene` restates the shared tokens for its ground, so
-`ChartShell`, `SiteHeader` and the charts need no dark variant. Warm tones mark
-water above normal and blue marks water below it, through `--data-warm` and
-`--data-cold`.
+Each home beat is a full-bleed scene on its own ground. The default is dark:
+green for the opening, the beat on why Lima stays dry, the rain beat and the
+closing, blue for the sea and the regions, ink for history, readiness and the
+footer, brick red for what to do. Every scene carries the same grain and a soft
+highlight, so the page reads as one printed piece. A `.scene` restates the
+shared tokens for its ground, so `ChartShell`, `SiteHeader` and the charts need
+no dark variant. Warm tones mark water above normal and blue marks water below
+it.
 
-Two accents split the scenes by temperature: terracotta for what is hot and
-official, teal for the sea scenes. The last scene uses amber on teal.
+A button in the home header switches to a light theme and remembers the choice
+in `localStorage` (`wawapacha-theme`); a script in the head applies it before
+the first paint. The light theme sets `data-theme="light"` on `html` and swaps
+only tokens: green becomes paper, blue a pale sea tint, ink a second paper tone
+and red deep teal. The data carries the colour: terracotta for what is hot and
+official, teal for the sea scenes, amber on deep teal to act. Three things exist
+only in the light theme: the mono kicker above each question ("01 / 10 · Estado
+del mar", in IBM Plex Mono), a terracotta dot in front of the official status in
+place of its strip, and the teal strip on the sea answer. The inner pages still
+follow the system theme.
 
 | Element      | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Kicker       | A small IBM Plex Mono label above each question: "01 / 10 · Estado del mar". Metadata and counts use mono; no other text does.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Kicker       | Light theme only: a small IBM Plex Mono label above each question, "01 / 10 · Estado del mar".                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | Beat         | The question in light serif, then the answer as a heavy Inter Tight heading.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| Strip        | A torn strip sits behind the few words the story turns on: the opening answer, the punch lines. Terracotta, or teal in the sea scenes. The official status carries a terracotta dot instead.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Strip        | A torn red strip sits behind the few words the story turns on: the opening answer, the punch lines and the official status. In the light theme it is terracotta, and teal in the sea scenes.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | Map          | The maps are a dark sheet of their own, with their own text and ring colours. Two maps on one scale: today and the same day a year earlier, side by side on a desktop and stacked on a phone. Land is one flat tone with the coastline as a thin line. Country names sit on land in spaced capitals and the ocean's name on the sea in spaced italic. Only Tumbes, Piura and Lima are named, in spaced italic serif. A chalk ring marks today's warmest point with its value; the year-earlier map rings the same point in dashed, muted chalk. A small globe in the corner of today's map pins the region. One legend sits under both, with "lo normal" on its normal step. |
 | Annotation   | A chart labels only the marks its beat talks about, on the chart where the value sits. No legend to consult.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | Scrolly      | One chart stays on screen while its steps scroll past. Each step brings one mark forward and dims the rest.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |

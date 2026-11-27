@@ -18,6 +18,7 @@ const items = [{ to: '/metodologia', label: messages.page.methodologyLink }]
         {{ item.label }}
       </NuxtLink>
     </nav>
+    <slot />
   </header>
 </template>
 

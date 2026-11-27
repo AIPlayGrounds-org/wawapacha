@@ -151,7 +151,7 @@ const legend = computed(() => {
   --land-on-deep: #17241e;
   --map-on: #f6f7f4;
   --map-muted: #aacac5;
-  --map-ring: #ff9a5a;
+  --map-ring: var(--scene-ring, #f6f7f4);
   --globe-sea: var(--step-1);
   --globe-land: var(--land-on-deep);
   display: grid;
