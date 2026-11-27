@@ -4,15 +4,19 @@ import { messages } from '~/messages'
 
 const light = ref(false)
 
+// Without a saved choice the home is dark and the inner pages follow the system theme.
+const props = defineProps<{ home?: boolean }>()
 onMounted(() => {
-  light.value = document.documentElement.dataset.theme === 'light'
+  const saved = document.documentElement.dataset.theme
+  light.value = saved
+    ? saved === 'light'
+    : !props.home && !window.matchMedia('(prefers-color-scheme: dark)').matches
 })
 
 const toggle = () => {
   light.value = !light.value
   const root = document.documentElement
-  if (light.value) root.dataset.theme = 'light'
-  else delete root.dataset.theme
+  root.dataset.theme = light.value ? 'light' : 'dark'
   try {
     localStorage.setItem('wawapacha-theme', light.value ? 'light' : 'dark')
   } catch {

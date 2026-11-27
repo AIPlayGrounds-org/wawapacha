@@ -461,7 +461,7 @@ useSiteSeo({
 <template>
   <div class="home">
     <div class="scene scene--green">
-      <SiteHeader><ThemeToggle /></SiteHeader>
+      <SiteHeader />
       <main id="main-content">
         <section class="apertura beat" aria-labelledby="home-title">
           <NewsReel :cards="REELS.apertura" :label="reelLabels.apertura" />

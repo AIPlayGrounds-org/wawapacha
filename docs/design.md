@@ -45,16 +45,20 @@ shared tokens for its ground, so `ChartShell`, `SiteHeader` and the charts need
 no dark variant. Warm tones mark water above normal and blue marks water below
 it.
 
-A small sun or moon icon in the home header switches the theme and remembers the choice
-in `localStorage` (`wawapacha-theme`); a script in the head applies it before
-the first paint. The light theme sets `data-theme="light"` on `html` and swaps
-only tokens: green becomes paper, blue a pale sea tint, ink a second paper tone
-and red deep teal. The data carries the colour: terracotta for what is hot and
-official, teal for the sea scenes, amber on deep teal to act. Three things exist
-only in the light theme: the mono kicker above each question ("01 / 10 · Estado
-del mar", in IBM Plex Mono), a terracotta dot in front of the official status in
-place of its strip, and the teal strip on the sea answer. The inner pages still
-follow the system theme.
+A small sun or moon icon in every page header switches the theme. The icon shows
+where the button goes: a sun in the dark theme, a moon in the light one. The
+choice is saved in `localStorage` (`wawapacha-theme`) and a script in the head
+applies it before the first paint. It sets `data-theme` to `dark` or `light` on
+`html`, and every token set answers to it, so the inner pages change too. Without
+a saved choice the home is dark and the inner pages follow the system theme.
+
+The light theme swaps only tokens on the home: green becomes paper, blue a pale
+sea tint, ink a second paper tone and red deep teal. The data carries the colour:
+terracotta for what is hot and official, teal for the sea scenes, amber on deep
+teal to act. Three things exist only in the light theme: the mono kicker above
+each question ("01 / 10 · Estado del mar", in IBM Plex Mono), a terracotta dot in
+front of the official status in place of its strip, and the teal strip on the sea
+answer.
 
 | Element      | Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
