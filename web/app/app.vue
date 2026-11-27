@@ -221,7 +221,10 @@ body {
   font-family: var(--font);
   font-size: var(--text-body);
   font-optical-sizing: auto;
+  font-synthesis: none;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 a {
   color: var(--link);
@@ -245,9 +248,10 @@ summary {
 }
 button {
   color: inherit;
+  transition: transform 120ms ease-out;
 }
 button:active {
-  transform: translateY(1px);
+  transform: scale(0.96);
 }
 main p,
 main li,

@@ -56,6 +56,9 @@ const toggle = () => {
   background: transparent;
   color: var(--muted);
   cursor: pointer;
+  transition-property: color, transform;
+  transition-duration: 150ms, 120ms;
+  transition-timing-function: ease-out;
 }
 .theme-toggle:hover {
   color: var(--text);
