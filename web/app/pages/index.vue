@@ -821,7 +821,7 @@ useSiteSeo({
             {{ messages.page.homeLead(enfenRecord.number, enfenRecord.year) }}
           </p>
           <p class="source">
-            <strong class="status"
+            <strong class="status strip"
               ><i class="dot" aria-hidden="true" />{{ enfenRecord.status }}.</strong
             >{{ ' ' }}
             <a :href="enfenRecord.url" target="_blank" rel="noopener">
@@ -1079,10 +1079,6 @@ useSiteSeo({
 a {
   color: var(--on-scene);
 }
-:global(html[data-theme='light']) .scene a {
-  text-decoration-color: var(--scene-accent);
-  text-decoration-thickness: 2px;
-}
 h1,
 h2,
 p {
@@ -1180,21 +1176,6 @@ h2 .answer {
 .dot {
   display: none;
 }
-:global(html[data-theme='light']) .kicker {
-  display: block;
-}
-:global(html[data-theme='light']) .dot {
-  display: inline-block;
-}
-:global(html[data-theme='light']) .status.strip {
-  background-image: none;
-}
-:global(html:not([data-theme='light'])) .strip--sea {
-  padding: 0;
-  margin-left: 0;
-  background: none;
-  color: inherit;
-}
 .kicker {
   margin-bottom: var(--space-4);
   color: var(--on-scene-muted);
@@ -1205,7 +1186,6 @@ h2 .answer {
   text-transform: uppercase;
 }
 .dot {
-  display: inline-block;
   width: 0.7em;
   height: 0.7em;
   margin-right: 0.5em;
@@ -1509,5 +1489,31 @@ h2 .answer {
   .scrolly-step.is-active {
     opacity: 1;
   }
+}
+</style>
+
+<style>
+/* Rules that depend on the theme lead with the html attribute, so they live outside the scope. */
+html[data-theme='light'] .scene {
+  --mark-today: var(--scene-accent);
+}
+html[data-theme='light'] .scene a {
+  text-decoration-color: var(--scene-accent);
+  text-decoration-thickness: 2px;
+}
+html[data-theme='light'] .scene .kicker {
+  display: block;
+}
+html[data-theme='light'] .scene .dot {
+  display: inline-block;
+}
+html[data-theme='light'] .scene .status.strip {
+  background-image: none;
+}
+html:not([data-theme='light']) .scene .strip--sea {
+  padding: 0;
+  margin-left: 0;
+  background: none;
+  color: inherit;
 }
 </style>
