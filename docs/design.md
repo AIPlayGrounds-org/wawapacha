@@ -75,7 +75,7 @@ answer.
 | Overlay      | Two events on one month axis inside a scrolly step: the step's event in the accent, drawn on scroll; the past event muted. Each peak is labelled with its event and value in Inter Tight; a pin is a ring with a serif italic note. The neutral band sits behind both lines.                                                                                                                                                                                                                                                                                                                                                                                                 |
 | Hand mark    | An arrow drawn as a loose curve, with a serif italic note, ties two points the sentence compares.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | Paper card   | What the press printed, on newsprint in every scene and theme: outlet and date on top, the passage as it was printed, torn out, with the lifted words under a highlighter, and a link to the source. A card whose passage cannot be captured sets the phrase in bold serif instead. Laid down a little askew. Measurements never sit on a card. A source in another language shows our translation large, tagged as ours, with the verbatim original small under it in its own `lang`.                                                                                                                                                                                       |
-| Clip card    | What television said, on a dark screen in every scene and theme, over a darkened still of the broadcast: the year stamped top left, the lifted words in bold serif, a red tag with the outlet over a light chyron with the transcript line in capitals, and a link to the cited second. The date joins the tag only when the source gives a day or a month. No video plays on the page: the footage is not ours, so the link opens it on YouTube. The still and the clipping are short quotations of a cited source, stored in the repository so a visit loads nothing from YouTube or the outlets. A still is small, with no chyron line.                                   |
+| Clip card    | What television said, on a dark screen in every scene and theme: the year stamped top left, the lifted words in bold serif, a red tag with the outlet over a light chyron with the transcript line in capitals, and a link to the cited second. The date joins the tag only when the source gives a day or a month. No video plays and no frame of it is shown: the footage is not ours, so the link opens it on YouTube. A still is small, with no chyron line.                                                                                                                                                                                                             |
 | Reel         | Cards of one beat in one frame that keeps the tallest card's height. The next card drops onto the pile and the one before stays under it, dimmed, so the years read as piling up. Below it: back, play or pause or replay, and next as round 44px buttons, and one tick per card that fills while the card is on. Arrow keys step. A slow reel holds lines meant to be read; a fast one is a chorus of one week. A row of stills never plays.                                                                                                                                                                                                                                |
 | Score row    | Three square marks, one per condition, each with its label and its state in words. Filled is the accent, half fills the left half, pending is a dashed box, unknown holds a "?". The frame shows the boxes without states.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | Thread mark  | A thread's line glyph in the accent and its name in serif italic, set above a clip card's frame.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -103,21 +103,20 @@ without JavaScript: every step and mark is in the static HTML.
 
 ## Press images
 
-`web/scripts/capture_press.py` captures the press behind each card. For a paper
-card it finds the lifted words in the source, a PDF or a web page, crops the
-passage around them at twice the display size and marks them with a highlighter.
-For a clip card it keeps the broadcast's YouTube still. The images go to
-`web/app/assets/press/` and the manifest `web/app/data/press.ts`. Run it after
+`web/scripts/capture_press.py` captures the press behind each paper card. It finds
+the lifted words in the source, a PDF or a web page, crops the passage around
+them at twice the display size and marks them with a highlighter. The images go
+to `web/app/assets/press/` and the manifest `web/app/data/press.ts`. Run it after
 adding a card:
 
     bun scripts/list-cards.ts > .cache/cards.json
     python scripts/capture_press.py .cache/cards.json
 
 A card whose words the script cannot find keeps its typed phrase; the script
-lists them.
+lists them. Clip cards never carry an image of the broadcast, only the lifted
+words and the link: the footage belongs to the channels.
 
-If a rights holder asks us to take an image down, add its link or YouTube video
-id to `web/scripts/press-optout.txt` and run the script again: the card goes
-back to its typed phrase. `/metodologia` tells readers how to ask, and says what
-the images are: short quotations, each with its outlet, date and a link to the
-original.
+If a rights holder asks us to take a clipping down, add its link to
+`web/scripts/press-optout.txt` and run the script again: the card goes back to
+its typed phrase. `/metodologia` says what the clippings are, short quotations
+with their outlet, date and a link to the original, and how to ask.

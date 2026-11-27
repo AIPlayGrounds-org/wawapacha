@@ -1,1 +1,1 @@
-# Sources whose images we took down at their owner's request: one link or YouTube video id per line.
+# Sources whose images we took down at their owner's request: one link per line.

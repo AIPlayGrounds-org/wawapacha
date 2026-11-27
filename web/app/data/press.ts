@@ -13,78 +13,23 @@ import img_0f47e9fa033d from '~/assets/press/0f47e9fa033d.webp'
 import img_68b43ffbb810 from '~/assets/press/68b43ffbb810.webp'
 import img_42d0b71bd06a from '~/assets/press/42d0b71bd06a.webp'
 import img_bf54c98cd68b from '~/assets/press/bf54c98cd68b.webp'
-import img_still_44kmFwnJUz0 from '~/assets/press/still-44kmFwnJUz0.webp'
-import img_still_kE22pgRvCXo from '~/assets/press/still-kE22pgRvCXo.webp'
-import img_still_IPblSP_dUTQ from '~/assets/press/still-IPblSP_dUTQ.webp'
-import img_still_0oT_y_vRdTM from '~/assets/press/still-0oT-y-vRdTM.webp'
-import img_still_6o_dJBASsWA from '~/assets/press/still-6o-dJBASsWA.webp'
-import img_still_eyfosKwEObQ from '~/assets/press/still-eyfosKwEObQ.webp'
-import img_still_wGb7Z4qDmEE from '~/assets/press/still-wGb7Z4qDmEE.webp'
-import img_still_0t5f_Di_jpo from '~/assets/press/still-0t5f-Di-jpo.webp'
-import img_still__nIYMe0_ZOA from '~/assets/press/still-_nIYMe0-ZOA.webp'
-import img_still_ChmmggWR3Y4 from '~/assets/press/still-ChmmggWR3Y4.webp'
-import img_still__tw3lE7mQac from '~/assets/press/still-_tw3lE7mQac.webp'
-import img_still_jdppRLOp14g from '~/assets/press/still-jdppRLOp14g.webp'
-import img_still_0gwvtwwT9i4 from '~/assets/press/still-0gwvtwwT9i4.webp'
-import img_still_bvdnUF8USL4 from '~/assets/press/still-bvdnUF8USL4.webp'
-import img_still_KV6zaHYQjU8 from '~/assets/press/still-KV6zaHYQjU8.webp'
-import img_still_2Rb5aactsgw from '~/assets/press/still-2Rb5aactsgw.webp'
-import img_still_Ok_vgh7YktE from '~/assets/press/still-Ok_vgh7YktE.webp'
 
 export type PressImage = { readonly src: string; readonly width: number; readonly height: number }
 
 /** The lifted passage of each paper card as printed, keyed by `href#lift`. */
 export const clippings: Readonly<Record<string, PressImage>> = {
-  'https://enfen.imarpe.gob.pe/download/informe-tecnico-enfen-ano-12-n17-al-25-de-setiembre-de-2026/#El modelo IA pronostica valores positivos del índice E':
-    { src: img_61f02d7d6ee7, width: 939, height: 54 },
-  'https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-01-2026/#magnitud débil': {
-    src: img_fb99978f1328,
-    width: 224,
-    height: 41,
-  },
-  'https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-11-2026/#magnitud fuerte entre junio y septiembre':
-    { src: img_c72c1a4e7e97, width: 571, height: 43 },
-  'https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-15-2026/#magnitud extraordinaria de setiembre 2026 a enero de 2027':
-    { src: img_eec3679e5537, width: 1200, height: 65 },
-  'https://panamericana.pe/buenosdiasperu/nacionales/474433-enfen-alerta-nino-devastador-1997#más devastador que el de 1997':
-    { src: img_ccb691ca8b0a, width: 1200, height: 119 },
-  'https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf#sigue una trayectoria muy similar a la del FEN 1997-1998':
-    { src: img_68e94ae876b6, width: 851, height: 55 },
-  'https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/#superó el umbral naranja':
-    { src: img_9b0cd4722167, width: 514, height: 94 },
-  'https://repositorio.igp.gob.pe/handle/20.500.12816/2412#El Niño moderado-fuerte-extraordinario 1%':
-    { src: img_40e7c52bdb25, width: 811, height: 45 },
-  'https://repositorio.igp.gob.pe/bitstreams/3ea80185-bd3a-4f27-8bc5-d31b58b0c1b0/download#un evento El Niño costero débil':
-    { src: img_52a5475bcfe1, width: 546, height: 49 },
-  'https://elcomercio.pe/peru/fenomeno-nino-afecto-pais-anos-1997-1998-142502-noticia/#Actualmente el país soporta un fenómeno de El Niño débil':
-    { src: img_a4d031572d20, width: 1068, height: 88 },
-  'https://repositorio.igp.gob.pe/bitstreams/703b4703-54b3-460e-b38c-fecf4938c5da/download#con una magnitud moderada':
-    { src: img_0f47e9fa033d, width: 472, height: 49 },
-  'https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf#con avance físico cercano a cero en ambos componentes':
-    { src: img_68b43ffbb810, width: 833, height: 98 },
-  'https://web.archive.org/web/20021215031044/http://www.caretas.com.pe/1998/1508/puentes/puentes.htm#Trece de los 68 puentes afectados en todo el país no tienen más de 14 años de antigüedad':
-    { src: img_42d0b71bd06a, width: 1180, height: 74 },
-  'https://sigrid.cenepred.gob.pe/sigridv3/documento/1128/descargar#The ENSO cycle must be considered by policy makers as a recurrent event in national planning':
-    { src: img_bf54c98cd68b, width: 647, height: 90 },
-}
-
-/** A still of each cited broadcast, keyed by YouTube video id. */
-export const stills: Readonly<Record<string, PressImage>> = {
-  '44kmFwnJUz0': { src: img_still_44kmFwnJUz0, width: 480, height: 270 },
-  kE22pgRvCXo: { src: img_still_kE22pgRvCXo, width: 480, height: 270 },
-  IPblSP_dUTQ: { src: img_still_IPblSP_dUTQ, width: 480, height: 270 },
-  '0oT-y-vRdTM': { src: img_still_0oT_y_vRdTM, width: 480, height: 270 },
-  '6o-dJBASsWA': { src: img_still_6o_dJBASsWA, width: 480, height: 270 },
-  eyfosKwEObQ: { src: img_still_eyfosKwEObQ, width: 480, height: 270 },
-  wGb7Z4qDmEE: { src: img_still_wGb7Z4qDmEE, width: 480, height: 270 },
-  '0t5f-Di-jpo': { src: img_still_0t5f_Di_jpo, width: 480, height: 270 },
-  '_nIYMe0-ZOA': { src: img_still__nIYMe0_ZOA, width: 480, height: 270 },
-  ChmmggWR3Y4: { src: img_still_ChmmggWR3Y4, width: 480, height: 270 },
-  _tw3lE7mQac: { src: img_still__tw3lE7mQac, width: 480, height: 270 },
-  jdppRLOp14g: { src: img_still_jdppRLOp14g, width: 480, height: 270 },
-  '0gwvtwwT9i4': { src: img_still_0gwvtwwT9i4, width: 480, height: 270 },
-  bvdnUF8USL4: { src: img_still_bvdnUF8USL4, width: 480, height: 270 },
-  KV6zaHYQjU8: { src: img_still_KV6zaHYQjU8, width: 480, height: 270 },
-  '2Rb5aactsgw': { src: img_still_2Rb5aactsgw, width: 480, height: 270 },
-  Ok_vgh7YktE: { src: img_still_Ok_vgh7YktE, width: 480, height: 270 },
+  "https://enfen.imarpe.gob.pe/download/informe-tecnico-enfen-ano-12-n17-al-25-de-setiembre-de-2026/#El modelo IA pronostica valores positivos del índice E": { src: img_61f02d7d6ee7, width: 939, height: 54 },
+  "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-01-2026/#magnitud débil": { src: img_fb99978f1328, width: 224, height: 41 },
+  "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-11-2026/#magnitud fuerte entre junio y septiembre": { src: img_c72c1a4e7e97, width: 571, height: 43 },
+  "https://enfen.imarpe.gob.pe/download/comunicado-oficial-enfen-n-15-2026/#magnitud extraordinaria de setiembre 2026 a enero de 2027": { src: img_eec3679e5537, width: 1200, height: 65 },
+  "https://panamericana.pe/buenosdiasperu/nacionales/474433-enfen-alerta-nino-devastador-1997#más devastador que el de 1997": { src: img_ccb691ca8b0a, width: 1200, height: 119 },
+  "https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf#sigue una trayectoria muy similar a la del FEN 1997-1998": { src: img_68e94ae876b6, width: 851, height: 55 },
+  "https://www.infobae.com/peru/2026/11/17/lluvias-por-el-nino-vuelven-a-poner-en-alerta-el-norte-del-peru-el-rio-tumbes-alcanzara-el-umbral-rojo/#superó el umbral naranja": { src: img_9b0cd4722167, width: 514, height: 94 },
+  "https://repositorio.igp.gob.pe/handle/20.500.12816/2412#El Niño moderado-fuerte-extraordinario 1%": { src: img_40e7c52bdb25, width: 811, height: 45 },
+  "https://repositorio.igp.gob.pe/bitstreams/3ea80185-bd3a-4f27-8bc5-d31b58b0c1b0/download#un evento El Niño costero débil": { src: img_52a5475bcfe1, width: 546, height: 49 },
+  "https://elcomercio.pe/peru/fenomeno-nino-afecto-pais-anos-1997-1998-142502-noticia/#Actualmente el país soporta un fenómeno de El Niño débil": { src: img_a4d031572d20, width: 1068, height: 88 },
+  "https://repositorio.igp.gob.pe/bitstreams/703b4703-54b3-460e-b38c-fecf4938c5da/download#con una magnitud moderada": { src: img_0f47e9fa033d, width: 472, height: 49 },
+  "https://apoyo.com/wp-content/uploads/2026/08/2026_07_feno_nino.pdf#con avance físico cercano a cero en ambos componentes": { src: img_68b43ffbb810, width: 833, height: 98 },
+  "https://web.archive.org/web/20021215031044/http://www.caretas.com.pe/1998/1508/puentes/puentes.htm#Trece de los 68 puentes afectados en todo el país no tienen más de 14 años de antigüedad": { src: img_42d0b71bd06a, width: 1180, height: 74 },
+  "https://sigrid.cenepred.gob.pe/sigridv3/documento/1128/descargar#The ENSO cycle must be considered by policy makers as a recurrent event in national planning": { src: img_bf54c98cd68b, width: 647, height: 90 },
 }

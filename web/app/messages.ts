@@ -602,12 +602,12 @@ export const messages = {
     dataLink: 'Archivo o servicio consultado',
     dataTypeTitle: 'Qué significa cada tipo de dato',
     dataTypeDescription: (type: Dataset['data_type']) => dataTypeDescriptions[type],
-    pressTitle: 'Las imágenes de prensa y televisión',
+    pressTitle: 'Los recortes de prensa',
     press: [
-      'Los recortes y fotogramas son citas breves de las notas y emisiones que el sitio cita: cada uno lleva su medio, su fecha y un enlace al original, donde está la obra completa.',
-      'Muestran solo el pasaje citado. El sitio no tiene publicidad ni fines comerciales, y las imágenes se sirven desde aquí: una visita no carga nada de YouTube ni de los medios.',
+      'Cada recorte es una cita breve de una nota o documento que el sitio cita: muestra solo el pasaje citado, con su medio, su fecha y un enlace al original, donde está la obra completa.',
+      'El sitio no tiene publicidad ni fines comerciales, y los recortes se sirven desde aquí: una visita no carga nada de los medios. Los videos de televisión no se muestran: solo se enlazan.',
     ],
-    takedown: 'Si una imagen es tuya y quieres que la retiremos, escríbenos en',
+    takedown: 'Si un recorte es tuyo y quieres que lo retiremos, escríbenos en',
     takedownLink: 'GitHub',
     limitsTitle: 'Lo que este sitio no hace',
     limits: [
