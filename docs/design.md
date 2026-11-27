@@ -115,3 +115,9 @@ adding a card:
 
 A card whose words the script cannot find keeps its typed phrase; the script
 lists them.
+
+If a rights holder asks us to take an image down, add its link or YouTube video
+id to `web/scripts/press-optout.txt` and run the script again: the card goes
+back to its typed phrase. `/metodologia` tells readers how to ask, and says what
+the images are: short quotations, each with its outlet, date and a link to the
+original.

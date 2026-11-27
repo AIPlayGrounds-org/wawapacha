@@ -2,6 +2,7 @@
 import { useSourceCatalog } from '~/composables/useSourceCatalog'
 import { dataTypeLabel, messages } from '~/messages'
 import { formatDay } from '~/utils/format'
+import { ISSUES } from '~/links'
 import { useSiteSeo } from '~/composables/useSiteSeo'
 import type { Dataset } from '~/types/dataset'
 
@@ -93,6 +94,18 @@ useSiteSeo({ title: methodology.seoTitle, description: methodology.seoDescriptio
             {{ methodology.dataTypeDescription(type) }}
           </li>
         </ul>
+      </section>
+
+      <section class="note-section" aria-labelledby="methodology-press-title">
+        <h2 id="methodology-press-title">{{ methodology.pressTitle }}</h2>
+        <p v-for="line in methodology.press" :key="line">{{ line }}</p>
+        <p>
+          {{ methodology.takedown }}
+          <a :href="ISSUES" target="_blank" rel="noopener"
+            >{{ methodology.takedownLink
+            }}<span class="sr-only">{{ messages.page.newTab }}</span></a
+          >.
+        </p>
       </section>
 
       <section class="note-section" aria-labelledby="methodology-limits-title">

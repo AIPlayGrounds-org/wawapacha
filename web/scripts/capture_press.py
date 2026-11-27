@@ -27,6 +27,9 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / 'app' / 'assets' / 'press'
 CACHE = ROOT / '.cache' / 'press'
 MANIFEST = ROOT / 'app' / 'data' / 'press.ts'
+# A source or video whose rights holder asked us to take its image down: one link or video id
+# per line. Its card goes back to the typed phrase on the next run.
+OPT_OUT = ROOT / 'scripts' / 'press-optout.txt'
 MAX_WIDTH = 1200
 SOFT_HYPHEN = chr(0xAD)
 UA = 'Mozilla/5.0 (compatible; press-capture)'
@@ -183,6 +186,13 @@ def still(video: str) -> Image.Image:
 
 def main(cards_path: str) -> None:
     cards = json.loads(Path(cards_path).read_text(encoding='utf-8'))
+    opted_out = (
+        {line.strip() for line in OPT_OUT.read_text(encoding='utf-8').splitlines() if line.strip() and not line.startswith('#')}
+        if OPT_OUT.exists()
+        else set()
+    )
+    cards['paper'] = [card for card in cards['paper'] if card['href'] not in opted_out]
+    cards['videos'] = [video for video in cards['videos'] if video not in opted_out]
     clippings, stills, missed = {}, {}, []
     with sync_playwright() as p:
         browser = p.chromium.launch(channel='chrome')

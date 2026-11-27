@@ -602,6 +602,13 @@ export const messages = {
     dataLink: 'Archivo o servicio consultado',
     dataTypeTitle: 'Qué significa cada tipo de dato',
     dataTypeDescription: (type: Dataset['data_type']) => dataTypeDescriptions[type],
+    pressTitle: 'Las imágenes de prensa y televisión',
+    press: [
+      'Los recortes y fotogramas son citas breves de las notas y emisiones que el sitio cita: cada uno lleva su medio, su fecha y un enlace al original, donde está la obra completa.',
+      'Muestran solo el pasaje citado. El sitio no tiene publicidad ni fines comerciales, y las imágenes se sirven desde aquí: una visita no carga nada de YouTube ni de los medios.',
+    ],
+    takedown: 'Si una imagen es tuya y quieres que la retiremos, escríbenos en',
+    takedownLink: 'GitHub',
     limitsTitle: 'Lo que este sitio no hace',
     limits: [
       'No hace pronósticos propios: el pronóstico es el de ENFEN.',
