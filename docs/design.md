@@ -45,7 +45,7 @@ shared tokens for its ground, so `ChartShell`, `SiteHeader` and the charts need
 no dark variant. Warm tones mark water above normal and blue marks water below
 it.
 
-A button in the home header switches to a light theme and remembers the choice
+A small sun or moon icon in the home header switches the theme and remembers the choice
 in `localStorage` (`wawapacha-theme`); a script in the head applies it before
 the first paint. The light theme sets `data-theme="light"` on `html` and swaps
 only tokens: green becomes paper, blue a pale sea tint, ink a second paper tone

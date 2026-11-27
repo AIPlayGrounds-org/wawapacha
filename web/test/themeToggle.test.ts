@@ -11,12 +11,12 @@ describe('theme toggle', () => {
   it('starts dark, switches to light and remembers the choice', async () => {
     const wrapper = mount(ThemeToggle)
     const button = wrapper.get('button')
-    expect(button.attributes('aria-pressed')).toBe('false')
+    expect(button.attributes('aria-label')).toBe('Cambiar a tema claro')
 
     await button.trigger('click')
     expect(document.documentElement.dataset.theme).toBe('light')
     expect(localStorage.getItem('wawapacha-theme')).toBe('light')
-    expect(button.attributes('aria-pressed')).toBe('true')
+    expect(button.attributes('aria-label')).toBe('Cambiar a tema oscuro')
 
     await button.trigger('click')
     expect(document.documentElement.dataset.theme).toBeUndefined()
@@ -27,6 +27,6 @@ describe('theme toggle', () => {
     document.documentElement.dataset.theme = 'light'
     const wrapper = mount(ThemeToggle)
     await wrapper.vm.$nextTick()
-    expect(wrapper.get('button').attributes('aria-pressed')).toBe('true')
+    expect(wrapper.get('button').attributes('aria-label')).toBe('Cambiar a tema oscuro')
   })
 })
