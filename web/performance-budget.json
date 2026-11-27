@@ -4,12 +4,12 @@
     "/": {
       "payloadBytes": 85729,
       "entryJsBytes": 336293,
-      "cssBytes": 1163
+      "cssBytes": 1618
     },
     "/metodologia": {
       "payloadBytes": 3571,
       "entryJsBytes": 284856,
-      "cssBytes": 1163
+      "cssBytes": 1618
     }
   }
 }

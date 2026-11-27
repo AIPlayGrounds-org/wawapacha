@@ -74,6 +74,8 @@ export const messages = {
   page: {
     brand: 'WawaPacha',
     skipLink: 'Saltar al contenido principal',
+    themeToLight: 'Cambiar a tema claro',
+    themeToDark: 'Cambiar a tema oscuro',
     seoTitle: 'El Niño Costero · WawaPacha',
     seoDescription: 'Estado oficial, evidencia y pronóstico para la costa del Perú',
     mainNav: 'Navegación principal',
@@ -142,6 +144,18 @@ export const messages = {
     },
   },
   story: {
+    kickers: [
+      'Estado del mar',
+      'Dónde está el calor',
+      'Por qué no llueve',
+      'Historia',
+      'La palabra',
+      'Lluvia',
+      'Listos',
+      'Tu región',
+      'Qué aprendimos',
+      'Qué hacer',
+    ],
     apertura: {
       headlines:
         '«El Niño sería más devastador que el de 1997». Así lo tituló un canal de televisión en septiembre. Una consultora escribió que el mar «sigue una trayectoria muy similar a la del FEN 1997-1998». En noviembre, el río Tumbes pasó el umbral naranja.',

@@ -244,7 +244,7 @@ button:disabled {
   cursor: default;
 }
 button:not(:disabled):hover {
-  background: rgb(255 255 255 / 0.08);
+  background: color-mix(in srgb, var(--on-scene) 10%, transparent);
 }
 button:focus-visible {
   outline: 2px solid var(--on-scene);
@@ -275,7 +275,7 @@ svg .fill {
   flex: 1;
   max-width: 3rem;
   height: 3px;
-  background: rgb(255 255 255 / 0.25);
+  background: color-mix(in srgb, var(--on-scene) 25%, transparent);
   background-image: linear-gradient(var(--on-scene), var(--on-scene));
   background-repeat: no-repeat;
   background-size: 0 100%;

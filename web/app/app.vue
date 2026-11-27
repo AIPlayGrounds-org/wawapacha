@@ -3,6 +3,19 @@ import { messages } from '~/messages'
 import '@fontsource-variable/source-serif-4/opsz.css'
 import '@fontsource-variable/source-serif-4/opsz-italic.css'
 import '@fontsource-variable/inter-tight/wght.css'
+import '@fontsource/ibm-plex-mono/latin-400.css'
+import '@fontsource/ibm-plex-mono/latin-500.css'
+
+// Apply the saved theme before the first paint. Without one, the home is dark and the inner pages follow the system.
+useHead({
+  script: [
+    {
+      innerHTML:
+        "try{var t=localStorage.getItem('wawapacha-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}",
+      tagPosition: 'head',
+    },
+  ],
+})
 </script>
 
 <template>
@@ -71,14 +84,27 @@ import '@fontsource-variable/inter-tight/wght.css'
   --text-display: 3rem;
   --font: 'Source Serif 4 Variable', Georgia, serif;
   --font-display: 'Inter Tight Variable', 'Helvetica Neue', Arial, sans-serif;
-  /* Home scenes: each beat sits on its own ground, and the strip marks its key words. */
+  /* Home scenes, dark by default: each beat sits on its own ground, and the strip marks its key
+     words. The light theme below swaps the grounds for near-white paper and ink. */
+  --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
   --scene-green: #1d3329;
   --scene-blue: #0f2a40;
   --scene-ink: #131819;
   --scene-red: #9e3b28;
   --on-scene: #f6f7f4;
   --on-scene-muted: #c5cfca;
+  --on-red: #f6f7f4;
   --on-red-muted: #f8e2db;
+  --on-strip: #f6f7f4;
+  --scene-accent: var(--warm-on-deep);
+  --scene-accent-cold: var(--warm-on-deep);
+  --scene-accent-act: var(--warm-on-deep);
+  --scene-warm: #ffad78;
+  --scene-cold-data: #6fa8dc;
+  --scene-ring: #f6f7f4;
+  --scene-sheen: color-mix(in srgb, white 7%, transparent);
+  --scene-grain: 0.22;
+  --scene-rule: transparent;
   /* A paper card is newsprint on every ground and in both themes: it is what the press printed. */
   --clipping: #efe9da;
   --on-clipping: #1e1c19;
@@ -94,11 +120,45 @@ import '@fontsource-variable/inter-tight/wght.css'
   --chyron-tag: #b3442d;
   --on-chyron-tag: #ffffff;
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  --strip: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpolygon fill='%23b3442d' points='0 0 6 2.2 12 1.6 18 0.2 24 4.3 30 2 36 2.6 42 2.3 48 2.4 54 1.4 60 1.1 66 3.6 72 0.7 78 1.9 84 2.9 90 4.1 96 1.9 102 0.4 108 1.1 114 3.7 120 3 126 2.8 132 2.4 138 1.2 144 1.5 150 4 156 0.1 162 1 168 2.9 174 3.6 180 0.1 186 1.9 192 4.4 198 2.6 204 0.5 210 3.1 216 4.8 222 1.6 228 4.5 234 0.1 240 3.6 246 4 252 4.7 258 1.4 264 0.8 270 4 276 4.7 282 3.7 288 5 294 4 300 2.2 306 1.3 312 3.1 318 0.1 324 4.8 330 4.2 336 1.8 342 4.4 348 0 354 3.3 360 4.8 366 2.7 372 3.4 378 2.5 384 4.3 390 2.2 396 4.6 397 14 399.5 27 400 40 394 37.1 388 39.1 382 37.5 376 36.1 370 35.2 364 35.3 358 39.1 352 35.5 346 36.8 340 37.8 334 36.9 328 37.4 322 35.5 316 36.9 310 35.9 304 37.9 298 37.8 292 39.6 286 35.5 280 39.9 274 40 268 38.9 262 37.8 256 36.8 250 39.3 244 38.2 238 37.5 232 36.5 226 37.7 220 36.3 214 39.8 208 37.8 202 39.6 196 35.7 190 35.8 184 39.8 178 38.5 172 36.4 166 39.1 160 36.8 154 39.4 148 37.4 142 37.5 136 36.2 130 35.5 124 39 118 39.4 112 36.3 106 38.8 100 36.7 94 39.3 88 37.2 82 35 76 35.1 70 35.2 64 37.8 58 36.5 52 39 46 36.6 40 38.2 34 39.9 28 37.5 22 38.8 16 35.9 10 38.3 4 37.5 2.5 24 0.5 11'/%3E%3C/svg%3E");
+  --strip-hot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpolygon fill='%23b3442d' points='0 0 6 2.2 12 1.6 18 0.2 24 4.3 30 2 36 2.6 42 2.3 48 2.4 54 1.4 60 1.1 66 3.6 72 0.7 78 1.9 84 2.9 90 4.1 96 1.9 102 0.4 108 1.1 114 3.7 120 3 126 2.8 132 2.4 138 1.2 144 1.5 150 4 156 0.1 162 1 168 2.9 174 3.6 180 0.1 186 1.9 192 4.4 198 2.6 204 0.5 210 3.1 216 4.8 222 1.6 228 4.5 234 0.1 240 3.6 246 4 252 4.7 258 1.4 264 0.8 270 4 276 4.7 282 3.7 288 5 294 4 300 2.2 306 1.3 312 3.1 318 0.1 324 4.8 330 4.2 336 1.8 342 4.4 348 0 354 3.3 360 4.8 366 2.7 372 3.4 378 2.5 384 4.3 390 2.2 396 4.6 397 14 399.5 27 400 40 394 37.1 388 39.1 382 37.5 376 36.1 370 35.2 364 35.3 358 39.1 352 35.5 346 36.8 340 37.8 334 36.9 328 37.4 322 35.5 316 36.9 310 35.9 304 37.9 298 37.8 292 39.6 286 35.5 280 39.9 274 40 268 38.9 262 37.8 256 36.8 250 39.3 244 38.2 238 37.5 232 36.5 226 37.7 220 36.3 214 39.8 208 37.8 202 39.6 196 35.7 190 35.8 184 39.8 178 38.5 172 36.4 166 39.1 160 36.8 154 39.4 148 37.4 142 37.5 136 36.2 130 35.5 124 39 118 39.4 112 36.3 106 38.8 100 36.7 94 39.3 88 37.2 82 35 76 35.1 70 35.2 64 37.8 58 36.5 52 39 46 36.6 40 38.2 34 39.9 28 37.5 22 38.8 16 35.9 10 38.3 4 37.5 2.5 24 0.5 11'/%3E%3C/svg%3E");
+  --strip-cold: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpolygon fill='%23b3442d' points='0 0 6 2.2 12 1.6 18 0.2 24 4.3 30 2 36 2.6 42 2.3 48 2.4 54 1.4 60 1.1 66 3.6 72 0.7 78 1.9 84 2.9 90 4.1 96 1.9 102 0.4 108 1.1 114 3.7 120 3 126 2.8 132 2.4 138 1.2 144 1.5 150 4 156 0.1 162 1 168 2.9 174 3.6 180 0.1 186 1.9 192 4.4 198 2.6 204 0.5 210 3.1 216 4.8 222 1.6 228 4.5 234 0.1 240 3.6 246 4 252 4.7 258 1.4 264 0.8 270 4 276 4.7 282 3.7 288 5 294 4 300 2.2 306 1.3 312 3.1 318 0.1 324 4.8 330 4.2 336 1.8 342 4.4 348 0 354 3.3 360 4.8 366 2.7 372 3.4 378 2.5 384 4.3 390 2.2 396 4.6 397 14 399.5 27 400 40 394 37.1 388 39.1 382 37.5 376 36.1 370 35.2 364 35.3 358 39.1 352 35.5 346 36.8 340 37.8 334 36.9 328 37.4 322 35.5 316 36.9 310 35.9 304 37.9 298 37.8 292 39.6 286 35.5 280 39.9 274 40 268 38.9 262 37.8 256 36.8 250 39.3 244 38.2 238 37.5 232 36.5 226 37.7 220 36.3 214 39.8 208 37.8 202 39.6 196 35.7 190 35.8 184 39.8 178 38.5 172 36.4 166 39.1 160 36.8 154 39.4 148 37.4 142 37.5 136 36.2 130 35.5 124 39 118 39.4 112 36.3 106 38.8 100 36.7 94 39.3 88 37.2 82 35 76 35.1 70 35.2 64 37.8 58 36.5 52 39 46 36.6 40 38.2 34 39.9 28 37.5 22 38.8 16 35.9 10 38.3 4 37.5 2.5 24 0.5 11'/%3E%3C/svg%3E");
   color-scheme: light dark;
 }
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #13272b;
+  --surface: #1b3438;
+  --surface-raised: #244047;
+  --text: #e7f1ef;
+  --muted: #b1c7c5;
+  --faint: #8ca5a2;
+  --border: #3d5a5d;
+  --land: #4b402c;
+  --band: #1a3739;
+  --sea: #153236;
+  --sea-edge: #397075;
+  --sand: #312a1c;
+  --deep: #09272f;
+  --on-deep: #e3f0ee;
+  --on-deep-muted: #9fbfbc;
+  --warm-on-deep: #ffab75;
+  --accent: #8bd4d0;
+  --neutral-data: #809796;
+  --warm: #f09555;
+  --warm-text: #f8a46c;
+  --warm-tint: #4a2a1b;
+  --cold: #83b8f0;
+  --cold-text: #95c7fa;
+  --chart-grid: #294348;
+  --notice-bg: #3d3217;
+  --notice-text: #f4dca5;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+/* Without a saved choice the inner pages follow the system theme. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --paper: #13272b;
     --surface: #1b3438;
     --surface-raised: #244047;
@@ -127,6 +187,30 @@ import '@fontsource-variable/inter-tight/wght.css'
     --notice-text: #f4dca5;
   }
 }
+/* The light theme turns the home scenes into near-white paper and ink, so the data carries the
+   colour: terracotta for what is hot and official, teal for the sea, amber on deep teal to act. */
+:root[data-theme='light'] {
+  --scene-green: #f4f2ec;
+  --scene-blue: #e4efed;
+  --scene-ink: #ebe8e0;
+  --scene-red: #0f5f63;
+  --on-scene: #16150f;
+  --on-scene-muted: #55534b;
+  --on-red: #f4f2ec;
+  --on-red-muted: #c3dad8;
+  --on-strip: #ffffff;
+  --scene-accent: #b4472a;
+  --scene-accent-cold: #0f5f63;
+  --scene-accent-act: #ffd27a;
+  --scene-warm: #b75f29;
+  --scene-cold-data: #4b8ac2;
+  --scene-ring: #ff9a5a;
+  --scene-sheen: transparent;
+  --scene-grain: 0.12;
+  --scene-rule: color-mix(in srgb, #16150f 18%, transparent);
+  --strip-hot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpolygon fill='%23b4472a' points='0 0 6 2.2 12 1.6 18 0.2 24 4.3 30 2 36 2.6 42 2.3 48 2.4 54 1.4 60 1.1 66 3.6 72 0.7 78 1.9 84 2.9 90 4.1 96 1.9 102 0.4 108 1.1 114 3.7 120 3 126 2.8 132 2.4 138 1.2 144 1.5 150 4 156 0.1 162 1 168 2.9 174 3.6 180 0.1 186 1.9 192 4.4 198 2.6 204 0.5 210 3.1 216 4.8 222 1.6 228 4.5 234 0.1 240 3.6 246 4 252 4.7 258 1.4 264 0.8 270 4 276 4.7 282 3.7 288 5 294 4 300 2.2 306 1.3 312 3.1 318 0.1 324 4.8 330 4.2 336 1.8 342 4.4 348 0 354 3.3 360 4.8 366 2.7 372 3.4 378 2.5 384 4.3 390 2.2 396 4.6 397 14 399.5 27 400 40 394 37.1 388 39.1 382 37.5 376 36.1 370 35.2 364 35.3 358 39.1 352 35.5 346 36.8 340 37.8 334 36.9 328 37.4 322 35.5 316 36.9 310 35.9 304 37.9 298 37.8 292 39.6 286 35.5 280 39.9 274 40 268 38.9 262 37.8 256 36.8 250 39.3 244 38.2 238 37.5 232 36.5 226 37.7 220 36.3 214 39.8 208 37.8 202 39.6 196 35.7 190 35.8 184 39.8 178 38.5 172 36.4 166 39.1 160 36.8 154 39.4 148 37.4 142 37.5 136 36.2 130 35.5 124 39 118 39.4 112 36.3 106 38.8 100 36.7 94 39.3 88 37.2 82 35 76 35.1 70 35.2 64 37.8 58 36.5 52 39 46 36.6 40 38.2 34 39.9 28 37.5 22 38.8 16 35.9 10 38.3 4 37.5 2.5 24 0.5 11'/%3E%3C/svg%3E");
+  --strip-cold: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpolygon fill='%230f5f63' points='0 0 6 2.2 12 1.6 18 0.2 24 4.3 30 2 36 2.6 42 2.3 48 2.4 54 1.4 60 1.1 66 3.6 72 0.7 78 1.9 84 2.9 90 4.1 96 1.9 102 0.4 108 1.1 114 3.7 120 3 126 2.8 132 2.4 138 1.2 144 1.5 150 4 156 0.1 162 1 168 2.9 174 3.6 180 0.1 186 1.9 192 4.4 198 2.6 204 0.5 210 3.1 216 4.8 222 1.6 228 4.5 234 0.1 240 3.6 246 4 252 4.7 258 1.4 264 0.8 270 4 276 4.7 282 3.7 288 5 294 4 300 2.2 306 1.3 312 3.1 318 0.1 324 4.8 330 4.2 336 1.8 342 4.4 348 0 354 3.3 360 4.8 366 2.7 372 3.4 378 2.5 384 4.3 390 2.2 396 4.6 397 14 399.5 27 400 40 394 37.1 388 39.1 382 37.5 376 36.1 370 35.2 364 35.3 358 39.1 352 35.5 346 36.8 340 37.8 334 36.9 328 37.4 322 35.5 316 36.9 310 35.9 304 37.9 298 37.8 292 39.6 286 35.5 280 39.9 274 40 268 38.9 262 37.8 256 36.8 250 39.3 244 38.2 238 37.5 232 36.5 226 37.7 220 36.3 214 39.8 208 37.8 202 39.6 196 35.7 190 35.8 184 39.8 178 38.5 172 36.4 166 39.1 160 36.8 154 39.4 148 37.4 142 37.5 136 36.2 130 35.5 124 39 118 39.4 112 36.3 106 38.8 100 36.7 94 39.3 88 37.2 82 35 76 35.1 70 35.2 64 37.8 58 36.5 52 39 46 36.6 40 38.2 34 39.9 28 37.5 22 38.8 16 35.9 10 38.3 4 37.5 2.5 24 0.5 11'/%3E%3C/svg%3E");
+}
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -137,7 +221,10 @@ body {
   font-family: var(--font);
   font-size: var(--text-body);
   font-optical-sizing: auto;
+  font-synthesis: none;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 a {
   color: var(--link);
@@ -161,9 +248,10 @@ summary {
 }
 button {
   color: inherit;
+  transition: transform 120ms ease-out;
 }
 button:active {
-  transform: translateY(1px);
+  transform: scale(0.96);
 }
 main p,
 main li,

@@ -109,6 +109,7 @@ const decades = computed(() =>
         class="mark"
         :class="{
           'mark--edge': mark.edge,
+          'mark--today': mark.id === 'hoy',
           'mark--focus': focus === mark.id,
           'mark--dim': focus !== null && focus !== mark.id,
         }"
@@ -127,7 +128,7 @@ const decades = computed(() =>
 
 <style scoped>
 .timeline {
-  --cold-on-deep: #6fa8dc;
+  --cold-on-deep: var(--scene-cold-data, #6fa8dc);
   min-width: 0;
 }
 .plot {
@@ -211,6 +212,9 @@ line {
   right: -4px;
   transform: none;
   text-align: right;
+}
+.mark--today {
+  background: var(--mark-today, var(--on-deep));
 }
 .mark--dim {
   opacity: 0.3;

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { messages } from '~/messages'
+import ThemeToggle from '~/components/ThemeToggle.vue'
 
 const route = useRoute()
 const items = [{ to: '/metodologia', label: messages.page.methodologyLink }]
@@ -18,6 +19,7 @@ const items = [{ to: '/metodologia', label: messages.page.methodologyLink }]
         {{ item.label }}
       </NuxtLink>
     </nav>
+    <ThemeToggle class="header-toggle" :home="route.path === '/'" />
   </header>
 </template>
 
@@ -73,10 +75,14 @@ nav a[aria-current='page'] {
     flex-wrap: wrap;
     gap: var(--space-3) var(--space-5);
   }
+  .header-toggle {
+    margin-left: auto;
+  }
   nav {
     flex-basis: 100%;
     justify-content: flex-start;
     margin-left: 0;
+    order: 3;
   }
 }
 </style>
